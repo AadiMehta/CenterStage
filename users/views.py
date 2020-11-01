@@ -1,10 +1,12 @@
+import string
+import random
 import logging
+
 from rest_framework import status
 from rest_framework import generics
 from users.models import User
 from rest_framework.parsers import MultiPartParser, FormParser
-from users.serializers import UserSerializer, UserCreateSerializer, ThirdPartyAuthSerializer, \
-    ThirdPartyAuthValidationSerializer, LoginResponseSerializer
+from users.serializers import UserSerializer, UserCreateSerializer, LoginResponseSerializer
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -129,3 +131,86 @@ class ProfileImage(APIView):
         except Exception as e:
             print(str(e))
             return Response(dict({"image": ["This field is required!"]}), status=status.HTTP_400_BAD_REQUEST)
+
+
+class SendOtp(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        phone_no = data.get('phone_no')
+        if not phone_no and not validate_no(phone_no):
+            return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
+
+        user = self.get_user_by_phone(phone_no)
+        if not user:
+            return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
+
+        otp = self.generate_otp()
+        print(otp)
+        self.send_otp(phone_no, otp)
+        self.persist_otp(user.id, phone_no, otp)
+
+        return Response(dict(msg="Otp Sent Successfully"), status=status.HTTP_200_OK)
+
+    def send_otp(self, phone_no, otp):
+        # Send OTP using twilio to phone_no
+        pass
+
+    def persist_otp(self, user_id, phone_no, otp):
+        # Store UserId (Key): OTP (Value) in Cache
+        pass
+
+    def generate_otp(self):
+        chars = string.ascii_uppercase + string.digits
+        return ''.join(random.choices(chars, k=6))
+
+    def get_user_by_phone(self, phone_no):
+        # Check if User with Phone Number is Present in DB
+        # Return User Object
+        return User(id=1)
+
+    def validate_no(self, phone_no):
+        pattern = re.compile("[1-9][0-9]{9}")
+        return pattern.match(phone_no)
+
+
+class VerifyOtp(APIView):
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        phone_no = data.get('phone_no')
+        provided_otp = data.get('otp')
+        if not provided_otp:
+            return Response("Invalid Data", status=status.HTTP_400_BAD_REQUEST)
+        if not phone_no and not validate_no(phone_no):
+            return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
+
+        user = self.get_user_by_phone(phone_no)
+        if not user:
+            return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
+
+        cached_otp = self.get_otp_from_cache(user.id)
+        if not cached_otp:
+            return Response(dict(msg="Otp Expired"), status=status.HTTP_400_BAD_REQUEST)
+
+        if provided_otp == cached_otp:
+            token = self.authenticate(user)
+            return Response(dict(msg="Login Successful", token=token), status=status.HTTP_200_OK)
+
+    def authenticate(self, user):
+        return "AUTHENTICATED!@#!@#TOKEN"
+
+    def get_otp_from_cache(self, user_id):
+        # GET UserId (Key) From Cache
+        return "KA9JQ1"
+
+    def generate_otp(self):
+        chars = string.ascii_uppercase + string.digits
+        return ''.join(random.choices(chars, k=6))
+
+    def get_user_by_phone(self, phone_no):
+        # Check if User with Phone Number is Present in DB
+        # Return User Object
+        return User(id=1)
+
+    def validate_no(self, phone_no):
+        pattern = re.compile("[1-9][0-9]{9}")
+        return pattern.match(phone_no)

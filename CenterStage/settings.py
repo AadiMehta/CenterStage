@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     # project specific apps
     'users',
@@ -78,7 +80,7 @@ WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-if sys.platform == "win32":
+if sys.platform in ["win32", "linux"]:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -138,6 +140,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# setting user model to custom user model
+AUTH_USER_MODEL = 'users.User'
 
 """
 Settings for AWS account
