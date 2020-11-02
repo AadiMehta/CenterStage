@@ -15,6 +15,9 @@ from rest_framework.response import Response
 from rest_framework.schemas import ManualSchema
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+from django.core.cache import cache
+
+from notifications.twilio_sms_notification import twilio
 
 logger = logging.getLogger(__name__)
 
@@ -145,28 +148,25 @@ class SendOtp(APIView):
             return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
 
         otp = self.generate_otp()
-        print(otp)
         self.send_otp(phone_no, otp)
         self.persist_otp(user.id, phone_no, otp)
 
         return Response(dict(msg="Otp Sent Successfully"), status=status.HTTP_200_OK)
 
     def send_otp(self, phone_no, otp):
-        # Send OTP using twilio to phone_no
-        pass
+        message = 'Your OTP : {}'.format(otp)
+        twilio.send_message(body=message, to=phone_no)
 
     def persist_otp(self, user_id, phone_no, otp):
-        # Store UserId (Key): OTP (Value) in Cache
-        pass
+        cache_key = 'USER_OTP_{}_{}'.format(user_id, phone_no)
+        cache.set(cache_key, otp, 60)
 
     def generate_otp(self):
         chars = string.ascii_uppercase + string.digits
         return ''.join(random.choices(chars, k=6))
 
     def get_user_by_phone(self, phone_no):
-        # Check if User with Phone Number is Present in DB
-        # Return User Object
-        return User(id=1)
+        return User.objects.filter(phone_no=phone_no).first()
 
     def validate_no(self, phone_no):
         pattern = re.compile("[1-9][0-9]{9}")
@@ -187,29 +187,27 @@ class VerifyOtp(APIView):
         if not user:
             return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
 
-        cached_otp = self.get_otp_from_cache(user.id)
+        cached_otp = self.get_otp_from_cache(user.id, phone_no)
         if not cached_otp:
             return Response(dict(msg="Otp Expired"), status=status.HTTP_400_BAD_REQUEST)
 
         if provided_otp == cached_otp:
-            token = self.authenticate(user)
+            token, created = self.authenticate(user)
             return Response(dict(msg="Login Successful", token=token), status=status.HTTP_200_OK)
 
     def authenticate(self, user):
-        return "AUTHENTICATED!@#!@#TOKEN"
+        return Token.objects.get_or_create(user=user)
 
-    def get_otp_from_cache(self, user_id):
-        # GET UserId (Key) From Cache
-        return "KA9JQ1"
+    def get_otp_from_cache(self, user_id, phone_no):
+        cache_key = 'USER_OTP_{}_{}'.format(user_id, phone_no)
+        return cache.get(cache_key)
 
     def generate_otp(self):
         chars = string.ascii_uppercase + string.digits
         return ''.join(random.choices(chars, k=6))
 
     def get_user_by_phone(self, phone_no):
-        # Check if User with Phone Number is Present in DB
-        # Return User Object
-        return User(id=1)
+        return User.objects.filter(phone_no=phone_no).first()
 
     def validate_no(self, phone_no):
         pattern = re.compile("[1-9][0-9]{9}")
