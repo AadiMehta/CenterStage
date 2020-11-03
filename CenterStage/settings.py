@@ -12,10 +12,13 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import sys
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env_path = Path(BASE_DIR) / '.env'
+load_dotenv(dotenv_path=env_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -24,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'z(3*uqch79bmakbwp1g&#k&#ik%!g(r!bzk_6vnooi!#4y-&b8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if sys.platform == "win32" else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,9 +99,9 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'CenterStage',
-            'USER': 'CenterStage',
-            'PASSWORD': 'root12345',
-            'HOST': 'cs-postgres.cob04tqc0slo.us-east-2.rds.amazonaws.com',
+            'USER': os.environ.get("DB_USER"),
+            'PASSWORD': os.environ.get("DB_PASSWORD"),
+            'HOST': os.environ.get("DB_HOST"),
             'PORT': 5432,
         }
     }
@@ -156,11 +159,11 @@ AUTH_USER_MODEL = 'users.User'
 """
 Settings for AWS account
 """
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "AKIAYD2G4QL6SNC3NRPF")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "UhXlxpptpuyg3WocGlxiLEhxBMD0Ap6gDewVrbna")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_BUCKET_NAME", "CenterStageBucket")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_BUCKET_NAME")
 
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
@@ -169,13 +172,13 @@ AWS_S3_REGION_NAME = 'us-east-1'
 AWS_DEFAULT_ACL = None
 
 # Twilio sms notifications settings
-TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "")
-TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "")
-TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER", "")
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "AC8286de623e212c4d624bf26107ed9f40")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "25fa381772e29faadc012136537763d4")
+TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER", "+13343098223")
 
 # sendgrid settings to send email
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

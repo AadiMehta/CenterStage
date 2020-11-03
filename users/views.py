@@ -138,20 +138,24 @@ class ProfileImage(APIView):
 
 class SendOtp(APIView):
     def post(self, request, *args, **kwargs):
-        data = request.data
-        phone_no = data.get('phone_no')
-        if not phone_no and not validate_no(phone_no):
-            return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
+        try:
+            data = request.data
+            phone_no = data.get('phone_no')
+            if not phone_no and not validate_no(phone_no):
+                return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
 
-        user = self.get_user_by_phone(phone_no)
-        if not user:
-            return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
+            user = self.get_user_by_phone(phone_no)
+            if not user:
+                return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
 
-        otp = self.generate_otp()
-        self.send_otp(phone_no, otp)
-        self.persist_otp(user.id, phone_no, otp)
+            otp = self.generate_otp()
+            self.send_otp(phone_no, otp)
+            self.persist_otp(user.id, phone_no, otp)
 
-        return Response(dict(msg="Otp Sent Successfully"), status=status.HTTP_200_OK)
+            return Response(dict(msg="Otp Sent Successfully"), status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=e.msg), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def send_otp(self, phone_no, otp):
         message = 'Your OTP : {}'.format(otp)
@@ -175,25 +179,31 @@ class SendOtp(APIView):
 
 class VerifyOtp(APIView):
     def post(self, request, *args, **kwargs):
-        data = request.data
-        phone_no = data.get('phone_no')
-        provided_otp = data.get('otp')
-        if not provided_otp:
-            return Response("Invalid Data", status=status.HTTP_400_BAD_REQUEST)
-        if not phone_no and not validate_no(phone_no):
-            return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
+        try:
+            data = request.data
+            phone_no = data.get('phone_no')
+            provided_otp = data.get('otp')
+            if not provided_otp:
+                return Response("Invalid Data", status=status.HTTP_400_BAD_REQUEST)
+            if not phone_no and not validate_no(phone_no):
+                return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
 
-        user = self.get_user_by_phone(phone_no)
-        if not user:
-            return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
+            user = self.get_user_by_phone(phone_no)
+            if not user:
+                return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
 
-        cached_otp = self.get_otp_from_cache(user.id, phone_no)
-        if not cached_otp:
-            return Response(dict(msg="Otp Expired"), status=status.HTTP_400_BAD_REQUEST)
+            cached_otp = self.get_otp_from_cache(user.id, phone_no)
+            if not cached_otp:
+                return Response(dict(msg="Otp Expired"), status=status.HTTP_400_BAD_REQUEST)
 
-        if provided_otp == cached_otp:
-            token, created = self.authenticate(user)
-            return Response(dict(msg="Login Successful", token=token), status=status.HTTP_200_OK)
+            if provided_otp == cached_otp:
+                token, created = self.authenticate(user)
+                return Response(dict(msg="Login Successful", token=token), status=status.HTTP_200_OK)
+            else:
+                return Response(dict(msg="Invalid OTP"), status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=e.msg), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def authenticate(self, user):
         return Token.objects.get_or_create(user=user)
