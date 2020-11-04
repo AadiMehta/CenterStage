@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-if sys.platform in ["win32", "linux"]:
+if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -125,13 +125,27 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Caching
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': '127.0.0.1:11211'
     }
 }
+if sys.platform == "win32":
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+            'KEY_PREFIX': 'centerstage'
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+            'KEY_PREFIX': 'centerstage'
+        }
+    }
 
 
 # Internationalization

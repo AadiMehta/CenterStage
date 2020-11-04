@@ -138,6 +138,18 @@ class ProfileImage(APIView):
 
 class SendOtp(APIView):
     def post(self, request, *args, **kwargs):
+        """
+        Send OTP to phone_no after validation
+
+        Request body:
+        {
+            "phone_no": "9999999999"
+        }
+        Response:
+        {
+            "msg": "Otp Sent Successfully"
+        }
+        """
         try:
             data = request.data
             phone_no = data.get('phone_no')
@@ -158,27 +170,46 @@ class SendOtp(APIView):
             return Response(dict(msg=e.msg), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def send_otp(self, phone_no, otp):
+        # Send OTP using twilio API
         message = 'Your OTP : {}'.format(otp)
         twilio.send_message(body=message, to=phone_no)
 
     def persist_otp(self, user_id, phone_no, otp):
-        cache_key = 'USER_OTP_{}_{}'.format(user_id, phone_no)
+        # Set OTP in Cache
+        cache_key = 'user-otp-{}-{}'.format(user_id, phone_no)
         cache.set(cache_key, otp, 60)
 
     def generate_otp(self):
+        # Generate Random OTP of 6 digits
         chars = string.ascii_uppercase + string.digits
         return ''.join(random.choices(chars, k=6))
 
     def get_user_by_phone(self, phone_no):
+        # Verify if User with phone_no exist
         return User.objects.filter(phone_no=phone_no).first()
 
     def validate_no(self, phone_no):
+        # Validate phone_no
         pattern = re.compile("[1-9][0-9]{9}")
         return pattern.match(phone_no)
 
 
 class VerifyOtp(APIView):
     def post(self, request, *args, **kwargs):
+        """
+        Verify OTP sent to the phone_no
+
+        Request body:
+        {
+            "phone_no": "9999999999"
+            "otp": "01AZM6"
+        }
+        Response:
+        {
+            "msg": "Login Successful",
+            "token": "3e80a3dbae01002c37a06fa5cee04fea62e96d01"
+        }
+        """
         try:
             data = request.data
             phone_no = data.get('phone_no')
@@ -198,7 +229,7 @@ class VerifyOtp(APIView):
 
             if provided_otp == cached_otp:
                 token, created = self.authenticate(user)
-                return Response(dict(msg="Login Successful", token=token), status=status.HTTP_200_OK)
+                return Response(dict(msg="Login Successful", token=token.key), status=status.HTTP_200_OK)
             else:
                 return Response(dict(msg="Invalid OTP"), status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
@@ -206,19 +237,19 @@ class VerifyOtp(APIView):
             return Response(dict(msg=e.msg), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def authenticate(self, user):
+        # Get or Create Token for User
         return Token.objects.get_or_create(user=user)
 
     def get_otp_from_cache(self, user_id, phone_no):
-        cache_key = 'USER_OTP_{}_{}'.format(user_id, phone_no)
+        # Get OTP from Cache
+        cache_key = 'user-otp-{}-{}'.format(user_id, phone_no)
         return cache.get(cache_key)
 
-    def generate_otp(self):
-        chars = string.ascii_uppercase + string.digits
-        return ''.join(random.choices(chars, k=6))
-
     def get_user_by_phone(self, phone_no):
+        # Verify if User with phone_no exist
         return User.objects.filter(phone_no=phone_no).first()
 
     def validate_no(self, phone_no):
+        # Validate phone_no
         pattern = re.compile("[1-9][0-9]{9}")
         return pattern.match(phone_no)
