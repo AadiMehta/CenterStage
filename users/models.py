@@ -100,8 +100,50 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
-class TeacherUser(models.Model):
+class TeacherProfile(models.Model):
     """
     Additional data associated with the teacher user
     """
-    pass
+    class Meta:
+        verbose_name = _('teacheruser')
+        verbose_name_plural = _('teacherusers')
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT, default=None)
+    year_of_experience = models.CharField(_('years of experience'), null=True, max_length=3) 
+    subdomain = models.CharField(_('Domain Prefix'), null=True, max_length=10)
+    about = models.CharField(_('About Teacher'), null=True, max_length=80)
+    intro_video = models.URLField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.title 
+
+
+class TeacherAccountTypes(models.TextChoices):
+    ZOOM_VIDEO = 'ZOOM', _('Zoom Video')
+    GOOGLE = 'GOOGLE', _('Google')
+    TEAMS = 'TEAMS', _('Teams')
+
+class TeacherAccounts(models.Model):
+    """
+    Data Associated to Social Accounts
+    """
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.PROTECT, related_name="accounts")
+    account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=10,
+                                 help_text="Type of account")
+    info = models.JSONField(null=True)
+
+
+class TeacherPaymentTypes(models.TextChoices):
+    STRIPE = 'STRIPE', _('Stripe payment')
+    PAYPAL = 'PAYPAL', _('Paypal payment')
+    BANK = 'BANK', _('Bank Account')
+
+
+class TeacherPayments(models.Model):
+    """
+    Data Associated to Social Accounts
+    """
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.PROTECT, related_name="payments")
+    payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
+                                 help_text="Type of account")
+    info = models.JSONField(null=True)

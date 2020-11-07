@@ -1,7 +1,7 @@
 import _thread
 from notifications.views import send_signup_email
 from rest_framework import serializers
-from users.models import User
+from users.models import User, TeacherProfile
 from django.db import IntegrityError
 
 
@@ -70,3 +70,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(error)
 
 
+class TeacherUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TeacherProfile
+        fields = ['user', 'year_of_experience', 'subdomain', 'about', 'intro_video']

@@ -2,11 +2,14 @@ import string
 import random
 import logging
 
+from urllib.parse import urlparse
+
+from django.views.generic import TemplateView
+from django.core.cache import cache
+
 from rest_framework import status
 from rest_framework import generics
-from users.models import User
 from rest_framework.parsers import MultiPartParser, FormParser
-from users.serializers import UserSerializer, UserCreateSerializer, LoginResponseSerializer
 from rest_framework import parsers, renderers
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -15,9 +18,15 @@ from rest_framework.response import Response
 from rest_framework.schemas import ManualSchema
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from django.core.cache import cache
 
 from notifications.twilio_sms_notification import twilio
+
+from users.serializers import (
+    UserSerializer, UserCreateSerializer, LoginResponseSerializer, 
+    TeacherUserSerializer
+)
+from users.models import (User, TeacherProfile)
+
 
 logger = logging.getLogger(__name__)
 
@@ -253,3 +262,56 @@ class VerifyOtp(APIView):
         # Validate phone_no
         pattern = re.compile("[1-9][0-9]{9}")
         return pattern.match(phone_no)
+
+
+class TeacherProfileAPIView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            request.user = User(id=4) # Temporary Line of Code
+            user = request.user
+            request.data.update(user=user.id)
+
+            serializer = TeacherUserSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(dict(msg='Teacher Profile Created'), status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get(self, request):
+        pass
+
+    def patch(self, request, *args, **kwargs):
+        try:            
+            request.user = User(id=4) # Temporary Line of Code
+            user = request.user
+            teacher = TeacherProfile.objects.filter(user=request.user).first()
+
+            serializer = TeacherUserSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                validated_data = serializer.data
+                serializer.update(instance=teacher, validated_data=validated_data)
+                return Response(dict(msg='Teacher Profile Updated'), status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, *args, **kwargs):
+        pass
+
+
+class TeacherProfileView(TemplateView):
+    template_name = "test_teacher_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        url = self.request.META['HTTP_HOST']
+        subdomain = url.split('.')[0]
+        teacher = TeacherProfile.objects.filter(subdomain=subdomain).first()
+        context.update({
+            'subdomain': subdomain,
+            'teacher': teacher
+        })
+        return context
