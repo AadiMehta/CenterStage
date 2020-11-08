@@ -99,6 +99,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+class TeacherProfileStatuses(models.TextChoices):
+    ACTIVE = 'ACTIVE', _('ACTIVE')
+    DELETED = 'DELETED', _('DELETED')
+    REMOVED = 'REMOVED', _('REMOVED')
 
 class TeacherProfile(models.Model):
     """
@@ -108,14 +112,13 @@ class TeacherProfile(models.Model):
         verbose_name = _('teacheruser')
         verbose_name_plural = _('teacherusers')
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT, default=None)
+    user = models.OneToOneField(User, on_delete=models.PROTECT, default=None)
     year_of_experience = models.CharField(_('years of experience'), null=True, max_length=3) 
     subdomain = models.CharField(_('Domain Prefix'), null=True, max_length=10)
     about = models.CharField(_('About Teacher'), null=True, max_length=80)
     intro_video = models.URLField(max_length=200, null=True)
-
-    def __str__(self):
-        return self.title 
+    status = models.CharField(_("Teacher Status"), null=True, choices=TeacherProfileStatuses.choices, max_length=10,
+                                 help_text="Teacher Profile Statuses")
 
 
 class TeacherAccountTypes(models.TextChoices):
@@ -127,7 +130,7 @@ class TeacherAccounts(models.Model):
     """
     Data Associated to Social Accounts
     """
-    teacher = models.ForeignKey(TeacherProfile, on_delete=models.PROTECT, related_name="accounts")
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="accounts")
     account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=10,
                                  help_text="Type of account")
     info = models.JSONField(null=True)
@@ -143,7 +146,7 @@ class TeacherPayments(models.Model):
     """
     Data Associated to Social Accounts
     """
-    teacher = models.ForeignKey(TeacherProfile, on_delete=models.PROTECT, related_name="payments")
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="payments")
     payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
-                                 help_text="Type of account")
+                                 help_text="Type of payment account")
     info = models.JSONField(null=True)

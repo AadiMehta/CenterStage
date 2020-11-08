@@ -1,3 +1,5 @@
+import re
+import json
 import string
 import random
 import logging
@@ -18,14 +20,18 @@ from rest_framework.response import Response
 from rest_framework.schemas import ManualSchema
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import authentication, permissions
 
 from notifications.twilio_sms_notification import twilio
 
 from users.serializers import (
     UserSerializer, UserCreateSerializer, LoginResponseSerializer, 
-    TeacherUserSerializer
+    TeacherProfileCreateUpdateSerializer, TeacherProfileGetSerializer
 )
-from users.models import (User, TeacherProfile)
+from users.models import (
+    User, TeacherProfile, TeacherProfileStatuses,
+    TeacherAccounts, TeacherPayments
+)
 
 
 logger = logging.getLogger(__name__)
@@ -265,41 +271,138 @@ class VerifyOtp(APIView):
 
 
 class TeacherProfileAPIView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    create_update_serializer = TeacherProfileCreateUpdateSerializer
+    get_serializer = TeacherProfileGetSerializer
 
     def post(self, request, *args, **kwargs):
         try:
-            request.user = User(id=4) # Temporary Line of Code
-            user = request.user
-            request.data.update(user=user.id)
+            teacher, created = TeacherProfile.objects.get_or_create(user=request.user)
+            if created:
+                teacher.status = TeacherProfileStatuses.ACTIVE
+                teacher.save()
 
-            serializer = TeacherUserSerializer(data=request.data)
+            serializer = self.create_update_serializer(instance=teacher, data=request.data)
             if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(dict(msg='Teacher Profile Created'), status=status.HTTP_200_OK)
+                teacher = serializer.save()
+                msg = created and 'Teacher Profile Created' or 'Teacher Profile Updated'
+                return Response(dict(id=teacher.user.id, msg=msg), status=status.HTTP_200_OK)
         except Exception as e:
             print(str(e))
             return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
-        pass
+        try:
+            teacher = TeacherProfile.objects.filter(user=request.user, status=TeacherProfileStatuses.ACTIVE).first()
+            if not teacher:
+                return Response(dict(msg="Active Profile Not Found"), status=status.HTTP_404_NOT_FOUND)
 
-    def patch(self, request, *args, **kwargs):
-        try:            
-            request.user = User(id=4) # Temporary Line of Code
-            user = request.user
-            teacher = TeacherProfile.objects.filter(user=request.user).first()
-
-            serializer = TeacherUserSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                validated_data = serializer.data
-                serializer.update(instance=teacher, validated_data=validated_data)
-                return Response(dict(msg='Teacher Profile Updated'), status=status.HTTP_200_OK)
+            serializer = self.get_serializer(instance=teacher)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             print(str(e))
             return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def delete(self, request, *args, **kwargs):
-        pass
+    def delete(self, request):
+        try:
+            teacher = TeacherProfile.objects.filter(user=request.user, status=TeacherProfileStatuses.ACTIVE).first()
+            if not teacher:
+                return Response(dict(msg="Active Profile Not Found"), status=status.HTTP_404_NOT_FOUND)
+
+            teacher.status = TeacherProfileStatuses.DELETED
+            teacher.save()
+            return Response(dict(msg="Profile has been deleted"), status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SubdomainAvailibilityAPIView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request):
+        data = request.data
+        subdomain = data.get('subdomain')
+        if not subdomain:
+            return Response("Invalid Data", status=status.HTTP_400_BAD_REQUEST)
+
+        availibility = not TeacherProfile.objects.filter(subdomain=subdomain).exists()
+        msg = availibility and 'Subdomain is available' or 'Subdomain is not available'
+        return Response(dict(available=availibility, subdomain=subdomain, msg=msg), status=status.HTTP_200_OK)            
+
+
+class TeacherPaymentsAPIView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            payment_type = data.get('payment_type')
+            info = data.get('info')
+            teacher = TeacherProfile.objects.filter(user=request.user, status=TeacherProfileStatuses.ACTIVE).first()
+            if not teacher:
+                return Response(dict(msg='Payment Not Created. Active Profile Not Found'), status=status.HTTP_404_NOT_FOUND)
+            
+            payment, created = TeacherPayments.objects.get_or_create(teacher=teacher, payment_type=payment_type)
+            payment.info = json.dumps(info)
+            payment.save()
+            msg = created and 'Payment Created' or 'Payment Updated'
+            return Response(dict(payment_account_id=payment.id, msg=msg), status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        try:
+            data = request.data
+            payment_type = data.get('payment_type')
+            teacher = TeacherProfile.objects.filter(user=request.user, status=TeacherProfileStatuses.ACTIVE).first()
+            if not teacher:
+                return Response(dict(msg='Payment Not Deleted. Active Profile Not Found'), status=status.HTTP_404_NOT_FOUND)
+            
+            payment = TeacherPayments.objects.filter(teacher=teacher, payment_type=payment_type).first()
+            payment.delete()
+            return Response(dict(msg='Payment Account Removed'), status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class TeacherAccountsAPIView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            account_type = data.get('account_type')
+            info = data.get('info')
+            teacher = TeacherProfile.objects.filter(user=request.user, status=TeacherProfileStatuses.ACTIVE).first()
+            if not teacher:
+                return Response(dict(msg='Account Not Created. Active Profile Not Found'), status=status.HTTP_404_NOT_FOUND)
+            
+            account, created = TeacherAccounts.objects.get_or_create(teacher=teacher, account_type=account_type)
+            account.info = json.dumps(info)
+            account.save()
+            msg = created and 'Account Created' or 'Account Updated'
+            return Response(dict(account_id=account.id, msg=msg), status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        try:
+            data = request.data
+            account_type = data.get('account_type')
+            teacher = TeacherProfile.objects.filter(user=request.user, status=TeacherProfileStatuses.ACTIVE).first()
+            if not teacher:
+                return Response(dict(msg='Account Not Deleted. Active Profile Not Found'), status=status.HTTP_404_NOT_FOUND)
+            
+            account = TeacherAccounts.objects.filter(teacher=teacher, account_type=account_type).first()
+            account.delete()
+            return Response(dict(msg='Account Removed'), status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            print(str(e))
+            return Response(dict(msg=str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class TeacherProfileView(TemplateView):
