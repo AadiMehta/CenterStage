@@ -118,7 +118,7 @@ class TeacherProfile(models.Model):
     about = models.CharField(_('About Teacher'), null=True, max_length=80)
     intro_video = models.URLField(max_length=200, null=True)
     status = models.CharField(_("Teacher Status"), null=True, choices=TeacherProfileStatuses.choices, max_length=10,
-                                 help_text="Teacher Profile Statuses")
+                                 help_text="Teacher Profile Statuses", default=TeacherProfileStatuses.ACTIVE)
 
 
 class TeacherAccountTypes(models.TextChoices):

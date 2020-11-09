@@ -73,7 +73,16 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class SendOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10)
+    phone_no = serializers.CharField(max_length=10, required=True)
+
+
+class SubdomainCheckSerializer(serializers.Serializer):
+    subdomain = serializers.CharField(max_length=10, required=True)
+
+
+class VerifyOTPSerializer(serializers.Serializer):
+    phone_no = serializers.CharField(max_length=10, required=True)
+    otp = serializers.CharField(max_length=6, required=True)
 
 
 class TeacherAccountsSerializer(serializers.ModelSerializer):
@@ -103,6 +112,7 @@ class TeacherPaymentsSerializer(serializers.ModelSerializer):
 
 
 class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = TeacherProfile
         fields = [
@@ -122,3 +132,10 @@ class TeacherProfileGetSerializer(serializers.ModelSerializer):
             'about', 'intro_video', 'accounts', 'payments'
         ]
 
+
+class TeacherPaymentRemoveSerializer(serializers.Serializer):
+    payment_type = serializers.CharField(max_length=10, required=True)
+
+
+class TeacherAccountRemoveSerializer(serializers.Serializer):
+    account_type = serializers.CharField(max_length=10, required=True)
