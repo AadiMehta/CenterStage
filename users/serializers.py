@@ -72,6 +72,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(error)
 
 
+class SendOTPSerializer(serializers.Serializer):
+    phone_no = serializers.CharField(max_length=10)
+
+
 class TeacherAccountsSerializer(serializers.ModelSerializer):
     info = serializers.SerializerMethodField()
 
@@ -105,6 +109,7 @@ class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
             'user', 'year_of_experience', 'subdomain',
             'about', 'intro_video'
         ]
+
 
 class TeacherProfileGetSerializer(serializers.ModelSerializer):
     accounts = TeacherAccountsSerializer(many=True, read_only=True)

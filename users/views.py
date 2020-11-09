@@ -3,12 +3,8 @@ import json
 import string
 import random
 import logging
-
-from urllib.parse import urlparse
-
-from django.views.generic import TemplateView
 from django.core.cache import cache
-
+from django.views.generic import TemplateView
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -25,8 +21,8 @@ from rest_framework import authentication, permissions
 from notifications.twilio_sms_notification import twilio
 
 from users.serializers import (
-    UserSerializer, UserCreateSerializer, LoginResponseSerializer, 
-    TeacherProfileCreateUpdateSerializer, TeacherProfileGetSerializer
+    UserSerializer, UserCreateSerializer, LoginResponseSerializer,
+    TeacherProfileCreateUpdateSerializer, TeacherProfileGetSerializer, SendOTPSerializer
 )
 from users.models import (
     User, TeacherProfile, TeacherProfileStatuses,
@@ -85,10 +81,7 @@ class Register(generics.CreateAPIView):
         "email": "bob_marley@gmail.com",
         "first_name": "Bob",
         "last_name": "Marley",
-        "business_name": "Noneofyours, Lic",
-        "location": "somewhere in the us",
-        "phone_no": "123123123",
-        "preferred_marina_address": "address"
+        "phone_no": "123123123"
     }
     """
     serializer_class = UserCreateSerializer
@@ -116,9 +109,6 @@ class Profile(generics.RetrieveUpdateAPIView):
     {
         "first_name": "Bob",
         "last_name": "Marley",
-        "business_name": "Noneofyours, Lic",
-        "location": "somewhere in the us",
-        "preferred_marina_address": "address",
         "phone_no": "123123123",
         "profile_image": "/users/profile_images/1.png"
     }
@@ -151,59 +141,65 @@ class ProfileImage(APIView):
             return Response(dict({"image": ["This field is required!"]}), status=status.HTTP_400_BAD_REQUEST)
 
 
-class SendOtp(APIView):
-    def post(self, request, *args, **kwargs):
-        """
-        Send OTP to phone_no after validation
+class SendOtp(generics.CreateAPIView):
+    """
+    Send OTP to phone_no after validation
 
-        Request body:
+    Request body:
         {
             "phone_no": "9999999999"
         }
-        Response:
+    Response:
         {
             "msg": "Otp Sent Successfully"
         }
-        """
-        try:
-            data = request.data
-            phone_no = data.get('phone_no')
-            if not phone_no and not validate_no(phone_no):
-                return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
+    """
+    serializer_class = SendOTPSerializer
+    authentication_classes = []
+    permission_classes = []
 
-            user = self.get_user_by_phone(phone_no)
-            if not user:
-                return Response("No User Found", status=status.HTTP_400_BAD_REQUEST)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-            otp = self.generate_otp()
-            self.send_otp(phone_no, otp)
-            self.persist_otp(user.id, phone_no, otp)
+        phone_no = serializer.validated_data.get("phone_no")
+        # if checks valid
+        user = self.get_user_by_phone(phone_no)
+        if not user:
+            return Response(dict({"error": "Invalid user"}))
 
-            return Response(dict(msg="Otp Sent Successfully"), status=status.HTTP_200_OK)
-        except Exception as e:
-            print(str(e))
-            return Response(dict(msg=e.msg), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        otp = self.generate_otp()
+        self.send_otp(phone_no, otp)
+        self.persist_otp(user.id, phone_no, otp)
 
-    def send_otp(self, phone_no, otp):
+        headers = self.get_success_headers(serializer.data)
+        return Response(dict({"msg": "OTP sent successfully"}), status=status.HTTP_200_OK, headers=headers)
+
+    @staticmethod
+    def send_otp(phone_no, otp):
         # Send OTP using twilio API
         message = 'Your OTP : {}'.format(otp)
         twilio.send_message(body=message, to=phone_no)
 
-    def persist_otp(self, user_id, phone_no, otp):
+    @staticmethod
+    def persist_otp(user_id, phone_no, otp):
         # Set OTP in Cache
         cache_key = 'user-otp-{}-{}'.format(user_id, phone_no)
         cache.set(cache_key, otp, 60)
 
-    def generate_otp(self):
+    @staticmethod
+    def generate_otp():
         # Generate Random OTP of 6 digits
         chars = string.ascii_uppercase + string.digits
         return ''.join(random.choices(chars, k=6))
 
-    def get_user_by_phone(self, phone_no):
+    @staticmethod
+    def get_user_by_phone(phone_no):
         # Verify if User with phone_no exist
-        return User.objects.filter(phone_no=phone_no).first()
+        return User.objects.get(phone_no=phone_no)
 
-    def validate_no(self, phone_no):
+    @staticmethod
+    def validate_no(phone_no):
         # Validate phone_no
         pattern = re.compile("[1-9][0-9]{9}")
         return pattern.match(phone_no)
@@ -231,7 +227,7 @@ class VerifyOtp(APIView):
             provided_otp = data.get('otp')
             if not provided_otp:
                 return Response("Invalid Data", status=status.HTTP_400_BAD_REQUEST)
-            if not phone_no and not validate_no(phone_no):
+            if not phone_no and not self.validate_no(phone_no):
                 return Response("Invalid Phone Number", status=status.HTTP_400_BAD_REQUEST)
 
             user = self.get_user_by_phone(phone_no)
@@ -251,20 +247,24 @@ class VerifyOtp(APIView):
             print(str(e))
             return Response(dict(msg=e.msg), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def authenticate(self, user):
+    @staticmethod
+    def authenticate(user):
         # Get or Create Token for User
         return Token.objects.get_or_create(user=user)
 
-    def get_otp_from_cache(self, user_id, phone_no):
+    @staticmethod
+    def get_otp_from_cache(user_id, phone_no):
         # Get OTP from Cache
         cache_key = 'user-otp-{}-{}'.format(user_id, phone_no)
         return cache.get(cache_key)
 
-    def get_user_by_phone(self, phone_no):
+    @staticmethod
+    def get_user_by_phone(phone_no):
         # Verify if User with phone_no exist
         return User.objects.filter(phone_no=phone_no).first()
 
-    def validate_no(self, phone_no):
+    @staticmethod
+    def validate_no(phone_no):
         # Validate phone_no
         pattern = re.compile("[1-9][0-9]{9}")
         return pattern.match(phone_no)

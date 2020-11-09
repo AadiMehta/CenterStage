@@ -180,9 +180,9 @@ AWS_S3_REGION_NAME = 'us-east-1'
 AWS_DEFAULT_ACL = None
 
 # Twilio sms notifications settings
-TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "AC8286de623e212c4d624bf26107ed9f40")
-TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "25fa381772e29faadc012136537763d4")
-TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER", "+13343098223")
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER")
 
 # sendgrid settings to send email
 EMAIL_HOST = os.environ.get("EMAIL_HOST")
