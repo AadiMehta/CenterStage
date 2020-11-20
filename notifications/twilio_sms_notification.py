@@ -6,21 +6,11 @@ from twilio.rest import Client
 logger = logging.getLogger(__name__)
 
 NOT_CONFIGURED_MESSAGE = (
-    "TWILIO_ACCOUNT_SID or TWILIO_AUTH_TOKEN or TWILIO_NUMBER missing. Are you sure, you have .env file configured?"
+    "TWILIO_ACCOUNT_SID or TWILIO_AUTH_TOKEN or TWILIO_NUMBER missing."
 )
 
 
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class MessageClient(metaclass=Singleton):
-
+class MessageClient:
     def __init__(self):
         logger.debug('Initializing messaging client')
 
@@ -42,6 +32,3 @@ class MessageClient(metaclass=Singleton):
             to=to,
             from_=self.twilio_number,
         )
-
-
-twilio = MessageClient()

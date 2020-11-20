@@ -137,5 +137,3 @@ media/*
 
 # static files
 static/*
-
-.env

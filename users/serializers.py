@@ -1,9 +1,7 @@
-import json
 import _thread
-
 from notifications.views import send_signup_email
 from rest_framework import serializers
-from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments
+from users.models import User
 from django.db import IntegrityError
 
 
@@ -72,70 +70,3 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(error)
 
 
-class SendOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10, required=True)
-
-
-class SubdomainCheckSerializer(serializers.Serializer):
-    subdomain = serializers.CharField(max_length=10, required=True)
-
-
-class VerifyOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10, required=True)
-    otp = serializers.CharField(max_length=6, required=True)
-
-
-class TeacherAccountsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TeacherAccounts
-        fields = ['account_type', 'info']
-    
-    def get_info(self, instance):
-        if instance.info:
-            return json.loads(instance.info)
-        return {}
-
-
-class TeacherPaymentsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TeacherPayments
-        fields = ['payment_type', 'info']
-    
-    def get_info(self, instance):
-        if instance.info:
-            return json.loads(instance.info)
-        return {}
-
-
-class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TeacherProfile
-        fields = [
-            'user', 'year_of_experience', 'subdomain',
-            'about', 'intro_video'
-        ]
-
-
-class TeacherProfileGetSerializer(serializers.ModelSerializer):
-    accounts = TeacherAccountsSerializer(many=True, read_only=True)
-    payments = TeacherPaymentsSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = TeacherProfile
-        fields = [
-            'user', 'year_of_experience', 'subdomain',
-            'about', 'intro_video', 'accounts', 'payments'
-        ]
-
-
-class TeacherPaymentRemoveSerializer(serializers.Serializer):
-    payment_type = serializers.CharField(max_length=10, required=True)
-
-
-class TeacherAccountRemoveSerializer(serializers.Serializer):
-    account_type = serializers.CharField(max_length=10, required=True)

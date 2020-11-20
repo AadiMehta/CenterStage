@@ -16,20 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from users.views import (
-    SendOtp, VerifyOtp, TeacherProfileAPIView, TeacherProfileView,
-    SubdomainAvailibilityAPIView, TeacherPaymentsAPIView,
-    TeacherAccountsAPIView
-)
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/profile/subdomain/validate', SubdomainAvailibilityAPIView.as_view()),
-    path('api/profile/teacher/<int:id>', TeacherProfileAPIView.as_view()),
-    path('api/profile/teacher/accounts', TeacherAccountsAPIView.as_view()),
-    path('api/profile/teacher/payments', TeacherPaymentsAPIView.as_view()),
-    path('api/profile/teacher', TeacherProfileAPIView.as_view()),
-    path('api/verifyotp', VerifyOtp.as_view()),
-    path('api/sendotp', SendOtp.as_view()),
-    path('', TeacherProfileView.as_view()),
 ]
