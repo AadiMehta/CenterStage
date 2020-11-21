@@ -6,7 +6,7 @@ def send_signup_email(user):
     """
     Send sign up email to the user
     """
-    message = render_to_string('index.html', {'user': user.get_full_name()})
+    message = render_to_string('signup_email.html', {'user': user.get_full_name()})
     message_plain = "Hello {0},\n\nThank you for signing up on CenterStage.".format(user.get_full_name())
     send_mail('Welcome to CenterStage!', message_plain, 'no-reply@center-stage.online', [user.email],
               fail_silently=False, html_message=message)

@@ -17,11 +17,9 @@ from rest_framework.schemas import ManualSchema
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import authentication, permissions
-
 from notifications.twilio_sms_notification import twilio
-
 from users.serializers import (
-    UserSerializer, UserCreateSerializer, LoginResponseSerializer,
+    UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer,
     TeacherProfileCreateUpdateSerializer, TeacherProfileGetSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
     TeacherAccountsSerializer, TeacherPaymentsSerializer,
@@ -37,6 +35,9 @@ logger = logging.getLogger(__name__)
 
 
 class ObtainAuthToken(APIView):
+    """
+    Send username and password and return Auth Token
+    """
     throttle_classes = ()
     permission_classes = ()
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
@@ -73,27 +74,27 @@ class ObtainAuthToken(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'preferred_marina_address': user.preferred_marina_address})
+        return Response({'token': token.key})
 
 
-class Register(generics.CreateAPIView):
+class TeacherRegister(generics.CreateAPIView):
     """
-    Create a user who can create trips
+    Create a user on the centerstage platform
 
-    {
-        "email": "bob_marley@gmail.com",
-        "first_name": "Bob",
-        "last_name": "Marley",
-        "phone_no": "123123123"
-    }
+    User Types:\n
+        CR -> Creator\n
+        ST -> Student\n
+        AD -> Admin
     """
-    serializer_class = UserCreateSerializer
+    serializer_class = TeacherUserCreateSerializer
     authentication_classes = []
     permission_classes = []
 
 
 class Logout(APIView):
-
+    """
+    Logs the user out. Deletes the token
+    """
     def get(self, request, format=None):
         # simply delete the token to force a login
         request.user.auth_token.delete()

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.mail import send_mail
+from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
@@ -61,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_type = models.CharField(_("user type"), choices=UserTypes.choices, max_length=3,
                                  help_text="Type of user")
 
-    profile_image = models.ImageField(_("profile image"), null=True)
+    profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     is_staff = models.BooleanField(_('staff status'), default=False)
@@ -97,7 +98,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_user_type(self):
         """Returns the type of the user"""
-        return self.user_type.label
+        return self.get_user_type_display()
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""

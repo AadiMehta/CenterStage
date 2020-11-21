@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class TeacherUserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True, max_length=32)
 
@@ -59,12 +59,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'is_active',
             'date_joined',
             'last_login',
+            'user_type',
         )
 
     def create(self, validated_data):
         try:
-            user = User.objects.create_user(validated_data.pop("email"), validated_data.pop("password"),
-                                            **validated_data)
+            user = User.objects.create_creator_user(validated_data.pop("email"), validated_data.pop("password"),
+                                                    **validated_data)
             _thread.start_new_thread(send_signup_email, (user,))
             return user
         except IntegrityError as e:
