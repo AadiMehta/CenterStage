@@ -95,7 +95,7 @@ class TeacherAccountsSerializer(serializers.ModelSerializer):
     
     def get_info(self, instance):
         if instance.info:
-            return json.loads(instance.info)
+            return dict(instance.info)
         return {}
 
 
@@ -108,7 +108,7 @@ class TeacherPaymentsSerializer(serializers.ModelSerializer):
     
     def get_info(self, instance):
         if instance.info:
-            return json.loads(instance.info)
+            return dict(instance.info)
         return {}
 
 
@@ -116,10 +116,10 @@ class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeacherProfile
-        fields = [
-            'user', 'year_of_experience', 'subdomain',
-            'about', 'intro_video'
-        ]
+        exclude = (
+            'id',
+            'user'
+        )
 
 
 class TeacherProfileGetSerializer(serializers.ModelSerializer):
@@ -130,7 +130,8 @@ class TeacherProfileGetSerializer(serializers.ModelSerializer):
         model = TeacherProfile
         fields = [
             'user', 'year_of_experience', 'subdomain',
-            'about', 'intro_video', 'accounts', 'payments'
+            'description', 'intro_video', 'accounts',
+            'payments'
         ]
 
 

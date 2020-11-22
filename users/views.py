@@ -3,8 +3,12 @@ import json
 import string
 import random
 import logging
+import urllib
+
+from django.conf import settings
 from django.core.cache import cache
 from django.views.generic import TemplateView
+
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -173,8 +177,8 @@ class SendOtp(generics.CreateAPIView):
             return Response(dict({"error": "User with phone no doesn't exist"}))
 
         otp = self.generate_otp()
-        print(otp)
-        # self.send_otp(phone_no, otp)
+        # print(otp)
+        self.send_otp(phone_no, otp)
         self.persist_otp(user.id, phone_no, otp)
 
         headers = self.get_success_headers(serializer.data)
@@ -282,12 +286,8 @@ class TeacherProfileAPIView(generics.CreateAPIView, generics.RetrieveAPIView, ge
     def create(self, request, *args, **kwargs):
         serializer = self.create_update_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        subdomain = serializer.validated_data.get("subdomain")
-        if subdomain and TeacherProfile.objects.exclude(user=request.user).filter(subdomain=subdomain).exists():
-            return Response(dict(msg="Subdomain is not available"))
-
         teacher, created = TeacherProfile.objects.get_or_create(user=request.user)
+        request.data.update(user=request.user)
         serializer = self.create_update_serializer(instance=teacher, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -411,15 +411,34 @@ class TeacherAccountsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
 
 
 class TeacherProfileView(TemplateView):
+    get_serializer = TeacherProfileGetSerializer
     template_name = "test_teacher_profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         url = self.request.META['HTTP_HOST']
         subdomain = url.split('.')[0]
-        teacher = TeacherProfile.objects.filter(subdomain=subdomain).first()
+        teacher = TeacherProfile.objects.get(subdomain=subdomain)
+        serializer = self.get_serializer(instance=teacher)
+        teacher_info = serializer.data
+        teacher_accounts = {}
+        accounts = teacher_info.pop('accounts')
+        for account in accounts:
+            teacher_accounts[account['account_type']] = account
+
+        print(url)
         context.update({
             'subdomain': subdomain,
-            'teacher': teacher
+            'teacher': teacher_info,
+            'teacher_accounts': teacher_accounts,
+            'redirection_url': url,
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_DISCONNECT_URL': '{}/profile/teacher/{}/zoom/disconnect'.format(settings.API_BASE_URL, teacher.id),
+                'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/teacher/{}/zoom/connect'.format(
+                                            settings.API_BASE_URL, teacher.id
+                                        ))
+            }
         })
+        print(context)
         return context

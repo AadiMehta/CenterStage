@@ -26,6 +26,9 @@ from users.views import (
     SubdomainAvailibilityAPIView, TeacherPaymentsAPIView,
     TeacherAccountsAPIView, TeacherRegister, ObtainAuthToken, Logout
 )
+from zoom.views import (
+    ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
+)
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -59,8 +62,11 @@ urlpatterns = [
     path('api/verify_otp/', VerifyOtp.as_view()),
     path('api/send_otp/', SendOtp.as_view()),
 
+    path('api/profile/teacher/<int:teacher_id>/zoom/connect', ZoomConnectAPIView.as_view()),
+    path('api/profile/teacher/<int:teacher_id>/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
+    path('api/profile/teacher/<int:teacher_id>/zoom/', ZoomMeetingAPIView.as_view()),
+
     path('api/profile/subdomain/validate/', SubdomainAvailibilityAPIView.as_view()),
-    path('api/profile/teacher/<int:id>/', TeacherProfileAPIView.as_view()),
     path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
     path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
     path('api/profile/teacher/', TeacherProfileAPIView.as_view()),

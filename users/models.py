@@ -139,7 +139,7 @@ class TeacherAccounts(models.Model):
     """
     Data Associated to Social Accounts
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="accounts")
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="accounts")
     account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=10,
                                     help_text="Type of account")
     info = models.JSONField(null=True)

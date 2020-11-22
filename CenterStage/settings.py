@@ -28,9 +28,12 @@ SECRET_KEY = 'z(3*uqch79bmakbwp1g&#k&#ik%!g(r!bzk_6vnooi!#4y-&b8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if sys.platform == "win32" else False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+BASE_URL = 'http://localhost:8000'
+API_BASE_URL = '{}/api'.format(BASE_URL)
 
 # Application definition
 
@@ -225,3 +228,9 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Zoom settings
+ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
+ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
+ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
+
