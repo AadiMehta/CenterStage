@@ -1,10 +1,10 @@
 import json
 import _thread
-
 from notifications.views import send_signup_email
 from rest_framework import serializers
 from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments
 from django.db import IntegrityError
+from phonenumber_field.serializerfields import PhoneNumberField
 
 
 class LoginResponseSerializer(serializers.Serializer):
@@ -20,7 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'is_superuser',
             'is_staff',
-            'is_active',
             'date_joined',
             'last_login',
             'groups',
@@ -40,6 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
 class TeacherUserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True, max_length=32)
+    phone_no = PhoneNumberField(required=False)
 
     class Meta:
         model = User
@@ -74,7 +74,7 @@ class TeacherUserCreateSerializer(serializers.ModelSerializer):
 
 
 class SendOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10, required=True)
+    phone_no = PhoneNumberField(required=True)
 
 
 class SubdomainCheckSerializer(serializers.Serializer):
@@ -82,7 +82,7 @@ class SubdomainCheckSerializer(serializers.Serializer):
 
 
 class VerifyOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10, required=True)
+    phone_no = PhoneNumberField(required=True)
     otp = serializers.CharField(max_length=6, required=True)
 
 
@@ -122,7 +122,7 @@ class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
         ]
 
 
-class TeacherProfileGetSerializer(serializers.ModelSerializer):
+class TeacherProfileSerializer(serializers.ModelSerializer):
     accounts = TeacherAccountsSerializer(many=True, read_only=True)
     payments = TeacherPaymentsSerializer(many=True, read_only=True)
 

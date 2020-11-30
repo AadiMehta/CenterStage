@@ -1,5 +1,17 @@
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+
+
+@api_view(["GET"])
+@authentication_classes([])
+@permission_classes([])
+def health_check(request):
+    """
+    Health check API
+    """
+    return Response(dict({"status": "System running with no issues!"}), status=200)
 
 
 def send_signup_email(user):

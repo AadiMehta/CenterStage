@@ -20,7 +20,7 @@ from rest_framework import authentication, permissions
 from notifications.twilio_sms_notification import twilio
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer,
-    TeacherProfileCreateUpdateSerializer, TeacherProfileGetSerializer,
+    TeacherProfileCreateUpdateSerializer, TeacherProfileSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
     TeacherAccountsSerializer, TeacherPaymentsSerializer,
     TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer
@@ -170,12 +170,12 @@ class SendOtp(generics.CreateAPIView):
         try:
             user = self.get_user_by_phone(phone_no)
         except User.DoesNotExist:
-            return Response(dict({"error": "User with phone no doesn't exist"}))
+            return Response(dict({"error": "User with phone no doesn't exist"}), status=status.HTTP_401_UNAUTHORIZED)
 
         otp = self.generate_otp()
         print(otp)
-        # self.send_otp(phone_no, otp)
-        self.persist_otp(user.id, phone_no, otp)
+        self.persist_otp(phone_no, otp)
+        self.send_otp(phone_no, otp)
 
         headers = self.get_success_headers(serializer.data)
         return Response(dict({"msg": "OTP sent successfully"}), status=status.HTTP_200_OK, headers=headers)
@@ -183,20 +183,19 @@ class SendOtp(generics.CreateAPIView):
     @staticmethod
     def send_otp(phone_no, otp):
         # Send OTP using twilio API
-        message = 'Your OTP : {}'.format(otp)
-        twilio.send_message(body=message, to=phone_no)
+        message = 'OTP for CenterStage sign in : {}'.format(otp)
+        twilio.send_message(body=message, to=str(phone_no))
 
     @staticmethod
-    def persist_otp(user_id, phone_no, otp):
+    def persist_otp(phone_no, otp):
         # Set OTP in Cache
-        cache_key = 'user-otp-{}-{}'.format(user_id, phone_no)
-        cache.set(cache_key, otp, 60)
+        cache_key = 'OTP-{0}'.format(str(phone_no))
+        cache.set(cache_key, otp, 90)
 
     @staticmethod
     def generate_otp():
         # Generate Random OTP of 6 digits
-        chars = string.ascii_uppercase + string.digits
-        return ''.join(random.choices(chars, k=6))
+        return ''.join(random.choices(string.digits, k=6))
 
     @staticmethod
     def get_user_by_phone(phone_no):
@@ -239,15 +238,15 @@ class VerifyOtp(generics.CreateAPIView):
         try:
             user = self.get_user_by_phone(phone_no)
         except User.DoesNotExist:
-            return Response(dict({"error": "Invalid user"}))
+            return Response(dict({"error": "Invalid user"}), status=status.HTTP_401_UNAUTHORIZED)
 
-        cached_otp = self.get_otp_from_cache(user.id, phone_no)
+        cached_otp = self.get_otp_from_cache(phone_no)
         if not cached_otp:
-            return Response(dict({"error": "Otp Expired"}))
+            return Response(dict({"error": "Otp Expired"}), status=status.HTTP_401_UNAUTHORIZED)
 
         if provided_otp == cached_otp:
             token, created = self.authenticate(user)
-            return Response(dict({"error": "Login Successful", "token": token.key}), status=status.HTTP_200_OK)
+            return Response(dict({"token": token.key}), status=status.HTTP_200_OK)
         else:
             return Response(dict({"error": "Invalid OTP"}), status=status.HTTP_401_UNAUTHORIZED)
     
@@ -257,9 +256,9 @@ class VerifyOtp(generics.CreateAPIView):
         return Token.objects.get_or_create(user=user)
 
     @staticmethod
-    def get_otp_from_cache(user_id, phone_no):
+    def get_otp_from_cache(phone_no):
         # Get OTP from Cache
-        cache_key = 'user-otp-{}-{}'.format(user_id, phone_no)
+        cache_key = 'OTP-{0}'.format(str(phone_no))
         return cache.get(cache_key)
 
     @staticmethod
@@ -274,10 +273,22 @@ class VerifyOtp(generics.CreateAPIView):
         return pattern.match(phone_no)
 
 
-class TeacherProfileAPIView(generics.CreateAPIView, generics.RetrieveAPIView, generics.DestroyAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
+class TeacherProfileView(generics.RetrieveAPIView):
+    serializer_class = TeacherProfileSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+        except TeacherProfile.DoesNotExist:
+            return Response(dict({"error": "No Active Profile Found"}), status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(instance=teacher)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TeacherProfileAPIView(generics.CreateAPIView, generics.DestroyAPIView):
     create_update_serializer = TeacherProfileCreateUpdateSerializer
-    get_serializer = TeacherProfileGetSerializer
+    serializer_class = TeacherProfileSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.create_update_serializer(data=request.data)
@@ -294,14 +305,6 @@ class TeacherProfileAPIView(generics.CreateAPIView, generics.RetrieveAPIView, ge
         msg = created and 'Teacher Profile Created' or 'Teacher Profile Updated'
         return Response(dict(id=teacher.user.id, msg=msg), status=status.HTTP_200_OK)
 
-    def get(self, request):
-        try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
-        except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
-
-        serializer = self.get_serializer(instance=teacher)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request):
         try:
@@ -316,8 +319,6 @@ class TeacherProfileAPIView(generics.CreateAPIView, generics.RetrieveAPIView, ge
 
 class SubdomainAvailibilityAPIView(generics.RetrieveAPIView):
     serializer_class = SubdomainCheckSerializer
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = []
 
     def get(self, request):
         serializer = self.get_serializer(data=request.data)
@@ -410,7 +411,7 @@ class TeacherAccountsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
             return Response(dict({"msg": "No Account Found"}))
 
 
-class TeacherProfileView(TemplateView):
+class TeacherProfileViewTemplate(TemplateView):
     template_name = "test_teacher_profile.html"
 
     def get_context_data(self, **kwargs):
