@@ -19,11 +19,9 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import authentication, permissions
 from notifications.twilio_sms_notification import twilio
 from users.serializers import (
-    UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer,
-    TeacherProfileCreateUpdateSerializer, TeacherProfileSerializer,
-    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
-    TeacherAccountsSerializer, TeacherPaymentsSerializer,
-    TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer
+    UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
+    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, TeacherAccountsSerializer,
+    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer
 )
 from users.models import (
     User, TeacherProfile, TeacherProfileStatuses,
@@ -89,6 +87,20 @@ class TeacherRegister(generics.CreateAPIView):
     serializer_class = TeacherUserCreateSerializer
     authentication_classes = []
     permission_classes = []
+
+
+# class StudentRegister(generics.CreateAPIView):
+#     """
+#     Create a user on the centerstage platform
+#
+#     User Types:\n
+#         CR -> Creator\n
+#         ST -> Student\n
+#         AD -> Admin
+#     """
+#     serializer_class = TeacherUserCreateSerializer
+#     authentication_classes = []
+#     permission_classes = []
 
 
 class Logout(APIView):
@@ -273,87 +285,81 @@ class VerifyOtp(generics.CreateAPIView):
         return pattern.match(phone_no)
 
 
-class TeacherProfileView(generics.RetrieveAPIView):
-    serializer_class = TeacherProfileSerializer
-
-    def retrieve(self, request, *args, **kwargs):
+class TeacherProfileView(APIView):
+    """
+    API to create the additional teacher profile
+    info
+    """
+    def get(self, request):
         try:
             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
         except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict({"error": "Teacher is yet to create the profile"}), status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = self.get_serializer(instance=teacher)
+        serializer = TeacherProfileSerializer(instance=teacher)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        try:
+            if request.user.teacher_profile_data is not None:
+                return Response(dict({
+                    "error": "Teacher profile already created. Hit Put request to update the profile"
+                }), status=status.HTTP_400_BAD_REQUEST)
+        except TeacherProfile.DoesNotExist:
+            serializer = TeacherProfileSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-class TeacherProfileAPIView(generics.CreateAPIView, generics.DestroyAPIView):
-    create_update_serializer = TeacherProfileCreateUpdateSerializer
-    serializer_class = TeacherProfileSerializer
+    def put(self, request):
+        try:
+            teacher_profile = request.user.teacher_profile_data
+            serializer = TeacherProfileSerializer(teacher_profile, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.create_update_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        subdomain = serializer.validated_data.get("subdomain")
-        if subdomain and TeacherProfile.objects.exclude(user=request.user).filter(subdomain=subdomain).exists():
-            return Response(dict(msg="Subdomain is not available"))
-
-        teacher, created = TeacherProfile.objects.get_or_create(user=request.user)
-        serializer = self.create_update_serializer(instance=teacher, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        msg = created and 'Teacher Profile Created' or 'Teacher Profile Updated'
-        return Response(dict(id=teacher.user.id, msg=msg), status=status.HTTP_200_OK)
-
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except TeacherProfile.DoesNotExist:
+            return Response(dict({
+                "error": "Teacher profile yet to be created. Hit Post request to create the profile."
+            }), status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+            teacher = request.user.teacher_profile_data
         except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
+            return Response(dict({"error": "Teacher is yet to create the profile"}))
 
         teacher.status = TeacherProfileStatuses.DELETED
         teacher.save()
-        return Response(dict(msg="Profile has been deleted"), status=status.HTTP_204_NO_CONTENT)
+        return Response("", status=status.HTTP_204_NO_CONTENT)
 
 
-class SubdomainAvailibilityAPIView(generics.RetrieveAPIView):
-    serializer_class = SubdomainCheckSerializer
-
-    def get(self, request):
-        serializer = self.get_serializer(data=request.data)
+class SubdomainAvailabilityAPIView(APIView):
+    """
+    API to check if the subdomain is available
+    on the backend. Restricted subdomains are also
+    checked.
+    """
+    def post(self, request):
+        serializer = SubdomainCheckSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        subdomain = serializer.validated_data.get("subdomain")
-        availibility = not TeacherProfile.objects.exclude(user=request.user).filter(subdomain=subdomain).exists()
-        msg = availibility and 'Subdomain is available' or 'Subdomain is not available'
-        return Response(dict(available=availibility, subdomain=subdomain, msg=msg), status=status.HTTP_200_OK)            
+        return Response(dict({"msg": "Available"}), status=status.HTTP_200_OK)
 
 
-class TeacherPaymentsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
-    serializer_class = TeacherPaymentsSerializer
-    payment_remove_serializer = TeacherPaymentRemoveSerializer
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = []
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+class TeacherPaymentsAPIView(APIView):
+    """
+    Create or delete the Payment data for the user
+    """
+    def post(self, request):
+        serializer = TeacherPaymentsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        payment_type = serializer.validated_data.get("payment_type")
-        info = serializer.validated_data.get("info")
-        try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
-        except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
-
-        payment, created = TeacherPayments.objects.get_or_create(teacher=teacher, payment_type=payment_type)
-        payment.info = json.dumps(info)
-        payment.save()
-        msg = created and 'Payment Created' or 'Payment Updated'
-        return Response(dict(payment_account_id=payment.id, msg=msg), status=status.HTTP_200_OK)
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request):
-        serializer = self.payment_remove_serializer(data=request.data)
+        serializer = TeacherPaymentRemoveSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         payment_type = serializer.validated_data.get("payment_type")
@@ -361,54 +367,91 @@ class TeacherPaymentsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
         except TeacherProfile.DoesNotExist:
             return Response(dict({"error": "No Active Profile Found"}))
-    
+
         try:
             payment = TeacherPayments.objects.get(teacher=teacher, payment_type=payment_type)
             payment.delete()
-            return Response(dict(msg='Payment Account Removed'), status=status.HTTP_204_NO_CONTENT)
+            return Response("", status=status.HTTP_204_NO_CONTENT)
         except TeacherPayments.DoesNotExist:
             return Response(dict({"error": "No Payment Found"}))
 
 
-class TeacherAccountsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
-    serializer_class = TeacherAccountsSerializer
-    account_remove_serializer = TeacherAccountRemoveSerializer
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = []
+# class TeacherPaymentsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+#
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         payment_type = serializer.validated_data.get("payment_type")
+#         info = serializer.validated_data.get("info")
+#         try:
+#             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+#         except TeacherProfile.DoesNotExist:
+#             return Response(dict({"error": "No Active Profile Found"}))
+#
+#         payment, created = TeacherPayments.objects.get_or_create(teacher=teacher, payment_type=payment_type)
+#         payment.info = json.dumps(info)
+#         payment.save()
+#         msg = created and 'Payment Created' or 'Payment Updated'
+#         return Response(dict(payment_account_id=payment.id, msg=msg), status=status.HTTP_200_OK)
+#
+#     def delete(self, request):
+#         serializer = self.payment_remove_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         payment_type = serializer.validated_data.get("payment_type")
+#         try:
+#             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+#         except TeacherProfile.DoesNotExist:
+#             return Response(dict({"error": "No Active Profile Found"}))
+#
+#         try:
+#             payment = TeacherPayments.objects.get(teacher=teacher, payment_type=payment_type)
+#             payment.delete()
+#             return Response(dict(msg='Payment Account Removed'), status=status.HTTP_204_NO_CONTENT)
+#         except TeacherPayments.DoesNotExist:
+#             return Response(dict({"error": "No Payment Found"}))
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
 
-        account_type = serializer.validated_data.get("account_type")
-        info = serializer.validated_data.get("info")
-        try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
-        except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
-    
-        account, created = TeacherAccounts.objects.get_or_create(teacher=teacher, account_type=account_type)
-        account.info = json.dumps(info)
-        account.save()
-        msg = created and 'Account Created' or 'Account Updated'
-        return Response(dict(account_id=account.id, msg=msg), status=status.HTTP_200_OK)
-
-    def delete(self, request):
-        serializer = self.account_remove_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        account_type = serializer.validated_data.get("account_type")
-        try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
-        except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
-    
-        try:
-            account = TeacherAccounts.objects.get(teacher=teacher, account_type=account_type)
-            account.delete()
-            return Response(dict(msg='Account Removed'), status=status.HTTP_204_NO_CONTENT)
-        except TeacherAccounts.DoesNotExist:
-            return Response(dict({"msg": "No Account Found"}))
+# class TeacherAccountsAPIView(generics.CreateAPIView, generics.DestroyAPIView):
+#     serializer_class = TeacherAccountsSerializer
+#     account_remove_serializer = TeacherAccountRemoveSerializer
+#     authentication_classes = [authentication.TokenAuthentication]
+#     permission_classes = []
+#
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         account_type = serializer.validated_data.get("account_type")
+#         info = serializer.validated_data.get("info")
+#         try:
+#             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+#         except TeacherProfile.DoesNotExist:
+#             return Response(dict({"error": "No Active Profile Found"}))
+#
+#         account, created = TeacherAccounts.objects.get_or_create(teacher=teacher, account_type=account_type)
+#         account.info = json.dumps(info)
+#         account.save()
+#         msg = created and 'Account Created' or 'Account Updated'
+#         return Response(dict(account_id=account.id, msg=msg), status=status.HTTP_200_OK)
+#
+#     def delete(self, request):
+#         serializer = self.account_remove_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         account_type = serializer.validated_data.get("account_type")
+#         try:
+#             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+#         except TeacherProfile.DoesNotExist:
+#             return Response(dict({"error": "No Active Profile Found"}))
+#
+#         try:
+#             account = TeacherAccounts.objects.get(teacher=teacher, account_type=account_type)
+#             account.delete()
+#             return Response(dict(msg='Account Removed'), status=status.HTTP_204_NO_CONTENT)
+#         except TeacherAccounts.DoesNotExist:
+#             return Response(dict({"msg": "No Account Found"}))
 
 
 class TeacherProfileViewTemplate(TemplateView):

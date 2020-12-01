@@ -24,8 +24,8 @@ from django.conf.urls.static import static
 from notifications.views import health_check
 from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp,       # Common APIs
-    TeacherProfileAPIView, TeacherProfileView, SubdomainAvailibilityAPIView, TeacherPaymentsAPIView,
-    TeacherAccountsAPIView, TeacherRegister, TeacherProfileViewTemplate
+    TeacherProfileView, SubdomainAvailabilityAPIView, TeacherPaymentsAPIView, TeacherRegister,
+    TeacherProfileViewTemplate
 )
 
 schema_view = get_schema_view(
@@ -58,15 +58,16 @@ urlpatterns = [
     # login APIs
     path('api/login/', ObtainAuthToken.as_view()),
     path('api/logout/', Logout.as_view()),
-    path('api/profile/', Profile.as_view()),
-    path('api/otp/send/', VerifyOtp.as_view()),
-    path('api/otp/verify/', SendOtp.as_view()),
+    path('api/profile/', Profile.as_view()),    # Basic Profile data
+    path('api/otp/send/', SendOtp.as_view()),
+    path('api/otp/verify/', VerifyOtp.as_view()),
 
     # Teacher APIs
-    path('api/profile/teacher/', TeacherProfileView.as_view()),
-    path('api/profile/subdomain/validate/', SubdomainAvailibilityAPIView.as_view()),
-    path('api/profile/teacher/<int:id>/', TeacherProfileAPIView.as_view()),
-    path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
+    path('api/teacher/register/', TeacherRegister.as_view()),
+    path('api/teacher/profile/', TeacherProfileView.as_view()),
+    path('api/teacher/subdomain/availability/', SubdomainAvailabilityAPIView.as_view()),
+    # path('api/profile/teacher/<int:id>/', TeacherProfileAPIView.as_view()),
+    # path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
     path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
 
     path('', TeacherProfileViewTemplate.as_view()),

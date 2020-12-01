@@ -84,6 +84,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
+SITE_URL = 'center-stage.online'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
