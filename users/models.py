@@ -4,6 +4,7 @@ from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class UserTypes(models.TextChoices):
@@ -37,7 +38,7 @@ class UserManager(BaseUserManager):
     def create_student_user(self, email, password, **extra_fields):
         return self._create_user(email, password, False, False, "ST", **extra_fields)
 
-    def create_admin_user(self, email, password, **extra_fields):
+    def create_superuser(self, email, password, **extra_fields):
         user = self._create_user(email, password, True, True, "AD", **extra_fields)
         return user
 
@@ -58,7 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30)
     last_name = models.CharField(_('last name'), max_length=150)
     email = models.EmailField(_('email address'), unique=True)
-    phone_no = models.CharField(_('contact number'), max_length=16, unique=True, null=True)
+    phone_no = PhoneNumberField(unique=True, null=True)
     user_type = models.CharField(_("user type"), choices=UserTypes.choices, max_length=3,
                                  help_text="Type of user")
 

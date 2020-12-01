@@ -61,12 +61,11 @@ class ZoomClient(metaclass=Singleton):
         )
         if resp.status_code == 200:
             data = resp.json()
-            print(data)
             return data
     
     def refresh_token(self, refresh_token):
         headers = {
-            "Authorization": "Basic {}".format(self.config.get("token")),
+            "Authorization": "Basic {}".format(self.encoded_token),
             "Content-Type": "application/json",
         }
         url = "{}?grant_type=refresh_token&refresh_token={}".format(
@@ -114,10 +113,9 @@ class ZoomClient(metaclass=Singleton):
             headers=headers,
             data=json.dumps(data)
         )
-        print(resp)
-        print(resp.reason)
         if resp.status_code == 201:
             return resp.json()
+        resp.raise_for_status()
 
     def list_meetings(self, access_token):
         headers = {

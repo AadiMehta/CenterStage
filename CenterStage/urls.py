@@ -21,10 +21,11 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
+from notifications.views import health_check
 from users.views import (
-    SendOtp, VerifyOtp, TeacherProfileAPIView, TeacherProfileView,
-    SubdomainAvailibilityAPIView, TeacherPaymentsAPIView,
-    TeacherAccountsAPIView, TeacherRegister, ObtainAuthToken, Logout
+    ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp,       # Common APIs
+    TeacherProfileAPIView, TeacherProfileView, SubdomainAvailibilityAPIView, TeacherPaymentsAPIView,
+    TeacherAccountsAPIView, TeacherRegister, TeacherProfileViewTemplate
 )
 from zoom.views import (
     ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
@@ -50,28 +51,31 @@ admin.site.site_title = 'CenterStage Admin'
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    path('health/check/', health_check, name="health_check"),
+
     # redoc and swagger documents
     url(r'swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # login APIs
-    path('api/teacher/register/', TeacherRegister.as_view()),
     path('api/login/', ObtainAuthToken.as_view()),
     path('api/logout/', Logout.as_view()),
-    path('api/verify_otp/', VerifyOtp.as_view()),
-    path('api/send_otp/', SendOtp.as_view()),
+    path('api/profile/', Profile.as_view()),
+    path('api/otp/send/', SendOtp.as_view()),
+    path('api/otp/verify/', VerifyOtp.as_view()),
 
-    path('api/profile/teacher/<int:teacher_id>/zoom/connect', ZoomConnectAPIView.as_view()),
-    path('api/profile/teacher/<int:teacher_id>/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
-    path('api/profile/teacher/<int:teacher_id>/zoom/', ZoomMeetingAPIView.as_view()),
+    path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
+    path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
+    path('api/profile/zoom/meeting/', ZoomMeetingAPIView.as_view()),
 
+    # Teacher APIs
+    path('api/profile/teacher/', TeacherProfileView.as_view()),
     path('api/profile/subdomain/validate/', SubdomainAvailibilityAPIView.as_view()),
     path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
     path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
-    path('api/profile/teacher/', TeacherProfileAPIView.as_view()),
 
-    path('', TeacherProfileView.as_view()),
+    path('', TeacherProfileViewTemplate.as_view()),
 ]
 
 if settings.DEBUG:

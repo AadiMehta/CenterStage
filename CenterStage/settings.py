@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
+    'phonenumber_field',
 
     # project specific apps
     'users',
@@ -104,7 +105,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'CenterStage',
+            'NAME': 'centerstage',
             'USER': os.environ.get("DB_USER"),
             'PASSWORD': os.environ.get("DB_PASSWORD"),
             'HOST': os.environ.get("DB_HOST"),
@@ -134,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 if sys.platform == "win32":
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
             'KEY_PREFIX': 'centerstage'
         }
     }
@@ -142,7 +143,7 @@ else:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': '127.0.0.1:11211',
+            'LOCATION': 'unix:/tmp/memcached.sock',
             'KEY_PREFIX': 'centerstage'
         }
     }
