@@ -25,7 +25,7 @@ from notifications.views import health_check
 from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp,       # Common APIs
     TeacherProfileView, SubdomainAvailabilityAPIView, TeacherPaymentsAPIView, TeacherRegister,
-    TeacherProfileViewTemplate
+    TeacherProfileViewTemplate, AccountConnectedTemplate
 )
 from zoom.views import (
     ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
@@ -67,15 +67,16 @@ urlpatterns = [
 
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
     path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
-    path('api/profile/zoom/meeting/', ZoomMeetingAPIView.as_view()),
 
     # Teacher APIs
     path('api/teacher/register/', TeacherRegister.as_view()),
     path('api/teacher/profile/', TeacherProfileView.as_view()),
     path('api/teacher/subdomain/availability/', SubdomainAvailabilityAPIView.as_view()),
-    path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
-    path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
+    # path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
+    # path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
+    path('api/teacher/zoom/meeting/', ZoomMeetingAPIView.as_view()),
 
+    path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
     path('', TeacherProfileViewTemplate.as_view()),
 ]
 

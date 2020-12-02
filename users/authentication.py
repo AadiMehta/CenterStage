@@ -11,3 +11,19 @@ class BearerAuthentication(authentication.TokenAuthentication):
     Authorization: Bearer 956e252a-513c-48c5-92dd-bfddc364e812
     '''
     keyword = 'Bearer'
+
+
+class AuthCookieAuthentication(authentication.TokenAuthentication):
+    """
+    Extend the TokenAuthentication class to support cookie based authentication
+    """
+    keyword = 'Bearer'
+    def authenticate(self, request):
+        # Check if 'auth_token' is in the request cookies.
+        # Give precedence to 'Authorization' header.
+        if 'auth_token' in request.COOKIES and \
+                        'HTTP_AUTHORIZATION' not in request.META:
+            return self.authenticate_credentials(
+                request.COOKIES.get('auth_token')
+            )
+        return super().authenticate(request)

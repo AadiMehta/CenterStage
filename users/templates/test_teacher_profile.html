@@ -6,10 +6,23 @@
     <p>description = {{teacher.description}}</p>
     <p>intro_video = {{teacher.intro_video}}</p>
     {% if 'ZOOM' in teacher_accounts %}
-        <a href="{{zoom.ZOOM_DISCONNECT_URL}}?redirection_url={{redirection_url}}">Disconnect Zoom</a>
+        <button
+            id="disconnectAccount"
+            data-account-type="zoom"
+            data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+            data-disconnect-url="{{zoom.ZOOM_DISCONNECT_URL}}"
+        >
+            Disconnect Zoom
+        </button>
     {% else %}
-        <!-- <button id="account" data-account-type="zoom" data-client_id="{{zoom.ZOOM_CLIENT_ID}}" data-redirect-uri="{{zoom.ZOOM_CONNECT_URL}}">Connect Zoom</button> -->
-        <a href="https://zoom.us/oauth/authorize?response_type=code&client_id={{zoom.ZOOM_CLIENT_ID}}&redirect_uri={{zoom.ZOOM_CONNECT_URL}}">Connect Zoom</a>
+        <button
+            id="connectAccount"
+            data-account-type="zoom"
+            data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+            data-redirect-uri="{{zoom.ZOOM_CONNECT_URL}}"
+        >
+            Connect Zoom
+        </button>
     {% endif %}
 {% endblock %}
 

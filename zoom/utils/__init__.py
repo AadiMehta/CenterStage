@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 
-from zoomus import ZoomClient as ZoomUsClient
+from rest_framework import status
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +30,6 @@ class Singleton(type):
 class ZoomClient(metaclass=Singleton):
 
     def __init__(self):
-        logger.debug('Initializing zoom client')
-
         self.oauth_url = 'https://zoom.us/oauth/token'
         self.api_base_url = 'https://api.zoom.us/v2'
 
@@ -41,43 +39,50 @@ class ZoomClient(metaclass=Singleton):
         if not all([self.client_id, self.client_secret]):
             raise ImproperlyConfigured(NOT_CONFIGURED_MESSAGE)
 
-        self.encoded_token = base64.b64encode('{}:{}'.format(self.client_id, self.client_secret).encode('ascii')).decode('ascii')
-        self.client = ZoomUsClient(self.client_id, self.client_secret)
-        self.config = self.client.config
-        logger.debug('Zoom client initialized')
+        self.encoded_auth_token = self.get_encoded_auth_token()
 
-    def get_access_token(self, code, redirect_uri):
+    def get_encoded_auth_token(self):
+        """
+        Get Encoded Token in Base64 format for API connections
+        returns encoded base64 string of `client_id:secret_key`
+        """
+        auth_token = '{}:{}'.format(self.client_id, self.client_secret).encode('ascii')
+        return base64.b64encode(auth_token).decode('ascii')
+
+    def get_access_token(self, code):
+        """
+        Get Encoded Token in Base64 format for API connections
+        returns encoded base64 string of `client_id:secret_key`
+        """
+        redirect_uri = urllib.parse.quote('{}/profile/zoom/connect'.format(
+                                settings.API_BASE_URL
+                            ))
         headers = {
-            "Authorization": "Basic {}".format(self.encoded_token),
+            "Authorization": "Basic {}".format(self.encoded_auth_token),
             "Content-Type": "application/json"
         }
         url = "{}?grant_type=authorization_code&code={}&redirect_uri={}".format(
                         self.oauth_url, code,
-                        urllib.parse.quote(redirect_uri)
+                        redirect_uri
                     )
-        resp = requests.post(
+        return requests.post(
             url,
             headers=headers
         )
-        if resp.status_code == 200:
-            data = resp.json()
-            return data
-    
+
     def refresh_token(self, refresh_token):
         headers = {
-            "Authorization": "Basic {}".format(self.encoded_token),
+            "Authorization": "Basic {}".format(self.encoded_auth_token),
             "Content-Type": "application/json",
         }
         url = "{}?grant_type=refresh_token&refresh_token={}".format(
                         self.oauth_url, refresh_token
                     )
-        resp = requests.post(
+        return requests.post(
             url,
             headers=headers
         )
-        if resp.status_code == 200:
-            data = resp.json()
-            return data
+
 
     def get_user_details(self, access_token):
         headers = {

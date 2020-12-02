@@ -50,6 +50,17 @@ class TeacherAccountsSerializer(serializers.ModelSerializer):
             'info'
         )
 
+    def get_info(self, instance):
+        if instance.info:
+            return dict(instance.info)
+        return {}
+
+
+class TeacherAccountsCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeacherAccounts
+        fields = '__all__'
+
 
 class TeacherPaymentsSerializer(serializers.ModelSerializer):
 
@@ -123,7 +134,7 @@ class TeacherUserCreateSerializer(serializers.ModelSerializer):
             _thread.start_new_thread(send_signup_email, (user,))
             return user
         except IntegrityError as e:
-            error = dict({'error': "User with email already present"})
+            error = dict({'error': str(e)})
             raise serializers.ValidationError(error)
 
 
@@ -152,19 +163,6 @@ class SubdomainCheckSerializer(serializers.Serializer):
 class VerifyOTPSerializer(serializers.Serializer):
     phone_no = PhoneNumberField(required=True)
     otp = serializers.CharField(max_length=6, required=True)
-
-
-class TeacherAccountsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TeacherAccounts
-        fields = ['account_type', 'info']
-    
-    def get_info(self, instance):
-        if instance.info:
-            return dict(instance.info)
-        return {}
 
 
 class TeacherPaymentsSerializer(serializers.ModelSerializer):

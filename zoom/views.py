@@ -1,8 +1,10 @@
 import logging
 
-from datetime import datetime, timedelta
+from datetime import datetime
+from django.utils import timezone
 
 from django.conf import settings
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
 from rest_framework import status
@@ -11,7 +13,11 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from rest_framework.views import APIView
 
+from zoom.serializer import ZoomAuthResponseSerializer
 from zoom.utils import zoomclient
+
+from users.serializers import TeacherAccountsCreateSerializer
+from users.authentication import BearerAuthentication, AuthCookieAuthentication
 
 from users.models import (
     User, TeacherProfile, TeacherAccounts,
@@ -22,36 +28,40 @@ logger = logging.getLogger(__name__)
 
 
 class ZoomConnectAPIView(generics.RetrieveAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
+    authentication_classes = [AuthCookieAuthentication]
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        teacher = TeacherProfile.objects.get(user=request.user)
+        """
+        Zoom redirects to this API with auth code after client authorization
 
+        """
+        teacher = request.user.teacher_profile_data
         zoom_authorization_code = request.GET.get('code')
-        redirect_uri = '{}/profile/zoom/connect'.format(
-                                settings.API_BASE_URL
-                            )
-        access_info = zoomclient.get_access_token(zoom_authorization_code, redirect_uri)
-        if not access_info:
-            return Response(dict(msg="Something wrong"), status=status.HTTP_400_BAD_REQUEST)
-        expires_in = access_info.get('expires_in')
-        expire_time = datetime.now() + timedelta(seconds=expires_in)
-        access_info['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
-        access_token = access_info.get('access_token')
-        user_info = zoomclient.get_user_details(access_token)
 
-        account_info = dict(access_info=access_info, user_info=user_info)
+        resp = zoomclient.get_access_token(zoom_authorization_code)
+        if resp.status_code == status.HTTP_200_OK:
+            access_info = resp.json()
+        else:
+            return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
-        account, created = TeacherAccounts.objects.get_or_create(teacher=teacher)
-        account.account_type = TeacherAccountTypes.ZOOM_VIDEO
-        account.info = account_info
-        account.save()
-        return Response(dict(msg="SuccessFully Connected", account_id=account.id), status=status.HTTP_200_OK)
+        serializer = ZoomAuthResponseSerializer(data=access_info)
+        serializer.is_valid(raise_exception=True)
+        expires_in = serializer.validated_data.get('expires_in')
+        expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
+        serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
+
+        teacher_account_info = dict(teacher=teacher.id, account_type=TeacherAccountTypes.ZOOM_VIDEO, info=access_info)
+        serializer = TeacherAccountsCreateSerializer(data=teacher_account_info)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        # TeacherAccounts.objects.create()
+        serializer.save()
+        return redirect('account-connected-success')
 
 
 class ZoomDisconnectAPIView(generics.RetrieveAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
+    authentication_classes = [BearerAuthentication]
     permission_classes = []
  
     def get(self, request, *args, **kwargs):
@@ -64,16 +74,16 @@ class ZoomDisconnectAPIView(generics.RetrieveAPIView):
         return Response(dict(msg="Disconnected Zoom Account"), status=status.HTTP_200_OK)
 
 
-class ZoomMeetingAPIView(generics.CreateAPIView, generics.ListAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
+class ZoomMeetingAPIView(APIView):
+    authentication_classes = [BearerAuthentication]
     permission_classes = []
   
-    def create(self, request, *args, **kwargs):
-        teacher = TeacherProfile.objects.get(user=request.user)
+    def post(self, request):
+        teacher = request.user.teacher_profile_data
         account = teacher.accounts.get(account_type=TeacherAccountTypes.ZOOM_VIDEO)
         access_token = self.get_access_token(account)
         if not access_token:
-            return Response(dict(msg="Something wrong"), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
         topic = request.data.get('topic')
         meeting_type = request.data.get('type')
@@ -84,33 +94,34 @@ class ZoomMeetingAPIView(generics.CreateAPIView, generics.ListAPIView):
 
         return Response(meeting, status=status.HTTP_200_OK)
 
-    def list(self, request, *args, **kwargs):
-        teacher = TeacherProfile.objects.get(user=request.user)
+    def get(self, request):
+        teacher = request.user.teacher_profile_data
         account = teacher.accounts.get(account_type=TeacherAccountTypes.ZOOM_VIDEO)
         access_token = self.get_access_token(account)
         if not access_token:
-            return Response(dict(msg="Something wrong"), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
         meetings = zoomclient.list_meetings(access_token)
         return Response(dict(meetings=meetings), status=status.HTTP_200_OK)
 
     @staticmethod
     def get_access_token(account):
-        access_info = account.info.get('access_info')
-        expire_time = datetime.strptime(access_info.get('expire_time'), '%Y-%m-%dT%H:%M:%S')
-        if expire_time > datetime.now():
-            access_token = access_info.get('access_token')
-            return access_token
-        refresh_token = access_info.get('refresh_token')
-        new_access_info = zoomclient.refresh_token(refresh_token)
-        if not new_access_info:
-            return
-        new_access_token = new_access_info.get('access_token')
-        expires_in = new_access_info.get('expires_in')
-        expire_time = datetime.now() + timedelta(seconds=expires_in)
-        new_access_info['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
-        account_info = account.info
-        account_info.update(access_info=new_access_info)
-        account.info = account_info
-        account.save()
-        return new_access_token
+        expire_time = datetime.strptime(account.info.get('expire_time'), '%Y-%m-%dT%H:%M:%S')
+        if expire_time > timezone.now():
+            # If expire time is greater than current time then return
+            return account.info.get('access_token')
+        
+        # If token is expired then refresh token
+        refresh_token = account.info.get('refresh_token')
+        resp = zoomclient.refresh_token(refresh_token)
+        if resp.status_code == status.HTTP_200_OK:
+            access_info = resp.json()
+            serializer = ZoomAuthResponseSerializer(data=access_info)
+            serializer.is_valid(raise_exception=True)
+            expires_in = serializer.validated_data.get('expires_in')
+            expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
+            serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
+
+            account.info = serializer.validated_data
+            account.save()
+            return access_info.get('access_token')

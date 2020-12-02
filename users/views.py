@@ -22,9 +22,12 @@ from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import authentication, permissions
 from notifications.twilio_sms_notification import twilio
+
+from users.authentication import BearerAuthentication
+
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
-    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, TeacherAccountsSerializer,
+    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
     TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer
 )
 from users.models import (
@@ -297,6 +300,9 @@ class TeacherProfileView(APIView):
     API to create the additional teacher profile
     info
     """
+    authentication_classes = [BearerAuthentication]
+    permission_classes = []
+
     def get(self, request):
         try:
             teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
@@ -383,34 +389,6 @@ class TeacherPaymentsAPIView(APIView):
             return Response(dict({"error": "No Payment Found"}))
 
 
-class TeacherAccountsAPIView(APIView):
-    """
-    Create or delete the Payment data for the user
-    """
-    def post(self, request):
-        serializer = TeacherAccountsSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def delete(self, request):
-        serializer = TeacherAccountRemoveSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        account_type = serializer.validated_data.get("account_type")
-        try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
-        except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
-
-        try:
-            account = TeacherAccounts.objects.get(teacher=teacher, account_type=account_type)
-            account.delete()
-            return Response("", status=status.HTTP_204_NO_CONTENT)
-        except TeacherAccounts.DoesNotExist:
-            return Response(dict({"error": "No Account Found"}))
-
 class TeacherProfileViewTemplate(TemplateView):
     template_name = "test_teacher_profile.html"
 
@@ -438,5 +416,8 @@ class TeacherProfileViewTemplate(TemplateView):
                                         ))
             }
         })
-        print(context)
         return context
+
+
+class AccountConnectedTemplate(TemplateView):
+    template_name = "test_account_connected_success.html"
