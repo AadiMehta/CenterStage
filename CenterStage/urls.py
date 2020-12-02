@@ -24,8 +24,8 @@ from django.conf.urls.static import static
 from notifications.views import health_check
 from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp,       # Common APIs
-    TeacherProfileAPIView, TeacherProfileView, SubdomainAvailibilityAPIView, TeacherPaymentsAPIView,
-    TeacherAccountsAPIView, TeacherRegister, TeacherProfileViewTemplate
+    TeacherProfileView, SubdomainAvailabilityAPIView, TeacherPaymentsAPIView, TeacherRegister,
+    TeacherProfileViewTemplate
 )
 from zoom.views import (
     ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
@@ -70,8 +70,9 @@ urlpatterns = [
     path('api/profile/zoom/meeting/', ZoomMeetingAPIView.as_view()),
 
     # Teacher APIs
-    path('api/profile/teacher/', TeacherProfileView.as_view()),
-    path('api/profile/subdomain/validate/', SubdomainAvailibilityAPIView.as_view()),
+    path('api/teacher/register/', TeacherRegister.as_view()),
+    path('api/teacher/profile/', TeacherProfileView.as_view()),
+    path('api/teacher/subdomain/availability/', SubdomainAvailabilityAPIView.as_view()),
     path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
     path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
 

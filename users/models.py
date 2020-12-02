@@ -121,7 +121,7 @@ class TeacherProfile(models.Model):
     year_of_experience = models.IntegerField(_('years of experience'), null=True, validators=[MinValueValidator(0),
                                                                                               MaxValueValidator(100)])
     description = models.TextField(_('About Teacher'), null=True, blank=True)
-    intro_video = models.URLField(max_length=200, null=True)
+    intro_video = models.URLField(max_length=200, null=True, blank=True)
     status = models.CharField(_("Teacher Status"), null=True, choices=TeacherProfileStatuses.choices, max_length=7,
                               help_text="Teacher Profile status", default=TeacherProfileStatuses.ACTIVE)
 
@@ -156,7 +156,7 @@ class TeacherPayments(models.Model):
     """
     Data Associated to teacher payment accounts
     """
-    teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="payments")
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="payments")
     payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
                                     help_text="Type of payment account")
     info = models.JSONField(null=True)
