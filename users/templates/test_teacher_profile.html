@@ -3,6 +3,30 @@
 {% block content %}
     <h2>Subdomain Name =  {{subdomain}}</h2>
     <p>year_of_experience = {{teacher.year_of_experience}}</p>
-    <p>about = {{teacher.about}}</p>
+    <p>description = {{teacher.description}}</p>
     <p>intro_video = {{teacher.intro_video}}</p>
+    {% if 'ZOOM' in teacher_accounts %}
+        <button
+            id="disconnectAccount"
+            data-account-type="zoom"
+            data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+            data-disconnect-url="{{zoom.ZOOM_DISCONNECT_URL}}"
+        >
+            Disconnect Zoom
+        </button>
+    {% else %}
+        <button
+            id="connectAccount"
+            data-account-type="zoom"
+            data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+            data-redirect-uri="{{zoom.ZOOM_CONNECT_URL}}"
+        >
+            Connect Zoom
+        </button>
+    {% endif %}
+{% endblock %}
+
+{% block script %}
+    {% load static %}
+    <script src="{% static '/js/test_account.js' %}" type="text/javascript"></script> 
 {% endblock %}

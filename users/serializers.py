@@ -41,7 +41,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TeacherAccountsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
 
     class Meta:
         model = TeacherAccounts
@@ -123,7 +122,7 @@ class TeacherUserCreateSerializer(serializers.ModelSerializer):
             _thread.start_new_thread(send_signup_email, (user,))
             return user
         except IntegrityError as e:
-            error = dict({'error': "User with email already present"})
+            error = dict({'error': str(e)})
             raise serializers.ValidationError(error)
 
 
@@ -152,6 +151,35 @@ class SubdomainCheckSerializer(serializers.Serializer):
 class VerifyOTPSerializer(serializers.Serializer):
     phone_no = PhoneNumberField(required=True)
     otp = serializers.CharField(max_length=6, required=True)
+
+
+class TeacherPaymentsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeacherPayments
+        fields = ['payment_type', 'info']
+
+
+class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TeacherProfile
+        exclude = (
+            'id',
+            'user'
+        )
+
+
+class TeacherProfileSerializer(serializers.ModelSerializer):
+    accounts = TeacherAccountsSerializer(many=True, read_only=True)
+    payments = TeacherPaymentsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TeacherProfile
+        fields = [
+            'user', 'year_of_experience', 'subdomain',
+            'description', 'intro_video', 'accounts',
+            'payments'
+        ]
 
 
 class TeacherPaymentRemoveSerializer(serializers.Serializer):
