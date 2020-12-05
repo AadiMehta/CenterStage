@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 from zoom.serializer import ZoomAuthResponseSerializer
 from zoom.utils import zoomclient
 
-from users.serializers import TeacherAccountsCreateSerializer
+from users.serializers import TeacherAccountsSerializer
 from users.authentication import BearerAuthentication, AuthCookieAuthentication
 
 from users.models import (
@@ -36,7 +36,6 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
         Zoom redirects to this API with auth code after client authorization
 
         """
-        teacher = request.user.teacher_profile_data
         zoom_authorization_code = request.GET.get('code')
 
         resp = zoomclient.get_access_token(zoom_authorization_code)
@@ -51,12 +50,12 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
         expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
         serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
 
-        teacher_account_info = dict(teacher=teacher.id, account_type=TeacherAccountTypes.ZOOM_VIDEO, info=access_info)
-        serializer = TeacherAccountsCreateSerializer(data=teacher_account_info)
+        serializer = TeacherAccountsSerializer(data=dict(
+                                            account_type=TeacherAccountTypes.ZOOM_VIDEO,
+                                            info=access_info
+                                        ))
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
-        # TeacherAccounts.objects.create()
-        serializer.save()
+        serializer.save(teacher=request.user.teacher_profile_data)
         return redirect('account-connected-success')
 
 
@@ -66,8 +65,7 @@ class ZoomDisconnectAPIView(generics.RetrieveAPIView):
  
     def get(self, request, *args, **kwargs):
         redirection_url = request.GET.get('redirection_url')
-        teacher = TeacherProfile.objects.get(user=request.user)
-        account = TeacherAccounts.objects.get(teacher=teacher)
+        account = TeacherAccounts.objects.get(teacher=request.user.teacher_profile_data)
         account.delete()
         if redirection_url:
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -79,8 +77,9 @@ class ZoomMeetingAPIView(APIView):
     permission_classes = []
   
     def post(self, request):
-        teacher = request.user.teacher_profile_data
-        account = teacher.accounts.get(account_type=TeacherAccountTypes.ZOOM_VIDEO)
+        account = request.user.teacher_profile_data.accounts.get(
+                        account_type=TeacherAccountTypes.ZOOM_VIDEO
+                    )
         access_token = self.get_access_token(account)
         if not access_token:
             return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
@@ -95,8 +94,9 @@ class ZoomMeetingAPIView(APIView):
         return Response(meeting, status=status.HTTP_200_OK)
 
     def get(self, request):
-        teacher = request.user.teacher_profile_data
-        account = teacher.accounts.get(account_type=TeacherAccountTypes.ZOOM_VIDEO)
+        account = request.user.teacher_profile_data.accounts.get(
+                        account_type=TeacherAccountTypes.ZOOM_VIDEO
+                    )
         access_token = self.get_access_token(account)
         if not access_token:
             return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)

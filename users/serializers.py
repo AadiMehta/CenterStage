@@ -41,7 +41,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TeacherAccountsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
 
     class Meta:
         model = TeacherAccounts
@@ -49,17 +48,6 @@ class TeacherAccountsSerializer(serializers.ModelSerializer):
             'account_type',
             'info'
         )
-
-    def get_info(self, instance):
-        if instance.info:
-            return dict(instance.info)
-        return {}
-
-
-class TeacherAccountsCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TeacherAccounts
-        fields = '__all__'
 
 
 class TeacherPaymentsSerializer(serializers.ModelSerializer):
@@ -166,16 +154,9 @@ class VerifyOTPSerializer(serializers.Serializer):
 
 
 class TeacherPaymentsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
-
     class Meta:
         model = TeacherPayments
         fields = ['payment_type', 'info']
-    
-    def get_info(self, instance):
-        if instance.info:
-            return dict(instance.info)
-        return {}
 
 
 class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):

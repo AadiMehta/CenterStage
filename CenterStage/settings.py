@@ -27,8 +27,7 @@ load_dotenv(dotenv_path=env_path)
 SECRET_KEY = 'z(3*uqch79bmakbwp1g&#k&#ik%!g(r!bzk_6vnooi!#4y-&b8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if sys.platform == "win32" else False
-DEBUG = True
+DEBUG = True if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,6 +52,7 @@ INSTALLED_APPS = [
     'users',
     'engine',
     'notifications',
+    'zoom',
 ]
 
 MIDDLEWARE = [
