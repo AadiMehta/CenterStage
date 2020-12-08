@@ -1,0 +1,177 @@
+@media only screen and (max-width:1600px) {
+    .homePage, .creator-text span, .featured-course-sec h5, #accordion .card .card-body {font-size: 18px;}
+    .header {padding: 25px 0px;}
+    .top-navigation {padding-top: 20px;}
+    .pl-10 {padding-left: 8rem;}
+    .title-row h2 {font-size: 52px; margin-bottom: 1.5rem;}
+    .text-content, .title-row p, .creator-text h3, .faqs-wrap h4 {font-size: 22px;}
+    .steps-img img {width: 60px;}
+    .steps-img {width: 115px;  height: 115px;}
+    .steps-content h3, .srvc-col h4 {font-size: 28px;}
+    .title-row h3 {font-size: 30px;   margin-bottom: 1rem;}
+    .featured-course-sec p {font-size: 42px;}
+    .teacher-prof-img, .teacher-prof-img img {width: 80px; height: 80px;}
+    .teacher-msg {font-size: 16px;}
+    .stud-prof-img, .stud-prof-img img {width: 260px;  height: 260px;}
+    .stud-name h3 {font-size: 20px;}
+    .stud-name span {font-size: 16px;}
+    #accordion .card .card-header .btn {font-size: 20px;}
+    .timechanged-sec h2, .instructor-sec h2{font-size: 52px;}
+    .timechanged-sec {height: 540px;}
+    .srvc-col {padding: 0px 2rem;}
+    .instructor-sec {height:480px;}
+    .font-small {font-size: 16px;}
+    .srvc-icon {margin-bottom: 2rem;}
+    .boarding-sec .title-row p, .add-pic-text {font-size: 22px;}
+    .boarding-left label {font-size: 20px;}
+    .boarding-left .form-control {height: 48px; font-size: 16px;}
+    .board-process-txt {font-size: 13px;}
+    .board-num {font-size: 32px;}
+    .boarding-wrap {padding-left: 8rem;}
+    .boarding-left{padding-right: 8rem;}
+}
+
+@media only screen and (max-width:1400px) {
+    .comn-sec, .saying-wrap, .how-it-works-wrap {padding-bottom: 80px;}
+    .business-wrap {margin-bottom: 80px;}
+    .srvc-wrap {padding: 80px 0px;}
+    .pt-100{padding-top: 80px;}
+    .pb-100{padding-bottom: 80PX;}
+    .title-row h2, .timechanged-sec h2, .instructor-sec h2 {font-size: 48px;}
+    .service-right-col {padding: 0rem 10rem 0rem 5rem;}
+    .vide-col {max-height: 500px;}
+    .text-content, .title-row p, .creator-text h3, .faqs-wrap h4 {font-size: 20px;}
+    .instructor-sec, .timechanged-sec {height: 400px;}
+    .srvc-icon img {width: 80px;}
+    .steps-content h3, .srvc-col h4 {font-size: 24px;}
+    .creators-slide {margin-top: 3rem;}
+    /*.homePage, .creator-text span, .featured-course-sec h5, #accordion .card .card-body, .ftr-nav li {font-size: 16px;}*/
+    .featured-course-sec p {font-size: 38px;}
+    .teacher-prof-img, .teacher-prof-img img {width: 70px; height: 70px;}
+    .teacher-name {gap: 15px; margin-bottom: 15px;}
+    .stud-prof-img, .stud-prof-img img {width: 220px; height: 220px;}
+    .stud-saying-slide .owl-nav {left: 28%; width: 220px;}
+    .faqs-wrap h4 {margin: 25px 0px 10px 0px;}
+    #accordion .card .card-header .btn {font-size: 18px;}
+    .footer {padding: 4rem 0px;}
+    .saying-slide {margin-top:4rem;}
+    .title-row h3 {font-size: 28px;}
+    .business-text {padding: 0px 8rem;}
+    .business-logos { margin-top:4rem;}
+    .header {margin-bottom:50px;}
+    .boarding-left .btn {height: 60px;}
+    .boarding-left {font-size: 18px;}
+    .boarding-left{padding-right:5rem;}
+}
+
+@media only screen and (max-width:1279px) {
+    .pl-10 {padding-left: 15px; padding-right: 15px !important;}
+    .service-right-col {padding: 0 3rem;}
+    .srvc-col {padding: 0px 1rem;}
+    .srvc-col h4 {margin-bottom: 1rem;}
+    .owl-carousel .owl-nav button {width: 38px; height: 38px; margin-top: -38px;}
+    .btn-theme {padding-left: 2rem; padding-right: 2rem; font-size: 20px;}
+    .title-row h2, .timechanged-sec h2, .instructor-sec h2 {font-size: 40px;}
+    .title-row h2 {margin-bottom: 1rem;}
+    .text-content, .title-row p, .creator-text h3, .faqs-wrap h4, .boarding-sec .title-row p, .add-pic-text {font-size: 18px;}
+    .saying-slide {margin-top: 3rem;}
+    .comn-sec, .saying-wrap, .how-it-works-wrap {padding-bottom:60px;}
+    .business-wrap {margin-bottom: 60px;}
+    .srvc-wrap {padding: 60px 0px;}
+    .pt-100{padding-top:60px;}
+    .instructor-sec, .timechanged-sec {height:250px;}
+    .homePage, .creator-text span, .featured-course-sec h5, #accordion .card .card-body, .ftr-nav li {font-size: 16px;}
+    .title-row h3 {font-size:24px;}
+    .service-right-col {padding: 0 2rem;}
+    .vide-col {max-height: 380px;}
+    .business-text {padding: 0px;}
+    .business-logos { margin-top:3rem;}
+    .boarding-wrap {padding-left: 0;}
+    .boarding-right {width: 400px;}
+    .add-profile-pic {width: 220px; height: 220px;}
+    .boarding-left {padding-right:2rem;}
+    .boarding-sec .title-row h2 {margin-bottom: 0.5rem;}
+    .boarding-row {padding-top: 2rem;}
+    .boarding-left .btn {height:56px;}
+    .header{margin-bottom: 0px;}
+    .mid-sec {padding-top: 50px;}
+    .pb-100{padding-bottom:60px;}
+    .board-num {font-size: 26px;}
+    .board-process-txt {font-size: 12px;}
+    .host-zoom {padding-bottom:3rem;}
+    .video-size-alert {font-size: 16px;}
+    .upload-video-wrap {height: 350px;}
+}
+
+@media only screen and (max-width:991px) {
+    .stud-prof-img, .stud-prof-img img {width: 150px; height: 150px; display: inline-block;}
+    .title-row h3 {font-size:22px;}
+    .text-content, .title-row p, .creator-text h3, .faqs-wrap h4, .boarding-sec .title-row p, .add-pic-text{font-size: 16px;}
+    .service-right-col {padding: 0 1rem;}
+    .vide-col {max-height:250px;}
+    .business-logos { margin-top:2rem;}
+
+    .comn-sec, .saying-wrap, .how-it-works-wrap {padding-bottom:40px;}
+    .business-wrap {margin-bottom:40px;}
+    .srvc-wrap {padding:40px 0px;}
+    .pt-100{padding-top:40px;}
+    .instructor-sec, .timechanged-sec {height:200px;}
+    .board-process {position: relative; text-align: right; margin-bottom: 15px;}
+    .boarding-left {width: 100%;}
+    .boarding-right {width: 100%; margin-bottom: 1rem;}
+    .boarding-row {flex-direction: column-reverse;}
+    .header-wrap {display: flex;  justify-content: space-between;}
+    .navbar-toggler {position: absolute; top:2px;  right: 10px; z-index: 999; width: 37px; height: 25px; padding: 0;}
+    .navbar-collapse {position: absolute;  top:40px; right:0px; z-index: 999; background: #fff; width: 220px; padding:25px; border-radius: 25px; border: 1px solid rgba(0,0,0,.15);}
+    .top-navigation .navbar-nav .nav-item {margin-right: 0;}
+    .top-navigation .navbar-nav .nav-link{color: #000; font-weight: 700;}
+    .top-navigation {padding-top: 10px;}
+    .mid-sec {padding-top:25px;}
+    .pb-100{padding-bottom:40PX;}
+    .boarding-graphics{display: none;}
+    .boarding-left {font-size: 16px; padding-right: 0;}
+    .host-zoom {padding-bottom: 2rem;}
+}
+@media only screen and (max-width:767px) {
+    .title-row h2{font-size:32px;}
+    .footer-address {font-size: 14px; padding: 1rem 0 2rem 0;}
+    .secured {padding-top: 0;}
+    footer.footer h2 {margin-bottom: 1rem;}
+    .ftr-nav {margin-bottom: 2rem;}
+    .footer {padding: 2rem 0px;}
+    .stud-saying-slide .item {flex-wrap: wrap;}
+    .studient-name {width: 200px; margin: auto;}
+    .stud-saying-slide .owl-nav {left: 0;  width: 100%;  position: relative;  text-align: center;}
+    .stud-saying-slide .owl-nav button {margin-top: 0; position: relative; margin: 10px; left: 0; top: 0; display: inline-block;}
+    .srvc-col {padding: 0; width: 100%; margin: 1rem 0;}
+    .steps-graphics, .studient-msg:after {display: none;}
+    .steps-content-wrap {gap: 0;  margin-top:40px;}
+    .steps-content {width: 100%; padding-right: 0;}
+    .service-wrap {flex-wrap: wrap;}
+    .service-left-col, .service-right-col {width: 100%;}
+    .srvc-icon img {width: 60px;}
+    .content-col {margin: 1rem 0;}
+    .comn-sec.section-1{padding-bottom: 1rem;}
+    .comn-sec.section-1 .row, .whyjoin-2{flex-direction: column-reverse;}
+    .works-steps ul {flex-wrap: wrap;}
+    .grid-logo {width: 100%;}
+    .steps-img {width: 65px; height: 65px;}
+    .steps-img img {width: 30px;}
+    .works-steps ul li:after {top: 26%; height: 1px;}
+    .works-steps ul li span {margin-top: 10px; font-size: 13px;}
+    .studient-msg-col {padding: 2rem 0 0 0;}
+    .studient-msg {padding: 0px 2rem;}
+    .timechanged-sec h2, .instructor-sec h2 {font-size:28px; margin:0; padding: 1rem;}
+    .stud-saying-slide {margin-top: 20px;}
+    .main-logo {width: 180px;}
+    .mid-sec {padding-top: 15px;}
+    .btn-large {height: 68px; gap: 10px; font-size: 16px; width: 100%; justify-content: center;}
+    .card-btn-col {width: 100%;}
+    .card-btn-col .card-name {padding-top: 5px; font-size: 14px;}
+    .boarding-left .btn {width: 100%; justify-content: center; height: auto; padding: 10px; gap: 10px;}
+    .boarding-left p br {display: none;}
+}
+@media only screen and (max-width:640px) {
+    .main-logo {width: 150px;}
+    .top-navigation {padding-top: 5px;}
+}

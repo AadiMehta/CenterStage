@@ -259,9 +259,6 @@ class VerifyOtp(generics.CreateAPIView):
         except User.DoesNotExist:
             return Response(dict({"error": "Invalid user"}), status=status.HTTP_401_UNAUTHORIZED)
 
-        token, created = self.authenticate(user)
-        return Response(dict({"token": token.key}), status=status.HTTP_200_OK)
-
         cached_otp = self.get_otp_from_cache(phone_no)
         if not cached_otp:
             return Response(dict({"error": "Otp Expired"}), status=status.HTTP_401_UNAUTHORIZED)
