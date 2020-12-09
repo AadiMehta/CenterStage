@@ -49,10 +49,11 @@ INSTALLED_APPS = [
     'phonenumber_field',
 
     # project specific apps
+    'frontend',
     'users',
     'engine',
     'notifications',
-    'zoom',
+    'zoom'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'notifications', 'email_templates')
         ],
         'APP_DIRS': True,
@@ -133,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Caching
-if sys.platform == "win32":
+if sys.platform == "win32" or os.getenv('DEPLOY_ENV'):
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',

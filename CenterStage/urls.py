@@ -30,6 +30,9 @@ from users.views import (
 from zoom.views import (
     ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 )
+from frontend.views import (
+    HomeTemplateView
+)
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -77,7 +80,7 @@ urlpatterns = [
     path('api/teacher/zoom/meeting/', ZoomMeetingAPIView.as_view()),
 
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
-    path('', TeacherProfileViewTemplate.as_view()),
+    path('', HomeTemplateView.as_view()),
 ]
 
 if settings.DEBUG:
