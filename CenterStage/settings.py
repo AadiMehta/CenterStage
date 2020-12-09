@@ -72,7 +72,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'notifications', 'email_templates')
         ],
         'APP_DIRS': True,

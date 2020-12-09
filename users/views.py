@@ -4,11 +4,9 @@ import string
 import random
 import logging
 import urllib
-
 from django.conf import settings
 from django.core.cache import cache
 from django.views.generic import TemplateView
-
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -20,19 +18,15 @@ from rest_framework.response import Response
 from rest_framework.schemas import ManualSchema
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import authentication, permissions
 from notifications.twilio_sms_notification import twilio
-
 from users.authentication import BearerAuthentication
-
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
     TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer
 )
 from users.models import (
-    User, TeacherProfile, TeacherProfileStatuses,
-    TeacherAccounts, TeacherPayments
+    User, TeacherProfile, TeacherProfileStatuses, TeacherPayments
 )
 
 

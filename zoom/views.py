@@ -1,28 +1,17 @@
 import logging
-
 from datetime import datetime
 from django.utils import timezone
-
-from django.conf import settings
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
-
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
 from rest_framework.views import APIView
-
 from zoom.serializer import ZoomAuthResponseSerializer
 from zoom.utils import zoomclient
-
 from users.serializers import TeacherAccountsSerializer
 from users.authentication import BearerAuthentication, AuthCookieAuthentication
-
-from users.models import (
-    User, TeacherProfile, TeacherAccounts,
-    TeacherAccountTypes
-)
+from users.models import TeacherAccounts, TeacherAccountTypes
 
 logger = logging.getLogger(__name__)
 
