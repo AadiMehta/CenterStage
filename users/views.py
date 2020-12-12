@@ -23,7 +23,8 @@ from users.authentication import BearerAuthentication
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
-    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer
+    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer,
+    UserCreateSerializer
 )
 from users.models import (
     User, TeacherProfile, TeacherProfileStatuses, TeacherPayments
@@ -78,12 +79,10 @@ class ObtainAuthToken(APIView):
 
 class TeacherRegister(generics.CreateAPIView):
     """
-    Create a user on the centerstage platform
+    Create a teacher user on the centerstage platform
 
-    User Types:\n
-        CR -> Creator\n
-        ST -> Student\n
-        AD -> Admin
+    User Type:\n
+        CR -> Creator
     """
     serializer_class = TeacherUserCreateSerializer
     authentication_classes = []
@@ -156,6 +155,21 @@ class ProfileImage(APIView):
         except Exception as e:
             print(str(e))
             return Response(dict({"image": ["This field is required!"]}), status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileRegister(generics.CreateAPIView):
+    """
+    Create a user on the centerstage platform
+
+    User Types:\n
+        VR -> Visitor\n
+        CR -> Creator\n
+        ST -> Student\n
+        AD -> Admin
+    """
+    serializer_class = UserCreateSerializer
+    authentication_classes = []
+    permission_classes = []
 
 
 class SendOtp(generics.CreateAPIView):

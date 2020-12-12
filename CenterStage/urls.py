@@ -23,9 +23,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from notifications.views import health_check
 from users.views import (
-    ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp,       # Common APIs
-    TeacherProfileView, SubdomainAvailabilityAPIView, TeacherPaymentsAPIView, TeacherRegister,
-    TeacherProfileViewTemplate, AccountConnectedTemplate
+    ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView,
+    SubdomainAvailabilityAPIView, TeacherPaymentsAPIView, TeacherRegister,
+    TeacherProfileViewTemplate, AccountConnectedTemplate, ProfileRegister
 )
 from zoom.views import (
     ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
@@ -62,11 +62,13 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # login APIs
+    path('api/signup/', ProfileRegister.as_view()),
     path('api/login/', ObtainAuthToken.as_view()),
     path('api/logout/', Logout.as_view()),
     path('api/profile/', Profile.as_view()),
     path('api/otp/send/', SendOtp.as_view()),
     path('api/otp/verify/', VerifyOtp.as_view()),
+
 
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
     path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),

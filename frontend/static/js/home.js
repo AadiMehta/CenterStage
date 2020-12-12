@@ -1,12 +1,70 @@
 (function () {
-    function setCookie(c_name, value, exdays) {
-        var exdate = new Date();
-        exdate.setDate(exdate.getDate() + exdays);
-        var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
-        document.cookie = c_name + "=" + c_value;
+
+    // ****** Utilities ******
+
+    /**
+     * Show a specific modal using modal id
+     * @param {String} modalName 
+     * @param {Boolean} hide 
+     */
+    function showModal(modalName, hide) {
+        if (hide) {
+            hideAll();
+        }
+        $(`#${modalName}`).modal('toggle');
+        $(`#${modalName}`).modal('show');
+        $('body').addClass('stop-scrolling');
     }
 
-    function sendOTP(phoneNumber) {
+    /**
+     * Hide a specific modal using modal id
+     * @param {String} modalName 
+     */
+    function hideModal(modalName) {
+        $(`#${modalName}`).modal('toggle');
+        $(`#${modalName}`).modal('hide');
+        $('body').removeClass('stop-scrolling');
+    }
+
+    /**
+     * Hide all Modals
+     */
+    function hideAll() {
+        $('.modal').map((index, modalEl) => {
+            $(`#${modalEl.id}`).modal('hide');
+        })
+    }
+
+    /**
+     * Check if phoneNumber is valid
+     * @param {Number} phoneNumber 
+     */
+    function isPhoneNumberValid(phoneNumber) {
+        var filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
+        return filter.test(phoneNumber) && phoneNumber.length === 10
+    }
+
+    /**
+     * Set Cookie in the browser
+     * @param {String} cookieName 
+     * @param {String} value 
+     * @param {Number} exdays 
+     */
+    function setCookie(cookieName, value, exdays) {
+        var exdate = new Date();
+        exdate.setDate(exdate.getDate() + exdays);
+        var cookieValue = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+        document.cookie = cookieName + "=" + cookieValue;
+    }
+    // ****** End of Utilities ******
+
+    // ****** API Handlers ******
+
+    /**
+     * Send OTP to Phone Number API
+     * @param {Number} phoneNumber 
+     */
+    function sendOtpAPI(phoneNumber) {
         window.sentOTPtoPhoneNumber = phoneNumber; 
         $.ajax('/api/otp/send/', {
           type: 'POST',
@@ -14,16 +72,20 @@
               "phone_no": phoneNumber
           },
           success: function (data, status, xhr) {
-            $('#modalOTP').modal('toggle');
-            $('#modalOTP').modal('show');
+            showModal('modalOTP', true);
           },
           error: function (jqXhr, textStatus, errorMessage) {
             console.log('Error while sending OTP', errorMessage)
           }
         });
-    }    
-
-    function verifyOTP(phoneNumber, otp) {
+    }
+  
+    /**
+     * Verify OTP 
+     * @param {Number} phoneNumber 
+     * @param {String, Number} otp 
+     */
+    function verifyOtpAPI(phoneNumber, otp) {
         $.ajax('/api/otp/verify/', {
           type: 'POST',
           data: {
@@ -32,22 +94,76 @@
           },
           success: function (data, status, xhr) {
             setCookie("auth_token", data.token, 1);
-            $('#modalOTP').modal('toggle');
-            $('#modalOTP').modal('hide');
-            $('#modalLogin').modal('hide');
+            hideModal('modalLogin');
           },
           error: function (jqXhr, textStatus, errorMessage) {
             console.log('Error while sending OTP', errorMessage)
           }
         });
-    }    
-
-
-    function isPhoneNumberValid(phoneNumber) {
-        var filter = /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/;
-        return filter.test(phoneNumber)
     }
 
+    /**
+     * Signup API for new User
+     * @param {String} firstName 
+     * @param {String} lastName 
+     * @param {Number} phoneNo 
+     * @param {String} emailId 
+     * @param {String} password 
+     */
+    function signUpAPI(firstName, lastName, phoneNo, emailId, password) {
+        $.ajax('/api/signup/', {
+          type: 'POST',
+          data: {
+            "email": emailId,
+            "password": password,
+            "first_name": firstName,
+            "last_name": lastName,
+            "phone_no": phoneNo
+          },
+          success: function (data, status, xhr) {
+            alert('Signup Successfull');
+            hideModal('modalSignup');
+          },
+          error: function (jqXhr, textStatus, errorMessage) {
+            alert('Error while signup');
+            console.log('Error while signup', errorMessage)
+            hideModal('modalSignup');
+          }
+        });
+    }
+
+    /**
+     * Login API
+     * @param {String} emailId 
+     * @param {String} password 
+     */
+    function loginAPI(emailId, password) {
+        $.ajax('/api/login/', {
+          type: 'POST',
+          data: {
+            "email": emailId,
+            "password": password
+          },
+          success: function (data, status, xhr) {
+            alert('Login Successfull');
+            hideModal('modalLogin');
+          },
+          error: function (jqXhr, textStatus, errorMessage) {
+            alert('Error while login');
+            console.log('Error while Login', errorMessage)
+            hideModal('modalLogin');
+          }
+        });
+    }
+    // ****** End of API Handlers ****** 
+
+
+    // ****** Event Handlers ****** 
+
+    /**
+     * On Get OTP Clicked,
+     * Validate Input and Hit Send OTP API
+     */
     function onGetOTPClicked () {
         let isValid = true;
         $('#loginCountryCodeError').hide()
@@ -65,10 +181,14 @@
             isValid = false;
         }
         if (isValid) {
-            sendOTP(`${countryCode}${phoneNumber}`)
+            sendOtpAPI(`${countryCode}${phoneNumber}`)
         }
     }
 
+    /**
+     * On Verify OTP Clicked,
+     * Validate Input and Hit Verify OTP API
+     */
     function onVerifyOTPClicked () {
         let isValid = true;
         const phoneNumber = window.sentOTPtoPhoneNumber;
@@ -78,10 +198,116 @@
             isValid = false;
         }
         if (isValid) {
-            verifyOTP(phoneNumber, otp);
+            verifyOtpAPI(phoneNumber, otp);
         }
     }
 
+    /**
+     * On Signup Button is Clicked
+     * Validate all the required Fields
+     * Show validation errors if inValid
+     * If valid: Hit Signup API
+     */
+    function onSignUpClicked () {
+        let isValid = true;
+        $('#signUpFirstNameError').hide()
+        $('#signUpLastNameError').hide()
+        $('#signUpCountryCodeError').hide()
+        $('#SignUpPhoneNumberError').hide()
+        $('#SignUpEmailError').hide()
+        $('#SignUpPasswordError').hide()
+        const firstName = $('#signUpFirstName')[0].value;
+        const lastName = $('#signUpLastName')[0].value;
+        const countryCode = $('#signUpCountryCode')[0].value;
+        const phoneNumber = $('#signUpPhoneNumber')[0].value;
+        const emailId = $('#signUpEmail')[0].value;
+        const password = $('#signUpPassword')[0].value;
+        if (!firstName) {
+            $('#signUpFirstNameError').text('Please provide First Name');
+            $('#signUpFirstNameError').show()
+            isValid = false;
+        }
+        if (!lastName) {
+            $('#signUpLastNameError').text('Please provide Last Name');
+            $('#signUpLastNameError').show()
+            isValid = false;
+        }
+        if (countryCode === 'none') {
+            $('#signUpCountryCodeError').text('Please select country code');
+            $('#signUpCountryCodeError').show()
+            isValid = false;
+        }
+        if (phoneNumber && !isPhoneNumberValid(phoneNumber)) {
+            $('#SignUpPhoneNumberError').text('Please add valid phone number');
+            $('#SignUpPhoneNumberError').show()
+            isValid = false;
+        }
+        if (!emailId) {
+            $('#SignUpEmailError').text('Please provide email');
+            $('#SignUpEmailError').show()
+            isValid = false;
+        }
+        if (!password) {
+            $('#SignUpPasswordError').text('Please provide password');
+            $('#SignUpPasswordError').show()
+            isValid = false;
+        }
+
+        if (isValid) {
+            signUpAPI(firstName, lastName, `${countryCode}${phoneNumber}`, emailId, password)
+        }
+    }
+
+    /**
+     * On Login Button is Clicked
+     * Validate all the required Fields
+     * Show validation errors if inValid
+     * If valid: Hit Login API
+     */
+    function onSignInClicked () {
+        let isValid = true;
+        $('#loginEmailError').hide()
+        $('#loginPasswordError').hide()
+        const emailId = $('#loginEmail')[0].value;
+        const password = $('#loginPassword')[0].value;
+        if (!emailId) {
+            $('#loginEmailError').text('Please provide email');
+            $('#loginEmailError').show()
+            isValid = false;
+        }
+        if (!password) {
+            $('#loginPasswordError').text('Please provide password');
+            $('#loginPasswordError').show()
+            isValid = false;
+        }
+
+        if (isValid) {
+            loginAPI(emailId, password)
+        }
+    }
+
+    /**
+     * Open SignUp Modal on bottom signup text clicked
+     * @param {Object} event 
+     */
+    function openSignupModal (event) {
+        event.preventDefault();
+        showModal('modalSignup', true);
+    }
+
+    /**
+     * Open Login Modal on bottom login text clicked
+     * @param {Object} event 
+     */
+    function openSignInModal (event) {
+        event.preventDefault();
+        showModal('modalLogin', true);
+    }
+
+    /**
+     * Init OTP Input to focus on next input on 
+     * key events
+     */
     function initOTPInput() {
         $(".otp-input").keydown(function () {
             let value = $(this).val();
@@ -103,12 +329,19 @@
         });
     }
 
+    // ****** End of Event Handlers ****** 
+
     function init() {
       /**
        * Init Function to add event handlers
        */
       $('#getOTPButton').click(onGetOTPClicked);
       $('#verifyOTPButton').click(onVerifyOTPClicked);
+      $('#verifyOTPButton').click(onVerifyOTPClicked);
+      $('.open-sign-up-button').click(openSignupModal);
+      $('.open-sign-in-button').click(openSignInModal);
+      $('#signUpButton').click(onSignUpClicked);
+      $('#signInButton').click(onSignInClicked);
       initOTPInput()
     }
   
