@@ -1,0 +1,160 @@
+{% load static %}
+
+<!-- Modal Login-->
+<div class="modal fade login-modal comn-modal" id="modalLogin" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"><i><img src="{% static '/images/login-icon.svg' %}" alt="" /></i> Log In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-form">
+            <div class="form-group">
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                    <input id="loginEmail" type="email" class="form-control" placeholder="Email Address" />
+                </div>
+                <strong id="loginEmailError" style="color:red;"></strong>
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                    <input id="loginPassword" type="password" class="form-control" placeholder="Password" />
+                </div>
+                <strong id="loginPasswordError" style="color:red;"></strong>
+            </div>
+                <button type="button" class="btn btn-primary btn-full btn-lg" id="signInButton">Log in</button>
+                <a href="#" class="forgot-pass link-small-text">Forgotten Your Password?</a>
+                <div class="or-row">
+                <span>OR</span>
+                </div>
+    
+                <h3>Log In Via OTP</h3>
+                <div class="form-group">
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
+                    <select id="loginCountryCode" class="form-control">
+                    <option value="none">Country Code</option>
+                    <option value="+1">United States +1</option>
+                    <option value="+91">India +91</option>
+                    </select>
+                </div>
+                <strong id="loginCountryCodeError" style="color:red;display: none;"></strong>
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-mobile.svg' %}" alt="" /></i>
+                    <input id="loginPhoneNumber" type="text" class="form-control" placeholder="Phone Number" />
+                </div>
+                <strong id="loginPhoneNumberError" style="color:red;display: none;"></strong>
+                </div>
+                <button id="getOTPButton" type="button" class="btn btn-primary btn-full btn-lg">Get OTP</button>
+                <div class="haveAc d-block">
+                    Don't have an account?<a href="javascript:void(0);" class="open-sign-up-button">Sign Up</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Login End-->
+
+<!-- Modal Signup-->
+<div class="modal fade login-modal comn-modal" id="modalSignup" tabindex="2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i><img src="{% static '/images/icon-signup.svg' %}" alt="" /></i> Sign Up</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="signup-form">
+                    <div class="form-group">
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                            <input id="signUpFirstName" type="text" class="form-control" placeholder="First Name" />
+                        </div>
+                        <strong id="signUpFirstNameError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                            <input id="signUpLastName" type="text" class="form-control" placeholder="Last Name" />
+                        </div>
+                        <strong id="signUpLastNameError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
+                            <select id="signUpCountryCode" class="form-control">
+                                <option value="none">Country Code</option>
+                                <option value="+1">United States +1</option>
+                                <option value="+91">India +91</option>
+                            </select>
+                        </div>
+                        <strong id="signUpCountryCodeError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-mobile.svg' %}" alt="" /></i>
+                            <input id="signUpPhoneNumber" type="number" class="form-control" placeholder="Mobile Number" maxLength="10"/>
+                        </div>
+                        <strong id="SignUpPhoneNumberError" style="color:red;display: none;"></strong>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                            <input id="signUpEmail" type="email" class="form-control" placeholder="Email Address" />
+                        </div>
+                        <strong id="SignUpEmailError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                            <input id="signUpPassword" type="password" class="form-control" placeholder="Password" />
+                        </div>
+                        <strong id="SignUpPasswordError" style="color:red;display: none;"></strong>
+                    </div>
+
+                    <div class="modal-text">
+                        By selecting <strong>Sign Up</strong> below, I agree to CenterStage’s <a href="#">Terms of Service, Payments Terms of Service, Privacy Policy,</a> and <a href="#">Nondiscrimination Policy</a>.
+                    </div>
+                    <button type="button" class="btn btn-primary btn-full btn-lg" id="signUpButton">Sign Up</button>
+                    <div class="haveAc d-block">Already have an account? <a href="javascript:void(0);" class="open-sign-in-button">Sign In</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Signup End-->
+
+<!-- Modal OTP-->
+<div class="modal fade login-modal comn-modal" id="modalOTP" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+            <i><img src="{% static '/images/login-icon.svg' %}" alt="" /></i>
+            OTP Authentication
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-form">
+            <div>Please enter the One Time Password (OTP) sent to your phone number</div>
+            <div class="otp-inp">
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+            </div>
+            <strong id="otpCodeError" style="color:red;display: none;"></strong>
+            <button id="verifyOTPButton" type="button" class="btn btn-primary btn-full btn-lg">Sign In</button>
+            <div class="haveAc">
+                <span class="otp-time">Submit OTP in: 23</span> <span>Didn't get any OTP. <a href="#">Resend</a></span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- Modal OTP End-->
+  

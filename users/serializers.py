@@ -1,11 +1,13 @@
 import re
 import json
 import _thread
-from notifications.views import send_signup_email
+
+from django.db import IntegrityError
 from rest_framework import serializers
+
+from notifications.views import send_signup_email
 from users.constants import RESTRICTED_SUBDOMAINS
 from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments
-from django.db import IntegrityError
 from phonenumber_field.serializerfields import PhoneNumberField
 
 subdomain_regex_pattern = '^([a-zA-Z0-9]+[\w\-]+[a-zA-Z0-9]+)$'
@@ -38,6 +40,47 @@ class UserSerializer(serializers.ModelSerializer):
             'last_login',
             'user_subscription',
         )
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    '''
+    User Create Serializer used for first time user signup
+    '''
+    first_name = serializers.CharField(required=True, max_length=30)
+    last_name = serializers.CharField(required=True, max_length=150)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, max_length=32)
+    phone_no = PhoneNumberField(required=False)
+
+    class Meta:
+        model = User
+        exclude = (
+            'id',
+            'is_superuser',
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'last_login',
+            'groups',
+            'user_permissions',
+        )
+        read_only_fields = (
+            'is_superuser',
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'last_login',
+            'user_type',
+        )
+
+    def create(self, validated_data):
+        try:
+            user = User.objects.create_creator_user(validated_data.pop("email"), validated_data.pop("password"),
+                                                    **validated_data)
+            _thread.start_new_thread(send_signup_email, (user,))
+            return user
+        except IntegrityError as e:
+            error = dict({'error': str(e)})
+            raise serializers.ValidationError(error)
 
 
 class TeacherAccountsSerializer(serializers.ModelSerializer):
