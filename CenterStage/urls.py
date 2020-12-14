@@ -23,16 +23,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from notifications.views import health_check
 from users.views import (
-    ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView,
-    SubdomainAvailabilityAPIView, TeacherPaymentsAPIView, TeacherRegister,
-    TeacherProfileViewTemplate, AccountConnectedTemplate, ProfileRegister
+    ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView, SubdomainAvailabilityAPIView,
+    TeacherRegister, AccountConnectedTemplate, StudentRegister
 )
-from zoom.views import (
-    ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
-)
-from frontend.views import (
-    HomeTemplateView
-)
+from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
+from frontend.views import HomeTemplateView
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -62,7 +57,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # login APIs
-    path('api/signup/', ProfileRegister.as_view()),
     path('api/login/', ObtainAuthToken.as_view()),
     path('api/logout/', Logout.as_view()),
     path('api/profile/', Profile.as_view()),
@@ -80,6 +74,9 @@ urlpatterns = [
     # path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
     # path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
     path('api/teacher/zoom/meeting/', ZoomMeetingAPIView.as_view()),
+
+    # Student APIs
+    path('api/student/register/', StudentRegister.as_view()),
 
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
     path('', HomeTemplateView.as_view()),

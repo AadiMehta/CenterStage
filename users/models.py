@@ -70,6 +70,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(_('superuser'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
 
+    last_login_ip = models.GenericIPAddressField(_('last login ip'), blank=True, null=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
@@ -106,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
 
-class TeacherProfileStatuses(models.TextChoices):
+class ProfileStatuses(models.TextChoices):
     ACTIVE = 'ACTIVE', _('ACTIVE')
     DELETED = 'DELETED', _('DELETED')
     REMOVED = 'REMOVED', _('REMOVED')
@@ -122,8 +124,8 @@ class TeacherProfile(models.Model):
                                                                                               MaxValueValidator(100)])
     description = models.TextField(_('About Teacher'), null=True, blank=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)
-    status = models.CharField(_("Teacher Status"), null=True, choices=TeacherProfileStatuses.choices, max_length=7,
-                              help_text="Teacher Profile status", default=TeacherProfileStatuses.ACTIVE)
+    status = models.CharField(_("Teacher Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
+                              help_text="Teacher Profile status", default=ProfileStatuses.ACTIVE)
 
     class Meta:
         verbose_name = _('Teacher Profile')
@@ -160,3 +162,26 @@ class TeacherPayments(models.Model):
     payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
                                     help_text="Type of payment account")
     info = models.JSONField(null=True)
+
+
+class StudentProfile(models.Model):
+    """
+    Additional data associated with the teacher user
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="student_profile_data")
+    description = models.TextField(_('About Student'), null=True, blank=True)
+    status = models.CharField(_("Student Profile Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
+                              help_text="Student Profile status", default=ProfileStatuses.ACTIVE)
+
+    class Meta:
+        verbose_name = _('Student Profile')
+        verbose_name_plural = _('Student Profiles')
+
+
+class EarningSchema(models.Model):
+    """
+    Earnings data
+    """
+    class Meta:
+        verbose_name = _('Earnings Data')
+        verbose_name_plural = _('Earnings Data')

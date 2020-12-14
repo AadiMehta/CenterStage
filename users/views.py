@@ -1,5 +1,4 @@
 import re
-import json
 import string
 import random
 import logging
@@ -19,18 +18,14 @@ from rest_framework.schemas import ManualSchema
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from notifications.twilio_sms_notification import twilio
+from django.utils import timezone
 from users.authentication import BearerAuthentication
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
-    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, TeacherAccountRemoveSerializer,
-    UserCreateSerializer
+    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, StudentUserCreateSerializer
 )
-from users.models import (
-    User, TeacherProfile, TeacherProfileStatuses, TeacherPayments
-)
-
-
+from users.models import User, TeacherProfile, ProfileStatuses, TeacherPayments
 logger = logging.getLogger(__name__)
 
 
@@ -70,37 +65,43 @@ class ObtainAuthToken(APIView):
 
     @swagger_auto_schema(request_body=AuthTokenSerializer, responses={200: LoginResponseSerializer})
     def post(self, request, *args, **kwargs):
+        print(request.headers)
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        user.last_login = timezone.now()
+        user.save()
+        # user.last_login_ip =
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
 
 
 class TeacherRegister(generics.CreateAPIView):
     """
-    Create a teacher user on the centerstage platform
+    Create a teacher user (CR) on the centerstage platform
 
-    User Type:\n
-        CR -> Creator
+    User Types:\n
+        CR -> Creator\n
+        ST -> Student\n
+        AD -> Admin
     """
     serializer_class = TeacherUserCreateSerializer
     authentication_classes = []
     permission_classes = []
 
 
-# class StudentRegister(generics.CreateAPIView):
-#     """
-#     Create a user on the centerstage platform
-#
-#     User Types:\n
-#         CR -> Creator\n
-#         ST -> Student\n
-#         AD -> Admin
-#     """
-#     serializer_class = TeacherUserCreateSerializer
-#     authentication_classes = []
-#     permission_classes = []
+class StudentRegister(generics.CreateAPIView):
+    """
+    Create a student user (ST) on the centerstage platform
+
+    User Types:\n
+        CR -> Creator\n
+        ST -> Student\n
+        AD -> Admin
+    """
+    serializer_class = StudentUserCreateSerializer
+    authentication_classes = []
+    permission_classes = []
 
 
 class Logout(APIView):
@@ -155,20 +156,6 @@ class ProfileImage(APIView):
         except Exception as e:
             print(str(e))
             return Response(dict({"image": ["This field is required!"]}), status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProfileRegister(generics.CreateAPIView):
-    """
-    Create a user on the centerstage platform
-
-    User Types:\n
-        CR -> Creator\n
-        ST -> Student\n
-        AD -> Admin
-    """
-    serializer_class = UserCreateSerializer
-    authentication_classes = []
-    permission_classes = []
 
 
 class SendOtp(generics.CreateAPIView):
@@ -246,8 +233,7 @@ class VerifyOtp(generics.CreateAPIView):
     }
     Response:
     {
-        "msg": "Login Successful",
-        "token": "3e80a3dbae01002c37a06fa5cee04fea62e96d01"
+        "token": "<token>"
     }
     """
     serializer_class = VerifyOTPSerializer
@@ -309,7 +295,7 @@ class TeacherProfileView(APIView):
 
     def get(self, request):
         try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+            teacher = TeacherProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
         except TeacherProfile.DoesNotExist:
             return Response(dict({"error": "Teacher is yet to create the profile"}), status=status.HTTP_400_BAD_REQUEST)
 
@@ -347,7 +333,7 @@ class TeacherProfileView(APIView):
         except TeacherProfile.DoesNotExist:
             return Response(dict({"error": "Teacher is yet to create the profile"}))
 
-        teacher.status = TeacherProfileStatuses.DELETED
+        teacher.status = ProfileStatuses.DELETED
         teacher.save()
         return Response("", status=status.HTTP_204_NO_CONTENT)
 
@@ -381,7 +367,7 @@ class TeacherPaymentsAPIView(APIView):
 
         payment_type = serializer.validated_data.get("payment_type")
         try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=TeacherProfileStatuses.ACTIVE)
+            teacher = TeacherProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
         except TeacherProfile.DoesNotExist:
             return Response(dict({"error": "No Active Profile Found"}))
 
@@ -415,9 +401,7 @@ class TeacherProfileViewTemplate(TemplateView):
             'zoom': {
                 'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
                 'ZOOM_DISCONNECT_URL': '{}/profile/zoom/disconnect'.format(settings.API_BASE_URL, teacher.id),
-                'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(
-                                            settings.API_BASE_URL
-                                        ))
+                'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(settings.API_BASE_URL))
             }
         })
         return context
