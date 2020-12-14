@@ -44,7 +44,6 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCreateSerializer(serializers.ModelSerializer):
     '''
     User Create Serializer used for first time user signup
-    For first time user, default type is set to VR (Visitor User)
     '''
     first_name = serializers.CharField(required=True, max_length=30)
     last_name = serializers.CharField(required=True, max_length=150)
@@ -75,7 +74,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         try:
-            user = User.objects.create_visitor_user(validated_data.pop("email"), validated_data.pop("password"),
+            user = User.objects.create_creator_user(validated_data.pop("email"), validated_data.pop("password"),
                                                     **validated_data)
             _thread.start_new_thread(send_signup_email, (user,))
             return user

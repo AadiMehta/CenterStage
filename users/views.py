@@ -162,7 +162,6 @@ class ProfileRegister(generics.CreateAPIView):
     Create a user on the centerstage platform
 
     User Types:\n
-        VR -> Visitor\n
         CR -> Creator\n
         ST -> Student\n
         AD -> Admin

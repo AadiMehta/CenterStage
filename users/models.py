@@ -8,7 +8,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class UserTypes(models.TextChoices):
-    VISITOR_USER = 'VR', _('Visitor User')
     CREATOR_USER = 'CR', _('Creator User')
     STUDENT_USER = 'ST', _('Student User')
     # CRESTU_USER = 'CS', _('Both Creator and Student User')
@@ -32,9 +31,6 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-
-    def create_visitor_user(self, email, password, **extra_fields):
-        return self._create_user(email, password, False, False, "VR", **extra_fields)
 
     def create_creator_user(self, email, password, **extra_fields):
         return self._create_user(email, password, False, False, "CR", **extra_fields)
@@ -65,7 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     phone_no = PhoneNumberField(unique=True, null=True)
     user_type = models.CharField(_("user type"), choices=UserTypes.choices, max_length=3,
-                                 help_text="Type of user", default=UserTypes.VISITOR_USER)
+                                 help_text="Type of user")
 
     profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
