@@ -309,7 +309,7 @@ class TeacherProfileView(APIView):
                     "error": "Teacher profile already created. Hit Put request to update the profile"
                 }), status=status.HTTP_400_BAD_REQUEST)
         except TeacherProfile.DoesNotExist:
-            serializer = TeacherProfileSerializer(data=request.data)
+            serializer = TeacherProfileSerializer(data=request.data, context={'request': request})
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -405,7 +405,3 @@ class TeacherProfileViewTemplate(TemplateView):
             }
         })
         return context
-
-
-class AccountConnectedTemplate(TemplateView):
-    template_name = "test_account_connected_success.html"

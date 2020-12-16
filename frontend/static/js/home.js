@@ -21,7 +21,6 @@
      * @param {String} modalName 
      */
     function hideModal(modalName) {
-        $(`#${modalName}`).modal('toggle');
         $(`#${modalName}`).modal('hide');
         $('body').removeClass('stop-scrolling');
     }
@@ -94,6 +93,7 @@
           },
           success: function (data, status, xhr) {
             setCookie("auth_token", data.token, 1);
+            hideModal('modalOTP');
             hideModal('modalLogin');
           },
           error: function (jqXhr, textStatus, errorMessage) {
