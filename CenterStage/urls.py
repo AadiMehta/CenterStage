@@ -24,10 +24,14 @@ from django.conf.urls.static import static
 from notifications.views import health_check
 from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView, SubdomainAvailabilityAPIView,
-    TeacherRegister, AccountConnectedTemplate, StudentRegister
+    TeacherRegister, StudentRegister
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
-from frontend.views import HomeTemplateView
+from frontend.views import (
+    HomeTemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
+    OnboardStep3TemplateView, AccountConnectedTemplate
+)
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -78,8 +82,13 @@ urlpatterns = [
     # Student APIs
     path('api/student/register/', StudentRegister.as_view()),
 
+
+    # Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
-    path('', HomeTemplateView.as_view()),
+    path('onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
+    path('onboarding/step2', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
+    path('onboarding/step3', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
+    path('', HomeTemplateView.as_view(), name="homepage"),
 ]
 
 if settings.DEBUG:

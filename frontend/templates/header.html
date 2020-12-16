@@ -28,20 +28,11 @@
             </div>
           </nav>
           <div class="main-profile-menu">
-            {% if logged_in_user %}
+            {% if user %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
-                <span>{{logged_in_user.first_name}}</span>
+                <span>{{user.first_name}}</span>
               </a>
-              <div class="dropdown-menu">
-                <ul>
-                  <li><a href="#" data-toggle="modal" data-target="#modalLogin"><i><img src="{% static '/images/t-login.svg' %}" alt="" /></i><span>Teacher Login</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/s-login.svg' %}" alt="" /></i><span>Student Login</span></a></li>
-                  <li class="divider"></li>
-                  <li><a href="#"><i><img src="{% static '/images/faq.svg' %}" alt="" /></i><span>FAQ</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
-                </ul>
-              </div>
             {% else %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
