@@ -338,7 +338,6 @@
        */
       $('#getOTPButton').click(onGetOTPClicked);
       $('#verifyOTPButton').click(onVerifyOTPClicked);
-      $('#verifyOTPButton').click(onVerifyOTPClicked);
       $('.open-sign-up-button').click(openSignupModal);
       $('.open-sign-in-button').click(openSignInModal);
       $('#signUpButton').click(onSignUpClicked);
