@@ -95,6 +95,7 @@
             setCookie("auth_token", data.token, 1);
             hideModal('modalOTP');
             hideModal('modalLogin');
+            location.reload();
           },
           error: function (jqXhr, textStatus, errorMessage) {
             console.log('Error while sending OTP', errorMessage)

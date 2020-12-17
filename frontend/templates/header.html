@@ -28,7 +28,7 @@
             </div>
           </nav>
           <div class="main-profile-menu">
-            {% if user %}
+            {% if user and user.first_name %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
                 <span>{{user.first_name}}</span>
