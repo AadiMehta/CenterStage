@@ -84,7 +84,7 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
             except TeacherProfile.DoesNotExist:
                 return value
         else:
-            raise serializers.ValidationError("Invalid subdomain. Subdomain has to be atleast 4 character long "
+            raise serializers.ValidationError("Invalid subdomain. Subdomain has to be at least 4 character long "
                                               "and cannot start and end with _ or - and cannot contain full stop(.)")
 
 
@@ -125,6 +125,43 @@ class TeacherUserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(error)
 
 
+class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TeacherProfile
+        exclude = (
+            'id',
+            'user'
+        )
+
+
+class SubdomainCheckSerializer(serializers.Serializer):
+    subdomain = serializers.CharField(required=True)
+
+    def validate_subdomain(self, value):
+        if value in RESTRICTED_SUBDOMAINS:
+            raise serializers.ValidationError("Subdomain not permitted!")
+        elif bool(re.match(subdomain_regex_pattern, value)):
+            try:
+                teacher = TeacherProfile.objects.get(subdomain=value)
+                raise serializers.ValidationError("Subdomain not available or already in use.")
+            except TeacherProfile.DoesNotExist:
+                print("Actual right case")
+                return value
+        else:
+            raise serializers.ValidationError("Invalid subdomain. Subdomain has to be atleast 4 character long "
+                                              "and cannot start and end with _ or - and cannot contain full stop(.)")
+
+
+class TeacherPaymentRemoveSerializer(serializers.Serializer):
+    payment_type = serializers.CharField(max_length=10, required=True)
+
+
+class TeacherAccountRemoveSerializer(serializers.Serializer):
+    account_type = serializers.CharField(max_length=10, required=True)
+
+
+# ********* Student Serializers **********
 class StudentUserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True, max_length=32)
@@ -162,46 +199,11 @@ class StudentUserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(error)
 
 
+# ********* Common Serializers ***********
 class SendOTPSerializer(serializers.Serializer):
     phone_no = PhoneNumberField(required=True)
-
-
-class SubdomainCheckSerializer(serializers.Serializer):
-    subdomain = serializers.CharField(required=True)
-
-    def validate_subdomain(self, value):
-        if value in RESTRICTED_SUBDOMAINS:
-            raise serializers.ValidationError("Subdomain not permitted!")
-        elif bool(re.match(subdomain_regex_pattern, value)):
-            try:
-                teacher = TeacherProfile.objects.get(subdomain=value)
-                raise serializers.ValidationError("Subdomain not available or already in use.")
-            except TeacherProfile.DoesNotExist:
-                print("Actual right case")
-                return value
-        else:
-            raise serializers.ValidationError("Invalid subdomain. Subdomain has to be atleast 4 character long "
-                                              "and cannot start and end with _ or - and cannot contain full stop(.)")
 
 
 class VerifyOTPSerializer(serializers.Serializer):
     phone_no = PhoneNumberField(required=True)
     otp = serializers.CharField(max_length=6, required=True)
-
-
-class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TeacherProfile
-        exclude = (
-            'id',
-            'user'
-        )
-
-
-class TeacherPaymentRemoveSerializer(serializers.Serializer):
-    payment_type = serializers.CharField(max_length=10, required=True)
-
-
-class TeacherAccountRemoveSerializer(serializers.Serializer):
-    account_type = serializers.CharField(max_length=10, required=True)
