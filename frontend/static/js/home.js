@@ -13,7 +13,6 @@
         }
         $(`#${modalName}`).modal('toggle');
         $(`#${modalName}`).modal('show');
-        $('body').addClass('stop-scrolling');
     }
 
     /**
@@ -22,7 +21,6 @@
      */
     function hideModal(modalName) {
         $(`#${modalName}`).modal('hide');
-        $('body').removeClass('stop-scrolling');
     }
 
     /**
@@ -95,6 +93,7 @@
             setCookie("auth_token", data.token, 1);
             hideModal('modalOTP');
             hideModal('modalLogin');
+            location.reload();
           },
           error: function (jqXhr, textStatus, errorMessage) {
             console.log('Error while sending OTP', errorMessage)
@@ -336,7 +335,6 @@
        * Init Function to add event handlers
        */
       $('#getOTPButton').click(onGetOTPClicked);
-      $('#verifyOTPButton').click(onVerifyOTPClicked);
       $('#verifyOTPButton').click(onVerifyOTPClicked);
       $('.open-sign-up-button').click(openSignupModal);
       $('.open-sign-in-button').click(openSignInModal);
