@@ -13,7 +13,6 @@
         }
         $(`#${modalName}`).modal('toggle');
         $(`#${modalName}`).modal('show');
-        $('body').addClass('stop-scrolling');
     }
 
     /**
@@ -22,7 +21,6 @@
      */
     function hideModal(modalName) {
         $(`#${modalName}`).modal('hide');
-        $('body').removeClass('stop-scrolling');
     }
 
     /**
