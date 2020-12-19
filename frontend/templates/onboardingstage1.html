@@ -35,8 +35,8 @@
                 </div>
                 <div class="form-group">
                     <label>Your Custom Page Name</label>
-                    <div class="liner-inp"> 
-                        <input id="onboardingPageName" type="text" class="form-control" placeholder="ThomasEddy" />
+                    <div class="liner-inp">
+                        <input id="onboardingPageName" type="text" class="form-control" placeholder="ThomasEddy" maxLength="32" />
                     </div>
                     <p id="onboardingPageNameError" style="color:red;"></p>
                 </div>
@@ -44,11 +44,14 @@
                     <button id="onboardingProceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static '/images/arrow-w.svg' %}" alt="" /></i></button>
                 </div>
             </div>
+            <input type="file" id="profileImageUpload" style="display:none"/> 
+            <img id="profileImageDataURl" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" style="display:none" />
             <div class="boarding-right">
-                <div class="add-profile-pic">
-                    <img src="{% static '/images/add-pic.svg' %}" alt="" />
+                <div id="profileImageContainer" class="add-profile-pic">
+                    <img id="profileImage" src="{% static '/images/add-pic.svg' %}" alt="" />
                 </div>
                 <div class="add-pic-text">Add Profile Picture</div>
+                <p id="onboardingProfileImageError" style="color:red;"></p>
             </div>
         </div>
     </div>

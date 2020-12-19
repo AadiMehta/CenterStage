@@ -309,7 +309,8 @@ class TeacherProfileView(APIView):
 
     def post(self, request):
         try:
-            if request.user.teacher_profile_data is not None:
+            teacher = TeacherProfile.objects.get(user=request.user)
+            if teacher is not None:
                 return Response(dict({
                     "error": "Teacher profile already created. Hit Put request to update the profile"
                 }), status=status.HTTP_400_BAD_REQUEST)
