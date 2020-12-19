@@ -110,7 +110,7 @@
      * @param {String} password 
      */
     function signUpAPI(firstName, lastName, phoneNo, emailId, password) {
-        $.ajax('/api/signup/', {
+        $.ajax('/api/teacher/register/', {
           type: 'POST',
           data: {
             "email": emailId,
@@ -120,7 +120,7 @@
             "phone_no": phoneNo
           },
           success: function (data, status, xhr) {
-            alert('Signup Successfull');
+            alert('Signup Successful');
             hideModal('modalSignup');
           },
           error: function (jqXhr, textStatus, errorMessage) {
@@ -140,12 +140,14 @@
         $.ajax('/api/login/', {
           type: 'POST',
           data: {
-            "email": emailId,
+            "username": emailId,
             "password": password
           },
           success: function (data, status, xhr) {
-            alert('Login Successfull');
+            setCookie("auth_token", data.token, 1);
+            hideModal('modalOTP');
             hideModal('modalLogin');
+            location.reload();
           },
           error: function (jqXhr, textStatus, errorMessage) {
             alert('Error while login');

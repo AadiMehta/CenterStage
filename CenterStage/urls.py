@@ -67,10 +67,6 @@ urlpatterns = [
     path('api/otp/send/', SendOtp.as_view()),
     path('api/otp/verify/', VerifyOtp.as_view()),
 
-
-    path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
-    path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
-
     # Teacher APIs
     path('api/teacher/register/', TeacherRegister.as_view()),
     path('api/teacher/profile/', TeacherProfileView.as_view()),
@@ -82,6 +78,9 @@ urlpatterns = [
     # Student APIs
     path('api/student/register/', StudentRegister.as_view()),
 
+    # zoom APIs
+    path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
+    path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
 
     # Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),

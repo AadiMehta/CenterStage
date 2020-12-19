@@ -44,7 +44,7 @@
      * @param {String} lessonDescription 
      * @param {String} subDomain 
      */
-    function createTeacherProfile(lessonName, lessonDescription, subDomain) {
+    function createTeacherProfile(academyName, description, subDomain) {
         const token = getCookie('auth_token');
         $.ajax('/api/teacher/profile/', {
           type: 'POST',
@@ -52,8 +52,8 @@
             'Authorization': `Bearer ${token}`
           },
           data: {
-              "lesson_name": lessonName,
-              "lesson_description": lessonDescription,
+              "academy_name": academyName,
+              "description": description,
               "subdomain": subDomain
           },
           success: function (data, status, xhr) {
@@ -97,29 +97,29 @@
      */
     function onProceedButtonClicked () {
         let isValid = true;
-        $('#onboardingLessonNameError').hide()
-        $('#onboardingLessonDescriptionError').hide()
+        $('#onboardingAcademyNameError').hide()
+        $('#onboardingDescriptionError').hide()
         $('#onboardingPageNameError').hide()
-        const lessonName = $('#onboardingLessonName')[0].value;
-        const lessonDescription = $('#onboardingLessonDescription')[0].value;
+        const academyName = $('#onboardingAcademyName')[0].value;
+        const description = $('#onboardingDescription')[0].value;
         const pageName = $('#onboardingPageName')[0].value;
-        if (!lessonName) {
-            $('#onboardingLessonNameError').text('Please Provide Lesson Name');
-            $('#onboardingLessonNameError').show()
+        if (!academyName) {
+            $('#onboardingAcademyNameError').text('Please provide academy name');
+            $('#onboardingAcademyNameError').show()
             isValid = false;
         }
-        if (!lessonDescription) {
-            $('#onboardingLessonDescriptionError').text('Please Provide Lesson Description');
-            $('#onboardingLessonDescriptionError').show()
+        if (!description) {
+            $('#onboardingDescriptionError').text('Please provide description');
+            $('#onboardingDescriptionError').show()
             isValid = false;
         }
         if (!pageName) {
-            $('#onboardingPageNameError').text('Please Provide Page Name');
+            $('#onboardingPageNameError').text('Please provide your personal subdomain');
             $('#onboardingPageNameError').show()
             isValid = false;
         }
         if (isValid) {
-            createTeacherProfile(lessonName, lessonDescription, pageName)
+            createTeacherProfile(academyName, description, pageName)
         }
     }
 

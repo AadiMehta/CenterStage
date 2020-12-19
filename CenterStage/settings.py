@@ -31,9 +31,6 @@ DEBUG = True if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
 
 ALLOWED_HOSTS = ['*']
 
-BASE_URL = 'http://localhost:8000'
-API_BASE_URL = '{}/api'.format(BASE_URL)
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -144,8 +141,8 @@ if sys.platform == "win32" or os.getenv('DEPLOY_ENV'):
 else:
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': 'unix:/tmp/memcached.sock',
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': '/var/tmp/django_cache',
             'KEY_PREFIX': 'centerstage'
         }
     }

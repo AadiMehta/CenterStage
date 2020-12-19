@@ -1,9 +1,7 @@
 import urllib
-
+import os
 from django.conf import settings
-from django.core.cache import cache
 from django.views.generic import TemplateView
-
 from rest_framework.authtoken.models import Token
 from users.models import User
 
@@ -18,17 +16,21 @@ def get_user_from_token(auth_token):
 
 
 class HomeTemplateView(TemplateView):
+    """
+
+    """
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
-        context['test'] = 123123123123
         return context
 
 
 class OnboardStep1TemplateView(TemplateView):
+    """
+    """
     template_name = "onboardingstage1.html"
 
     def get_context_data(self, **kwargs):
@@ -39,6 +41,9 @@ class OnboardStep1TemplateView(TemplateView):
 
 
 class AccountConnectedTemplate(TemplateView):
+    """
+
+    """
     template_name = "zoom_auth_success.html"
 
 
@@ -58,7 +63,8 @@ class OnboardStep2TemplateView(TemplateView):
                 'teacher_accounts': teacher_accounts,
                 'zoom': {
                     'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
-                    'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(settings.API_BASE_URL))
+                    'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(
+                        os.getenv("ZOOM_REDIRECT_URL")))
                 }
             })
         return context

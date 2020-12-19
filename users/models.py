@@ -63,7 +63,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_type = models.CharField(_("user type"), choices=UserTypes.choices, max_length=3,
                                  help_text="Type of user")
 
-    profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     is_staff = models.BooleanField(_('staff status'), default=False)
@@ -120,8 +119,10 @@ class TeacherProfile(models.Model):
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="teacher_profile_data")
     subdomain = models.CharField(_('Domain Prefix'), max_length=32, unique=True, validators=[MinLengthValidator(4)])
+    profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     year_of_experience = models.IntegerField(_('years of experience'), null=True, validators=[MinValueValidator(0),
                                                                                               MaxValueValidator(100)])
+    academy_name = models.CharField(_("Academy Name"), max_length=64, validators=[MinLengthValidator(4)])
     description = models.TextField(_('About Teacher'), null=True, blank=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)
     status = models.CharField(_("Teacher Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
