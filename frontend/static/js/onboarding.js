@@ -4,10 +4,10 @@
 
     /**
      * Check if Subdomain starts with alphabet and has no symbols
-     * @param {subDomain} sunDomain 
+     * @param {String} subDomain 
      */
-    function validateSubdomain(sunDomain) {
-      return /^[a-zA-Z]*/.test(subDomain) && !/[!@#$%^&*()_+]/.test(sunDomain);
+    function validateSubdomain(subDomain) {
+      return /^[a-zA-Z]*/.test(subDomain) && !/[!@#$%^&*()_+]/.test(subDomain);
     }
 
     /**
@@ -87,8 +87,12 @@
      * @param {Event} event 
      */
     function checkSubdomainAvailability(event) {
-      const subdomain = event.target.value;
+      const subDomain = event.target.value;
       const token = getCookie('auth_token');
+
+      if (!validateSubdomain(subDomain)) {
+        return;
+      }
 
       $.ajax('api/teacher/subdomain/availability/', {
         type: 'POST',
@@ -97,7 +101,7 @@
           'Content-Type': 'application/json; charset=utf-8;'
         },
         data: JSON.stringify({
-          "subdomain": subdomain
+          "subdomain": subDomain
         }),
         success: function (data, status, xhr) {
           window.subdomainValid = true;
@@ -180,7 +184,7 @@
         const academyName = $('#onboardingAcademyName')[0].value;
         const description = $('#onboardingDescription')[0].value;
         const subDomain = $('#onboardingPageName')[0].value;
-        if (!profileUrl) {
+        if (profileUrl === 'data:image/jpeg;base64') {
           $('#onboardingProfileImageError').text('Please Select Profile Image');
           $('#onboardingProfileImageError').show()
           isValid = false;
