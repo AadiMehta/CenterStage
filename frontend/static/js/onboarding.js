@@ -3,6 +3,50 @@
     // ****** Utilities ******
 
     /**
+     * Check if Subdomain starts with alphabet and has no symbols
+     * @param {String} subDomain 
+     */
+    function validateSubdomain(subDomain) {
+      return /^[a-zA-Z]*/.test(subDomain) && !/[!@#$%^&*()_+]/.test(subDomain);
+    }
+
+    /**
+     * Debounce Method for handling Input
+     * @param {Function} func 
+     * @param {Number} wait 
+     * @param {Boolean} immediate 
+     */
+    function debounce(func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    };
+
+    /**
+     * Read Uploaded File URL
+     * @param {Element} input 
+     */
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $('#profileImage').attr('src', e.target.result);
+          $('#profileImageDataURl').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    /**
      * Opens Popup window as the current window as parent
      */
     function openWindow(url, winName, w, h, scroll){
@@ -39,12 +83,46 @@
     // ****** API Handlers ******
 
     /**
+     * Check if SubDomain is available
+     * @param {Event} event 
+     */
+    function checkSubdomainAvailability(event) {
+      const subDomain = event.target.value;
+      const token = getCookie('auth_token');
+
+      if (!validateSubdomain(subDomain)) {
+        return;
+      }
+
+      $.ajax('api/teacher/subdomain/availability/', {
+        type: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json; charset=utf-8;'
+        },
+        data: JSON.stringify({
+          "subdomain": subDomain
+        }),
+        success: function (data, status, xhr) {
+          window.subdomainValid = true;
+          $('#onboardingPageNameError').hide();
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+          window.subdomainValid = false;
+          $('#onboardingPageNameError').hide();
+          $('#onboardingPageNameError').text('Subdomain not available');
+          $('#onboardingPageNameError').show()
+        }
+      });
+    }
+
+    /**
      * Create Teacher Profile
-     * @param {String} lessonName 
-     * @param {String} lessonDescription 
+     * @param {String} academyName 
+     * @param {String} description 
      * @param {String} subDomain 
      */
-    function createTeacherProfile(academyName, description, subDomain) {
+    function createTeacherProfile(profileUrl, academyName, description, subDomain) {
         const token = getCookie('auth_token');
         $.ajax('/api/teacher/profile/', {
           type: 'POST',
@@ -52,9 +130,10 @@
             'Authorization': `Bearer ${token}`
           },
           data: {
-              "academy_name": academyName,
-              "description": description,
-              "subdomain": subDomain
+            "profile_image": profileUrl,
+            "academy_name": academyName,
+            "description": description,
+            "subdomain": subDomain
           },
           success: function (data, status, xhr) {
             window.location.href = "/onboarding/step2";
@@ -62,7 +141,7 @@
           error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI
             console.log('Error while creating teacher profile', errorMessage)
-            window.location.href = "/onboarding/step2";
+            // window.location.href = "/onboarding/step2";
           }
         });
     }
@@ -100,26 +179,33 @@
         $('#onboardingAcademyNameError').hide()
         $('#onboardingDescriptionError').hide()
         $('#onboardingPageNameError').hide()
+        $('#onboardingProfileImageError').hide()
+        const profileUrl = $('#profileImageDataURl')[0].src;
         const academyName = $('#onboardingAcademyName')[0].value;
         const description = $('#onboardingDescription')[0].value;
-        const pageName = $('#onboardingPageName')[0].value;
+        const subDomain = $('#onboardingPageName')[0].value;
+        if (profileUrl === 'data:image/jpeg;base64') {
+          $('#onboardingProfileImageError').text('Please Select Profile Image');
+          $('#onboardingProfileImageError').show()
+          isValid = false;
+        }
         if (!academyName) {
-            $('#onboardingAcademyNameError').text('Please provide academy name');
+            $('#onboardingAcademyNameError').text('Please Provide Academy Name');
             $('#onboardingAcademyNameError').show()
             isValid = false;
         }
         if (!description) {
-            $('#onboardingDescriptionError').text('Please provide description');
+            $('#onboardingDescriptionError').text('Please Provide Description');
             $('#onboardingDescriptionError').show()
             isValid = false;
         }
-        if (!pageName) {
-            $('#onboardingPageNameError').text('Please provide your personal subdomain');
+        if (!subDomain && validateSubdomain(subDomain)) {
+            $('#onboardingPageNameError').text('Please Provide Page Name');
             $('#onboardingPageNameError').show()
             isValid = false;
         }
-        if (isValid) {
-            createTeacherProfile(academyName, description, pageName)
+        if (isValid && window.subdomainValid) {
+            createTeacherProfile(profileUrl, academyName, description, subDomain)
         }
     }
 
@@ -141,16 +227,26 @@
       openWindow(url, 'Authorize Zoom', 600, 700, 1);
     }
 
+    function openImageSelector () {
+      $('#profileImageUpload').trigger('click');
+    }
+
     // ****** End of Event Handlers ****** 
 
     function init() {
       /**
        * Init Function to add event handlers
        */
+      $("#profileImageUpload").change(function() {
+        readURL(this);
+      });
+
+      $('#onboardingPageName').keyup(debounce(checkSubdomainAvailability, 500));
+      $('#profileImageContainer').click(openImageSelector);
       $('#onboardingProceed').click(onProceedButtonClicked);
       $('#onboarding2Proceed').click(onProceed2ButtonClicked);
-      $('#disconnectZoomAccount').click(handleZoomDisconnectAccount)
-      $('#connectZoomAccount').click(handleZoomConnectAccount)
+      $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
+      $('#connectZoomAccount').click(handleZoomConnectAccount);
     }
   
     init();
