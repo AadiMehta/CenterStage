@@ -16,10 +16,7 @@ def get_user_from_token(auth_token):
 
 
 class HomeTemplateView(TemplateView):
-    """
-
-    """
-    template_name = "home.html"
+    template_name = "home2.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

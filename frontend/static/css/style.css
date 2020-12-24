@@ -237,3 +237,20 @@ video {width: 100%;}
 .boarding-graphics{display: flex; justify-content: flex-end;}
 .upload-video-wrap input{position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;}
 
+.businessAfter_row{display: flex; width: 100%; gap: 20px; flex-wrap: wrap; margin-top: 3rem; font-weight: 700; text-align: left;}
+.businessAfter_col{display: flex; width:calc(33.333% - 14px); gap:20px; align-items: center; padding:1.5rem 2rem; background: #181818;}
+.businessAfter_col i {width: 50px;}
+.businessAfter_col span {flex: 2;}
+.modal-onload{position: fixed; bottom:1rem; left:1rem; background: #2A2A2A; border-radius: 4px; padding:2rem 1rem 1rem 1rem; width: 300px; z-index:999; color: #fff; text-align: center;}
+.modal-onload p{ margin: 0px;}
+.modal-onload .text-1{font-size: 20px;}
+.profimg-rounded{display: inline-block;}
+.profimg-rounded, .profimg-rounded img {width: 60px; height: 60px; border-radius: 100%;}
+.profimg-rounded img {padding: 2px; background: #fff; box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);}
+.profimg-col {display: flex; justify-content: center; align-items: center; padding: 1rem 0;}
+.profimg-col .profimg-rounded:first-child {margin: 0;}
+.profimg-col .profimg-rounded {margin-left: -25px;}
+.close-small-modal{position: absolute; right: 10px; top: 10px; background: none; border: 0px;}
+
+
+

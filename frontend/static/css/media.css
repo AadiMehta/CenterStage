@@ -101,6 +101,7 @@
     .host-zoom {padding-bottom:3rem;}
     .video-size-alert {font-size: 16px;}
     .upload-video-wrap {height: 350px;}
+    .businessAfter_col {padding: 1rem;}
 }
 
 @media only screen and (max-width:991px) {
@@ -122,7 +123,17 @@
     .boarding-row {flex-direction: column-reverse;}
     .header-wrap {display: flex;  justify-content: space-between;}
     .navbar-toggler {position: absolute; top:2px;  right: 10px; z-index: 999; width: 37px; height: 25px; padding: 0;}
-    .navbar-collapse {position: absolute;  top:40px; right:0px; z-index: 999; background: #fff; width: 220px; padding:25px; border-radius: 25px; border: 1px solid rgba(0,0,0,.15);}
+    .navbar-collapse {
+        position: fixed;
+        top: 0;
+        right: 0px;
+        z-index: 999;
+        background: #2A2A2A;
+        width: 100%;
+        padding: 25px;
+        height: 100vh;
+        text-align: center;
+    }
     .top-navigation .navbar-nav .nav-item {margin-right: 0;}
     .top-navigation .navbar-nav .nav-link{color: #000; font-weight: 700;}
     .top-navigation {padding-top: 10px;}
@@ -170,6 +181,7 @@
     .card-btn-col .card-name {padding-top: 5px; font-size: 14px;}
     .boarding-left .btn {width: 100%; justify-content: center; height: auto; padding: 10px; gap: 10px;}
     .boarding-left p br {display: none;}
+    .businessAfter_col {width: 100%;}
 }
 @media only screen and (max-width:640px) {
     .main-logo {width: 150px;}

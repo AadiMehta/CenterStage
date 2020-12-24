@@ -89,6 +89,13 @@ class TeacherRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.create(serializer.validated_data)
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response(dict({'token': token.key}), status=status.HTTP_201_CREATED)
+
 
 class StudentRegister(generics.CreateAPIView):
     """
