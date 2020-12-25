@@ -27,10 +27,9 @@ load_dotenv(dotenv_path=env_path)
 SECRET_KEY = 'z(3*uqch79bmakbwp1g&#k&#ik%!g(r!bzk_6vnooi!#4y-&b8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if sys.platform == "win32" else False
+DEBUG = True if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -43,11 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
+    'phonenumber_field',
 
     # project specific apps
+    'frontend',
     'users',
     'engine',
     'notifications',
+    'zoom'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +68,9 @@ ROOT_URLCONF = 'CenterStage.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'notifications', 'email_templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,6 +85,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
+SITE_URL = 'center-stage.online'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -98,7 +104,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'CenterStage',
+            'NAME': 'centerstage',
             'USER': os.environ.get("DB_USER"),
             'PASSWORD': os.environ.get("DB_PASSWORD"),
             'HOST': os.environ.get("DB_HOST"),
@@ -125,18 +131,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Caching
-if sys.platform == "win32":
+if sys.platform == "win32" or os.getenv('DEPLOY_ENV'):
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
             'KEY_PREFIX': 'centerstage'
         }
     }
 else:
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': '127.0.0.1:11211',
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': '/var/tmp/django_cache',
             'KEY_PREFIX': 'centerstage'
         }
     }
@@ -161,8 +167,40 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 # setting user model to custom user model
 AUTH_USER_MODEL = 'users.User'
+
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'users.authentication.BearerAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+
+"""
+Swagger Settings
+"""
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+    },
+    'LOGIN_URL': '/api/login',
+}
+
+REDOC_SETTINGS = {
+   'LAZY_RENDERING': False,
+}
+
 
 """
 Settings for AWS account
@@ -190,3 +228,9 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+# Zoom settings
+ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
+ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
+ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
+

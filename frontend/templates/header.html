@@ -1,0 +1,55 @@
+{% load static %}
+
+<header class="header">
+    <div class="container">
+      <div class="header-wrap">
+        <a class="main-logo" href="/"><img src="{% static '/images/CenterStage_logo.svg' %}" alt="" /></a>
+        <div class="top-navigation">
+          <nav class="navbar navbar-expand-lg">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-icon"><img src="{% static '/images/toggle.png' %}" alt="" /></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Why Us</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Join</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Blog</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="main-profile-menu">
+            {% if user and user.first_name %}
+              <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                <span>{{user.first_name}}</span>
+              </a>
+            {% else %}
+              <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                <span>Login</span>
+              </a>
+              <div class="dropdown-menu">
+                <ul>
+                  <li><a href="#" data-toggle="modal" data-target="#modalLogin"><i><img src="{% static '/images/t-login.svg' %}" alt="" /></i><span>Teacher Login</span></a></li>
+                  <li><a href="#"><i><img src="{% static '/images/s-login.svg' %}" alt="" /></i><span>Student Login</span></a></li>
+                  <li class="divider"></li>
+                  <li><a href="#"><i><img src="{% static '/images/faq.svg' %}" alt="" /></i><span>FAQ</span></a></li>
+                  <li><a href="#"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+  </div>
+  </header>

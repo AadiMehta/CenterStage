@@ -1,7 +1,10 @@
 from django.db import models
 from django.core.mail import send_mail
+from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class UserTypes(models.TextChoices):
@@ -35,7 +38,7 @@ class UserManager(BaseUserManager):
     def create_student_user(self, email, password, **extra_fields):
         return self._create_user(email, password, False, False, "ST", **extra_fields)
 
-    def create_admin_user(self, email, password, **extra_fields):
+    def create_superuser(self, email, password, **extra_fields):
         user = self._create_user(email, password, True, True, "AD", **extra_fields)
         return user
 
@@ -56,16 +59,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30)
     last_name = models.CharField(_('last name'), max_length=150)
     email = models.EmailField(_('email address'), unique=True)
-    phone_no = models.CharField(_('contact number'), max_length=16, unique=True, null=True)
+    phone_no = PhoneNumberField(unique=True, null=True)
     user_type = models.CharField(_("user type"), choices=UserTypes.choices, max_length=3,
                                  help_text="Type of user")
 
-    profile_image = models.ImageField(_("profile image"), null=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_superuser = models.BooleanField(_('superuser'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
+
+    last_login_ip = models.GenericIPAddressField(_('last login ip'), blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -75,6 +79,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+        indexes = [
+            models.Index(fields=["first_name", "last_name"]),
+        ]
 
     def clean(self):
         super().clean()
@@ -93,32 +100,37 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_user_type(self):
         """Returns the type of the user"""
-        return self.user_type.label
+        return self.get_user_type_display()
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-class TeacherProfileStatuses(models.TextChoices):
+
+class ProfileStatuses(models.TextChoices):
     ACTIVE = 'ACTIVE', _('ACTIVE')
     DELETED = 'DELETED', _('DELETED')
     REMOVED = 'REMOVED', _('REMOVED')
+
 
 class TeacherProfile(models.Model):
     """
     Additional data associated with the teacher user
     """
-    class Meta:
-        verbose_name = _('teacheruser')
-        verbose_name_plural = _('teacherusers')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="teacher_profile_data")
+    subdomain = models.CharField(_('Domain Prefix'), max_length=32, unique=True, validators=[MinLengthValidator(4)])
+    profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
+    year_of_experience = models.IntegerField(_('years of experience'), null=True, validators=[MinValueValidator(0),
+                                                                                              MaxValueValidator(100)])
+    academy_name = models.CharField(_("Academy Name"), max_length=64, validators=[MinLengthValidator(4)])
+    description = models.TextField(_('About Teacher'), null=True, blank=True)
+    intro_video = models.URLField(max_length=200, null=True, blank=True)
+    status = models.CharField(_("Teacher Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
+                              help_text="Teacher Profile status", default=ProfileStatuses.ACTIVE)
 
-    user = models.OneToOneField(User, on_delete=models.PROTECT, default=None)
-    year_of_experience = models.CharField(_('years of experience'), null=True, max_length=3) 
-    subdomain = models.CharField(_('Domain Prefix'), null=True, max_length=10)
-    about = models.CharField(_('About Teacher'), null=True, max_length=80)
-    intro_video = models.URLField(max_length=200, null=True)
-    status = models.CharField(_("Teacher Status"), null=True, choices=TeacherProfileStatuses.choices, max_length=10,
-                                 help_text="Teacher Profile Statuses", default=TeacherProfileStatuses.ACTIVE)
+    class Meta:
+        verbose_name = _('Teacher Profile')
+        verbose_name_plural = _('Teacher Profiles')
 
 
 class TeacherAccountTypes(models.TextChoices):
@@ -126,13 +138,14 @@ class TeacherAccountTypes(models.TextChoices):
     GOOGLE = 'GOOGLE', _('Google')
     TEAMS = 'TEAMS', _('Teams')
 
+
 class TeacherAccounts(models.Model):
     """
     Data Associated to Social Accounts
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="accounts")
     account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=10,
-                                 help_text="Type of account")
+                                    help_text="Type of account")
     info = models.JSONField(null=True)
 
 
@@ -144,9 +157,32 @@ class TeacherPaymentTypes(models.TextChoices):
 
 class TeacherPayments(models.Model):
     """
-    Data Associated to Social Accounts
+    Data Associated to teacher payment accounts
     """
-    teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="payments")
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="payments")
     payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
-                                 help_text="Type of payment account")
+                                    help_text="Type of payment account")
     info = models.JSONField(null=True)
+
+
+class StudentProfile(models.Model):
+    """
+    Additional data associated with the teacher user
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="student_profile_data")
+    description = models.TextField(_('About Student'), null=True, blank=True)
+    status = models.CharField(_("Student Profile Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
+                              help_text="Student Profile status", default=ProfileStatuses.ACTIVE)
+
+    class Meta:
+        verbose_name = _('Student Profile')
+        verbose_name_plural = _('Student Profiles')
+
+
+class EarningSchema(models.Model):
+    """
+    Earnings data
+    """
+    class Meta:
+        verbose_name = _('Earnings Data')
+        verbose_name_plural = _('Earnings Data')

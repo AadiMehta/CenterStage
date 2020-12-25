@@ -1,0 +1,603 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<style>
+   /**** Remove scrollbar on number input ****/
+   /* For Chrome, Safari, Edge, Opera */
+   input::-webkit-outer-spin-button,
+   input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+   }
+   /* Firefox */
+   input[type=number] {
+      -moz-appearance: textfield;
+   }
+   /**** End - Remove scrollbar on number input ****/
+   .modal {
+      overflow:auto;
+   }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'modals.html' %}
+<div class="wrapper homePage">
+   {% include 'header.html' with user=user %}
+   <div class="comn-sec section-1">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-6 left-col pl-10 pr-5">
+               <div class="content-col">
+                  <div class="title-row">
+                     <h2>HOST LIVE<br>
+                        VIDEO LESSONS
+                     </h2>
+                  </div>
+                  <div class="text-content">
+                     Setup in minutes
+                     Organise and schedule live lessons
+                     Teach independently. No upfront fees
+                     Start earning on day 1
+                  </div>
+                  <div class="button-area mt-5">
+                     <a class="btn btn-primary btn-lg btn-theme" href="{% url 'onboarding-step-1' %}">Start Teaching</a>
+                     <span class="btn-btm-txt">last 20 spots left</span>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6 right-col">
+               <video src="{% static '/video/video-1.mp4' %}" autoplay muted loop></video>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-6 left-col">
+               <img src="{% static '/images/Image2.jpg' %}" alt="" />
+            </div>
+            <div class="col-md-6 right-col">
+               <div class="content-col">
+                  <div class="title-row">
+                     <h2>Build your Independent<br>
+                        School
+                     </h2>
+                  </div>
+                  <div class="text-content">
+                     The world's top 10% teachers use Center Stage to conduct Live Online Lessons.
+                     We provide the simplest and best tools for you to enjoy doing what you love
+                  </div>
+                  <div class="button-area mt-5">
+                     <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching Today</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec">
+      <div class="container">
+         <div class="business-wrap">
+            <div class="title-row">
+               <h2>Your business before<br>Center Stage...</h2>
+            </div>
+            <div class="business-logos">
+               <div class="grid-logo grid">
+                  <img src="{% static '/images/logo1.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo2.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo3.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo4.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo5.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo6.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo7.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo8.jpg' %}" alt="" />
+                  <img src="{% static '/images/logo9.jpg' %}" alt="" />
+               </div>
+            </div>
+         </div>
+         <div class="business-wrap">
+            <div class="title-row">
+               <h2>Your business before<br>Center Stage...</h2>
+            </div>
+            <div class="business-text">
+               ...lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
+               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip 
+               ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore 
+               eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
+               deserunt mollit anim id est laborum adipiscing elit, sed do eiusmod.
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec how-it-works">
+      <div class="container">
+         <div class="how-it-works-wrap">
+            <div class="title-row">
+               <h2>How it Works</h2>
+            </div>
+            <div class="works-steps">
+               <ul>
+                  <li class="active">
+                     <i class="steps-img">
+                     <img class="steps-img-1" src="{% static '/images/step-1.svg' %}" alt="" />
+                     <img class="steps-img-2" src="{% static '/images/step-1_h.svg' %}" alt="" />
+                     </i>
+                     <span>STEP 1<br>Plan Your Course</span>
+                  </li>
+                  <li>
+                     <i class="steps-img">
+                     <img class="steps-img-1" src="{% static '/images/step-2.svg' %}" alt="" />
+                     <img class="steps-img-2" src="{% static '/images/step-2_h.svg' %}" alt="" />
+                     </i>
+                     <span>STEP 2<br>Record Your Video</span>
+                  </li>
+                  <li>
+                     <i class="steps-img">
+                     <img class="steps-img-1" src="{% static '/images/step-3.svg' %}" alt="" />
+                     <img class="steps-img-2" src="{% static '/images/step-3_h.svg' %}" alt="" />
+                     </i>
+                     <span>STEP 3<br>Build Your Community</span>
+                  </li>
+               </ul>
+               <div class="steps-content-wrap">
+                  <div class="steps-content">
+                     <h3>Plan Your Course</h3>
+                     <p>Create a customised webpage Host your live lesson or webinar You determine the lesson price Announce your lesson</p>
+                  </div>
+                  <div class="steps-graphics">
+                     <img src="{% static '/images/step-grap-1.svg' %}" alt="" />
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec why-join-center">
+      <div class="container-2">
+         <div class="why-join-wrap">
+            <div class="title-row text-center">
+               <h2>WHY JOIN CENTER STAGE?</h2>
+               <div class="button-area mt-5">
+                  <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
+                  <span class="btn-btm-txt">last 20 spots left</span>
+               </div>
+            </div>
+            <div class="content-img-wrap mt-5">
+               <div class="service-wrap whyjoin-1">
+                  <div class="service-left-col vide-col">
+                     <video src="{% static '/video/4A_Video.mp4' %}" autoplay muted loop></video>
+                  </div>
+                  <div class="service-right-col">
+                     <div class="content-col">
+                        <div class="title-row">
+                           <h3>YOU ARE GOOD AT SOMETHING</h3>
+                        </div>
+                        <div class="text-content font-light">
+                           You have the knowledge to teach live lessons
+                           You are a top instructor in your category
+                           You want to own your brand 100%
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="service-wrap whyjoin-2">
+               <div class="service-right-col">
+                  <div class="content-col">
+                     <div class="title-row">
+                        <h3>YOU WANT TO SHARE YOUR<br>KNOWLEDGE</h3>
+                     </div>
+                     <div class="text-content font-light">
+                        You want to focus on your lessons You don't want to worry about the tools, a website,
+                        mailing lists, calendars, payments and analytics
+                     </div>
+                  </div>
+               </div>
+               <div class="service-left-col vide-col">
+                  <video src="{% static '/video/4B_Video.mp4' %}" autoplay muted loop></video>
+               </div>
+            </div>
+            <div class="service-wrap whyjoin-3">
+               <div class="service-left-col">
+                  <img src="{% static '/images/Image5.jpg' %}" alt="" />
+               </div>
+               <div class="service-right-col">
+                  <div class="content-col">
+                     <div class="title-row">
+                        <h3>YOU WANT TO EARN</h3>
+                     </div>
+                     <div class="text-content font-light">
+                        <p>Your lessons are worth paying for and not just views
+                           or likes on social media 
+                        </p>
+                        <p>You want total control of your earnings</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="whoIs-sec text-center pt-100">
+               <div class="container">
+                  <div class="title-row">
+                     <h2>WHO IS CENTER STAGE FOR?</h2>
+                     <p>Teacher. Dancer. Coder. Fitness Enthusiast. Public Speaker.<br />
+                        Finance Guru. Masterchef. Spiritual Coach. Healer. Painter. Singer. Musician.
+                     </p>
+                  </div>
+                  <span class="font-small">and many more</span>
+                  <div class="button-area">
+                     <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="instructor-sec">
+      <h2>INSTRUCTORS ON CENTER STAGE GET</h2>
+      <video src="{% static '/video/instructor.mp4' %}" autoplay muted loop></video>
+   </div>
+   <div class="comn-sec">
+      <div class="container">
+         <div class="srvc-wrap">
+            <div class="srvc-col">
+               <div class="srvc-icon"><img src="{% static '/images/icon-1.svg' %}" alt="" /></div>
+               <h4>FREE &amp; CUSTOMISED<br />WEB PAGE</h4>
+               <p>Customised web page and custom URL with your name Free and unlimited live video hosting for one-on-one lessons and webinars Exclusive access to the top 99.9th percentile community of teachers</p>
+            </div>
+            <div class="srvc-col">
+               <div class="srvc-icon"><img src="{% static '/images/icon-2.svg' %}" alt="" /></div>
+               <h4>FREE &amp; INSTANT PAYMENTS<br />INTEGRATION</h4>
+               <p>Connect your bank account and setup payments in minutes  Charge your customers per your desire Price all your lessons and webinars as you want</p>
+            </div>
+            <div class="srvc-col">
+               <div class="srvc-icon"><img src="{% static '/images/icon-3.svg' %}" alt="" /></div>
+               <h4>INSTANT EMAIL LIST &amp; <br />SUPPORT</h4>
+               <p>Build your own student community instantly Never worry about moving your customers elsewhere Round the clock support &amp; assistance</p>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec creators-sec">
+      <div class="container">
+         <div class="title-row text-center">
+            <h2>WHO WILL TEACH ON CENTER STAGE?</h2>
+            <p>Top creators who have the passion and skills to change what the<br> world will learn in the future</p>
+         </div>
+         <div class="creators-slide">
+            <div class="owl-carousel owl-theme">
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor01.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor02.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor03.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <button class="btn btn-primary btn-theme">New Class</button>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor04.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor05.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor04.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="item creators-col">
+                  <figure class="creators-img"><img src="{% static '/images/instructor05.jpg' %}" alt="" /></figure>
+                  <div class="creator-text">
+                     <div>
+                        <h3>Thomas Edward</h3>
+                        <span>Teaches Cooking</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="featured-course-sec">
+      <div class="owl-carousel owl-theme">
+         <div class="item">
+            <div class="featured-img"><img class="d-block w-100" src="{% static '/images/featured-course.jpg' %}" alt=""></div>
+            <div class="featured-caption">
+               <h5>Featured Lesson</h5>
+               <div class="caption-text-2">
+                  <h2>Fierce Clarity</h2>
+                  <p>By<br />
+                     Thomas Edward
+                  </p>
+                  <a class="btn btn-primary btn-lg btn-theme" href="#">View Lesson</a>
+               </div>
+            </div>
+         </div>
+         <div class="item">
+            <div class="featured-img"><img class="d-block w-100" src="{% static '/images/featured-course.jpg' %}" alt=""></div>
+            <div class="featured-caption">
+               <h5>Featured Course</h5>
+               <div class="caption-text-2">
+                  <h2>Fierce Clarity</h2>
+                  <p>By<br />
+                     Thomas Edward
+                  </p>
+                  <a class="btn btn-primary btn-lg btn-theme" href="#">View Lesson</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec saying-sec">
+      <div class="container">
+         <div class="saying-wrap">
+            <div class="title-row text-center">
+               <h2>What Teachers Are Saying About Us</h2>
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore<br> magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+            </div>
+            <div class="saying-slide">
+               <div class="owl-carousel owl-theme">
+                  <div class="item">
+                     <div class="teacher-name">
+                        <div class="teacher-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <span>Rose Gerry</span>
+                     </div>
+                     <div class="teacher-msg">
+                        " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. "
+                     </div>
+                  </div>
+                  <div class="item">
+                     <div class="teacher-name">
+                        <div class="teacher-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <span>Rose Gerry</span>
+                     </div>
+                     <div class="teacher-msg">
+                        " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. "
+                     </div>
+                  </div>
+                  <div class="item">
+                     <div class="teacher-name">
+                        <div class="teacher-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <span>Rose Gerry</span>
+                     </div>
+                     <div class="teacher-msg">
+                        " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. "
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec saying-sec">
+      <div class="container">
+         <div class="saying-wrap bdr-0">
+            <div class="title-row text-center">
+               <h2>What Students are saying</h2>
+            </div>
+            <div class="stud-saying-slide">
+               <div class="owl-carousel owl-theme">
+                  <div class="item">
+                     <div class="studient-name">
+                        <div class="stud-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <div class="stud-name">
+                           <h3>Petrica Perry</h3>
+                           <span>Entertainer USA</span>
+                        </div>
+                     </div>
+                     <div class="studient-msg-col">
+                        <div class="studient-msg">
+                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+                        </div>
+                     </div>
+                  </div>
+                  <div class="item">
+                     <div class="studient-name">
+                        <div class="stud-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <div class="stud-name">
+                           <h3>Petrica Perry</h3>
+                           <span>Entertainer USA</span>
+                        </div>
+                     </div>
+                     <div class="studient-msg-col">
+                        <div class="studient-msg">
+                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="comn-sec faqs-sec">
+      <div class="container">
+         <div class="title-row text-center">
+            <h2>Frequently Asked Questions</h2>
+         </div>
+         <div class="faqs-wrap">
+            <div id="accordion">
+               <h4>General</h4>
+               <div class="card">
+                  <div class="card-header" id="headingOne">
+                     <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        What is Center Stage?
+                        </button>
+                     </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                     <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                     </div>
+                  </div>
+               </div>
+               <div class="card">
+                  <div class="card-header" id="headingTwo">
+                     <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        What is included in a Center Stage membership?
+                        </button>
+                     </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                     <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                     </div>
+                  </div>
+               </div>
+               <div class="card">
+                  <div class="card-header" id="headingThree">
+                     <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Where can I watch?
+                        </button>
+                     </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                     <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                     </div>
+                  </div>
+               </div>
+               <h4>Pricing &amp; Payment</h4>
+               <div class="card">
+                  <div class="card-header" id="headingFour">
+                     <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        How much does Center Stage cost?
+                        </button>
+                     </h5>
+                  </div>
+                  <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                     <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                     </div>
+                  </div>
+               </div>
+               <div class="card">
+                  <div class="card-header" id="headingFive">
+                     <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Will I be charged taxes?
+                        </button>
+                     </h5>
+                  </div>
+                  <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                     <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                     </div>
+                  </div>
+               </div>
+               <div class="card">
+                  <div class="card-header" id="headingSix">
+                     <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        How does the 30-day guarantee work?
+                        </button>
+                     </h5>
+                  </div>
+                  <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
+                     <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                     </div>
+                  </div>
+               </div>
+               <a href="#" class="text-link mt-3">View All</a>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="timechanged-sec">
+      <div class="container">
+         <h2>TIMES HAVE CHANGED. LEARNING WON'T</h2>
+      </div>
+   </div>
+   <footer class="footer">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-3">
+               <div class="logo-ftr"><img src="{% static '/images/CenterStage_logo.svg' %}" alt="" /></div>
+               <div class="footer-address">
+                  <p>© 2020 Center Stage<br>
+                     All Rights Reserved
+                  </p>
+                  <div class="secured"><img src="{% static '/images/lock.svg' %}" alt="" /> <span>Secured with SSL</span></div>
+               </div>
+            </div>
+            <div class="col-md-3">
+               <h2>Explore</h2>
+               <ul class="ftr-nav">
+                  <li><a href="#">Classes</a></li>
+                  <li><a href="#">Center Stage Live</a></li>
+                  <li><a href="#">Articles</a></li>
+                  <li><a href="#">Sitemap</a></li>
+                  <li><a href="#">Gifts</a></li>
+               </ul>
+            </div>
+            <div class="col-md-3">
+               <h2>About</h2>
+               <ul class="ftr-nav">
+                  <li><a href="#">Diversity, Equity, and Inclusion</a></li>
+                  <li><a href="#">Careers</a></li>
+                  <li><a href="#">Privacy</a></li>
+                  <li><a href="#">Terms</a></li>
+                  <li><a href="#">Grants</a></li>
+                  <li><a href="#">Groups</a></li>
+                  <li><a href="#">Support</a></li>
+               </ul>
+            </div>
+            <div class="col-md-3">
+               <h2>Social</h2>
+               <ul class="ftr-nav">
+                  <li><a href="#"><i><img src="{% static '/images/twitter.svg' %}" alt="" /></i><span>Twitter</span></a></li>
+                  <li><a href="#"><i><img src="{% static '/images/instagram.svg' %}" alt="" /></i><span>Instagram</span></a></li>
+                  <li><a href="#"><i><img src="{% static '/images/facebook.svg' %}" alt="" /></i><span>Facebook</span></a></li>
+                  <li><a href="#"><i><img src="{% static '/images/youtube.svg' %}" alt="" /></i><span>Youtube</span></a></li>
+                  <li><a href="#"><i><img src="{% static '/images/linkedin.svg' %}" alt="" /></i><span>LinkedIn</span></a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </footer>
+</div>
+{% endblock %}
+{% block script %}
+<script src="{% static '/js/home.js' %}" type="text/javascript"></script> 
+{% endblock %}

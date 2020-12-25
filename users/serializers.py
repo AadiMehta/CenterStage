@@ -1,10 +1,13 @@
-import json
+import re
 import _thread
-
 from notifications.views import send_signup_email
 from rest_framework import serializers
+from users.constants import RESTRICTED_SUBDOMAINS
 from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments
 from django.db import IntegrityError
+from phonenumber_field.serializerfields import PhoneNumberField
+
+subdomain_regex_pattern = '^([a-zA-Z0-9]+[\w\-]+[a-zA-Z0-9]+)$'
 
 
 class LoginResponseSerializer(serializers.Serializer):
@@ -20,7 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'is_superuser',
             'is_staff',
-            'is_active',
             'date_joined',
             'last_login',
             'groups',
@@ -37,9 +39,61 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class TeacherAccountsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TeacherAccounts
+        fields = (
+            'account_type',
+            'info'
+        )
+
+
+class TeacherPaymentsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TeacherPayments
+        fields = (
+            'payment_type',
+            'info'
+        )
+
+
+class TeacherProfileSerializer(serializers.ModelSerializer):
+    accounts = TeacherAccountsSerializer(many=True, read_only=True)
+    payments = TeacherPaymentsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TeacherProfile
+        fields = (
+            'academy_name',
+            'profile_image',
+            'year_of_experience',
+            'subdomain',
+            'description',
+            'intro_video',
+            'accounts',
+            'payments',
+        )
+
+    def validate_subdomain(self, value):
+        if value in RESTRICTED_SUBDOMAINS:
+            raise serializers.ValidationError("Subdomain not permitted!")
+        elif bool(re.match(subdomain_regex_pattern, value)):
+            try:
+                teacher = TeacherProfile.objects.get(subdomain=value)
+                raise serializers.ValidationError("Subdomain not available or already in use.")
+            except TeacherProfile.DoesNotExist:
+                return value
+        else:
+            raise serializers.ValidationError("Invalid subdomain. Subdomain has to be at least 4 character long "
+                                              "and cannot start and end with _ or - and cannot contain full stop(.)")
+
+
+class TeacherUserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True, max_length=32)
+    phone_no = PhoneNumberField(required=False)
 
     class Meta:
         model = User
@@ -59,78 +113,46 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'is_active',
             'date_joined',
             'last_login',
+            'user_type',
         )
 
     def create(self, validated_data):
         try:
-            user = User.objects.create_user(validated_data.pop("email"), validated_data.pop("password"),
-                                            **validated_data)
+            user = User.objects.create_creator_user(validated_data.pop("email"), validated_data.pop("password"),
+                                                    **validated_data)
             _thread.start_new_thread(send_signup_email, (user,))
             return user
         except IntegrityError as e:
-            error = dict({'error': "User with email already present"})
+            error = dict({'error': str(e)})
             raise serializers.ValidationError(error)
-
-
-class SendOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10, required=True)
-
-
-class SubdomainCheckSerializer(serializers.Serializer):
-    subdomain = serializers.CharField(max_length=10, required=True)
-
-
-class VerifyOTPSerializer(serializers.Serializer):
-    phone_no = serializers.CharField(max_length=10, required=True)
-    otp = serializers.CharField(max_length=6, required=True)
-
-
-class TeacherAccountsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TeacherAccounts
-        fields = ['account_type', 'info']
-    
-    def get_info(self, instance):
-        if instance.info:
-            return json.loads(instance.info)
-        return {}
-
-
-class TeacherPaymentsSerializer(serializers.ModelSerializer):
-    info = serializers.SerializerMethodField()
-
-    class Meta:
-        model = TeacherPayments
-        fields = ['payment_type', 'info']
-    
-    def get_info(self, instance):
-        if instance.info:
-            return json.loads(instance.info)
-        return {}
 
 
 class TeacherProfileCreateUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeacherProfile
-        fields = [
-            'user', 'year_of_experience', 'subdomain',
-            'about', 'intro_video'
-        ]
+        exclude = (
+            'id',
+            'user'
+        )
 
 
-class TeacherProfileGetSerializer(serializers.ModelSerializer):
-    accounts = TeacherAccountsSerializer(many=True, read_only=True)
-    payments = TeacherPaymentsSerializer(many=True, read_only=True)
+class SubdomainCheckSerializer(serializers.Serializer):
+    subdomain = serializers.CharField(required=True)
 
-    class Meta:
-        model = TeacherProfile
-        fields = [
-            'user', 'year_of_experience', 'subdomain',
-            'about', 'intro_video', 'accounts', 'payments'
-        ]
+    def validate_subdomain(self, value):
+        if value in RESTRICTED_SUBDOMAINS:
+            raise serializers.ValidationError("Subdomain not permitted!")
+        elif bool(re.match(subdomain_regex_pattern, value)):
+            try:
+                teacher = TeacherProfile.objects.get(subdomain=value)
+                raise serializers.ValidationError("Subdomain not available or already in use.")
+            except TeacherProfile.DoesNotExist:
+                print("Actual right case")
+                return value
+        else:
+            raise serializers.ValidationError("Invalid subdomain. Subdomain has to be atleast 4 character long "
+                                              "and cannot start and end with _ or - and cannot contain full stop(.)")
 
 
 class TeacherPaymentRemoveSerializer(serializers.Serializer):
@@ -139,3 +161,51 @@ class TeacherPaymentRemoveSerializer(serializers.Serializer):
 
 class TeacherAccountRemoveSerializer(serializers.Serializer):
     account_type = serializers.CharField(max_length=10, required=True)
+
+
+# ********* Student Serializers **********
+class StudentUserCreateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, max_length=32)
+    phone_no = PhoneNumberField(required=False)
+
+    class Meta:
+        model = User
+        exclude = (
+            'id',
+            'is_superuser',
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'last_login',
+            'groups',
+            'user_permissions',
+        )
+        read_only_fields = (
+            'is_superuser',
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'last_login',
+            'user_type',
+        )
+
+    def create(self, validated_data):
+        try:
+            user = User.objects.create_student_user(validated_data.pop("email"), validated_data.pop("password"),
+                                                    **validated_data)
+            _thread.start_new_thread(send_signup_email, (user,))
+            return user
+        except IntegrityError as e:
+            error = dict({'error': str(e)})
+            raise serializers.ValidationError(error)
+
+
+# ********* Common Serializers ***********
+class SendOTPSerializer(serializers.Serializer):
+    phone_no = PhoneNumberField(required=True)
+
+
+class VerifyOTPSerializer(serializers.Serializer):
+    phone_no = PhoneNumberField(required=True)
+    otp = serializers.CharField(max_length=6, required=True)
