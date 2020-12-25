@@ -22,30 +22,36 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         """
-        Zoom redirects to this API with auth code after client authorization
+        Zoom redirects to this API_BASE_URL with auth code after client authorization
 
         """
-        zoom_authorization_code = request.GET.get('code')
+        try:
+            zoom_authorization_code = request.GET.get('code')
 
-        resp = zoomclient.get_access_token(zoom_authorization_code)
-        if resp.status_code == status.HTTP_200_OK:
-            access_info = resp.json()
-        else:
-            return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
+            resp = zoomclient.get_access_token(zoom_authorization_code)
+            if resp.status_code == status.HTTP_200_OK:
+                access_info = resp.json()
+            else:
+                return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = ZoomAuthResponseSerializer(data=access_info)
-        serializer.is_valid(raise_exception=True)
-        expires_in = serializer.validated_data.get('expires_in')
-        expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
-        serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
+            serializer = ZoomAuthResponseSerializer(data=access_info)
+            serializer.is_valid(raise_exception=True)
+            expires_in = serializer.validated_data.get('expires_in')
+            expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
+            serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
 
-        serializer = TeacherAccountsSerializer(data=dict(
-                                            account_type=TeacherAccountTypes.ZOOM_VIDEO,
-                                            info=access_info
-                                        ))
-        serializer.is_valid(raise_exception=True)
-        serializer.save(teacher=request.user.teacher_profile_data)
-        return redirect('account-connected-success')
+            serializer = TeacherAccountsSerializer(data=dict(
+                                                account_type=TeacherAccountTypes.ZOOM_VIDEO,
+                                                info=access_info
+                                            ))
+            serializer.is_valid(raise_exception=True)
+            serializer.save(teacher=request.user.teacher_profile_data)
+            return redirect('account-connected-success')
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ZoomDisconnectAPIView(generics.RetrieveAPIView):
