@@ -400,31 +400,3 @@ class TeacherPaymentsAPIView(APIView):
             return Response("", status=status.HTTP_204_NO_CONTENT)
         except TeacherPayments.DoesNotExist:
             return Response(dict({"error": "No Payment Found"}))
-
-
-class TeacherProfileViewTemplate(TemplateView):
-    template_name = "test_teacher_profile.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        url = self.request.META['HTTP_HOST']
-        subdomain = url.split('.')[0]
-        teacher = TeacherProfile.objects.get(subdomain=subdomain)
-        serializer = TeacherProfileSerializer(instance=teacher)
-        teacher_info = serializer.data
-        teacher_accounts = {}
-        accounts = teacher_info.pop('accounts')
-        for account in accounts:
-            teacher_accounts[account['account_type']] = account
-        context.update({
-            'subdomain': subdomain,
-            'teacher': teacher_info,
-            'teacher_accounts': teacher_accounts,
-            'redirection_url': url,
-            'zoom': {
-                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
-                'ZOOM_DISCONNECT_URL': '{}/profile/zoom/disconnect'.format(settings.API_BASE_URL, teacher.id),
-                'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(settings.API_BASE_URL))
-            }
-        })
-        return context

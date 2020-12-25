@@ -22,7 +22,7 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         """
-        Zoom redirects to this API_BASE_URL with auth code after client authorization
+        Zoom redirects to this API with auth code after client authorization
 
         """
         try:
