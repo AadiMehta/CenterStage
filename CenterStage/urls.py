@@ -85,8 +85,8 @@ urlpatterns = [
     # Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
     path('onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
-    path('onboarding/step2', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
-    path('onboarding/step3', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
+    path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
+    path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
     path('', HomeTemplateView.as_view(), name="homepage"),
 ]
 

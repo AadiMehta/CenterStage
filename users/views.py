@@ -317,10 +317,9 @@ class TeacherProfileView(APIView):
     def post(self, request):
         try:
             teacher = TeacherProfile.objects.get(user=request.user)
-            if teacher is not None:
-                return Response(dict({
-                    "error": "Teacher profile already created. Hit Put request to update the profile"
-                }), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict({
+                "error": "Teacher profile already created. Hit Put request to update the profile"
+            }), status=status.HTTP_400_BAD_REQUEST)
         except TeacherProfile.DoesNotExist:
             profile_photo = None
             if "profile_image" in request.data.keys():
@@ -332,6 +331,11 @@ class TeacherProfileView(APIView):
                 teacher_profile.profile_image.save(str(teacher_profile.user.first_name) + "_profile_photo." + ext,
                                                    profile_photo, save=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request):
         try:

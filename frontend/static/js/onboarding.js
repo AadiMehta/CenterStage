@@ -127,16 +127,17 @@
         $.ajax('/api/teacher/profile/', {
           type: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           },
-          data: {
+          data: JSON.stringify({
             "profile_image": profileUrl,
             "academy_name": academyName,
             "description": description,
             "subdomain": subDomain
-          },
+          }),
           success: function (data, status, xhr) {
-            window.location.href = "/onboarding/step2";
+            window.location.href = "/onboarding/accounts";
           },
           error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI
@@ -214,7 +215,7 @@
      * Route to stage 3
      */
     function onProceed2ButtonClicked () {
-        window.location.href = "/onboarding/step3";
+        window.location.href = "/onboarding/intro-video";
     }
 
     /**
