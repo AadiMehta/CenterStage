@@ -60,8 +60,7 @@ class OnboardStep2TemplateView(TemplateView):
                 'teacher_accounts': teacher_accounts,
                 'zoom': {
                     'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
-                    'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(
-                        os.getenv("ZOOM_REDIRECT_URL")))
+                    'ZOOM_REDIRECT_URL': urllib.parse.quote(settings.ZOOM_REDIRECT_URL)
                 }
             })
         return context

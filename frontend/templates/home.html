@@ -6,24 +6,24 @@
    /* For Chrome, Safari, Edge, Opera */
    input::-webkit-outer-spin-button,
    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+   -webkit-appearance: none;
+   margin: 0;
    }
    /* Firefox */
    input[type=number] {
-      -moz-appearance: textfield;
+   -moz-appearance: textfield;
    }
    /**** End - Remove scrollbar on number input ****/
    .modal {
-      overflow:auto;
+   overflow:auto;
    }
 </style>
 {% endblock %}
 {% block content %}
 {% include 'modals.html' %}
 <div class="wrapper homePage">
-   {% include 'header.html' with user=user %}
-   <div class="comn-sec section-1">
+    {% include 'header.html' with user=user %}
+    <div class="comn-sec section-1">
       <div class="container">
          <div class="row">
             <div class="col-md-6 left-col pl-10 pr-5">
@@ -40,7 +40,7 @@
                      Start earning on day 1
                   </div>
                   <div class="button-area mt-5">
-                     <a class="btn btn-primary btn-lg btn-theme" href="{% url 'onboarding-step-1' %}">Start Teaching</a>
+                     <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
                      <span class="btn-btm-txt">last 20 spots left</span>
                   </div>
                </div>
@@ -82,8 +82,8 @@
             <div class="title-row">
                <h2>Your business before<br>Center Stage...</h2>
             </div>
-            <div class="business-logos">
-               <div class="grid-logo grid">
+            <div class="business-logos text-center">
+               <!--<div class="grid-logo grid">
                   <img src="{% static '/images/logo1.jpg' %}" alt="" />
                   <img src="{% static '/images/logo2.jpg' %}" alt="" />
                   <img src="{% static '/images/logo3.jpg' %}" alt="" />
@@ -93,12 +93,13 @@
                   <img src="{% static '/images/logo7.jpg' %}" alt="" />
                   <img src="{% static '/images/logo8.jpg' %}" alt="" />
                   <img src="{% static '/images/logo9.jpg' %}" alt="" />
-               </div>
+                  </div>-->
+               <img src="{% static '/images/brand-logos.svg' %}" alt="" />
             </div>
          </div>
          <div class="business-wrap">
             <div class="title-row">
-               <h2>Your business before<br>Center Stage...</h2>
+               <h2>But your business after <br />Center Stage...</h2>
             </div>
             <div class="business-text">
                ...lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
@@ -106,6 +107,28 @@
                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore 
                eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
                deserunt mollit anim id est laborum adipiscing elit, sed do eiusmod.
+            </div>
+            <div class="businessAfter_row">
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/check_document.svg' %}" alt="" /></i>
+                  <span>Admissions</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/users.svg' %}" alt="" /></i>
+                  <span>Student Management</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/Communication.svg' %}" alt="" /></i>
+                  <span>Communication</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/conf.svg' %}" alt="" /></i>
+                  <span>Conferencing</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/payment.svg' %}" alt="" /></i>
+                  <span>Payment Processing</span>
+               </div>
             </div>
          </div>
       </div>
@@ -153,7 +176,7 @@
          </div>
       </div>
    </div>
-   <div class="comn-sec why-join-center">
+   <div class="comn-sec why-join-center" id="WhyUs">
       <div class="container-2">
          <div class="why-join-wrap">
             <div class="title-row text-center">
@@ -181,52 +204,52 @@
                      </div>
                   </div>
                </div>
-            </div>
-            <div class="service-wrap whyjoin-2">
-               <div class="service-right-col">
-                  <div class="content-col">
-                     <div class="title-row">
-                        <h3>YOU WANT TO SHARE YOUR<br>KNOWLEDGE</h3>
+               <div class="service-wrap whyjoin-2">
+                  <div class="service-right-col">
+                     <div class="content-col">
+                        <div class="title-row">
+                           <h3>YOU WANT TO SHARE YOUR<br>KNOWLEDGE</h3>
+                        </div>
+                        <div class="text-content font-light">
+                           You want to focus on your lessons You don't want to worry about the tools, a website,
+                           mailing lists, calendars, payments and analytics
+                        </div>
                      </div>
-                     <div class="text-content font-light">
-                        You want to focus on your lessons You don't want to worry about the tools, a website,
-                        mailing lists, calendars, payments and analytics
+                  </div>
+                  <div class="service-left-col vide-col">
+                     <video src="{% static '/video/4B_Video.mp4' %}" autoplay muted loop></video>
+                  </div>
+               </div>
+               <div class="service-wrap whyjoin-3">
+                  <div class="service-left-col">
+                     <img src="{% static '/images/Image5.jpg' %}" alt="" />
+                  </div>
+                  <div class="service-right-col">
+                     <div class="content-col">
+                        <div class="title-row">
+                           <h3>YOU WANT TO EARN</h3>
+                        </div>
+                        <div class="text-content font-light">
+                           <p>Your lessons are worth paying for and not just views
+                              or likes on social media 
+                           </p>
+                           <p>You want total control of your earnings</p>
+                        </div>
                      </div>
                   </div>
                </div>
-               <div class="service-left-col vide-col">
-                  <video src="{% static '/video/4B_Video.mp4' %}" autoplay muted loop></video>
-               </div>
-            </div>
-            <div class="service-wrap whyjoin-3">
-               <div class="service-left-col">
-                  <img src="{% static '/images/Image5.jpg' %}" alt="" />
-               </div>
-               <div class="service-right-col">
-                  <div class="content-col">
+               <div class="whoIs-sec text-center pt-100">
+                  <div class="container">
                      <div class="title-row">
-                        <h3>YOU WANT TO EARN</h3>
-                     </div>
-                     <div class="text-content font-light">
-                        <p>Your lessons are worth paying for and not just views
-                           or likes on social media 
+                        <h2>WHO IS CENTER STAGE FOR?</h2>
+                        <p>Teacher. Dancer. Coder. Fitness Enthusiast. Public Speaker.<br />
+                           Finance Guru. Masterchef. Spiritual Coach. Healer. Painter. Singer. Musician.
                         </p>
-                        <p>You want total control of your earnings</p>
                      </div>
-                  </div>
-               </div>
-            </div>
-            <div class="whoIs-sec text-center pt-100">
-               <div class="container">
-                  <div class="title-row">
-                     <h2>WHO IS CENTER STAGE FOR?</h2>
-                     <p>Teacher. Dancer. Coder. Fitness Enthusiast. Public Speaker.<br />
-                        Finance Guru. Masterchef. Spiritual Coach. Healer. Painter. Singer. Musician.
-                     </p>
-                  </div>
-                  <span class="font-small">and many more</span>
-                  <div class="button-area">
-                     <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
+                     <span class="font-small">and many more</span>
+                     <div class="button-area">
+                        <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
+                     </div>
                   </div>
                </div>
             </div>
@@ -258,7 +281,7 @@
          </div>
       </div>
    </div>
-   <div class="comn-sec creators-sec">
+   <div class="comn-sec creators-sec" id="Join">
       <div class="container">
          <div class="title-row text-center">
             <h2>WHO WILL TEACH ON CENTER STAGE?</h2>
