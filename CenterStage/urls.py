@@ -31,6 +31,7 @@ from frontend.views import (
     HomeTemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
     OnboardStep3TemplateView, AccountConnectedTemplate
 )
+from engine.views import LessonAPIView
 
 
 schema_view = get_schema_view(
@@ -81,6 +82,9 @@ urlpatterns = [
     # zoom APIs
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
     path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
+
+    # Lesson APIs
+    path('api/lesson/', LessonAPIView.as_view()),
 
     # Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
