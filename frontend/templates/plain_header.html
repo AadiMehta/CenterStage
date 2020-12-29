@@ -1,0 +1,50 @@
+{% load static %}
+<header class="header">
+    <div class="container">
+        <div class="header-wrap">
+            <a class="main-logo" href="/"><img style='width:15%; min-width: 200px;' src="{% static '/images/CenterStage-WhiteLogo.svg' %}" alt="" /></a>
+            <div class="top-navigation">
+                <nav class="navbar navbar-expand-lg">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                        <span class="navbar-icon"><img src="{% static '/images/toggle.png' %}" alt="" /></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                            <span class="navbar-icon"><img src="{% static '/images/close.png' %}" alt="" /></span>
+                        </button>
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item" data-toggle="collapse" data-target="#navbarNav">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/#WhyUs">Why Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/#Join">Join</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" target="_blank" href="https://medium.com/@tanaydesai/why-we-are-building-center-stage-53e3cbaf244d">Blog</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="main-profile-menu">
+                    <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                        <span>Login</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <ul>
+                            <li><a href="#" data-toggle="modal" data-target="#modalLogin"><i><img src="{% static '/images/t-login.svg' %}" alt="" /></i><span>Teacher Login</span></a></li>
+                            <li><a href="#"><i><img src="{% static '/images/s-login.svg' %}" alt="" /></i><span>Student Login</span></a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"><i><img src="{% static '/images/faq.svg' %}" alt="" /></i><span>FAQ</span></a></li>
+                            <li><a href="#"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

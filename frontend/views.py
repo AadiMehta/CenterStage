@@ -25,6 +25,16 @@ class HomeTemplateView(TemplateView):
         return context
 
 
+class TermsAndConditionsView(TemplateView):
+    template_name = "terms-condition.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'auth_token' in self.request.COOKIES:
+            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        return context
+
+
 class OnboardStep1TemplateView(TemplateView):
     """
     """

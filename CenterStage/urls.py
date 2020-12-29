@@ -28,8 +28,8 @@ from users.views import (
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views import (
-    HomeTemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
-    OnboardStep3TemplateView, AccountConnectedTemplate
+    HomeTemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
+    AccountConnectedTemplate, TermsAndConditionsView
 )
 from engine.views import LessonAPIView
 
@@ -92,6 +92,7 @@ urlpatterns = [
     path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
     path('', HomeTemplateView.as_view(), name="homepage"),
+    path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
 ]
 
 if settings.DEBUG:
