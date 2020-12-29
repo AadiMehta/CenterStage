@@ -81,7 +81,6 @@ class ZoomClient(metaclass=Singleton):
             headers=headers
         )
 
-
     def get_user_details(self, access_token):
         headers = {
             "Authorization": "Bearer {}".format(access_token),
