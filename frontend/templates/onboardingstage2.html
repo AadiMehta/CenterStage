@@ -41,8 +41,22 @@
                           type="button"
                           class="btn-large"
                         >
-                            <i><img src="{% static '/images/zoom-icon.svg' %}" alt="" /></i>
-                            <span>Connect to Zoom</span>
+                            <i
+                              data-account-type="zoom"
+                              data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+                              data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"
+                            >
+                              <img
+                                data-account-type="zoom"
+                                data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+                                data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"
+                                src="{% static '/images/zoom-icon.svg' %}" alt="" />
+                            </i>
+                            <span
+                              data-account-type="zoom"
+                              data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
+                              data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"
+                            >Connect to Zoom</span>
                         </button>
                     {% endif %}
                 </div>

@@ -70,7 +70,7 @@ class OnboardStep2TemplateView(TemplateView):
                 'teacher_accounts': teacher_accounts,
                 'zoom': {
                     'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
-                    'ZOOM_REDIRECT_URL': urllib.parse.quote(settings.ZOOM_REDIRECT_URL)
+                    'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
                 }
             })
         return context
