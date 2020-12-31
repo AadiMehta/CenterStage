@@ -29,6 +29,8 @@
     .board-num {font-size: 32px;}
     .boarding-wrap {padding-left: 8rem;}
     .boarding-left{padding-right: 8rem;}
+    .inner-page h1{font-size:48px;}
+    .inner-page h2{font-size:38px;}
 }
 
 @media only screen and (max-width:1400px) {
@@ -62,6 +64,9 @@
     .boarding-left .btn {height: 60px;}
     .boarding-left {font-size: 18px;}
     .boarding-left{padding-right:5rem;}
+    .inner-page h1{font-size:42px;}
+    .inner-page h2{font-size:32px;}
+    .inner-page{font-size: 16px;}
 }
 
 @media only screen and (max-width:1279px) {
@@ -102,6 +107,9 @@
     .video-size-alert {font-size: 16px;}
     .upload-video-wrap {height: 350px;}
     .businessAfter_col {padding: 1rem;}
+    .inner-page h1{font-size:38px;}
+    .inner-page h2{font-size:28px;}
+    .inner-page{font-size: 15px;}
 }
 
 @media only screen and (max-width:991px) {
@@ -142,6 +150,15 @@
     .boarding-graphics{display: none;}
     .boarding-left {font-size: 16px; padding-right: 0;}
     .host-zoom {padding-bottom: 2rem;}
+    .profile-user span {display: none;}
+    .header {padding:16px 0px !important; height: 72px !important;  position: fixed; top: 0;  left: 0; z-index: 99; animation: none !important;}
+    .wrapper.homePage {padding-top: 85px;}
+    .navbar-collapse .navbar-toggler {top:32px;right:56px;width: 26px; height: 26px;}
+    .modal-onload {bottom: 10px; left: 10px;}
+    .mid-sec {padding-top: 100px;}
+    .inner-page h1{font-size:32px;}
+    .inner-page h2{font-size:22px;}
+    .inner-page p{margin-bottom:1.5rem;}
 }
 @media only screen and (max-width:767px) {
     .title-row h2{font-size:32px;}

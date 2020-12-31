@@ -13,7 +13,7 @@ ul{ list-style: none; padding: 0px; margin: 0px;}
 .container-2{ max-width: 2200px; width:100%; margin: auto; padding:0px;}
 .wrapper {width: 100%; position: relative; display: block;}
 .header {padding: 40px 0px; margin-bottom: 70px; background: #000; width: 100%; transition: all ease 0.4s;}
-header.header.sticky {position: fixed; top: 0;  left: 0; -webkit-animation: smoothScroll 1s forwards; animation: smoothScroll 1s forwards; z-index: 99; -webkit-box-shadow: 2px 2px 7px 2px #00000045;
+header.header.sticky {position: fixed; top: 0;  left: 0; padding: 25px 0px; -webkit-animation: smoothScroll 1s forwards; animation: smoothScroll 1s forwards; z-index: 99; -webkit-box-shadow: 2px 2px 7px 2px #00000045;
     box-shadow: 2px 2px 7px 2px #00000045;}
 @-webkit-keyframes smoothScroll {
     0% {
@@ -36,7 +36,7 @@ header.header.sticky {position: fixed; top: 0;  left: 0; -webkit-animation: smoo
         transform: translateY(0px);
     }
 }
-
+header.header.sticky .top-navigation {padding-top:15px;}
 .top-navigation {padding-top:35px; display: flex; justify-content: space-between;}
 .top-navigation .navbar-nav .nav-item{margin-right: 2rem;}
 .top-navigation .navbar-nav .nav-link {color: #fff; font-weight: 300; padding:.5rem;}
@@ -241,7 +241,7 @@ video {width: 100%;}
 .businessAfter_col{display: flex; width:calc(33.333% - 14px); gap:20px; align-items: center; padding:1.5rem 2rem; background: #181818;}
 .businessAfter_col i {width: 50px;}
 .businessAfter_col span {flex: 2;}
-.modal-onload{position: fixed; bottom:1rem; left:1rem; background: #2A2A2A; border-radius: 4px; padding:2rem 1rem 1rem 1rem; width: 300px; z-index:999; color: #fff; text-align: center;}
+.modal-onload{position: fixed; bottom:1rem; left:1rem; background: #2A2A2A; border-radius: 4px; padding:2rem 1rem 1rem 1rem; width: 300px; z-index:8; color: #fff; text-align: center;}
 .modal-onload p{ margin: 0px;}
 .modal-onload .text-1{font-size: 20px;}
 .profimg-rounded{display: inline-block;}
@@ -251,6 +251,10 @@ video {width: 100%;}
 .profimg-col .profimg-rounded:first-child {margin: 0;}
 .profimg-col .profimg-rounded {margin-left: -25px;}
 .close-small-modal{position: absolute; right: 10px; top: 10px; background: none; border: 0px;}
-
-
+.inner-page{font-size: 18px;}
+.inner-page p{margin-bottom: 2rem;}
+.inner-page h1{font-size:52px;}
+.inner-page h2{font-size:42px;}
+.inner-page .mid-sec{padding-bottom: 2rem;}
+.hide-popup{display: none;}
 

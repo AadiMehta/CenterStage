@@ -423,6 +423,11 @@ function initHomePage () {
   });  
 }
 
+//=======Onload Popup==========//
+$('.close-small-modal').click( function() {
+  $(".modal-onload").toggleClass("hide-popup");
+} );
+
 // ****** End of Event Handlers ****** 
 
 function init() {
