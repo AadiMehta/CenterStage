@@ -221,9 +221,8 @@ function onProceed2ButtonClicked () {
  * Connect Zoom Account Handler
  */
 function handleZoomConnectAccount () {
-  const {clientId, redirectUri} = event.target.dataset;
+  const {redirectUri} = event.target.dataset;
   const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=mAkYlnKISSCqOgSJPIxCCA&redirect_uri=${redirectUri}`;
-  const token = getCookie('auth_token');
   openWindow(url, 'Authorize Zoom', 600, 700, 1);
 }
 
