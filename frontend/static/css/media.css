@@ -31,6 +31,8 @@
     .boarding-left{padding-right: 8rem;}
     .inner-page h1{font-size:48px;}
     .inner-page h2{font-size:38px;}
+    .btn-btm-txt {font-size:20px;}
+    .left-col {padding-right: 2rem;}
 }
 
 @media only screen and (max-width:1400px) {
@@ -67,6 +69,7 @@
     .inner-page h1{font-size:42px;}
     .inner-page h2{font-size:32px;}
     .inner-page{font-size: 16px;}
+    .btn-btm-txt {font-size: 18px;}
 }
 
 @media only screen and (max-width:1279px) {
@@ -110,6 +113,7 @@
     .inner-page h1{font-size:38px;}
     .inner-page h2{font-size:28px;}
     .inner-page{font-size: 15px;}
+    .btn-btm-txt {font-size:16px;}
 }
 
 @media only screen and (max-width:991px) {
@@ -131,21 +135,10 @@
     .boarding-row {flex-direction: column-reverse;}
     .header-wrap {display: flex;  justify-content: space-between;}
     .navbar-toggler {position: absolute; top:2px;  right: 10px; z-index: 999; width: 37px; height: 25px; padding: 0;}
-    .navbar-collapse {
-        position: fixed;
-        top: 0;
-        right: 0px;
-        z-index: 999;
-        background: #2A2A2A;
-        width: 100%;
-        padding: 25px;
-        height: 100vh;
-        text-align: center;
-    }
+    .navbar-collapse {position: fixed; top: 0; right: 0px; z-index: 999; background: #2A2A2A; width: 100%;  padding:4rem 25px 25px 25px;  height: 100vh !important;  text-align: center;}
     .top-navigation .navbar-nav .nav-item {margin-right: 0;}
-    .top-navigation .navbar-nav .nav-link{color: #000; font-weight: 700;}
-    .top-navigation {padding-top: 10px;}
-    .mid-sec {padding-top:25px;}
+    .top-navigation .navbar-nav .nav-link{ font-size: 20px;}
+    .top-navigation {padding-top: 10px !important;}
     .pb-100{padding-bottom:40PX;}
     .boarding-graphics{display: none;}
     .boarding-left {font-size: 16px; padding-right: 0;}
@@ -192,15 +185,17 @@
     .timechanged-sec h2, .instructor-sec h2 {font-size:28px; margin:0; padding: 1rem;}
     .stud-saying-slide {margin-top: 20px;}
     .main-logo {width: 180px;}
-    .mid-sec {padding-top: 15px;}
     .btn-large {height: 68px; gap: 10px; font-size: 16px; width: 100%; justify-content: center;}
     .card-btn-col {width: 100%;}
     .card-btn-col .card-name {padding-top: 5px; font-size: 14px;}
     .boarding-left .btn {width: 100%; justify-content: center; height: auto; padding: 10px; gap: 10px;}
     .boarding-left p br {display: none;}
     .businessAfter_col {width: 100%;}
+    .left-col {padding-right:15px;}
+    .content-col.pl-3{padding-left: 0px !important;}
+    
 }
 @media only screen and (max-width:640px) {
     .main-logo {width: 150px;}
-    .top-navigation {padding-top: 5px;}
+    .top-navigation {padding-top: 5px !important;}
 }
