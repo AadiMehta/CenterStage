@@ -2,60 +2,35 @@ import urllib
 import os
 from django.conf import settings
 from django.views.generic import TemplateView
-from rest_framework.authtoken.models import Token
-from users.models import User
-
-
-# Temporary Function for get and set user
-def get_user_from_token(auth_token):
-    try:
-        user_id = Token.objects.get(key=auth_token).user_id
-        return User.objects.get(id=user_id)
-    except User.DoesNotExist:
-        pass
-
-
-class HomeTemplateView(TemplateView):
-    template_name = "home.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
-        return context
-
-
-class TermsAndConditionsView(TemplateView):
-    template_name = "terms-condition.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
-        return context
-
-
-class OnboardStep1TemplateView(TemplateView):
-    """
-    """
-    template_name = "onboardingstage1.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
-        return context
+from frontend.utils import get_user_from_token
 
 
 class AccountConnectedTemplate(TemplateView):
     """
-
+    This template is rendered on Zoom connect sucess
+    to close the window and refresh the parent page
     """
-    template_name = "zoom_auth_success.html"
+    template_name = "zoom/zoom_auth_success.html"
+
+
+class OnboardStep1TemplateView(TemplateView):
+    """
+    Onboarding step 1
+    """
+    template_name = "onboarding/step1.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'auth_token' in self.request.COOKIES:
+            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        return context
 
 
 class OnboardStep2TemplateView(TemplateView):
-    template_name = "onboardingstage2.html"
+    """
+    Onboarding step 2
+    """
+    template_name = "onboarding/step2.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,7 +52,10 @@ class OnboardStep2TemplateView(TemplateView):
 
 
 class OnboardStep3TemplateView(TemplateView):
-    template_name = "onboardingstage3.html"
+    """
+    Onboarding step 3
+    """
+    template_name = "onboarding/step3.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

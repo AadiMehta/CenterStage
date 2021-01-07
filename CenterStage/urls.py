@@ -27,9 +27,15 @@ from users.views import (
     TeacherRegister, StudentRegister
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
-from frontend.views import (
-    HomeTemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
-    AccountConnectedTemplate, TermsAndConditionsView
+from frontend.views.main import (
+    HomeTemplateView, TermsAndConditionsView
+)
+from frontend.views.onboarding import (
+    OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
+    AccountConnectedTemplate
+)
+from frontend.views.lesson import (
+    LessonCreateStep1TemplateView, LessonCreateStep2TemplateView
 )
 from engine.views import LessonAPIView
 
@@ -86,11 +92,17 @@ urlpatterns = [
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
 
-    # Templates
+    # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
     path('onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
     path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
+
+    # Lesson Creation Templates
+    path('lesson/create', LessonCreateStep1TemplateView.as_view(), name="lesson-creation-step-1"),
+    path('lesson/schedule', LessonCreateStep2TemplateView.as_view(), name="lesson-creation-step-2"),
+
+    # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
 ]

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="boarding-sec">
+   <div class="host-header">
+      <div class="host-header-left">
+         <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+         <h2>Host New Lesson</h2>
+      </div>
+      <div class="board-process">
+         <div class="board-num"><span class="active">01</span>/04</div>
+         <span class="board-process-txt">Lesson Info</span>
+      </div>
+   </div>
+   <div class="boarding-area">
+      <div class="container">
+         <div class="boarding-wrap">
+            <div class="title-row">
+               <h2>Lesson Info</h2>
+            </div>
+            <div class="boarding-row">
+               <div class="boarding-left">
+                  <div class="form-group">
+                     <div class="input-area">
+                        <label>Name your lesson <span>*</span></label>
+                        <div class="liner-inp"> 
+                           <input id="lessonName" type="text" class="form-control" placeholder="Lesson name" value="asdasd" />
+                        </div>
+                        <p id="lessonNameError" style="color:red;"></p>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <div class="input-area">
+                        <label>Lesson Description <span>*</span></label>
+                        <div class="liner-inp"> 
+                           <input id="lessonDescription" type="text" class="form-control" placeholder="Description here" value="asdasd" />
+                        </div>
+                        <p id="lessonDescriptionError" style="color:red;"></p>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <div class="input-area">
+                        <label>Number of Participants <span>*</span></label>
+                        <div class="liner-select-drop">
+                           <select id="lessonNoOfParticipants" class="form-control">
+                              {% comment %} <option value="none">Select Number of Participants</option> {% endcomment %}
+                              <option value="100">Select Number of Participants</option>
+                              <option value="200">200</option>
+                              <option value="300">300</option>
+                              <option value="400">400</option>
+                           </select>
+                        </div>
+                        <p id="lessonNoOfParticipantsError" style="color:red;"></p>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <div class="input-area">
+                        <label>Lesson Language <span>*</span></label>
+                        <div class="liner-select-drop">
+                           <select id="lessonLanguage" class="form-control">
+                              {% comment %} <option value="none">Set language</option> {% endcomment %}
+                              <option value="test">Set language</option>
+                              <option value="english">English</option>
+                              <option value="hindi">Hindi</option>
+                           </select>
+                        </div>
+                        <p id="lessonLanguageError" style="color:red;"></p>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Number of Sessions in Lesson <span>*</span></label>
+                     <p id="lessonTypeError" style="color:red;"></p>
+                     <div class="selectct-sessionsNom" id="lessonType">
+                        <div class="select-sessions-col">
+                           <button id="singleSession" type="button" class="btn-select-session selected" data-lesson-type="single">Single Session</button>
+                           <span class="select-session-text">This is a one time class</span>
+                        </div>
+                        <div class="select-sessions-col">
+                           <button id="multiSession" type="button" class="btn-select-session" data-lesson-type="multi">Multi Sessions</button>
+                           <span class="select-session-text">This lesson will have a fixed start and end date</span>
+                        </div>
+                        <div class="select-sessions-col">
+                           <button id="ongoingSession" type="button" class="btn-select-session" data-lesson-type="ongoing">Ongoing</button>
+                           <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="btn-area"> 
+                     <button id="lcs1Proceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="images/next.svg" alt="" /></i></button>
+                  </div>
+               </div>
+               <div class="boarding-right">
+                  <img src="{% static 'images/video-graphic.svg' %}" alt="" />
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static '/js/lesson.js' %}" type="text/javascript"></script> 
+{% endblock %}

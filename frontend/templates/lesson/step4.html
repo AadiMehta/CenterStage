@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>Center Stage</title>
+      <link href="css/bootstrap.min.css" rel="stylesheet">
+      <link href="css/style.css" rel="stylesheet">
+      <link href="css/media.css" rel="stylesheet">
+   </head>
+   <body>
+      <!-- Modal -->
+      <div class="modal fade modal-upload" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <img src="images/close.svg" alt="" />
+               </button>
+               <div class="modal-body verticalTabb">
+                  <div class="nav flex-column nav-pills tabb-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                     <a class="nav-link active" id="v-pills-device-tab" data-toggle="pill" href="#v-pills-device" role="tab" aria-controls="v-pills-device" aria-selected="true"><i><img src="images/icon-laptop.svg" alt="" /></i> My Device</a>
+                     <a class="nav-link" id="v-pills-link-tab" data-toggle="pill" href="#v-pills-link" role="tab" aria-controls="v-pills-link" aria-selected="false"><i><img src="images/icon-link.svg" alt="" /></i> Link (URL)</a>
+                     <a class="nav-link" id="v-pills-web-tab" data-toggle="pill" href="#v-pills-web" role="tab" aria-controls="v-pills-web" aria-selected="false"><i><img src="images/icon-websearch.svg" alt="" /></i> Web Search</a>
+                     <a class="nav-link" id="v-pills-facebook-tab" data-toggle="pill" href="#v-pills-facebook" role="tab" aria-controls="v-pills-facebook" aria-selected="false"><i><img src="images/icon-facebook.svg" alt="" /></i> Facebook</a>
+                     <a class="nav-link" id="v-pills-instagram-tab" data-toggle="pill" href="#v-pills-instagram" role="tab" aria-controls="v-pills-instagram" aria-selected="false"><i><img src="images/icon-insta.svg" alt="" /></i> Instagram</a>
+                     <a class="nav-link" id="v-pills-gd-tab" data-toggle="pill" href="#v-pills-gd" role="tab" aria-controls="v-pills-gd" aria-selected="false"><i><img src="images/icon-gd.svg" alt="" /></i> Google Drive</a>
+                  </div>
+                  <div class="tab-content tabb-right" id="v-pills-tabContent">
+                     <div class="tab-pane fade show active" id="v-pills-device" role="tabpanel" aria-labelledby="v-pills-device-tab">
+                        <div class="tabselect-icon-row">
+                           <img src="images/icon-laptop.svg" alt="" />
+                        </div>
+                        <div class="file-dropbox">
+                           <input type="file" class="file-drop-inp" />
+                           <div class="fileDrop-content">
+                              <figure class="file-dropbox-icon">
+                                 <img src="images/add-file.svg" alt="" />
+                              </figure>
+                              <h2>Select Files to Upload</h2>
+                              <span class="grayText">or Drag and Drop, Copy and Paste Files</span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="tab-pane fade" id="v-pills-link" role="tabpanel" aria-labelledby="v-pills-link-tab">...</div>
+                     <div class="tab-pane fade" id="v-pills-web" role="tabpanel" aria-labelledby="v-pills-web-tab">...</div>
+                     <div class="tab-pane fade" id="v-pills-facebook" role="tabpanel" aria-labelledby="v-pills-facebook-tab">...</div>
+                     <div class="tab-pane fade" id="v-pills-instagram" role="tabpanel" aria-labelledby="v-pills-instagram-tab">...</div>
+                     <div class="tab-pane fade" id="v-pills-gd" role="tabpanel" aria-labelledby="v-pills-gd-tab">...</div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="boarding-sec">
+         <div class="host-header">
+            <div class="host-header-left">
+               <button type="button" class="link-back"><img src="images/back.svg" alt="" /></button> 
+               <h2>Host New Lesson</h2>
+            </div>
+            <div class="board-process">
+               <div class="board-num"><span class="active">04</span>/04</div>
+               <span class="board-process-txt">Lesson Material</span>
+            </div>
+         </div>
+         <div class="boarding-area">
+            <div class="container">
+               <div class="boarding-wrap">
+                  <div class="title-row">
+                     <h2>Lesson Material</h2>
+                  </div>
+                  <div class="boarding-row">
+                     <div class="boarding-left">
+                        <div class="form-group">
+                           <div class="input-area addmore-fields">
+                              <label>What Your Students Will Learn</label>
+                              <div class="liner-inp mb-2"> 
+                                 <input type="text" class="form-control" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing" />
+                              </div>
+                              <div class="liner-inp mb-2"> 
+                                 <input type="text" class="form-control" placeholder="Add a goal..." />
+                                 <button class="btn-addmore" type="button"><img src="images/add-icon.svg" alt="" /></button>
+                              </div>
+                              <span class="addmore-text">Press enter to add more</span>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <div class="input-area addmore-fields">
+                              <label>Lesson Requirements</label>
+                              <div class="liner-inp mb-2"> 
+                                 <input type="text" class="form-control" placeholder="Add requirements" />
+                                 <button class="btn-addmore" type="button"><img src="images/add-icon.svg" alt="" /></button>
+                              </div>
+                              <span class="addmore-text">e.g. - Laptop, Drawing board...etc</span>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label>Lesson Reading</label>
+                           <div class="sessions-reading">
+                              <div class="btn-col"><button type="button" class="btn-large-default lession-upload width-btn" data-toggle="modal" data-target="#exampleModal">Upload</button></div>
+                              <div class="btn-col blank-box"></div>
+                              <div class="btn-col blank-box"></div>
+                              <div class="btn-col"><button type="button" class="btn-large-default add-plusbtn"><img src="images/btn-add-w.svg" alt="" /></button></div>
+                           </div>
+                           <span class="select-session-text">You can upload PDF and Images</span>
+                        </div>
+                        <div class="btn-area"> 
+                           <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Review & Finish</span> <i><img src="images/next.svg" alt="" /></i></button>
+                        </div>
+                     </div>
+                     <div class="boarding-right">
+                        <img src="images/lesson-info-graphic.svg" alt="" />
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Google CDN jQuery with fallback to local -->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.min.js"></script>
+      <script src="js/custom.js"></script>
+   </body>
+</html>
