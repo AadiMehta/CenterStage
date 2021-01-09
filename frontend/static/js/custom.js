@@ -58,3 +58,12 @@ $(window).scroll(function () {
       $('.header').removeClass('sticky');
     }
   });
+
+  $('.sidebar-toggle').click( function() {
+    $(".wrapper-main").toggleClass("sidebar-collapse");
+} );
+
+$('.close-btn').click( function() {
+    $(".wrapper-main").toggleClass("sidebar-collapse");
+} );
+

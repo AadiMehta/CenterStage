@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}%
+
+{% block content %}
+<div class="wrapper-main profileInfo-page">
+   <div class="sidebar ">
+      <div class="logo-area">
+         <a href="#">
+         <img class="main-logo-img" src="{% static 'images/logo-main.svg' %}" alt="" />
+         </a>
+         <a href="#" class="close-btn">
+         <img src="{% static 'images/closebtn.svg' %}" alt="close">
+         </a>
+      </div>
+      <div class="sidebar-menu">
+         <ul id="accordion">
+            <li>
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One">
+               <i>
+               <img src="{% static 'images/my_schedule.svg' %}" alt="" />
+               </i>
+               <span>My Schedule</span>
+               </a>
+               <ul id="One" class="collapse submenu" data-parent="#accordion">
+                  <li>
+                     <a href="#">- Upcoming Sessions 
+                     <span class="badge-small"></span>
+                     </a>
+                  </li>
+                  <li>
+                     <a href="#">- Past Sessions</a>
+                  </li>
+                  <li>
+                     <a href="#">- Calendar</a>
+                  </li>
+               </ul>
+            </li>
+            <li>
+               <a href="#">
+               <i>
+               <img src="{% static 'images/my_message.svg' %}" alt="" />
+               </i>
+               <span>My Messages</span>
+               <span class="badge-small"></span>
+               </a>
+            </li>
+            <li>
+               <a href="#">
+               <i>
+               <img src="{% static 'images/my_lesson.svg' %}" alt="" />
+               </i>
+               <span>My Lessons</span>
+               </a>
+            </li>
+            <li>
+               <a href="#">
+               <i>
+               <img src="{% static 'images/google_save.svg' %}" alt="" />
+               </i>
+               <span>My Drive</span>
+               </a>
+            </li>
+            <li>
+               <a href="#">
+               <i>
+               <img src="{% static 'images/my_stats.svg' %}" alt="" />
+               </i>
+               <span>My Stats</span>
+               </a>
+            </li>
+            <li>
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five">
+               <i>
+               <img src="{% static 'images/my_ac.svg' %}" alt="" />
+               </i>
+               <span>My Account</span>
+               </a>
+               <ul id="Five" class="collapse submenu" data-parent="#accordion">
+                  <li>
+                     <a href="#">- Info</a>
+                  </li>
+                  <li>
+                     <a href="#">- Payments</a>
+                  </li>
+                  <li class="active">
+                     <a href="#">- Alerts</a>
+                  </li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="main">
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle">
+            <img src="{% static 'images/menu-icon.svg' %}" alt="" />
+            </button>
+            <div class="header-prof-col"></div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon">
+                  <img src="{% static 'images/icon-switch-account.svg' %}" alt="" />
+               </div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon">
+                  <img src="{% static 'images/icon-doted.svg' %}" alt="" />
+               </div>
+            </div>
+         </div>
+      </header>
+      <div class="main-content pt-0">
+         <div class="profile-info-bg"></div>
+         <div class="admin-mid-sec container-fluid">
+            <div class="profile-info-header">
+               <div class="profile-info-col">
+                  <div class="profile-image-area">
+                     <img class="profile-image" src="{% static 'images/profile-img.jpg' %}" alt="" />
+                     <i class="camera">
+                     <img src="{% static 'images/camera.png' %}" alt="" />
+                     </i>
+                  </div>
+                  <div class="profile-info-name">
+                     <h3>Thomas Edward</h3>
+                     <span class="desigation">Web Developer and JAVA Expert</span>
+                     <button type="button" class="edit-btn">
+                     <img src="{% static 'images/edit.png' %}" alt="" />
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="yourac-sec profile-wrap">
+               <h2 class="title-2">Alerts</h2>
+               <div class="profile-wrap-main">
+                  <div class="account-left-col">
+                     <div class="yourac-wrap">
+                        <div class="profile-page-sec-title">
+                           <h3>Messaging</h3>
+                           <div class="title-dec-text">Get alerts when you receive messages from your students and other teachers</div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/email.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Email</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                 <label class="custom-control-label" for="customSwitch1"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/message_open.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Text Messages</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                 <label class="custom-control-label" for="customSwitch2"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/whatsup.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>WhatsApp</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                                 <label class="custom-control-label" for="customSwitch3"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/megaphone.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Browser Notifications</h4>
+                                 <span>Receive notifications outside of your browser on either desktop or mobile web</span>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch4">
+                                 <label class="custom-control-label" for="customSwitch4"></label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="yourac-wrap">
+                        <div class="profile-page-sec-title">
+                           <h3>Messaging</h3>
+                           <div class="title-dec-text">Get alerts when you receive messages from your students and other teachers</div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/email.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Email</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                 <label class="custom-control-label" for="customSwitch1"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/message_open.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Text Messages</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                 <label class="custom-control-label" for="customSwitch2"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/whatsup.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>WhatsApp</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                                 <label class="custom-control-label" for="customSwitch3"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/megaphone.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Browser Notifications</h4>
+                                 <span>Receive notifications outside of your browser on either desktop or mobile web</span>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch4">
+                                 <label class="custom-control-label" for="customSwitch4"></label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="yourac-wrap">
+                        <div class="profile-page-sec-title">
+                           <h3>Messaging</h3>
+                           <div class="title-dec-text">Get alerts when you receive messages from your students and other teachers</div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/email.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Email</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                 <label class="custom-control-label" for="customSwitch1"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/message_open.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Text Messages</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                 <label class="custom-control-label" for="customSwitch2"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/whatsup.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>WhatsApp</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                                 <label class="custom-control-label" for="customSwitch3"></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i>
+                              <img src="{% static 'images/megaphone.png' %}" alt="" />
+                              </i>
+                              <div class="col-text">
+                                 <h4>Browser Notifications</h4>
+                                 <span>Receive notifications outside of your browser on either desktop or mobile web</span>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-control custom-switch">
+                                 <input type="checkbox" class="custom-control-input" id="customSwitch4">
+                                 <label class="custom-control-label" for="customSwitch4"></label>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="account-right-col">
+                     <div class="d-block text-center mb-5">
+                        <img src="{% static 'images/message-graphics.svg' %}" alt="" />
+                     </div>
+                     <h5>Where would you like to get text messages?</h5>
+                     <p>By ticking an sms box, you agree to receive autodialled promotional texts from CentreStage partners at:</p>
+                     <div class="ph-area">
+                        <label>Choose a phone number</label>
+                        <div class="ph-number-row">+91 *******598 </div>
+                     </div>
+                     <p>For more info, text HELP to 12345. To cancel mobile notifications, reply STOP to 12345. Message and data rates may apply.</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
