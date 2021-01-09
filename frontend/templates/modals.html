@@ -157,17 +157,122 @@
     </div>
 </div>
 <!-- Modal OTP End-->
-<!-- Modal OnLoad-->
-<div id="OnLoad" class="modal-onload">
-    <button type="button" class="close-small-modal close" data-dismiss="modal" aria-label="Close"><img src="{% static '/images/close-small.svg' %}" alt="" /></button>
-    <div class="text-1">Teacher in category XYZ signed up 3 minutes ago</div>
-        <div class="signedup-teachers">
-            <div class="profimg-col">
-            <div class="profimg-rounded"><img src="{% static '/images/profile-img.jpg' %}" alt=""></div>
-            <div class="profimg-rounded"><img src="{% static '/images/profile-img.jpg' %}" alt=""></div>
-            <div class="profimg-rounded"><img src="{% static '/images/profile-img.jpg' %}" alt=""></div>
+<!-- Modal Lesson Notes -->
+<div class="modal fade modal-upload" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body verticalTabb">
+            <div class="nav flex-column nav-pills tabb-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-device-tab" data-toggle="pill" href="#v-pills-device" role="tab" aria-controls="v-pills-device" aria-selected="true"><i><img src="images/icon-laptop.svg" alt="" /></i> My Device</a>
+                <a class="nav-link" id="v-pills-link-tab" data-toggle="pill" href="#v-pills-link" role="tab" aria-controls="v-pills-link" aria-selected="false"><i><img src="images/icon-link.svg" alt="" /></i> Link (URL)</a>
+                <a class="nav-link" id="v-pills-web-tab" data-toggle="pill" href="#v-pills-web" role="tab" aria-controls="v-pills-web" aria-selected="false"><i><img src="images/icon-websearch.svg" alt="" /></i> Web Search</a>
+                <a class="nav-link" id="v-pills-facebook-tab" data-toggle="pill" href="#v-pills-facebook" role="tab" aria-controls="v-pills-facebook" aria-selected="false"><i><img src="images/icon-facebook.svg" alt="" /></i> Facebook</a>
+                <a class="nav-link" id="v-pills-instagram-tab" data-toggle="pill" href="#v-pills-instagram" role="tab" aria-controls="v-pills-instagram" aria-selected="false"><i><img src="images/icon-insta.svg" alt="" /></i> Instagram</a>
+                <a class="nav-link" id="v-pills-gd-tab" data-toggle="pill" href="#v-pills-gd" role="tab" aria-controls="v-pills-gd" aria-selected="false"><i><img src="images/icon-gd.svg" alt="" /></i> Google Drive</a>
+            </div>
+            <div class="tab-content tabb-right" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-device" role="tabpanel" aria-labelledby="v-pills-device-tab">
+                <div class="tabselect-icon-row">
+                    <img src="images/icon-laptop.svg" alt="" />
+                </div>
+                <div class="file-dropbox">
+                    <input type="file" class="file-drop-inp" />
+                    <div class="fileDrop-content">
+                        <figure class="file-dropbox-icon">
+                            <img src="images/add-file.svg" alt="" />
+                        </figure>
+                        <h2>Select Files to Upload</h2>
+                        <span class="grayText">or Drag and Drop, Copy and Paste Files</span>
+                    </div>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-link" role="tabpanel" aria-labelledby="v-pills-link-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-web" role="tabpanel" aria-labelledby="v-pills-web-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-facebook" role="tabpanel" aria-labelledby="v-pills-facebook-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-instagram" role="tabpanel" aria-labelledby="v-pills-instagram-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-gd" role="tabpanel" aria-labelledby="v-pills-gd-tab">...</div>
+            </div>
         </div>
     </div>
-    <p>4 Teachers from your region just signed up today</p>
+    </div>
 </div>
-<!-- Modal OnLoad End-->
+<!-- Modal Lesson Notes -->
+<!-- Modal Lesson Preview -->
+<div class="modal fade modal-finish" id="Publish" tabindex="-1" aria-labelledby="PublishLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="images/close.svg" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="images/finish-graphics.svg" alt="" />
+            </div>
+            <h2>Thank you for completing your lesson</h2>
+            <h3>How was your overall experience?</h3>
+            <div class="rating-row">
+                <a href="#"><img src="images/rating-fill.svg" alt="" /></a>
+                <a href="#"><img src="images/rating-fill.svg" alt="" /></a>
+                <a href="#"><img src="images/rating-fill.svg" alt="" /></a>
+                <a href="#"><img src="images/rating-blank.svg" alt="" /></a>
+                <a href="#"><img src="images/rating-blank.svg" alt="" /></a>
+            </div>
+            <div class="form-group">
+                <div class="liner-inp"> 
+                <input type="text" class="form-control" placeholder="Your Feedback">
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#share"><span>Finish</span> <i><img src="images/next.svg" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Report Issue</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="modal fade modal-share" id="share" tabindex="-1" aria-labelledby="shareLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="images/close.svg" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3>Congratulations!</h3>
+                <h4>You have successfully created your lesson</h4>
+                <div class="sharecopy-link">
+                    <h2>Core JAVA Development</h2>
+                    <div class="sharecopy-inp">
+                        <input type="text" class="form-control" placeholder="https://www.centerstage.live/xyzjava/1548fghgytuj" />
+                        <button type="button" class="btn-theme">Copy</button>
+                    </div>
+                </div>
+                <div class="share-to">
+                    <h5>Share to</h5>
+                    <p>Sharing your lesson on social media right now will increase bookings</p>
+                    <div class="social-icons">
+                        <a href="#"><img src="images/whatsapp-icon.svg" alt="" /></a>
+                        <a href="#"><img src="images/telegram-icon.svg" alt="" /></a>
+                        <a href="#"><img src="images/facebook-icon.svg" alt="" /></a>
+                        <a href="#"><img src="images/linkedin-icon.svg" alt="" /></a>
+                        <a href="#"><img src="images/twitter-icon.svg" alt="" /></a>
+                        <a href="#"><img src="images/email-icon.svg" alt="" /></a>
+                    </div>
+                </div>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <button type="button" class="btn btn-theme">Start Now</button>
+                </div>
+                </div>
+                <div class="share-graphics">
+                <img src="images/share-graphics.svg" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal Lesson Preview -->

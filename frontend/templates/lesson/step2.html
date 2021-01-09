@@ -1,328 +1,323 @@
-<!DOCTYPE html>
-<html>
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Center Stage</title>
-      <link href="css/bootstrap.min.css" rel="stylesheet">
-      <link href="css/style.css" rel="stylesheet">
-      <link href="css/media.css" rel="stylesheet">
-   </head>
-   <body>
-      <div class="boarding-sec">
-         <div class="host-header">
-            <div class="host-header-left">
-               <button type="button" class="link-back"><img src="images/back.svg" alt="" /></button> 
-               <h2>Host New Lesson</h2>
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="boarding-sec">
+   <div class="host-header">
+      <div class="host-header-left">
+         <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+         <h2>Host New Lesson</h2>
+      </div>
+      <div class="board-process">
+         <div class="board-num"><span class="active">02</span>/05</div>
+         <span class="board-process-txt">Lesson Schedule &amp; Price</span>
+      </div>
+   </div>
+   <div class="boarding-area">
+      <div class="container">
+         <div class="boarding-wrap">
+            <div class="title-row">
+               <h2>Session Schedule <span class="required">*</span></h2>
             </div>
-            <div class="board-process">
-               <div class="board-num"><span class="active">01</span>/04</div>
-               <span class="board-process-txt">Lesson Schedule &amp; Price</span>
-            </div>
-         </div>
-         <div class="boarding-area">
-            <div class="container">
-               <div class="boarding-wrap">
-                  <div class="title-row">
-                     <h2>Session Schedule <span class="required">*</span></h2>
-                  </div>
-                  <div class="boarding-row">
-                     <div class="boarding-left">
-                        <div class="form-group">
-                           <div class="select-dateTime-row">
-                              <div class="select-dateTime-col">
-                                 <button type="button" class="btn-select-session">Flexible Date & Time</button>
-                                 <span class="select-session-text">By selecting this option, students can book any time during your office hours. Please select office hours on your calendar to start receiving bookings after creating this lesson</span>
-                              </div>
-                              <div class="select-dateTime-col">
-                                 <button type="button" class="btn-select-session selected">Select Date & Time</button>
-                                 <span class="select-session-text">By selecting this option, students will be
-                                 required to follow lesson timings set by you</span>
-                              </div>
-                           </div>
+            <div class="boarding-row">
+               <div class="boarding-left">
+                  <div class="form-group">
+                     <div class="select-dateTime-row">
+                        <div class="select-dateTime-col">
+                           <button type="button" class="btn-select-session">Flexible Date & Time</button>
+                           <span class="select-session-text">By selecting this option, students can book any time during your office hours. Please select office hours on your calendar to start receiving bookings after creating this lesson</span>
                         </div>
-                        <div class="selectdatetile-wrap">
-                           <div class="row">
-                              <div class="col-lg-6">
-                                 <div class="form-group">
-                                    <label>Start Date <span class="required">*</span></label>
-                                    <div class="liner-select-drop">
-                                       <select class="form-control">
-                                          <option>Set Start Date</option>
-                                       </select>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="col-lg-6">
-                                 <div class="form-group">
-                                    <label>End Date <span class="required">*</span></label>
-                                    <div class="liner-select-drop">
-                                       <select class="form-control">
-                                          <option>Set End Date</option>
-                                       </select>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
+                        <div class="select-dateTime-col">
+                           <button type="button" class="btn-select-session selected">Select Date & Time</button>
+                           <span class="select-session-text">By selecting this option, students will be
+                           required to follow lesson timings set by you</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="selectdatetile-wrap">
+                     <div class="row">
+                        <div class="col-lg-6">
                            <div class="form-group">
-                              <label>Session Schedule<span class="required"> *</span> </label>
-                              <div class="select-day-cald">
-                                 <img src="images/Calendar.svg" alt="" />
-                              </div>
-                           </div>
-                           <div class="session-days form-group table-responsive">
-                              <table width="100%">
-                                 <tr>
-                                 <thead>
-                                    <th>Session Days</th>
-                                    <th>Start Time <span class="required"> *</span></th>
-                                    <th>End Time <span class="required"> *</span></th>
-                                 </thead>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2">Mon</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2 active">Tue</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2">Wed</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2">Thu</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2 active">Fri</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2">Sat</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 <tr>
-                                    <td><button type="button" class="select-btn2 active">Sun</button></td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                    <td>
-                                       <div class="liner-select-drop">
-                                          <select class="form-control">
-                                             <option>Select Time</option>
-                                          </select>
-                                       </div>
-                                    </td>
-                                 </tr>
-                                 </tr>
-                              </table>
-                           </div>
-                           <div class="form-group">
-                              <label>Number of Sessions</label>
-                              <div class="liner-inp"> 
-                                 <input type="text" class="form-control" placeholder="01">
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <label>Time Zone <span class="required">*</span></label>
+                              <label>Start Date <span class="required">*</span></label>
                               <div class="liner-select-drop">
                                  <select class="form-control">
-                                    <option>Select Time Zone</option>
+                                    <option>Set Start Date</option>
                                  </select>
                               </div>
                            </div>
-                           <div class="priceSection">
-                              <label>Price<span class="required">*</span></label>
-                              <div class="inp-price-wrap">
-                                 <div class="inp-price-row form-group">
-                                    <div class="select-price01">
-                                       <div class="w-100">
-                                          <div class="custom-check">
-                                             <div class="checkbox">
-                                                <input type="checkbox" id="check">
-                                                <label for="check"></label>
-                                             </div>
-                                          </div>
-                                          <label>Price Per Session<span class="required">*</span></label>
-                                       </div>
-                                       <div class="row">
-                                          <div class="col-lg-5 liner-select-drop">
-                                             <select class="form-control">
-                                                <option>$ US Dollar</option>
-                                             </select>
-                                          </div>
-                                          <div class="col-lg-7 liner-select-drop">
-                                             <select class="form-control">
-                                                <option>$50</option>
-                                             </select>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="session-price-col">
-                                       <h4>Total Price</h4>
-                                       <span>$250.00</span>
-                                    </div>
-                                 </div>
-                                 <div class="inp-price-row form-group">
-                                    <div class="select-price01">
-                                       <div class="w-100">
-                                          <div class="custom-check">
-                                             <div class="checkbox">
-                                                <input type="checkbox" id="check2">
-                                                <label for="check2"></label>
-                                             </div>
-                                          </div>
-                                          <label>Weekly Price<span class="required">*</span></label>
-                                       </div>
-                                       <div class="row">
-                                          <div class="col-lg-5 liner-select-drop">
-                                             <select class="form-control">
-                                                <option>$ US Dollar</option>
-                                             </select>
-                                          </div>
-                                          <div class="col-lg-7 liner-select-drop">
-                                             <select class="form-control">
-                                                <option>$50</option>
-                                             </select>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="session-price-col">
-                                       <h4>Total Price</h4>
-                                       <span>$250.00</span>
-                                    </div>
-                                 </div>
-                                 <div class="inp-price-row">
-                                    <div class="select-price01">
-                                       <div class="w-100">
-                                          <div class="custom-check">
-                                             <div class="checkbox">
-                                                <input type="checkbox" id="check3">
-                                                <label for="check3"></label>
-                                             </div>
-                                          </div>
-                                          <label>Monthly Price<span class="required">*</span></label>
-                                       </div>
-                                       <div class="row">
-                                          <div class="col-lg-5 liner-select-drop">
-                                             <select class="form-control">
-                                                <option>$ US Dollar</option>
-                                             </select>
-                                          </div>
-                                          <div class="col-lg-7 liner-select-drop">
-                                             <select class="form-control">
-                                                <option>$50</option>
-                                             </select>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="session-price-col">
-                                       <h4>Total Price</h4>
-                                       <span>$250.00</span>
-                                    </div>
-                                 </div>
+                        </div>
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label>End Date <span class="required">*</span></label>
+                              <div class="liner-select-drop">
+                                 <select class="form-control">
+                                    <option>Set End Date</option>
+                                 </select>
                               </div>
                            </div>
                         </div>
-                        <div class="btn-area"> 
-                           <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="images/next.svg" alt="" /></i></button>
+                     </div>
+                     <div class="form-group">
+                        <label>Session Schedule<span class="required"> *</span> </label>
+                        <div class="select-day-cald">
+                           <img src="{% static 'images/Calendar.svg' %}" alt="" />
                         </div>
                      </div>
-                     <div class="boarding-right">
-                        <img src="images/schdule-graphics.svg" alt="" />
+                     <div class="session-days form-group table-responsive">
+                        <table width="100%">
+                           <tr>
+                           <thead>
+                              <th>Session Days</th>
+                              <th>Start Time <span class="required"> *</span></th>
+                              <th>End Time <span class="required"> *</span></th>
+                           </thead>
+                           <tr>
+                              <td><button type="button" class="select-btn2">Mon</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 active">Tue</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2">Wed</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2">Thu</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 active">Fri</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2">Sat</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 active">Sun</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                 </div>
+                              </td>
+                           </tr>
+                           </tr>
+                        </table>
+                     </div>
+                     <div class="form-group">
+                        <label>Number of Sessions</label>
+                        <div class="liner-inp"> 
+                           <input type="text" class="form-control" placeholder="01">
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <label>Time Zone <span class="required">*</span></label>
+                        <div class="liner-select-drop">
+                           <select class="form-control">
+                              <option>Select Time Zone</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="priceSection">
+                        <label>Price<span class="required">*</span></label>
+                        <div class="inp-price-wrap">
+                           <div class="inp-price-row form-group">
+                              <div class="select-price01">
+                                 <div class="w-100">
+                                    <div class="custom-check">
+                                       <div class="checkbox">
+                                          <input type="checkbox" id="check">
+                                          <label for="check"></label>
+                                       </div>
+                                    </div>
+                                    <label>Price Per Session<span class="required">*</span></label>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-lg-5 liner-select-drop">
+                                       <select class="form-control">
+                                          <option>$ US Dollar</option>
+                                       </select>
+                                    </div>
+                                    <div class="col-lg-7 liner-select-drop">
+                                       <select class="form-control">
+                                          <option>$50</option>
+                                       </select>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="session-price-col">
+                                 <h4>Total Price</h4>
+                                 <span>$250.00</span>
+                              </div>
+                           </div>
+                           <div class="inp-price-row form-group">
+                              <div class="select-price01">
+                                 <div class="w-100">
+                                    <div class="custom-check">
+                                       <div class="checkbox">
+                                          <input type="checkbox" id="check2">
+                                          <label for="check2"></label>
+                                       </div>
+                                    </div>
+                                    <label>Weekly Price<span class="required">*</span></label>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-lg-5 liner-select-drop">
+                                       <select class="form-control">
+                                          <option>$ US Dollar</option>
+                                       </select>
+                                    </div>
+                                    <div class="col-lg-7 liner-select-drop">
+                                       <select class="form-control">
+                                          <option>$50</option>
+                                       </select>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="session-price-col">
+                                 <h4>Total Price</h4>
+                                 <span>$250.00</span>
+                              </div>
+                           </div>
+                           <div class="inp-price-row">
+                              <div class="select-price01">
+                                 <div class="w-100">
+                                    <div class="custom-check">
+                                       <div class="checkbox">
+                                          <input type="checkbox" id="check3">
+                                          <label for="check3"></label>
+                                       </div>
+                                    </div>
+                                    <label>Monthly Price<span class="required">*</span></label>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-lg-5 liner-select-drop">
+                                       <select class="form-control">
+                                          <option>$ US Dollar</option>
+                                       </select>
+                                    </div>
+                                    <div class="col-lg-7 liner-select-drop">
+                                       <select class="form-control">
+                                          <option>$50</option>
+                                       </select>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="session-price-col">
+                                 <h4>Total Price</h4>
+                                 <span>$250.00</span>
+                              </div>
+                           </div>
+                        </div>
                      </div>
                   </div>
+                  <div class="btn-area"> 
+                     <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}%" alt="" /></i></button>
+                  </div>
+               </div>
+               <div class="boarding-right">
+                  <img src="{% static 'images/schdule-graphics.svg' %}" alt="" />
                </div>
             </div>
          </div>
       </div>
-      <!-- Google CDN jQuery with fallback to local -->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.min.js"></script>
-      <script src="js/custom.js"></script>
-   </body>
-</html>
+   </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static '/js/lesson.js' %}" type="text/javascript"></script> 
+{% endblock %}

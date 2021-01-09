@@ -1,81 +1,76 @@
-<!DOCTYPE html>
-<html>
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Center Stage</title>
-      <link href="css/bootstrap.min.css" rel="stylesheet">
-      <link href="css/style.css" rel="stylesheet">
-      <link href="css/media.css" rel="stylesheet">
-   </head>
-   <body>
-      <div class="boarding-sec">
-         <div class="host-header">
-            <div class="host-header-left">
-               <button type="button" class="link-back"><img src="images/back.svg" alt="" /></button> 
-               <h2>Host New Lesson</h2>
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="boarding-sec">
+   <div class="host-header">
+      <div class="host-header-left">
+         <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+         <h2>Host New Lesson</h2>
+      </div>
+      <div class="board-process">
+         <div class="board-num"><span class="active">03</span>/05</div>
+         <span class="board-process-txt">Lesson Availability</span>
+      </div>
+   </div>
+   <div class="boarding-area">
+      <div class="container">
+         <div class="boarding-wrap">
+            <div class="title-row">
+               <h2>Lesson Availability</h2>
             </div>
-            <div class="board-process">
-               <div class="board-num"><span class="active">03</span>/04</div>
-               <span class="board-process-txt">Lesson Availability</span>
-            </div>
-         </div>
-         <div class="boarding-area">
-            <div class="container">
-               <div class="boarding-wrap">
-                  <div class="title-row">
-                     <h2>Lesson Availability</h2>
+            <div class="boarding-row">
+               <div class="lesson-availability">
+                  <div class="comn-row mb-5">
+                     <div class="comn-col width250">
+                        <button type="button" class="btn-select-session">Public</button>
+                        <span class="select-session-text">Your lesson will be published on 
+                        your profile and can be booked by 
+                        anyone</span>
+                     </div>
+                     <div class="comn-col width250">
+                        <button type="button" class="btn-select-session selected">Private</button>
+                        <span class="select-session-text">Your lesson will not be published 
+                        on your profile. Only people who
+                        have the lesson link can book it</span>
+                     </div>
                   </div>
-                  <div class="boarding-row">
-                     <div class="lesson-availability">
-                        <div class="comn-row mb-5">
-                           <div class="comn-col width250">
-                              <button type="button" class="btn-select-session">Public</button>
-                              <span class="select-session-text">Your lesson will be published on 
-                              your profile and can be booked by 
-                              anyone</span>
+                  <div class="upImage-video-wrap mb-5">
+                     <h3>Images &amp; Videos </h3>
+                     <div class="upImage-video-row">
+                        <div class="upImage-video-col">
+                           <div class="upImage-video-inner">
+                              <input class="upload-file-input" type="file" >
+                              <i><img src="{% static 'images/picture.png' %}" alt="" /></i>
+                              <h4>Add cover image</h4>
                            </div>
-                           <div class="comn-col width250">
-                              <button type="button" class="btn-select-session selected">Private</button>
-                              <span class="select-session-text">Your lesson will not be published 
-                              on your profile. Only people who
-                              have the lesson link can book it</span>
-                           </div>
+                           <span class="dtl-txt">Please add an engaging image at least 600 pixels wide and free of copyright</span>
                         </div>
-                        <div class="upImage-video-wrap mb-5">
-                           <h3>Images &amp; Videos </h3>
-                           <div class="upImage-video-row">
-                              <div class="upImage-video-col">
-                                 <div class="upImage-video-inner">
-                                    <input class="upload-file-input" type="file" >
-                                    <i><img src="images/picture.png" alt="" /></i>
-                                    <h4>Add cover image</h4>
-                                 </div>
-                                 <span class="dtl-txt">Please add an engaging image at least 600 pixels wide and free of copyright</span>
-                              </div>
-                              <div class="upImage-video-col">
-                                 <div class="upImage-video-inner">
-                                    <i><img src="images/video.png" alt="" /></i>
-                                    <input class="form-control" placeholder="Add your video URL">
-                                 </div>
-                                 <span class="dtl-txt">Please add a YouTube (or any other) link for your introduction video.
-                                 Recommended length 30 - 60 Seconds</span>
-                              </div>
+                        <div class="upImage-video-col">
+                           <div class="upImage-video-inner">
+                              <i><img src="{% static 'images/video.png' %}" alt="" /></i>
+                              <input class="form-control" placeholder="Add your video URL">
                            </div>
-                        </div>
-                        <div class="btn-area"> 
-                           <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="images/next.svg" alt="" /></i></button>
+                           <span class="dtl-txt">Please add a YouTube (or any other) link for your introduction video.
+                           Recommended length 30 - 60 Seconds</span>
                         </div>
                      </div>
+                  </div>
+                  <div class="btn-area"> 
+                     <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      <!-- Google CDN jQuery with fallback to local -->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.min.js"></script>
-      <script src="js/custom.js"></script>
-   </body>
-</html>
+   </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static '/js/lesson.js' %}" type="text/javascript"></script> 
+{% endblock %}
