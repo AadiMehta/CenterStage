@@ -36,7 +36,7 @@ from frontend.views.onboarding import (
 )
 from frontend.views.lesson import (
     LessonCreateStep1TemplateView, LessonCreateStep2TemplateView, LessonCreateStep3TemplateView,
-    LessonCreateStep4TemplateView, LessonCreatePreviewTemplateView
+    LessonCreateStep4TemplateView, LessonCreatePreviewTemplateView, LessonCreateWizard
 )
 from engine.views import LessonAPIView
 
@@ -105,6 +105,9 @@ urlpatterns = [
     path('lesson/intro', LessonCreateStep3TemplateView.as_view(), name="lesson-creation-step-3"),
     path('lesson/notes', LessonCreateStep4TemplateView.as_view(), name="lesson-creation-step-4"),
     path('lesson/preview', LessonCreatePreviewTemplateView.as_view(), name="lesson-creation-preview"),
+
+    # Lesson Wizard
+    path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS)),
 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),

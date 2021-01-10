@@ -19,6 +19,9 @@
       </div>
    </div>
    <div class="boarding-area">
+      <form action="" method="post">
+      {% csrf_token %}
+      {{ wizard.management_form }}
       <div class="container">
          <div class="boarding-wrap">
             <div class="title-row">
@@ -29,40 +32,35 @@
                   <div class="form-group">
                      <label>Name your Lesson</label>
                      <div class="content-area">
-                        Core JAVA Development
+                        {{form_data.name}}
                      </div>
                   </div>
                   <div class="form-group">
                      <label>Lesson Description</label>
                      <div class="content-area">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                        mollit anim id est laborum.
+                        {{form_data.description}}
                      </div>
                   </div>
                   <div class="form-group">
                      <label>Number of Participants</label>
                      <div class="content-area">
-                        100
+                        {{form_data.no_of_participants}}
                      </div>
                   </div>
                   <div class="form-group">
                      <label>Lesson Language</label>
                      <div class="content-area">
                         <div class="search-tags">
-                           <a href="#" class="tag-link">English</a>
-                           <a href="#" class="tag-link">Spanish</a>
-                           <a href="#" class="tag-link">Hindi</a>
+                           <a href="#" class="tag-link">{{form_data.language}}</a>
+<!--                           <a href="#" class="tag-link">Spanish</a>-->
+<!--                           <a href="#" class="tag-link">Hindi</a>-->
                         </div>
                      </div>
                   </div>
                   <div class="form-group">
                      <label>Number of Sessions in Lesson</label>
                      <div class="content-area">
-                        5
+                        {{form_data.no_of_sessions}}
                      </div>
                   </div>
                   <div class="row">
@@ -103,7 +101,7 @@
                            <label>Lesson Video</label>
                            <div class="lession-img-video">
                               <img src="{% static 'images/video-img.jpg' %}" alt="" />
-                              <span class="path-text mt-2">www.youtube.com/loremipsum/125re78trgdf</span>
+                              <span class="path-text mt-2">{{form_data.link}}</span>
                            </div>
                         </div>
                      </div>
@@ -112,7 +110,7 @@
                      <label>What Your Students Will Learn</label>
                      <div class="content-area">
                         <ul class="listStyle">
-                           <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
+                           <li>{{form_data.learn}}</li>
                            <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</li>
                            <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</li>
                            <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</li>
@@ -143,8 +141,10 @@
                         culpa qui officia deserunt mollit anim id est laborum.
                      </div>
                   </div>
-                  <div class="btn-area"> 
-                     <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish"><span>Save & Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                  <div class="btn-area">
+                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary btn-lg btn-theme" style="margin-right:30px; float: left">
+                        <i><img src="{% static 'images/next.svg' %}" alt="" style="transform: rotateY(180deg);"/></i><span>Previous</span></button>
+                     <button type="submit" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish"><span>Save & Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                   </div>
                </div>
                <div class="boarding-right text-left">
@@ -176,9 +176,10 @@
             </div>
          </div>
       </div>
+      </form>
    </div>
 </div>
 {% endblock %}
 {% block script %}
-    <script src="{% static '/js/lesson.js' %}" type="text/javascript"></script> 
+    <script src="{% static '/js/lesson.js' %}" type="text/javascript"></script>
 {% endblock %}

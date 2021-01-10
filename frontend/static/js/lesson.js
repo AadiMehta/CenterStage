@@ -140,18 +140,38 @@
         isValid = false;
       }
       if (isValid) {
-        goToLessonSchedule(lessonName, lessonDescription, lessonNoOfParticipants, lessonLanguage, lessonType);
+        //goToLessonSchedule(lessonName, lessonDescription, lessonNoOfParticipants, lessonLanguage, lessonType);
         // Go to Step 2
+        $("#step1").submit();
       }
   }
-  
+
+  function handleLCS2Proceed() {
+    $("#step2").submit();
+  }
+
+  function handleLCS3Proceed() {
+    $("#step3").submit();
+  }
+
+  function handleLCS4Proceed() {
+    $("#step4").submit();
+  }
+
   function handleLessonTypeSelect(event) {
     $('#singleSession').removeClass('selected');
     $('#multiSession').removeClass('selected');
     $('#ongoingSession').removeClass('selected');
     $(event.target).addClass('selected');
+    $("#no_of_sessions").val(event.currentTarget.dataset.lessonType);
   }
-  
+
+  function handleLessonTimeSlotTypeSelect(event) {
+    $("#flexible-time-slot").removeClass('selected');
+    $("#fixed-time-slot").removeClass('selected');
+    $(event.target).addClass('selected');
+    $("#slot_type").val(event.currentTarget.dataset.slotType);
+  }
   // ****** End of Event Handlers ****** 
   
   function init() {
@@ -163,6 +183,16 @@
     $('#singleSession').click(handleLessonTypeSelect);
     $('#multiSession').click(handleLessonTypeSelect);
     $('#ongoingSession').click(handleLessonTypeSelect);
+
+    /*
+        Step2 Time Slot Selection
+    */
+    $('#lcs2Proceed').click(handleLCS2Proceed);
+    $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
+    $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
+
+    $('#lcs3Proceed').click(handleLCS3Proceed);
+    $('#lcs4Proceed').click(handleLCS4Proceed);
   }
   
   init();

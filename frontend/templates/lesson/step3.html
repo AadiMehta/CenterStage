@@ -26,6 +26,9 @@
             </div>
             <div class="boarding-row">
                <div class="lesson-availability">
+                  <form id="step3" action="" method="post">
+                  {% csrf_token %}
+                  {{ wizard.management_form }}
                   <div class="comn-row mb-5">
                      <div class="comn-col width250">
                         <button type="button" class="btn-select-session">Public</button>
@@ -54,16 +57,19 @@
                         <div class="upImage-video-col">
                            <div class="upImage-video-inner">
                               <i><img src="{% static 'images/video.png' %}" alt="" /></i>
-                              <input class="form-control" placeholder="Add your video URL">
+                              <input class="form-control" placeholder="Add your video URL" name="step3-link" value="{{wizard.form.link.value|default_if_none:''}}">
                            </div>
                            <span class="dtl-txt">Please add a YouTube (or any other) link for your introduction video.
                            Recommended length 30 - 60 Seconds</span>
                         </div>
                      </div>
                   </div>
-                  <div class="btn-area"> 
-                     <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                  <div class="btn-area">
+                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary btn-lg btn-theme" style="margin-right:30px; float: left">
+                        <i><img src="{% static 'images/next.svg' %}" alt="" style="transform: rotateY(180deg);"/></i><span>Previous</span></button>
+                     <button id="lcs3Proceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                   </div>
+                  </form>
                </div>
             </div>
          </div>

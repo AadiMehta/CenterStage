@@ -25,15 +25,19 @@
                <h2>Session Schedule <span class="required">*</span></h2>
             </div>
             <div class="boarding-row">
+               <form id="step2" action="" method="post">
+               {% csrf_token %}
+               {{ wizard.management_form }}
                <div class="boarding-left">
                   <div class="form-group">
+                     <input id="slot_type" name="step2-slot_type" type="text" value="{{wizard.form.slot_type.value|default_if_none:'fixed'}}">
                      <div class="select-dateTime-row">
                         <div class="select-dateTime-col">
-                           <button type="button" class="btn-select-session">Flexible Date & Time</button>
+                           <button id="flexible-time-slot" type="button" class="btn-select-session  {% if wizard.form.slot_type.value == 'flexible' %}selected{% endif %}" data-slot-type="flexible">Flexible Date & Time</button>
                            <span class="select-session-text">By selecting this option, students can book any time during your office hours. Please select office hours on your calendar to start receiving bookings after creating this lesson</span>
                         </div>
                         <div class="select-dateTime-col">
-                           <button type="button" class="btn-select-session selected">Select Date & Time</button>
+                           <button id="fixed-time-slot" type="button" class="btn-select-session {% if wizard.form.slot_type.value == None or wizard.form.slot_type.value == 'fixed' %}selected{% endif %}" data-slot-type="fixed">Select Date & Time</button>
                            <span class="select-session-text">By selecting this option, students will be
                            required to follow lesson timings set by you</span>
                         </div>
@@ -45,7 +49,7 @@
                            <div class="form-group">
                               <label>Start Date <span class="required">*</span></label>
                               <div class="liner-select-drop">
-                                 <select class="form-control">
+                                 <select class="form-control" name="step2-start_date">
                                     <option>Set Start Date</option>
                                  </select>
                               </div>
@@ -55,7 +59,7 @@
                            <div class="form-group">
                               <label>End Date <span class="required">*</span></label>
                               <div class="liner-select-drop">
-                                 <select class="form-control">
+                                 <select class="form-control" name="step2-end_date">
                                     <option>Set End Date</option>
                                  </select>
                               </div>
@@ -201,7 +205,7 @@
                      <div class="form-group">
                         <label>Number of Sessions</label>
                         <div class="liner-inp"> 
-                           <input type="text" class="form-control" placeholder="01">
+                           <input type="text" name="step2-no_of_sessions" class="form-control" placeholder="01" value="{{wizard.form.no_of_sessions.value|default_if_none:''}}">
                         </div>
                      </div>
                      <div class="form-group">
@@ -305,10 +309,13 @@
                         </div>
                      </div>
                   </div>
-                  <div class="btn-area"> 
-                     <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}%" alt="" /></i></button>
+                  <div class="btn-area">
+                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary btn-lg btn-theme" style="margin-right:30px; float: left">
+                        <i><img src="{% static 'images/next.svg' %}" alt="" style="transform: rotateY(180deg);"/></i><span>Previous</span></button>
+                     <button id="lcs2Proceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                   </div>
                </div>
+               </form>
                <div class="boarding-right">
                   <img src="{% static 'images/schdule-graphics.svg' %}" alt="" />
                </div>
