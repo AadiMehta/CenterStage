@@ -114,6 +114,9 @@
     .inner-page h2{font-size:28px;}
     .inner-page{font-size: 15px;}
     .btn-btm-txt {font-size:16px;}
+    .boarding-form-area {max-width: 450px;}
+    .dominname-area {right: -30%; font-size: 14px;}
+    .dominname-area i {width: 28px;}
 }
 
 @media only screen and (max-width:991px) {
@@ -152,6 +155,8 @@
     .inner-page h1{font-size:32px;}
     .inner-page h2{font-size:22px;}
     .inner-page p{margin-bottom:1.5rem;}
+    .boarding-form-area {max-width: 100%;}
+    .dominname-area {right: 0; position: relative;}
 }
 @media only screen and (max-width:767px) {
     .title-row h2{font-size:32px;}

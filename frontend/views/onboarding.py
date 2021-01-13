@@ -1,5 +1,4 @@
 import urllib
-import os
 from django.conf import settings
 from django.views.generic import TemplateView
 from frontend.utils import get_user_from_token
@@ -7,7 +6,7 @@ from frontend.utils import get_user_from_token
 
 class AccountConnectedTemplate(TemplateView):
     """
-    This template is rendered on Zoom connect sucess
+    This template is rendered on Zoom connect success
     to close the window and refresh the parent page
     """
     template_name = "zoom/zoom_auth_success.html"
@@ -15,7 +14,11 @@ class AccountConnectedTemplate(TemplateView):
 
 class OnboardStep1TemplateView(TemplateView):
     """
-    Onboarding step 1
+    After sign up the user is asked for following
+    basic details:
+        - Academy name
+        - description
+        - Custom Page name
     """
     template_name = "onboarding/step1.html"
 
@@ -23,6 +26,7 @@ class OnboardStep1TemplateView(TemplateView):
         context = super().get_context_data(**kwargs)
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        context['site_name'] = settings.SITE_URL
         return context
 
 
