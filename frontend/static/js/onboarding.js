@@ -6,7 +6,7 @@
  * @param {String} subDomain 
  */
 function validateSubdomain(subDomain) {
-  return /^[a-zA-Z]*/.test(subDomain) && !/[!@#$%^&*()_+]/.test(subDomain);
+  return /^([a-zA-Z0-9]+[\w\-]+[a-zA-Z0-9]+)$/.test(subDomain);
 }
 
 /**
@@ -90,6 +90,8 @@ function checkSubdomainAvailability(event) {
   const token = getCookie('auth_token');
 
   if (!validateSubdomain(subDomain)) {
+    $('#onboardingPageNameError').text('Minimum length of subdomain should be 3 characters and can only include \'-\' and \'_\'');
+    $('#onboardingPageNameError').show()
     return;
   }
 
@@ -121,29 +123,52 @@ function checkSubdomainAvailability(event) {
  * @param {String} description 
  * @param {String} subDomain 
  */
-function createTeacherProfile(profileUrl, academyName, description, subDomain) {
+function createTeacherProfile(academyName, description, subDomain, profileUrl) {
     const token = getCookie('auth_token');
-    $.ajax('/api/teacher/profile/', {
-      type: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      data: JSON.stringify({
-        "profile_image": profileUrl,
-        "academy_name": academyName,
-        "description": description,
-        "subdomain": subDomain
-      }),
-      success: function (data, status, xhr) {
-        window.location.href = "/onboarding/accounts";
-      },
-      error: function (jqXhr, textStatus, errorMessage) {
-        // Todo: Show Error Message on UI
-        console.log('Error while creating teacher profile', errorMessage)
-        // window.location.href = "/onboarding/step2";
-      }
-    });
+    if (profileUrl == null) {
+      $.ajax('/api/teacher/profile/', {
+        type: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+          "academy_name": academyName,
+          "description": description,
+          "subdomain": subDomain
+        }),
+        success: function (data, status, xhr) {
+          window.location.href = "/onboarding/accounts";
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+          // Todo: Show Error Message on UI
+          console.log('Error while creating teacher profile', errorMessage)
+          // window.location.href = "/onboarding/step2";
+        }
+      });
+    } else {
+      $.ajax('/api/teacher/profile/', {
+        type: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+          "profile_image": profileUrl,
+          "academy_name": academyName,
+          "description": description,
+          "subdomain": subDomain
+        }),
+        success: function (data, status, xhr) {
+          window.location.href = "/onboarding/accounts";
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+          // Todo: Show Error Message on UI
+          console.log('Error while creating teacher profile', errorMessage)
+          // window.location.href = "/onboarding/step2";
+        }
+      });
+    }
 }
 
     /**
@@ -176,6 +201,7 @@ function handleZoomDisconnectAccount (event) {
  */
 function onProceedButtonClicked () {
     let isValid = true;
+    let isProfileUrl = true;
     $('#onboardingAcademyNameError').hide()
     $('#onboardingDescriptionError').hide()
     $('#onboardingPageNameError').hide()
@@ -185,27 +211,31 @@ function onProceedButtonClicked () {
     const description = $('#onboardingDescription')[0].value;
     const subDomain = $('#onboardingPageName')[0].value;
     if (profileUrl === 'data:image/jpeg;base64') {
-      $('#onboardingProfileImageError').text('Please Select Profile Image');
-      $('#onboardingProfileImageError').show()
-      isValid = false;
+//      $('#onboardingProfileImageError').text('Please select profile image');
+//      $('#onboardingProfileImageError').show()
+        isProfileUrl = false
     }
     if (!academyName) {
-        $('#onboardingAcademyNameError').text('Please Provide Academy Name');
+        $('#onboardingAcademyNameError').text('Please provide academy name');
         $('#onboardingAcademyNameError').show()
         isValid = false;
     }
     if (!description) {
-        $('#onboardingDescriptionError').text('Please Provide Description');
+        $('#onboardingDescriptionError').text('Please provide description');
         $('#onboardingDescriptionError').show()
         isValid = false;
     }
     if (!subDomain && validateSubdomain(subDomain)) {
-        $('#onboardingPageNameError').text('Please Provide Page Name');
+        $('#onboardingPageNameError').text('Please provide page name');
         $('#onboardingPageNameError').show()
         isValid = false;
     }
     if (isValid && window.subdomainValid) {
-        createTeacherProfile(profileUrl, academyName, description, subDomain)
+        if (isProfileUrl) {
+            createTeacherProfile(academyName, description, subDomain, profileUrl)
+        } else {
+            createTeacherProfile(academyName, description, subDomain)
+        }
     }
 }
 

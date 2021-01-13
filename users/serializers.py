@@ -148,7 +148,6 @@ class SubdomainCheckSerializer(serializers.Serializer):
                 teacher = TeacherProfile.objects.get(subdomain=value)
                 raise serializers.ValidationError("Subdomain not available or already in use.")
             except TeacherProfile.DoesNotExist:
-                print("Actual right case")
                 return value
         else:
             raise serializers.ValidationError("Invalid subdomain. Subdomain has to be atleast 4 character long "
