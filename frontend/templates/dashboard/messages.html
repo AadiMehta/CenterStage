@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'dashboard/modals.html' %}
+<div class="wrapper-main">
+   <div class="sidebar ">
+      <div class="logo-area">
+         <a href="#"><img class="main-logo-img" src="{% static 'images/logo-main.svg' %}" alt="" /></a> 
+         <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
+      </div>
+      <div class="sidebar-menu">
+         <ul id="accordion">
+            <li>
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>        
+               <ul id="One" class="collapse submenu" data-parent="#accordion">
+                  <li class="active"><a href="#">- Upcoming Sessions <span class="badge-small"></span></a></li>
+                  <li><a href="#">- Past Sessions</a></li>
+                  <li><a href="#">- Calendar</a></li>
+               </ul>
+            </li>
+            <li><a href="#"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages</span><span class="badge-small"></span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons</span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive</span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
+            <li>
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
+               <ul id="Five" class="collapse submenu" data-parent="#accordion">
+                  <li><a href="#">- Info</a></li>
+                  <li><a href="#">- Payments</a></li>
+                  <li><a href="#">- Alerts</a></li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="main">
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+               <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
+               <div class="header-prof-name">
+                  <h3>Thomas Edward</h3>
+                  <span class="desigation">Web Developer and JAVA Expert</span>
+               </div>
+            </div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+            </div>
+         </div>
+      </header>
+      <div class="main-content">
+         <div class="cta-links-wrap">
+            <ul class="cta-links">
+               <li>
+                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-meeting.svg' %}" alt="" /></i>
+                  <span>New Meeting</span>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <a class="dropdown-item" href="#">Free Meeting</a>
+                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#meeting">Paid Meeting</a>
+                  </div>
+               </li>
+               <li>
+                  <a href="#">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
+                  <span>Schedule Meeting</span>
+                  </a>
+               </li>
+               <li>
+                  <a href="#">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-lesson.svg' %}" alt="" /></i>
+                  <span>New Lesson</span>
+                  </a>
+               </li>
+               <li class="p-coaching">
+                  <a href="#" data-toggle="modal" data-target="#pcoatching">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
+                  <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
+                  </i>
+                  <span>Personal Coaching</span>
+                  </a>
+               </li>
+            </ul>
+         </div>
+         <div class="admin-mid-sec container-fluid">
+            <h2 class="title-2">My Messages</h2>
+            <div class="search-row">
+               <div class="searchInp-col">
+                  <img src="{% static 'images/icon-search.svg' %}" alt="" />
+                  <input type="search" class="form-control" placeholder="Search Sessions" />
+               </div>
+               <div class="search-tags">
+                  <a href="#" class="tag-link">Today</a>
+                  <a href="#" class="tag-link">This Week</a>
+                  <a href="#" class="tag-link">Recent</a>
+                  <a href="#" class="tag-link">A - Z</a>
+                  <a href="#" class="tag-link">Z - A</a>
+               </div>
+            </div>
+            <div class="my-messages-wrap">
+               <div class="my-messages-left-col rounded-box" id="mC-scroll">
+                  <ul class="msg-list">
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li class="active">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina <span class="notifaction-badge">4</span></h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <div class="msg-text-time">
+                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
+                              </div>
+                           </div>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+               <div class="my-messages-right-col rounded-box">
+                  <div class="msg-header">
+                     <div class="profimg-name">
+                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        <div class="prof-name">
+                           <h4>Sunny Thomas</h4>
+                           <span class="desigation">Core Java Student</span>
+                        </div>
+                     </div>
+                     <div class="msg-h-actions">
+                        <div class="msg-h-action-col"><a href="#" class="btn-rounded dropdown-toggle">Request Review</a></div>
+                        <div class="msg-h-action-col">
+                           <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/zoom-icon.png' %}" alt=""></a>
+                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="will-change: transform;">
+                              <a class="dropdown-item" href="#">Free Meeting</a>
+                              <a class="dropdown-item" href="#">Paid Meeting</a>
+                           </div>
+                        </div>
+                        <div class="msg-h-action-col">
+                           <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/doted-icon.png' %}" alt=""></a>
+                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="will-change: transform;">
+                              <a class="dropdown-item" href="#">Mark As Unread</a>
+                              <a class="dropdown-item" href="#">Report Thread</a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="chatMsg-wrap" id="mC-scroll2">
+                     <div class="request-action-row">
+                        <button type="button" class="request-action-btn accept bg-green"><i><img src="{% static 'images/check-rounded.svg' %}" alt="" /></i> <span>Accept</span></button>
+                        <button type="button" class="request-action-btn bg-red"><i><img src="{% static 'images/close-rounded.svg' %}" alt="" /></i> <span>Ignore</span></button>
+                     </div>
+                     <div class="messages-row">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <div class="msg-activity-row">
+                                 <h4>Sunny Thomas</h4>
+                                 <time>09:33 PM</time> <button class="link-reply" type="button"><img src="{% static 'images/reply.svg' %}" alt="" /></button>
+                                 <div class="msg-date">16 Nov 2020</div>
+                              </div>
+                              <div class="chat-row">
+                                 Hello, Good Evening Sir!<br/ >
+                                 Want to talk about recent session of core java development
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="messages-row messages-child">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <div class="msg-activity-row">
+                                 <h4>You</h4>
+                                 <time>09:33 PM</time>
+                              </div>
+                              <div class="chat-row">
+                                 Hello, Sunny<br />
+                                 Very good evening! Please go ahead.... (Y)
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="messages-row">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <div class="msg-activity-row">
+                                 <h4>Sunny Thomas</h4>
+                                 <time>09:33 PM</time> <button class="link-reply" type="button"><img src="{% static 'images/reply.svg' %}" alt="" /></button>
+                                 <div class="msg-date">16 Nov 2020</div>
+                              </div>
+                              <div class="chat-row">
+                                 Lorem ipsum doller sit amet!<br />
+                                 Eiusmod tempor incididunt ut labore et dolore magna aliqua.<br />
+                                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="messages-row messages-child">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <div class="msg-activity-row">
+                                 <h4>You</h4>
+                                 <time>09:33 PM</time>
+                              </div>
+                              <div class="chat-row">
+                                 Hello, Sunny<br />
+                                 Very good evening! Please go ahead.... (Y)
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="msg-footer">
+                     <div class="addNewPost-inp">
+                        <i><img src="{% static 'images/write.svg' %}" alt=""></i>
+                        <input class="form-control" type="text" placeholder="write message...">
+                     </div>
+                     <div class="cmntPost-actions">
+                        <button type="button"><img src="{% static 'images/send.svg' %}" alt=""></button>
+                        <button type="button"><img src="{% static 'images/image.svg' %}" alt=""></button>
+                        <button type="button"><img src="{% static 'images/documents.svg' %}" alt=""></button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- custom scrollbar plugin -->
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script>
+   (function($){
+         $(window).on("load",function(){
+            $("#mC-scroll").mCustomScrollbar({
+               theme:"minimal"
+            });
+            $("#mC-scroll2").mCustomScrollbar({
+               theme:"minimal"
+         });
+         });
+      })(jQuery);
+</script>
+{% endblock %}

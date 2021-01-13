@@ -38,6 +38,11 @@ from frontend.views.lesson import (
     LessonCreateStep1TemplateView, LessonCreateStep2TemplateView, LessonCreateStep3TemplateView,
     LessonCreateStep4TemplateView, LessonCreatePreviewTemplateView, LessonCreateWizard
 )
+from frontend.views.dashboard import (
+    DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
+    DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
+    DashboardSchedulesUpcomingSessions, DashboardStatistics
+)
 from engine.views import LessonAPIView
 
 
@@ -109,6 +114,16 @@ urlpatterns = [
     # Lesson Wizard
     path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS)),
 
+    # Dashboard Templates
+    path('dashboard/account/alerts', DashboardAccountAlerts.as_view(), name="dashboard-account-alerts"),
+    path('dashboard/account/info', DashboardAccountInfo.as_view(), name="dashboard-account-info"),
+    path('dashboard/account/payment', DashboardAccountPayment.as_view(), name="dashboard-account-payment"),
+    path('dashboard/schedules/pastsessions', DashboardSchedulesPastSessions.as_view(), name="dashboard-schedules-past-sessions"),
+    path('dashboard/schedules/upcoming', DashboardSchedulesUpcomingSessions.as_view(), name="dashboard-schedules-upcoming-sessions"),
+    path('dashboard/lessons', DashboardLessons.as_view(), name="dashboard-lessons"),
+    path('dashboard/messages', DashboardMessages.as_view(), name="dashboard-messages"),
+    path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
+ 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
