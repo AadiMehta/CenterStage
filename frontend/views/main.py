@@ -1,13 +1,11 @@
-import urllib
-import os
-from django.conf import settings
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
-from frontend.utils import get_user_from_token
+from frontend.utils import get_user_from_token, is_authenticated
 
 
 class HomeTemplateView(TemplateView):
     """
-    Centerstag home page
+    Centerstage home page
     """
     template_name = "home.html"
 
@@ -16,6 +14,12 @@ class HomeTemplateView(TemplateView):
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if is_authenticated(self.request.COOKIES.get('auth_token')):
+            return redirect('dashboard-lessons')
+
+        return super(HomeTemplateView, self).dispatch(request, *args, **kwargs)
 
 
 class TermsAndConditionsView(TemplateView):
