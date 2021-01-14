@@ -166,23 +166,23 @@
         </button>
         <div class="modal-body verticalTabb">
             <div class="nav flex-column nav-pills tabb-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link active" id="v-pills-device-tab" data-toggle="pill" href="#v-pills-device" role="tab" aria-controls="v-pills-device" aria-selected="true"><i><img src="images/icon-laptop.svg" alt="" /></i> My Device</a>
-                <a class="nav-link" id="v-pills-link-tab" data-toggle="pill" href="#v-pills-link" role="tab" aria-controls="v-pills-link" aria-selected="false"><i><img src="images/icon-link.svg" alt="" /></i> Link (URL)</a>
-                <a class="nav-link" id="v-pills-web-tab" data-toggle="pill" href="#v-pills-web" role="tab" aria-controls="v-pills-web" aria-selected="false"><i><img src="images/icon-websearch.svg" alt="" /></i> Web Search</a>
-                <a class="nav-link" id="v-pills-facebook-tab" data-toggle="pill" href="#v-pills-facebook" role="tab" aria-controls="v-pills-facebook" aria-selected="false"><i><img src="images/icon-facebook.svg" alt="" /></i> Facebook</a>
-                <a class="nav-link" id="v-pills-instagram-tab" data-toggle="pill" href="#v-pills-instagram" role="tab" aria-controls="v-pills-instagram" aria-selected="false"><i><img src="images/icon-insta.svg" alt="" /></i> Instagram</a>
-                <a class="nav-link" id="v-pills-gd-tab" data-toggle="pill" href="#v-pills-gd" role="tab" aria-controls="v-pills-gd" aria-selected="false"><i><img src="images/icon-gd.svg" alt="" /></i> Google Drive</a>
+                <a class="nav-link active" id="v-pills-device-tab" data-toggle="pill" href="#v-pills-device" role="tab" aria-controls="v-pills-device" aria-selected="true"><i><img src="{% static 'images/icon-laptop.svg' %}" alt="" /></i> My Device</a>
+                <a class="nav-link" id="v-pills-link-tab" data-toggle="pill" href="#v-pills-link" role="tab" aria-controls="v-pills-link" aria-selected="false"><i><img src="{% static 'images/icon-link.svg' %}" alt="" /></i> Link (URL)</a>
+                <a class="nav-link" id="v-pills-web-tab" data-toggle="pill" href="#v-pills-web" role="tab" aria-controls="v-pills-web" aria-selected="false"><i><img src="{% static 'images/icon-websearch.svg' %}" alt="" /></i> Web Search</a>
+                <a class="nav-link" id="v-pills-facebook-tab" data-toggle="pill" href="#v-pills-facebook" role="tab" aria-controls="v-pills-facebook" aria-selected="false"><i><img src="{% static 'images/icon-facebook.svg' %}" alt="" /></i> Facebook</a>
+                <a class="nav-link" id="v-pills-instagram-tab" data-toggle="pill" href="#v-pills-instagram" role="tab" aria-controls="v-pills-instagram" aria-selected="false"><i><img src="{% static 'images/icon-insta.svg' %}" alt="" /></i> Instagram</a>
+                <a class="nav-link" id="v-pills-gd-tab" data-toggle="pill" href="#v-pills-gd" role="tab" aria-controls="v-pills-gd" aria-selected="false"><i><img src="{% static 'images/icon-gd.svg' %}" alt="" /></i> Google Drive</a>
             </div>
             <div class="tab-content tabb-right" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-device" role="tabpanel" aria-labelledby="v-pills-device-tab">
                 <div class="tabselect-icon-row">
-                    <img src="images/icon-laptop.svg" alt="" />
+                    <img src="{% static 'images/icon-laptop.svg' %}" alt="" />
                 </div>
                 <div class="file-dropbox">
                     <input type="file" class="file-drop-inp" />
                     <div class="fileDrop-content">
                         <figure class="file-dropbox-icon">
-                            <img src="images/add-file.svg" alt="" />
+                            <img src="{% static 'images/add-file.svg' %}" alt="" />
                         </figure>
                         <h2>Select Files to Upload</h2>
                         <span class="grayText">or Drag and Drop, Copy and Paste Files</span>
@@ -205,20 +205,20 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body text-center">
             <div class="finish-graphics">
-                <img src="images/finish-graphics.svg" alt="" />
+                <img src="{% static 'images/finish-graphics.svg' %}" alt="" />
             </div>
             <h2>Thank you for completing your lesson</h2>
             <h3>How was your overall experience?</h3>
             <div class="rating-row">
-                <a href="#"><img src="images/rating-fill.svg" alt="" /></a>
-                <a href="#"><img src="images/rating-fill.svg" alt="" /></a>
-                <a href="#"><img src="images/rating-fill.svg" alt="" /></a>
-                <a href="#"><img src="images/rating-blank.svg" alt="" /></a>
-                <a href="#"><img src="images/rating-blank.svg" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt="" /></a>
             </div>
             <div class="form-group">
                 <div class="liner-inp"> 
@@ -226,7 +226,7 @@
                 </div>
             </div>
             <div class="finish-btn-area">
-                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#share"><span>Finish</span> <i><img src="images/next.svg" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#share"><span>Finish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                 <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Report Issue</button>
             </div>
         </div>
@@ -237,7 +237,7 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body">
             <div class="share-modal-wrap">
@@ -255,12 +255,12 @@
                     <h5>Share to</h5>
                     <p>Sharing your lesson on social media right now will increase bookings</p>
                     <div class="social-icons">
-                        <a href="#"><img src="images/whatsapp-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/telegram-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/facebook-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/linkedin-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/twitter-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/email-icon.svg" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
                     </div>
                 </div>
                 <div class="btn-area mt-5 twobtn-wrap">
@@ -268,7 +268,7 @@
                 </div>
                 </div>
                 <div class="share-graphics">
-                <img src="images/share-graphics.svg" alt="" />
+                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
                 </div>
             </div>
         </div>
