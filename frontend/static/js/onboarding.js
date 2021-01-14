@@ -248,6 +248,14 @@ function onProceed2ButtonClicked () {
 }
 
 /**
+ * On Stage 3, finish button clicked
+ * Route to teacher dashboard
+ */
+function onFinish3ButtonClicked () {
+    window.location.href = "/dashboard/lessons";
+}
+
+/**
  * Connect Zoom Account Handler
  */
 function handleZoomConnectAccount () {
@@ -274,6 +282,7 @@ function init() {
   $('#profileImageContainer').click(openImageSelector);
   $('#onboardingProceed').click(onProceedButtonClicked);
   $('#onboarding2Proceed').click(onProceed2ButtonClicked);
+  $('#onboarding3Finish').click(onFinish3ButtonClicked);
   $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
   $('#connectZoomAccount').click(handleZoomConnectAccount);
 }
