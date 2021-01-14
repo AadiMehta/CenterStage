@@ -95,14 +95,17 @@ class LessonCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        ("step1", LessonCreateFormStep1),
-        ("step2", LessonCreateFormStep2),
+        # ("step1", LessonCreateFormStep1),
+        # ("step2", LessonCreateFormStep2),
         ("step3", LessonCreateFormStep3),
         ("step4", LessonCreateFormStep4),
         ("preview", LessonCreateFormPreview),
     ]
 
     def get_context_data(self, form, **kwargs):
+        print(form)
+        print(kwargs)
+        print( self.get_all_cleaned_data())
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
         if self.steps.current == 'preview':
             context.update({'form_data': self.get_all_cleaned_data()})

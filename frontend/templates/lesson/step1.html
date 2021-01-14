@@ -57,8 +57,7 @@
                         <label>Number of Participants <span>*</span></label>
                         <div class="liner-select-drop">
                            <select id="lessonNoOfParticipants" name="step1-no_of_participants" class="form-control">
-                              {% comment %} <option value="none">Select Number of Participants</option> {% endcomment %}
-                              <option value="100">Select Number of Participants</option>
+                              <option value="none">Select Number of Participants</option>
                               <option value="200" {% if wizard.form.no_of_participants.value == "200" %}selected{% endif %}>200</option>
                               <option value="300" {% if wizard.form.no_of_participants.value == "300" %}selected{% endif %}>300</option>
                               <option value="400" {% if wizard.form.no_of_participants.value == "400" %}selected{% endif %}>400</option>
@@ -72,8 +71,7 @@
                         <label>Lesson Language <span>*</span></label>
                         <div class="liner-select-drop">
                            <select id="lessonLanguage" name="step1-language" class="form-control">
-                              {% comment %} <option value="none">Set language</option> {% endcomment %}
-                              <option value="test">Set language</option>
+                              <option value="none">Set language</option>
                               <option value="english" {% if wizard.form.language.value == "english" %}selected{% endif %}>English</option>
                               <option value="hindi" {% if wizard.form.language.value == "hindi" %}selected{% endif %}>Hindi</option>
                            </select>
@@ -115,5 +113,5 @@
 </div>
 {% endblock %}
 {% block script %}
-    <script src="{% static '/js/lesson.js' %}" type="text/javascript"></script> 
+    <script src="{% static '/js/lesson/step1.js' %}" type="text/javascript"></script> 
 {% endblock %}
