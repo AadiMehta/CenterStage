@@ -11,7 +11,7 @@
 <div class="wrapper-main">
    <div class="sidebar ">
       <div class="logo-area">
-         <a href="#"><img class="main-logo-img" src="{% static 'images/logo-main.svg' %}" alt="" /></a> 
+         <a href="/"><img class="main-logo-img" src="{% static 'images/CenterStage-WhiteLogo.svg' %}" alt="" /></a>
          <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
       </div>
       <div class="sidebar-menu">
@@ -46,8 +46,8 @@
             <div class="header-prof-col">
                <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
                <div class="header-prof-name">
-                  <h3>Thomas Edward</h3>
-                  <span class="desigation">Web Developer and JAVA Expert</span>
+                  <h3>{{user.get_full_name}}</h3>
+                  <span class="desigation">{{user.teacher_profile_data.description}}</span>
                </div>
             </div>
             <div class="header-actions-col">
@@ -357,7 +357,7 @@
 
 {% block script %}
 <!-- custom scrollbar plugin -->
-<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
 <script>
    (function($){
          $(window).on("load",function(){

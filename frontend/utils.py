@@ -9,3 +9,14 @@ def get_user_from_token(auth_token):
         return User.objects.get(id=user_id)
     except User.DoesNotExist:
         pass
+
+
+def is_authenticated(auth_token):
+    """
+    Validate if the user is authenticated one
+    """
+    try:
+        user = Token.objects.get(key=auth_token)
+        return True
+    except Token.DoesNotExist:
+        return False

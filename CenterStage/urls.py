@@ -9,7 +9,7 @@ Function views
 Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
+Including another URL conf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
@@ -118,8 +118,10 @@ urlpatterns = [
     path('dashboard/account/alerts', DashboardAccountAlerts.as_view(), name="dashboard-account-alerts"),
     path('dashboard/account/info', DashboardAccountInfo.as_view(), name="dashboard-account-info"),
     path('dashboard/account/payment', DashboardAccountPayment.as_view(), name="dashboard-account-payment"),
-    path('dashboard/schedules/pastsessions', DashboardSchedulesPastSessions.as_view(), name="dashboard-schedules-past-sessions"),
-    path('dashboard/schedules/upcoming', DashboardSchedulesUpcomingSessions.as_view(), name="dashboard-schedules-upcoming-sessions"),
+    path('dashboard/schedules/pastsessions', DashboardSchedulesPastSessions.as_view(),
+         name="dashboard-schedules-past-sessions"),
+    path('dashboard/schedules/upcoming', DashboardSchedulesUpcomingSessions.as_view(),
+         name="dashboard-schedules-upcoming-sessions"),
     path('dashboard/lessons', DashboardLessons.as_view(), name="dashboard-lessons"),
     path('dashboard/messages', DashboardMessages.as_view(), name="dashboard-messages"),
     path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
