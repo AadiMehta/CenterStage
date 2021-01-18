@@ -131,17 +131,17 @@ header.header.sticky .top-navigation {padding-top:15px;}
 .stud-name h3 {font-size: 24px; line-height: normal;  margin: 0;}
 .stud-name span {font-size: 18px; font-weight: 300;}
 .studient-msg {display: inline-block; width: 100%; padding: 0px 3rem; position: relative;}
-.studient-msg:before{content: ""; position: absolute; left: 0px; top: -25px; background: url(../images/quote.png) left top no-repeat; width: 21px; height: 20px;}
-.studient-msg:after{content: ""; position: absolute; right: 0px; bottom: -25px; background: url(../images/quote.png) left top no-repeat; width: 21px; height: 20px;}
+.studient-msg:before{content: ""; position: absolute; left: 0px; top: -25px; background: url(../../images/quote.png) left top no-repeat; width: 21px; height: 20px;}
+.studient-msg:after{content: ""; position: absolute; right: 0px; bottom: -25px; background: url(../../images/quote.png) left top no-repeat; width: 21px; height: 20px;}
 #accordion .card {background: #181818;  margin-bottom: 15px;}
 #accordion .card .card-header .btn {width: 100%;  text-align: left;  color: #fff;  font-size: 24px; font-weight: 700; text-decoration: none; position: relative; padding-right: 50px;}
 #accordion .card .card-body {font-size: 20px; font-weight: 300; padding: 0 1.25rem 1.25rem 2rem;}
 .faqs-wrap h4 {font-size: 26px; margin:40px 0px 15px 0px;}
 .text-link{ color: #13A0F0; display: inline-block; text-decoration: underline !important;}
-#accordion .card .card-header .btn:after{content: ""; position: absolute; right: 0px; top:15px; background: url(../images/arrow.svg) left top no-repeat; width: 22px; height: 22px;}
+#accordion .card .card-header .btn:after{content: ""; position: absolute; right: 0px; top:15px; background: url(../../images/arrow.svg) left top no-repeat; width: 22px; height: 22px;}
 #accordion .card .card-header .btn.btn-link:after{transform: rotate(90deg); right:10px;}
 #accordion .card .card-header .btn.btn-link.collapsed:after{transform: rotate(0deg); right:0px;}
-.timechanged-sec{text-align: center; height: 580px; background: url(../images/banner-img.jpg) center center no-repeat; background-size: cover; display: flex; align-items: center;}
+.timechanged-sec{text-align: center; height: 580px; background: url(../../images/banner-img.jpg) center center no-repeat; background-size: cover; display: flex; align-items: center;}
 .timechanged-sec h2{font-size: 62px;}
 .footer{padding:5rem 0px; background: #000; color: #fff;}
 .footer-address {display: block; padding:1rem 0 0 4.2rem;  font-size: 16px; font-weight: 300; line-height: 1.8;}
@@ -158,8 +158,8 @@ footer.footer h2 {font-size: 18px; text-transform: capitalize; margin-bottom: 2r
 video {width: 100%; position: relative; z-index: 0;}
 .owl-dots, .owl-nav button span{display: none;}
 .owl-carousel .owl-nav button {width: 48px; height: 48px; border-radius: 100%;  position: absolute;  left:0px; top: 50%; margin-top: -48px;}
-.owl-carousel .owl-nav button.owl-prev{background: url(../images/arrow-left.svg) left top no-repeat; background-size: 100%;}
-.owl-carousel .owl-nav button.owl-next{background: url(../images/arrow-right.svg) left top no-repeat; background-size: 100%; right:0px; left: inherit;}
+.owl-carousel .owl-nav button.owl-prev{background: url(../../images/arrow-left.svg) left top no-repeat; background-size: 100%;}
+.owl-carousel .owl-nav button.owl-next{background: url(../../images/arrow-right.svg) left top no-repeat; background-size: 100%; right:0px; left: inherit;}
 .featured-course-sec .owl-carousel .owl-nav button.owl-prev {left:8%;}
 .featured-course-sec .owl-carousel .owl-nav button.owl-next {right:8%;}
 .stud-saying-slide .owl-nav {position: absolute;  left: 33%;  bottom: 0;  width: 180px;  float: left;}

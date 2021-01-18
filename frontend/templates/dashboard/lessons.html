@@ -2,38 +2,38 @@
 {% load static %}
 
 {% block style %}
-<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
-<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 {% include 'dashboard/modals.html' %}
 <div class="wrapper-main">
-   <div class="sidebar ">
+   <div class="sidebar">
       <div class="logo-area">
-         <a href="/"><img class="main-logo-img" src="{% static 'images/CenterStage-WhiteLogo.svg' %}" alt="" /></a>
+         <a href="/"><img class="main-logo-img" src="{% static 'images/CenterStage-BlackLogo.svg' %}" alt="" /></a>
          <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
       </div>
       <div class="sidebar-menu">
          <ul id="accordion">
             <li>
-               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>        
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>
                <ul id="One" class="collapse submenu" data-parent="#accordion">
-                  <li class="active"><a href="#">- Upcoming Sessions <span class="badge-small"></span></a></li>
-                  <li><a href="#">- Past Sessions</a></li>
+                  <li><a href="#">- Upcoming Sessions <span class="badge-small"></span></a></li>
+                  <li><a href="{% url 'dashboard-schedules-past-sessions' %}">- Past Sessions</a></li>
                   <li><a href="#">- Calendar</a></li>
                </ul>
             </li>
-            <li><a href="#"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages</span><span class="badge-small"></span></a></li>
+            <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages</span><span class="badge-small"></span></a></li>
             <li><a href="#"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons</span></a></li>
             <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive</span></a></li>
-            <li><a href="#"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
+            <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
             <li>
                <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
                <ul id="Five" class="collapse submenu" data-parent="#accordion">
-                  <li><a href="#">- Info</a></li>
-                  <li><a href="#">- Payments</a></li>
-                  <li><a href="#">- Alerts</a></li>
+                  <li><a href="{% url 'dashboard-account-info' %}">- Info</a></li>
+                  <li class="active"><a href="{% url 'dashboard-account-payment' %}">- Payments</a></li>
+                  <li><a href="{% url 'dashboard-account-alerts' %}">- Alerts</a></li>
                </ul>
             </li>
          </ul>
