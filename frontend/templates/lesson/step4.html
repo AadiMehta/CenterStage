@@ -33,25 +33,32 @@
                   <div class="form-group">
                      <div class="input-area addmore-fields">
                         <label>What Your Students Will Learn</label>
-                        <div class="liner-inp mb-2"> 
-                           <input type="text" name="step4-learn" class="form-control" placeholder="Lorem ipsum dolor sit amet, consectetur adipiscing" value="{{wizard.form.learn.value|default_if_none:''}}"/>
+                        <input  id="goals" name="step4-goals" style="display: none"/>
+                        <div class="liner-inp mb-2" id="lastGoalInput"> 
+                           <input type="text" class="form-control goal-input" placeholder="Add a goal..." data-goal-index="0"/>
+                           <button id="addMoreGoalButton" class="btn-addmore add-goal-button" type="button"><img src="{% static 'images/add-icon.svg' %}" alt="" /></button>
                         </div>
-                        <div class="liner-inp mb-2"> 
+                        <div class="liner-inp mb-2" id="referenceGoalInput" style="display:none" data-index="1"> 
                            <input type="text" class="form-control" placeholder="Add a goal..." />
-                           <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt="" /></button>
                         </div>
                         <span class="addmore-text">Press enter to add more</span>
                      </div>
+                     <p id="goalError" style="color:red;"></p>
                   </div>
                   <div class="form-group">
                      <div class="input-area addmore-fields">
                         <label>Lesson Requirements</label>
-                        <div class="liner-inp mb-2"> 
-                           <input type="text" class="form-control" placeholder="Add requirements" />
-                           <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt="" /></button>
+                        <input  id="requirements" name="step4-requirements" style="display: none"/>
+                        <div class="liner-inp mb-2" id="lastRequirementInput"> 
+                           <input type="text" class="form-control requirement-input" placeholder="Add requirements"  data-requirement-index="0" />
+                           <button id="addMoreRequirementButton" class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt="" /></button>
+                        </div>
+                        <div class="liner-inp mb-2" id="referenceRequirementInput" style="display:none" data-index="1"> 
+                           <input type="text" class="form-control requirement-input" placeholder="Add requirements" />
                         </div>
                         <span class="addmore-text">e.g. - Laptop, Drawing board...etc</span>
                      </div>
+                     <p id="requirementError" style="color:red;"></p>
                   </div>
                   <div class="form-group">
                      <label>Lesson Reading</label>
@@ -82,5 +89,5 @@
 </div>
 {% endblock %}
 {% block script %}
-    <script src="{% static '/js/lesson/step4.js' %}" type="text/javascript"></script>
+   <script src="{% static '/js/lesson/step4.js' %}" type="text/javascript"></script>
 {% endblock %}

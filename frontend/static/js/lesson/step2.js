@@ -219,11 +219,11 @@ function init() {
     $('#monthlyPriceTotalPrice').text(`${currency} ${pricePerSessionValue}`);
   })
 
+  $('#lcs2Proceed').click(handleLCS2Proceed);
   /*
       Step2 Time Slot Selection
   */
-  $('#lcs2Proceed').click(handleLCS2Proceed);
-  $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
+ $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
   $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
 }
 

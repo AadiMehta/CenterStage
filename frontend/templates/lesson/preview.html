@@ -68,7 +68,7 @@
                         <div class="form-group">
                            <label>Price per Session</label>
                            <div class="content-area">
-                              $50
+                              {% if form_data.price_per_session_currency == 'DOLLARS' %}${% endif %}{{form_data.price_per_session_value}}
                            </div>
                         </div>
                      </div>
@@ -76,7 +76,7 @@
                         <div class="form-group">
                            <label>Total Price per Student</label>
                            <div class="content-area">
-                              $250
+                              {% if form_data.price_per_session_currency == 'DOLLARS' %}${% endif %}{{ form_data.price_per_session_value }}
                            </div>
                         </div>
                      </div>
@@ -84,7 +84,11 @@
                   <div class="form-group">
                      <label>Lesson Availability</label>
                      <div class="content-area">
-                        Public
+                        {% if form_data.is_private == 'true' %}
+                        PRIVATE
+                        {% else %}
+                        PUBLIC
+                        {% endif %}
                      </div>
                   </div>
                   <div class="row">
@@ -92,7 +96,7 @@
                         <div class="form-group">
                            <label>Lesson Image</label>
                            <div class="lession-img-video">
-                              <img src="{% static 'images/img01.jpg' %}" alt="" />
+                              <img src="{{form_data.cover_image}}" alt="" />
                            </div>
                         </div>
                      </div>
@@ -100,8 +104,9 @@
                         <div class="form-group">
                            <label>Lesson Video</label>
                            <div class="lession-img-video">
-                              <img src="{% static 'images/video-img.jpg' %}" alt="" />
-                              <span class="path-text mt-2">{{form_data.link}}</span>
+                              <video controls="true">
+                                 <source src="{{form_data.video_link}}" type="video/mp4" />
+                              </video>
                            </div>
                         </div>
                      </div>
@@ -110,14 +115,9 @@
                      <label>What Your Students Will Learn</label>
                      <div class="content-area">
                         <ul class="listStyle">
-                           <li>{{form_data.learn}}</li>
-                           <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</li>
-                           <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</li>
-                           <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</li>
-                           <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
-                           <li>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-                              consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. 
-                           </li>
+                           {% for goal in form_data.goals %}
+                              <li>{{goal}}</li>
+                           {% endfor %}
                         </ul>
                      </div>
                   </div>
@@ -125,9 +125,9 @@
                      <label>Lesson Requirements</label>
                      <div class="content-area">
                         <ul class="listStyle">
-                           <li>Prior knowledge of JAVA</li>
-                           <li>laptop</li>
-                           <li>GitHub Account</li>
+                           {% for requirement in form_data.requirements %}
+                              <li>{{requirement}}</li>
+                           {% endfor %}
                         </ul>
                      </div>
                   </div>
@@ -152,14 +152,14 @@
                      <div class="cald-right-col">
                         <img src="{% static 'images/cald-2.png' %}" alt="" />
                      </div>
-                     <span class="required-text pl-5">Please select 5 session dates</span>
+                     {% comment %} <span class="required-text pl-5">Please select 5 session dates</span> {% endcomment %}
                   </div>
                   <div class="row">
                      <div class="col-md-6">
                         <div class="form-group">
                            <label>Start Date</label>
                            <div class="content-area">
-                              21 Nov 2020
+                              {{form_data.start_date}}
                            </div>
                         </div>
                      </div>
@@ -167,7 +167,7 @@
                         <div class="form-group">
                            <label>End Date</label>
                            <div class="content-area">
-                              25 Nov 2020
+                              {{form_data.end_date}}
                            </div>
                         </div>
                      </div>

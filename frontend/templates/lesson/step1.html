@@ -81,19 +81,19 @@
                   </div>
                   <div class="form-group">
                      <label>Number of Sessions in Lesson <span>*</span></label>
-                     <input id="no_of_sessions" type="hidden" name="step1-no_of_sessions" value="{{wizard.form.no_of_sessions.value|default_if_none:'single'}}">
+                     <input id="no_of_sessions" type="hidden" name="step1-lesson_type" value="{{wizard.form.lesson_type.value|default_if_none:'single'}}">
                      <p id="lessonTypeError" style="color:red;"></p>
                      <div class="selectct-sessionsNom" id="lessonType" >
                         <div class="select-sessions-col">
-                           <button id="singleSession" type="button" class="btn-select-session {% if wizard.form.no_of_sessions.value == None or wizard.form.no_of_sessions.value == 'single' %}selected{% endif %}" data-lesson-type="single">Single Session</button>
+                           <button id="singleSession" type="button" class="btn-select-session {% if wizard.form.lesson_type.value == None or wizard.form.lesson_type.value == 'SINGLE' %}selected{% endif %}" data-lesson-type="SINGLE">Single Session</button>
                            <span class="select-session-text">This is a one time class</span>
                         </div>
                         <div class="select-sessions-col">
-                           <button id="multiSession" type="button" class="btn-select-session {% if wizard.form.no_of_sessions.value == 'multi' %}selected{% endif %}" data-lesson-type="multi">Multi Sessions</button>
+                           <button id="multiSession" type="button" class="btn-select-session {% if wizard.form.lesson_type.value == 'MULTI' %}selected{% endif %}" data-lesson-type="MULTI">Multi Sessions</button>
                            <span class="select-session-text">This lesson will have a fixed start and end date</span>
                         </div>
                         <div class="select-sessions-col">
-                           <button id="ongoingSession" type="button" class="btn-select-session {% if wizard.form.no_of_sessions.value == 'ongoing' %}selected{% endif %}" data-lesson-type="ongoing">Ongoing</button>
+                           <button id="ongoingSession" type="button" class="btn-select-session {% if wizard.form.lesson_type.value == 'ONGOING' %}selected{% endif %}" data-lesson-type="ONGOING">Ongoing</button>
                            <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
                         </div>
                      </div>

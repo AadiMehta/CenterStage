@@ -34,10 +34,7 @@ from frontend.views.onboarding import (
     OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
     AccountConnectedTemplate
 )
-from frontend.views.lesson import (
-    LessonCreateStep1TemplateView, LessonCreateStep2TemplateView, LessonCreateStep3TemplateView,
-    LessonCreateStep4TemplateView, LessonCreatePreviewTemplateView, LessonCreateWizard
-)
+from frontend.views.lesson import LessonCreateWizard
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
@@ -104,17 +101,12 @@ urlpatterns = [
     path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
 
-    # Lesson Creation Templates
-    path('lesson/create', LessonCreateStep1TemplateView.as_view(), name="lesson-creation-step-1"),
-    path('lesson/schedule', LessonCreateStep2TemplateView.as_view(), name="lesson-creation-step-2"),
-    path('lesson/intro', LessonCreateStep3TemplateView.as_view(), name="lesson-creation-step-3"),
-    path('lesson/notes', LessonCreateStep4TemplateView.as_view(), name="lesson-creation-step-4"),
-    path('lesson/preview', LessonCreatePreviewTemplateView.as_view(), name="lesson-creation-preview"),
-
     # Lesson Wizard
     path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS)),
 
     # Dashboard Templates
+    path('dashboard', DashboardLessons.as_view(), name="dashboard-main"),
+    path('dashboard/lessons', DashboardLessons.as_view(), name="dashboard-lessons"),
     path('dashboard/account/alerts', DashboardAccountAlerts.as_view(), name="dashboard-account-alerts"),
     path('dashboard/account/info', DashboardAccountInfo.as_view(), name="dashboard-account-info"),
     path('dashboard/account/payment', DashboardAccountPayment.as_view(), name="dashboard-account-payment"),
@@ -122,7 +114,6 @@ urlpatterns = [
          name="dashboard-schedules-past-sessions"),
     path('dashboard/schedules/upcoming', DashboardSchedulesUpcomingSessions.as_view(),
          name="dashboard-schedules-upcoming-sessions"),
-    path('dashboard/lessons', DashboardLessons.as_view(), name="dashboard-lessons"),
     path('dashboard/messages', DashboardMessages.as_view(), name="dashboard-messages"),
     path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
  

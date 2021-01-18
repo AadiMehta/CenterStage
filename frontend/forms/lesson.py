@@ -5,7 +5,7 @@ class LessonCreateFormStep1(forms.Form):
     description = forms.CharField(max_length=100)
     no_of_participants = forms.CharField(max_length=100)
     language = forms.CharField(max_length=100)
-    no_of_sessions = forms.CharField(max_length=100)
+    lesson_type = forms.CharField(max_length=100)
 
 
 class LessonCreateFormStep2(forms.Form):
@@ -37,11 +37,14 @@ class LessonCreateFormStep2(forms.Form):
 
 
 class LessonCreateFormStep3(forms.Form):
-    link = forms.CharField(max_length=100)
+    is_private = forms.CharField(max_length=100)
+    cover_image = forms.CharField(widget=forms.Textarea)
+    video_link = forms.CharField(max_length=500)
 
 
 class LessonCreateFormStep4(forms.Form):
-    learn = forms.CharField(max_length=100)
+    goals = forms.CharField(max_length=1000)
+    requirements = forms.CharField(max_length=1000)
 
 
 class LessonCreateFormPreview(forms.Form):
