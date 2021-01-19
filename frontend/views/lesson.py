@@ -1,31 +1,14 @@
-import os
 import json
-import urllib
 import base64
-
-from django.conf import settings
 from django.utils import timezone
-
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.core.files.base import ContentFile
-from django.views.generic import TemplateView
-from django.views.generic.base import View
 from django.shortcuts import redirect, render
-from django.core.cache import cache
-
 from formtools.wizard.views import SessionWizardView
-from users.authentication import AuthCookieAuthentication
-
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
     LessonCreateFormStep4, LessonCreateFormPreview
 from frontend.utils import get_user_from_token, is_authenticated
-
-from engine.models import LessonData
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 
 
@@ -83,7 +66,7 @@ class LessonCreateWizard(SessionWizardView):
     def create(self, form_data):
         """
         Create Lesson with lesson details
-        Create slots based on slot session informations
+        Create slots based on slot session information
         """
         try:
             user = self.get_user()
@@ -95,8 +78,9 @@ class LessonCreateWizard(SessionWizardView):
             lesson = serializer.save(creator=user.teacher_profile_data)
 
             # Uncomment below lines once bucket gets created on s3
-            # lesson.cover_image = cover_image
-            # lesson.save()
+            if cover_image is not None:
+                lesson.cover_image = cover_image
+                lesson.save()
 
             now = timezone.now()
             thirty_months = now + timezone.timedelta(days=90)
@@ -135,8 +119,9 @@ class LessonCreateWizard(SessionWizardView):
     def add_available_slots(creator, lesson, start_date, end_date, weekdays, sessions_in_day):
         """
         Add Slots for lessons provided by creator
-        using daterange between start_date and end_date with weekdays filter
-        and appending start_time and end_time with timezone
+        using date range between start_date and
+        end_date with weekdays filter and appending
+        start_time and end_time with timezone
         """
         start_date = timezone.datetime.strptime(start_date, '%d-%m-%Y')
         end_date = timezone.datetime.strptime(end_date, '%d-%m-%Y')

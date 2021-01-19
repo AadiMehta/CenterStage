@@ -1,17 +1,4 @@
-import os
-import urllib
-import base64
-
-from django.conf import settings
 from django.views.generic import TemplateView
-from django.views.generic.base import View
-from django.shortcuts import redirect
-from django.core.cache import cache
-
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from frontend.utils import get_user_from_token
  
 

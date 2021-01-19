@@ -1,5 +1,6 @@
 from django import forms
 
+
 class LessonCreateFormStep1(forms.Form):
     name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=100)
