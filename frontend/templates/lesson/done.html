@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="boarding-sec">
+   <div class="host-header">
+      <div class="host-header-left">
+         <h2>Lesson Successfully Created</h2>
+      </div>
+   </div>
+   <div class="host-header">
+      <div class="host-header-left">
+         <p><strong id="redirectionMessage">Redirecting to dashboard</strong></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script>
+        (function () {
+            var counter = 5;
+            var timeInterval = setInterval(function(){
+                $("#redirectionMessage").text(`Redirecting to dashboard in ${counter} seconds`);
+                counter = counter - 1;
+                if(counter <= 0) {
+                    window.location.href = '/dashboard';
+                }
+            }, 1000)
+        })();
+    </script>
+{% endblock %}

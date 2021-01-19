@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboardmedia.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="boarding-sec">
+   <div class="host-header">
+      <div class="host-header-left">
+         <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+         <h2>Host New Lesson</h2>
+      </div>
+      <div class="board-process">
+         <div class="board-num"><span class="active">05</span>/05</div>
+         <span class="board-process-txt">Lesson Info</span>
+      </div>
+   </div>
+   <div class="boarding-area">
+      <form action="" method="post">
+      {% csrf_token %}
+      {{ wizard.management_form }}
+      <div class="container">
+         <div class="boarding-wrap">
+            <div class="title-row">
+               <h2>Session Lesson Preview </h2>
+            </div>
+            <div class="boarding-row">
+               <div class="boarding-left">
+                  <div class="form-group">
+                     <label>Name your Lesson</label>
+                     <div class="content-area">
+                        {{form_data.name}}
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Lesson Description</label>
+                     <div class="content-area">
+                        {{form_data.description}}
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Number of Participants</label>
+                     <div class="content-area">
+                        {{form_data.no_of_participants}}
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Lesson Language</label>
+                     <div class="content-area">
+                        <div class="search-tags">
+                           <a href="#" class="tag-link">{{form_data.language}}</a>
+<!--                           <a href="#" class="tag-link">Spanish</a>-->
+<!--                           <a href="#" class="tag-link">Hindi</a>-->
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Number of Sessions in Lesson</label>
+                     <div class="content-area">
+                        {{form_data.no_of_sessions}}
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Price per Session</label>
+                           <div class="content-area">
+                              {% if form_data.price_per_session_currency == 'DOLLARS' %}${% endif %}{{form_data.price_per_session_value}}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Total Price per Student</label>
+                           <div class="content-area">
+                              {% if form_data.price_per_session_currency == 'DOLLARS' %}${% endif %}{{ form_data.price_per_session_value }}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Lesson Availability</label>
+                     <div class="content-area">
+                        {% if form_data.is_private == 'true' %}
+                        PRIVATE
+                        {% else %}
+                        PUBLIC
+                        {% endif %}
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Lesson Image</label>
+                           <div class="lession-img-video">
+                              <img src="{{form_data.cover_image}}" alt="" />
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Lesson Video</label>
+                           <div class="lession-img-video">
+                              <video controls="true">
+                                 <source src="{{form_data.video_link}}" type="video/mp4" />
+                              </video>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>What Your Students Will Learn</label>
+                     <div class="content-area">
+                        <ul class="listStyle">
+                           {% for goal in form_data.goals %}
+                              <li>{{goal}}</li>
+                           {% endfor %}
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Lesson Requirements</label>
+                     <div class="content-area">
+                        <ul class="listStyle">
+                           {% for requirement in form_data.requirements %}
+                              <li>{{requirement}}</li>
+                           {% endfor %}
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Lesson Reading</label>
+                     <div class="content-area">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                        culpa qui officia deserunt mollit anim id est laborum.
+                     </div>
+                  </div>
+                  <div class="btn-area">
+                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary btn-lg btn-theme" style="margin-right:30px; float: left">
+                        <i><img src="{% static 'images/next.svg' %}" alt="" style="transform: rotateY(180deg);"/></i><span>Previous</span></button>
+                     <button type="submit" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish"><span>Save & Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                  </div>
+               </div>
+               <div class="boarding-right text-left">
+                  <div class="form-group">
+                     <div class="cald-right-col">
+                        <img src="{% static 'images/cald-2.png' %}" alt="" />
+                     </div>
+                     {% comment %} <span class="required-text pl-5">Please select 5 session dates</span> {% endcomment %}
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Start Date</label>
+                           <div class="content-area">
+                              {{form_data.start_date}}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>End Date</label>
+                           <div class="content-area">
+                              {{form_data.end_date}}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      </form>
+   </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static '/js/lesson/preview.js' %}" type="text/javascript"></script>
+{% endblock %}

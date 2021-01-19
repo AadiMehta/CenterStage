@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'dashboard/modals.html' %}
+<div class="wrapper-main">
+   <div class="sidebar ">
+      <div class="logo-area">
+         <a href="#"><img class="main-logo-img" src="{% static 'images/CenterStage-BlackLogo.svg' %}" alt="" /></a>
+         <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
+      </div>
+      <div class="sidebar-menu">
+         <ul id="accordion">
+            <li>
+               <a href="#" class="ac-link" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>
+               <ul id="One" class="collapse submenu show" data-parent="#accordion">
+                  <li class="active"><a href="{% url 'dashboard-schedules-upcoming-sessions' %}">- Upcoming Sessions <span class="badge-small"></span></a></li>
+                  <li><a href="{% url 'dashboard-schedules-past-sessions' %}">- Past Sessions</a></li>
+                  <li><a href="#">- Calendar</a></li>
+               </ul>
+            </li>
+            <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages</span><span class="badge-small"></span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons</span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive</span></a></li>
+            <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
+            <li>
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
+               <ul id="Five" class="collapse submenu" data-parent="#accordion">
+                  <li><a href="{% url 'dashboard-account-info' %}">- Info</a></li>
+                  <li><a href="{% url 'dashboard-account-payment' %}">- Payments</a></li>
+                  <li><a href="{% url 'dashboard-account-alerts' %}">- Alerts</a></li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="main">
+      {% include 'dashboard/header.html' with user=user %}
+      <div class="main-content">
+         <div class="cta-links-wrap">
+            <ul class="cta-links">
+               <li>
+                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-meeting.svg' %}" alt="" /></i>
+                  <span>New Meeting</span>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <a class="dropdown-item" href="#">Free Meeting</a>
+                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#meeting">Paid Meeting</a>
+                  </div>
+               </li>
+               <li>
+                  <a href="#">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
+                  <span>Schedule Meeting</span>
+                  </a>
+               </li>
+               <li>
+                  <a href="#">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-lesson.svg' %}" alt="" /></i>
+                  <span>New Lesson</span>
+                  </a>
+               </li>
+               <li class="p-coaching">
+                  <a href="#" data-toggle="modal" data-target="#pcoatching">
+                  <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
+                  <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
+                  </i>
+                  <span>Personal Coaching</span>
+                  </a>
+               </li>
+            </ul>
+         </div>
+         <div class="admin-mid-sec container-fluid">
+            <h2 class="title-2">Upcoming Sessions</h2>
+            <div class="search-row">
+               <div class="searchInp-col">
+                  <img src="{% static 'images/icon-search.svg' %}" alt="" />
+                  <input type="search" class="form-control" placeholder="Search Sessions" />
+               </div>
+               <div class="search-tags">
+                  <a href="#" class="tag-link">One - on - One</a>
+                  <a href="#" class="tag-link active">Group Lesson</a>
+                  <a href="#" class="tag-link">Personal Coaching</a>
+                  <a href="#" class="tag-link">A - Z</a>
+                  <a href="#" class="tag-link">Z - A</a>
+               </div>
+            </div>
+            <div class="searchresult-wrap">
+               <div class="searchresult-row">
+                  <div class="searchresult-col-left">
+                     <h2 class="lession-title">Core JAVA Development</h2>
+                     <div class="profimg-name">
+                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                        <div class="prof-name">
+                           <h4>with Edwina</h4>
+                           <span class="lession-time">Monday, 06 Nov 2020</span>
+                        </div>
+                     </div>
+                     <ul class="lessons-steps">
+                        <li>
+                           <i><img src="{% static 'images/time.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Time</h4>
+                              <span>02:00 PM IST</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Duration</h4>
+                              <span>45 Minutes</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Type</h4>
+                              <span>One - on - One</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Language</h4>
+                              <span>Hosted in English</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Number</h4>
+                              <span>03 Out of 05</span>
+                           </div>
+                        </li>
+                     </ul>
+                     <div class="linerbtn-row">
+                        <div class="lessonBtnCol">
+                           <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Edit Session</a>
+                              <a class="dropdown-item" href="#">Manage in Zoom</a>
+                           </div>
+                        </div>
+                        <div class="lessonBtnCol"> <a href="#" class="btn-liner" data-toggle="modal" data-target="#newmeeting">Share</a></div>
+                        <div class="lessonBtnCol"><a href="#" class="btn-liner active">Start</a></div>
+                     </div>
+                  </div>
+                  <div class="searchresult-col-right">
+                     <div class="searchresult-right-top">
+                        <div class="searchresult-right-top-title">
+                           <h3>Lesson Discussion</h3>
+                           <div class="notifications">
+                              <div class="icon-notification">
+                                 <a href="#">
+                                 <span class="notifaction-badge">4</span>
+                                 <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                        <a href="#">View complete thread</a>
+                     </div>
+                     <div class="discussion-post-box">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <span class="lession-time">Monday, 06 Nov 2020</span>
+                           </div>
+                        </div>
+                        <div class="discussion-post-detail">
+                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna … <a href="#">view more</a>
+                        </div>
+                        <div class="discussion-post-img"><img src="{% static 'images/post-1.png' %}" alt="" /></div>
+                     </div>
+                     <div class="discussion-cmnt-row">
+                        <div class="addNewPost-inp">
+                           <i><img src="{% static 'images/write.svg' %}" alt="" /></i>
+                           <input class="form-control" type="text" placeholder="Add new post...">
+                        </div>
+                        <div class="cmntPost-actions">
+                           <button type="button"><img src="{% static 'images/send.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/image.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/video.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/documents.svg' %}" alt="" /></button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="searchresult-wrap">
+               <div class="searchresult-row">
+                  <div class="searchresult-col-left">
+                     <h2 class="lession-title">Core JAVA Development</h2>
+                     <div class="profimg-name">
+                        <div class="profimg-col">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                        <div class="prof-name">
+                           <h4>with Edwina, Peter, Andrew... +5</h4>
+                           <span class="lession-time">Monday, 06 Nov 2020</span>
+                        </div>
+                     </div>
+                     <ul class="lessons-steps">
+                        <li>
+                           <i><img src="{% static 'images/time.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Time</h4>
+                              <span>02:00 PM IST</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Duration</h4>
+                              <span>45 Minutes</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Type</h4>
+                              <span>One - on - One</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Language</h4>
+                              <span>Hosted in English</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Number</h4>
+                              <span>03 Out of 05</span>
+                           </div>
+                        </li>
+                     </ul>
+                     <div class="linerbtn-row">
+                        <div class="lessonBtnCol">
+                           <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Edit Session</a>
+                              <a class="dropdown-item" href="#">Manage in Zoom</a>
+                           </div>
+                        </div>
+                        <div class="lessonBtnCol"> <a href="#" class="btn-liner">Share</a></div>
+                        <div class="lessonBtnCol"><a href="#" class="btn-liner active">Start</a></div>
+                     </div>
+                  </div>
+                  <div class="searchresult-col-right">
+                     <div class="searchresult-right-top">
+                        <div class="searchresult-right-top-title">
+                           <h3>Lesson Discussion</h3>
+                           <div class="notifications">
+                              <div class="icon-notification">
+                                 <a href="#">
+                                 <span class="notifaction-badge">4</span>
+                                 <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                        <a href="#">View complete thread</a>
+                     </div>
+                     <div class="discussion-post-box">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <span class="lession-time">Monday, 06 Nov 2020</span>
+                           </div>
+                        </div>
+                        <div class="discussion-post-detail">
+                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna … <a href="#">view more</a>
+                        </div>
+                        <div class="discussion-post-img"><img src="{% static 'images/post-1.png' %}" alt="" /></div>
+                     </div>
+                     <div class="discussion-cmnt-row">
+                        <div class="addNewPost-inp">
+                           <i><img src="{% static 'images/write.svg' %}" alt="" /></i>
+                           <input class="form-control" type="text" placeholder="Add new post...">
+                        </div>
+                        <div class="cmntPost-actions">
+                           <button type="button"><img src="{% static 'images/send.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/image.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/video.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/documents.svg' %}" alt="" /></button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="searchresult-wrap">
+               <div class="searchresult-row">
+                  <div class="searchresult-col-left">
+                     <h2 class="lession-title">Core JAVA Development</h2>
+                     <div class="profimg-name">
+                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                        <div class="prof-name">
+                           <h4>with Edwina</h4>
+                           <span class="lession-time">Monday, 06 Nov 2020</span>
+                        </div>
+                     </div>
+                     <ul class="lessons-steps">
+                        <li>
+                           <i><img src="{% static 'images/time.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Time</h4>
+                              <span>02:00 PM IST</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Duration</h4>
+                              <span>45 Minutes</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Type</h4>
+                              <span>One - on - One</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Language</h4>
+                              <span>Hosted in English</span>
+                           </div>
+                        </li>
+                        <li>
+                           <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
+                           <div class="lessons-steps-text">
+                              <h4>Session Number</h4>
+                              <span>03 Out of 05</span>
+                           </div>
+                        </li>
+                     </ul>
+                     <div class="linerbtn-row">
+                        <div class="lessonBtnCol">
+                           <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Edit Session</a>
+                              <a class="dropdown-item" href="#">Manage in Zoom</a>
+                           </div>
+                        </div>
+                        <div class="lessonBtnCol"> <a href="#" class="btn-liner">Share</a></div>
+                        <div class="lessonBtnCol"><a href="#" class="btn-liner active">Start</a></div>
+                     </div>
+                  </div>
+                  <div class="searchresult-col-right">
+                     <div class="searchresult-right-top">
+                        <div class="searchresult-right-top-title">
+                           <h3>Lesson Discussion</h3>
+                           <div class="notifications">
+                              <div class="icon-notification">
+                                 <a href="#">
+                                 <span class="notifaction-badge">4</span>
+                                 <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                        <a href="#">View complete thread</a>
+                     </div>
+                     <div class="discussion-post-box">
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                           <div class="prof-name">
+                              <h4>with Edwina</h4>
+                              <span class="lession-time">Monday, 06 Nov 2020</span>
+                           </div>
+                        </div>
+                        <div class="discussion-post-detail">
+                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna … <a href="#">view more</a>
+                        </div>
+                        <div class="discussion-post-img"><img src="{% static 'images/post-1.png' %}" alt="" /></div>
+                     </div>
+                     <div class="discussion-cmnt-row">
+                        <div class="addNewPost-inp">
+                           <i><img src="{% static 'images/write.svg' %}" alt="" /></i>
+                           <input class="form-control" type="text" placeholder="Add new post...">
+                        </div>
+                        <div class="cmntPost-actions">
+                           <button type="button"><img src="{% static 'images/send.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/image.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/video.svg' %}" alt="" /></button>
+                           <button type="button"><img src="{% static 'images/documents.svg' %}" alt="" /></button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

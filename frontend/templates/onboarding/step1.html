@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/home.css' %}" rel="stylesheet">
+<link href="{% static '/css/media.css' %}" rel="stylesheet">
+<link href="{% static '/css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+  {% include 'header.html' with user=user %}
+  <div class="mid-sec pb-100 boarding-sec">
+    <div class="container">
+        <div class="board-process">
+            <div class="board-num"><span class="active">01</span>/03</div>
+            <span class="board-process-txt">Onboarding Process</span>
+        </div>
+        <div class="boarding-wrap">
+        <div class="title-row"><h2>Welcome {{user.first_name}}</h2>
+            <p>Lets get started. This will take less than 2 minutes of your time</p>
+        </div>
+        <div class="boarding-row">
+            <div class="boarding-left">
+                <div class="boarding-form-area">
+                    <div class="form-group">
+                        <label>Name your academy</label>
+                        <div class="liner-inp">
+                            <input id="onboardingAcademyName" type="text" class="form-control" placeholder="Academy name here" />
+                        </div>
+                        <p id="onboardingAcademyNameError" style="color:red;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <div class="liner-inp">
+                            <input id="onboardingDescription" type="text" class="form-control" placeholder="Description here" />
+                        </div>
+                        <p id="onboardingDescriptionError" style="color:red;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Custom Page Name</label>
+                        <div class="liner-inp">
+                            <input id="onboardingPageName" type="text" class="form-control" placeholder="ThomasEddy" />
+                            <div class="dominname-area"><i><img src="{% static 'images/done-icon.svg' %}" alt="" /></i> <span>@{{site_name}}</span></div>
+                        </div>
+                        <p id="onboardingPageNameError" style="color:red;"></p>
+                    </div>
+                    <div class="btn-area">
+                        <button id="onboardingProceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static '/images/arrow-w.svg' %}" alt="" /></i></button>
+                    </div>
+                </div>
+            </div>
+            <input type="file" id="profileImageUpload" style="display:none"/> 
+            <img id="profileImageDataURl" src="data:image/jpeg;base64" alt="" style="display:none" />
+            <div class="boarding-right">
+                <div id="profileImageContainer" class="add-profile-pic">
+                    <img id="profileImage" src="{% static '/images/add-pic.svg' %}" alt="" />
+                </div>
+                <div class="add-pic-text">Add Profile Picture</div>
+                <p id="onboardingProfileImageError" style="color:red;"></p>
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+
+
+{% include 'footer.html' %}
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static '/js/onboarding.js' %}" type="text/javascript"></script> 
+{% endblock %}

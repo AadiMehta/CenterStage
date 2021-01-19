@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="wrapper-main profileInfo-page">
+   <div class="sidebar">
+      <div class="logo-area">
+         <a href="#"><img class="main-logo-img" src="{% static 'images/CenterStage-BlackLogo.svg' %}" alt="" /></a>
+         <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
+      </div>
+      <div class="sidebar-menu">
+         <ul id="accordion">
+            <li>
+               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>
+               <ul id="One" class="collapse submenu" data-parent="#accordion">
+                  <li><a href="{% url 'dashboard-schedules-upcoming-sessions' %}">- Upcoming Sessions <span class="badge-small"></span></a></li>
+                  <li><a href="{% url 'dashboard-schedules-past-sessions' %}">- Past Sessions</a></li>
+                  <li><a href="#">- Calendar</a></li>
+               </ul>
+            </li>
+            <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages</span><span class="badge-small"></span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons</span></a></li>
+            <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive</span></a></li>
+            <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
+            <li>
+               <a href="#" class="ac-link" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
+               <ul id="Five" class="collapse submenu show" data-parent="#accordion">
+                  <li class="active"><a href="{% url 'dashboard-account-info' %}">- Info</a></li>
+                  <li><a href="{% url 'dashboard-account-payment' %}">- Payments</a></li>
+                  <li><a href="{% url 'dashboard-account-alerts' %}">- Alerts</a></li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="main">
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+            </div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+            </div>
+         </div>
+      </header>
+      <div class="main-content pt-0">
+         <div class="profile-info-bg"></div>
+         <div class="admin-mid-sec container-fluid">
+            <div class="profile-info-header">
+               <div class="profile-info-col">
+                  <div class="profile-image-area">
+                     <img class="profile-image" src="{% static 'images/profile-img.jpg' %}" alt="" />
+                     <i class="camera"><img src="{% static 'images/camera.png' %}" alt="" /></i>
+                  </div>
+                  <div class="profile-info-name">
+                     <h3>{{user.get_full_name}}</h3>
+                     <span class="desigation">{{user.teacher_profile_data.description}}</span>
+                     <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
+                  </div>
+               </div>
+            </div>
+            <div class="bio-content profile-wrap">
+               <h2 class="title-2">Bio</h2>
+               <div class="bio-content-area">
+                  <p class="normal-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore 
+                     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut 
+                     aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                     dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
+                     deserunt mollit anim id est laborum.
+                  </p>
+                  <button type="button" class="edit-btn2"><img src="{% static 'images/edit.png' %}" alt="" /></button>
+               </div>
+            </div>
+            <div class="personal-dtl-wrap profile-wrap">
+               <div class="personal-dtl-row">
+                  <div class="personal-dtl-label">Email Address</div>
+                  <div class="personal-dtl-inp">{{user.email}}</div>
+                  <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
+               </div>
+               <div class="personal-dtl-row">
+                  <div class="personal-dtl-label">Phone Number</div>
+                  <div class="personal-dtl-inp">{{user.phone_no}}</div>
+                  <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
+               </div>
+               <div class="personal-dtl-row">
+                  <div class="personal-dtl-label">Password</div>
+                  <div class="personal-dtl-inp">* * * * * * * * * * * * *</div>
+                  <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
+               </div>
+            </div>
+            <div class="profile-wrap">
+               <div class="form-group exp-area">
+                  <label>Years of Experience</label>
+                  <div class="exp-row inp-with-btn">
+                     <div class="liner-inp"><input type="text" class="form-control" placeholder="{{user.teacher_profile_data.year_of_experience}}">
+                        <span class="addmore-text">Please state your experience accurately</span>
+                     </div>
+                     <button type="button" class="btn-rounded">Save</button>
+                  </div>
+               </div>
+            </div>
+            <div class="yourac-sec profile-wrap">
+               <h2 class="title-2">Your Accounts</h2>
+               <div class="profile-wrap-main">
+                  <div class="account-left-col">
+                     <div class="yourac-wrap">
+                        <h3>Video Conferencing</h3>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/zoom-icon.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Zoom</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test01" name="radio-group">
+                                 <label for="test01"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/g-meet.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Google Meet</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test02" name="radio-group">
+                                 <label for="test02"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/team.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Teams</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test03" name="radio-group">
+                                 <label for="test03"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Connect</button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="yourac-wrap">
+                        <h3>Video Conferencing</h3>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/g-cald.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Google Calendar</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test04" name="radio-group">
+                                 <label for="test04"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="yourac-wrap">
+                        <h3>Video Conferencing</h3>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/icon-facebook.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Facebook</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test1" name="radio-group">
+                                 <label for="test1"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/icon-linkdin.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>LinkedIN</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test2" name="radio-group">
+                                 <label for="test2"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/icon-twitter.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Twitter</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test3" name="radio-group">
+                                 <label for="test3"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/icon-tumblr.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Tumblr</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test4" name="radio-group">
+                                 <label for="test4"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                        <div class="ac-veryfy-row">
+                           <div class="ac-veryfy-left">
+                              <i><img src="{% static 'images/icon-reddit.png' %}" alt="" /></i>
+                              <div class="col-text">
+                                 <h4>Reddit</h4>
+                              </div>
+                           </div>
+                           <div class="ac-veryfy-right">
+                              <div class="custom-radios">
+                                 <input type="radio" id="test5" name="radio-group">
+                                 <label for="test5"></label>
+                              </div>
+                              <button type="button" class="btn-liner">Disconnect</button>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="yourac-wrap">
+                        <h3>Your Page</h3>
+                        <div class="personal-dtl-row">
+                           <div class="personal-dtl-label">Page Link</div>
+                           <div class="personal-dtl-inp">{{user.teacher_profile_data.subdomain}}@{{site_name}}</div>
+                           <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
+                        </div>
+                     </div>
+                     <div class="yourac-wrap">
+                        <h3>Your Intro Video</h3>
+                        <div class="intro-video">
+                           <img src="{% static 'images/video-img.jpg' %}" alt="" />
+                           <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
+                        </div>
+                     </div>
+                     <div class="prof-action-btn">
+                        <button type="button" class="btn-theme btn-theme-liner"><i><img src="{% static 'images/logout.svg' %}" alt="" /></i> <span>Logout</span></button><br>
+                        <button type="button" class="btn-theme btn-bgred"><i><img src="{% static 'images/delete.svg' %}" alt="" /></i> <span>Delete Account</span></button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

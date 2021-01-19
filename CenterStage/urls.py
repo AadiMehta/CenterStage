@@ -9,7 +9,7 @@ Function views
 Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
+Including another URL conf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
@@ -27,9 +27,18 @@ from users.views import (
     TeacherRegister, StudentRegister
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
-from frontend.views import (
-    HomeTemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
-    AccountConnectedTemplate, TermsAndConditionsView
+from frontend.views.main import (
+    HomeTemplateView, TermsAndConditionsView
+)
+from frontend.views.onboarding import (
+    OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
+    AccountConnectedTemplate
+)
+from frontend.views.lesson import LessonCreateWizard
+from frontend.views.dashboard import (
+    DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
+    DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
+    DashboardSchedulesUpcomingSessions, DashboardStatistics
 )
 from engine.views import LessonAPIView
 
@@ -86,11 +95,29 @@ urlpatterns = [
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
 
-    # Templates
+    # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
     path('onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
     path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
+
+    # Lesson Wizard
+    path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS)),
+
+    # Dashboard Templates
+    path('dashboard', DashboardLessons.as_view(), name="dashboard-main"),
+    path('dashboard/lessons', DashboardLessons.as_view(), name="dashboard-lessons"),
+    path('dashboard/account/alerts', DashboardAccountAlerts.as_view(), name="dashboard-account-alerts"),
+    path('dashboard/account/info', DashboardAccountInfo.as_view(), name="dashboard-account-info"),
+    path('dashboard/account/payment', DashboardAccountPayment.as_view(), name="dashboard-account-payment"),
+    path('dashboard/schedules/pastsessions', DashboardSchedulesPastSessions.as_view(),
+         name="dashboard-schedules-past-sessions"),
+    path('dashboard/schedules/upcoming', DashboardSchedulesUpcomingSessions.as_view(),
+         name="dashboard-schedules-upcoming-sessions"),
+    path('dashboard/messages', DashboardMessages.as_view(), name="dashboard-messages"),
+    path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
+ 
+    # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
 ]
