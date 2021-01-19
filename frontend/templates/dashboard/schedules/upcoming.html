@@ -11,14 +11,14 @@
 <div class="wrapper-main">
    <div class="sidebar ">
       <div class="logo-area">
-         <a href="#"><img class="main-logo-img" src="{% static 'images/logo-main.svg' %}" alt="" /></a> 
+         <a href="#"><img class="main-logo-img" src="{% static 'images/CenterStage-BlackLogo.svg' %}" alt="" /></a>
          <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
       </div>
       <div class="sidebar-menu">
          <ul id="accordion">
             <li>
-               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>
-               <ul id="One" class="collapse submenu" data-parent="#accordion">
+               <a href="#" class="ac-link" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>
+               <ul id="One" class="collapse submenu show" data-parent="#accordion">
                   <li class="active"><a href="{% url 'dashboard-schedules-upcoming-sessions' %}">- Upcoming Sessions <span class="badge-small"></span></a></li>
                   <li><a href="{% url 'dashboard-schedules-past-sessions' %}">- Past Sessions</a></li>
                   <li><a href="#">- Calendar</a></li>
@@ -40,30 +40,7 @@
       </div>
    </div>
    <div class="main">
-      <header class="header">
-         <div class="container-fluid">
-            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
-            <div class="header-prof-col">
-               <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
-               <div class="header-prof-name">
-                  <h3>Thomas Edward</h3>
-                  <span class="desigation">Web Developer and JAVA Expert</span>
-               </div>
-            </div>
-            <div class="header-actions-col">
-               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
-               <div class="header-actions-icon notifications">
-                  <div class="icon-notification">
-                     <a href="#">
-                     <span class="notifaction-badge">4</span>
-                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
-                     </a>
-                  </div>
-               </div>
-               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
-            </div>
-         </div>
-      </header>
+      {% include 'dashboard/header.html' with user=user %}
       <div class="main-content">
          <div class="cta-links-wrap">
             <ul class="cta-links">

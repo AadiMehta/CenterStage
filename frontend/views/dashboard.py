@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.views.generic import TemplateView
 from frontend.utils import get_user_from_token
  
@@ -25,6 +26,7 @@ class DashboardAccountInfo(TemplateView):
         context = super().get_context_data(**kwargs)
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        context['site_name'] = settings.SITE_URL
         return context
 
 

@@ -9,9 +9,9 @@
 {% block content %}
 {% include 'dashboard/modals.html' %}
 <div class="wrapper-main profileInfo-page">
-   <div class="sidebar ">
+   <div class="sidebar">
       <div class="logo-area">
-         <a href="#"><img class="main-logo-img" src="{% static 'images/logo-main.svg' %}" alt="" /></a> 
+         <a href="#"><img class="main-logo-img" src="{% static 'images/CenterStage-BlackLogo.svg' %}" alt="" /></a>
          <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
       </div>
       <div class="sidebar-menu">
@@ -29,8 +29,8 @@
             <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive</span></a></li>
             <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
             <li>
-               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
-               <ul id="Five" class="collapse submenu" data-parent="#accordion">
+               <a href="#" class="ac-link" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
+               <ul id="Five" class="collapse submenu show" data-parent="#accordion">
                   <li><a href="{% url 'dashboard-account-info' %}">- Info</a></li>
                   <li class="active"><a href="{% url 'dashboard-account-payment' %}">- Payments</a></li>
                   <li><a href="{% url 'dashboard-account-alerts' %}">- Alerts</a></li>
@@ -69,8 +69,8 @@
                      <i class="camera"><img src="{% static 'images/camera.png' %}" alt="" /></i>
                   </div>
                   <div class="profile-info-name">
-                     <h3>Thomas Edward</h3>
-                     <span class="desigation">Web Developer and JAVA Expert</span>
+                     <h3>{{user.get_full_name}}</h3>
+                     <span class="desigation">{{user.teacher_profile_data.description}}</span>
                      <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
                   </div>
                </div>
