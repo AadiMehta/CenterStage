@@ -102,7 +102,7 @@ urlpatterns = [
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
 
     # Lesson Wizard
-    path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="create-lesson"),
+    path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="schedule-lesson"),
 
     # Dashboard Templates
     path('dashboard', DashboardLessons.as_view(), name="dashboard-main"),

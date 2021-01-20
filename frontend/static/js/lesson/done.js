@@ -37,7 +37,7 @@ function init() {
   showModal('PublishLessonModal', true);
   $('#startNow').click(() => {
     hideModal('shareModal');
-    var counter = 5;
+    var counter = 2;
     var timeInterval = setInterval(function(){
         $("#redirectionMessage").text(`Redirecting to dashboard in ${counter} seconds`);
         counter = counter - 1;
