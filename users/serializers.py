@@ -66,11 +66,11 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeacherProfile
         fields = (
-            'academy_name',
+            'profession',
             'profile_image',
             'year_of_experience',
             'subdomain',
-            'description',
+            'bio',
             'intro_video',
             'accounts',
             'payments',

@@ -119,11 +119,11 @@ function checkSubdomainAvailability(event) {
 
 /**
  * Create Teacher Profile
- * @param {String} academyName 
- * @param {String} description 
+ * @param {String} profession
+ * @param {String} bio
  * @param {String} subDomain 
  */
-function createTeacherProfile(academyName, description, subDomain, profileUrl) {
+function createTeacherProfile(profession, bio, subDomain, profileUrl) {
     const token = getCookie('auth_token');
     if (profileUrl == null) {
       $.ajax('/api/teacher/profile/', {
@@ -133,8 +133,8 @@ function createTeacherProfile(academyName, description, subDomain, profileUrl) {
           'Content-Type': 'application/json'
         },
         data: JSON.stringify({
-          "academy_name": academyName,
-          "description": description,
+          "profession": profession,
+          "bio": bio,
           "subdomain": subDomain
         }),
         success: function (data, status, xhr) {
@@ -155,8 +155,8 @@ function createTeacherProfile(academyName, description, subDomain, profileUrl) {
         },
         data: JSON.stringify({
           "profile_image": profileUrl,
-          "academy_name": academyName,
-          "description": description,
+          "profession": profession,
+          "bio": bio,
           "subdomain": subDomain
         }),
         success: function (data, status, xhr) {
@@ -202,27 +202,27 @@ function handleZoomDisconnectAccount (event) {
 function onProceedButtonClicked () {
     let isValid = true;
     let isProfileUrl = true;
-    $('#onboardingAcademyNameError').hide()
-    $('#onboardingDescriptionError').hide()
+    $('#onboardingProfessionError').hide()
+    $('#onboardingBioError').hide()
     $('#onboardingPageNameError').hide()
     $('#onboardingProfileImageError').hide()
     const profileUrl = $('#profileImageDataURl')[0].src;
-    const academyName = $('#onboardingAcademyName')[0].value;
-    const description = $('#onboardingDescription')[0].value;
+    const profession = $('#onboardingProfession')[0].value;
+    const bio = $('#onboardingBio')[0].value;
     const subDomain = $('#onboardingPageName')[0].value;
     if (profileUrl === 'data:image/jpeg;base64') {
 //      $('#onboardingProfileImageError').text('Please select profile image');
 //      $('#onboardingProfileImageError').show()
         isProfileUrl = false
     }
-    if (!academyName) {
-        $('#onboardingAcademyNameError').text('Please provide academy name');
-        $('#onboardingAcademyNameError').show()
+    if (!profession) {
+        $('#onboardingProfessionError').text('Please provide profession name');
+        $('#onboardingProfessionError').show()
         isValid = false;
     }
-    if (!description) {
-        $('#onboardingDescriptionError').text('Please provide description');
-        $('#onboardingDescriptionError').show()
+    if (!bio) {
+        $('#onboardingBioError').text('Please provide bio');
+        $('#onboardingBioError').show()
         isValid = false;
     }
     if (!subDomain && validateSubdomain(subDomain)) {
@@ -232,9 +232,9 @@ function onProceedButtonClicked () {
     }
     if (isValid && window.subdomainValid) {
         if (isProfileUrl) {
-            createTeacherProfile(academyName, description, subDomain, profileUrl)
+            createTeacherProfile(profession, bio, subDomain, profileUrl)
         } else {
-            createTeacherProfile(academyName, description, subDomain)
+            createTeacherProfile(profession, description, subDomain)
         }
     }
 }

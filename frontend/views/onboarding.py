@@ -16,8 +16,8 @@ class OnboardStep1TemplateView(TemplateView):
     """
     After sign up the user is asked for following
     basic details:
-        - Academy name
-        - description
+        - Profession name
+        - Bio
         - Custom Page name
     """
     template_name = "onboarding/step1.html"

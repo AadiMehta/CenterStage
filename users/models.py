@@ -122,8 +122,8 @@ class TeacherProfile(models.Model):
     profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     year_of_experience = models.IntegerField(_('years of experience'), null=True, validators=[MinValueValidator(0),
                                                                                               MaxValueValidator(100)])
-    academy_name = models.CharField(_("Academy Name"), max_length=64, validators=[MinLengthValidator(4)])
-    description = models.TextField(_('About Teacher'), null=True, blank=True)
+    profession = models.CharField(_("Profession"), max_length=64, validators=[MinLengthValidator(4)])
+    bio = models.TextField(_('Bio for Teacher'), null=True, blank=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)
     status = models.CharField(_("Teacher Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
                               help_text="Teacher Profile status", default=ProfileStatuses.ACTIVE)
