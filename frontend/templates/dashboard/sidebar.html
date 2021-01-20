@@ -16,7 +16,7 @@
             </ul>
         </li>
         <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages {% if activeSection == 'messages' %}<span class="badge-small"></span>{% endif %}</span></a></li>
-        <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons {% if activeSection == 'lessons' %}<span class="badge-small"></span>{% endif %}</span></a></li>
+        <li><a href="{% url 'dashboard-lessons' %}"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons {% if activeSection == 'lessons' %}<span class="badge-small"></span>{% endif %}</span></a></li>
         {% comment %} <li class="{% if activeSection == 'message' %}active{% endif %}"><a href="{% url 'dashboard-drive' %}"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive {% if activeSection == 'lessons' %}<span class="badge-small"></span>{% endif %}</span></a></li> {% endcomment %}
         <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats {% if activeSection == 'stats' %}<span class="badge-small"></span>{% endif %}</span></a></li>
         <li>

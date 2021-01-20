@@ -13,40 +13,7 @@
    <div class="main">
       {% include 'dashboard/header.html' with user=user %}
       <div class="main-content">
-         <div class="cta-links-wrap">
-            <ul class="cta-links">
-               <li>
-                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-meeting.svg' %}" alt="" /></i>
-                  <span>New Meeting</span>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                     <a class="dropdown-item" href="#">Free Meeting</a>
-                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#meeting">Paid Meeting</a>
-                  </div>
-               </li>
-               <li>
-                  <a href="#">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
-                  <span>Schedule Meeting</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="#">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-lesson.svg' %}" alt="" /></i>
-                  <span>New Lesson</span>
-                  </a>
-               </li>
-               <li class="p-coaching">
-                  <a href="#" data-toggle="modal" data-target="#pcoatching">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
-                  <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
-                  </i>
-                  <span>Personal Coaching</span>
-                  </a>
-               </li>
-            </ul>
-         </div>
+         {% include 'dashboard/actionbar.html' %}
          <div class="admin-mid-sec container-fluid">
             <h2 class="title-2">Upcoming Sessions</h2>
             <div class="search-row">
