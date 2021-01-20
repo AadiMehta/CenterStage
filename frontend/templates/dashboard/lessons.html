@@ -9,36 +9,7 @@
 {% block content %}
 {% include 'dashboard/modals.html' %}
 <div class="wrapper-main">
-   <div class="sidebar">
-      <div class="logo-area">
-         <a href="/"><img class="main-logo-img" src="{% static 'images/CenterStage-BlackLogo.svg' %}" alt="" /></a>
-         <a href="#" class="close-btn"><img src="{% static 'images/closebtn.svg' %}" alt="close"></a>
-      </div>
-      <div class="sidebar-menu">
-         <ul id="accordion">
-            <li>
-               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i><span>My Schedule</span></a>
-               <ul id="One" class="collapse submenu" data-parent="#accordion">
-                  <li><a href="#">- Upcoming Sessions <span class="badge-small"></span></a></li>
-                  <li><a href="{% url 'dashboard-schedules-past-sessions' %}">- Past Sessions</a></li>
-                  <li><a href="#">- Calendar</a></li>
-               </ul>
-            </li>
-            <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages</span><span class="badge-small"></span></a></li>
-            <li><a href="#"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons</span></a></li>
-            <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive</span></a></li>
-            <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats</span></a></li>
-            <li>
-               <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i><span>My Account</span></a>
-               <ul id="Five" class="collapse submenu" data-parent="#accordion">
-                  <li><a href="{% url 'dashboard-account-info' %}">- Info</a></li>
-                  <li"><a href="{% url 'dashboard-account-payment' %}">- Payments</a></li>
-                  <li><a href="{% url 'dashboard-account-alerts' %}">- Alerts</a></li>
-               </ul>
-            </li>
-         </ul>
-      </div>
-   </div>
+   {% include 'dashboard/sidebar.html' with activeSection='lessons' %}   
    <div class="main">
       <header class="header">
          <div class="container-fluid">
@@ -65,40 +36,7 @@
          </div>
       </header>
       <div class="main-content">
-         <div class="cta-links-wrap">
-            <ul class="cta-links">
-               <li>
-                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-meeting.svg' %}" alt="" /></i>
-                  <span>New Meeting</span>
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                     <a class="dropdown-item" href="#">Free Meeting</a>
-                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#meeting">Paid Meeting</a>
-                  </div>
-               </li>
-               <li>
-                  <a href="#">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
-                  <span>Schedule Meeting</span>
-                  </a>
-               </li>
-               <li>
-                  <a href="#">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-new-lesson.svg' %}" alt="" /></i>
-                  <span>New Lesson</span>
-                  </a>
-               </li>
-               <li class="p-coaching">
-                  <a href="#" data-toggle="modal" data-target="#pcoatching">
-                  <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
-                  <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
-                  </i>
-                  <span>Personal Coaching</span>
-                  </a>
-               </li>
-            </ul>
-         </div>
+         {% include 'dashboard/actionbar.html' %}
          <div class="admin-mid-sec container-fluid">
             <h2 class="title-2">My Lessons</h2>
             <div class="search-row">

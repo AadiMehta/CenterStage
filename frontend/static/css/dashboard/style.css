@@ -237,7 +237,7 @@ ul.lessions-countDetail-list {display: flex; width: 100%;}
 .upImage-video-row {display: flex; flex-wrap: wrap;}
 .upImage-video-col {display: flex;  flex: 2;  align-items: flex-start;  flex-wrap: wrap; width: calc(50% - 20px); margin:0 20px 1rem 0;}
 .upImage-video-col:last-child{margin-right: 0px;}
-.upImage-video-inner {height: 250px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; width: 100%; border: dashed 2px #C9C9C9; border-radius: 6px; padding: 2rem; position: relative; text-align: center; margin-bottom: 12px;}
+.upImage-video-inner {height: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; width: 100%; border: dashed 2px #C9C9C9; border-radius: 6px; padding: 2rem; position: relative; text-align: center; margin-bottom: 12px;}
 .upImage-video-inner h4 {font-size: 20px;  font-weight: 400; width: 100%;}
 .upImage-video-inner .form-control {width: 100%;  border-radius: 0; font-style: italic;}
 .upload-file-input{position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; opacity: 0;}
