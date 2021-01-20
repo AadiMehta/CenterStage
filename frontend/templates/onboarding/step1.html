@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block style %}
-<link href="{% static '/css/home.css' %}" rel="stylesheet">
-<link href="{% static '/css/media.css' %}" rel="stylesheet">
-<link href="{% static '/css/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/home.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/media.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/style.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -24,16 +24,16 @@
             <div class="boarding-left">
                 <div class="boarding-form-area">
                     <div class="form-group">
-                        <label>Name your academy</label>
+                        <label>Profession</label>
                         <div class="liner-inp">
-                            <input id="onboardingAcademyName" type="text" class="form-control" placeholder="Academy name here" />
+                            <input id="onboardingAcademyName" type="text" class="form-control" placeholder="e.g Fitness Trainer" />
                         </div>
                         <p id="onboardingAcademyNameError" style="color:red;"></p>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label>Bio</label>
                         <div class="liner-inp">
-                            <input id="onboardingDescription" type="text" class="form-control" placeholder="Description here" />
+                            <input id="onboardingDescription" type="text" class="form-control" placeholder="e.g Jack is a certified fitness trainer" />
                         </div>
                         <p id="onboardingDescriptionError" style="color:red;"></p>
                     </div>
