@@ -141,3 +141,5 @@ media/*
 static/*
 
 .env
+
+tmp_files/*

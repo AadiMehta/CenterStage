@@ -34,7 +34,7 @@ from frontend.views.onboarding import (
     OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
     AccountConnectedTemplate
 )
-from frontend.views.lesson import LessonCreateWizard
+from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
@@ -94,6 +94,7 @@ urlpatterns = [
 
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
+    path('api/lesson/upload/', AcceptFileAPI.as_view()),
 
     # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),

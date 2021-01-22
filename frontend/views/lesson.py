@@ -10,11 +10,34 @@ from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, 
     LessonCreateFormStep4, LessonCreateFormPreview
 from frontend.utils import get_user_from_token, is_authenticated
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
+from rest_framework.views import APIView
+from rest_framework.parsers import FileUploadParser
+from rest_framework.exceptions import ParseError
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + timezone.timedelta(n)
+
+
+class AcceptFileAPI(APIView):
+    """
+    Accept and store attached files in temporary storage
+    """
+    parser_class = (FileUploadParser,)
+
+    def post(self, request, format=None):
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+
+        fl = request.data['file']
+        fs = FileSystemStorage(location=settings.TEMP_DIR)
+        filename = fs.save(fl.name, fl)
+        return Response(dict({
+            "url": fs.url(filename)
+        }))
 
 
 class LessonCreateWizard(SessionWizardView):

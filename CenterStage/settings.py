@@ -234,3 +234,10 @@ ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
 ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
 ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
 
+# Temporary storage for the file upload
+if sys.platform == "win32":
+    TEMP_DIR = Path(BASE_DIR) / "tmp_files"
+else:
+    TEMP_DIR = Path("/tmp") / "tmp_files"
+
+os.makedirs(TEMP_DIR, exist_ok=True)

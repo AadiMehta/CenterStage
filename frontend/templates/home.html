@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block style %}
 <link href="{% static '/css/web/style.css' %}" rel="stylesheet">
 <link href="{% static '/css/web/media.css' %}" rel="stylesheet">
-
 <style>
    /**** Remove scrollbar on number input ****/
    /* For Chrome, Safari, Edge, Opera */
@@ -18,13 +18,14 @@
    }
    /**** End - Remove scrollbar on number input ****/
    .modal {
-   overflow:auto;
+      overflow:auto;
    }
    html {
       scroll-behavior: smooth;
    }
 </style>
 {% endblock %}
+
 {% block content %}
 {% include 'modals.html' %}
 <!-- Modal OnLoad-->
@@ -42,8 +43,8 @@
 </div>
 <!-- Modal OnLoad End-->
 <div class="wrapper homePage">
-    {% include 'header.html' with user=user %}
-    <div class="comn-sec section-1">
+   {% include 'header.html' with user=user %}
+   <div class="comn-sec section-1">
       <div class="container">
          <div class="row">
             <div class="col-md-6 left-col pl-10 pr-5">
@@ -154,48 +155,77 @@
       </div>
    </div>
    <div class="comn-sec how-it-works">
-      <div class="container">
-         <div class="how-it-works-wrap">
-            <div class="title-row">
-               <h2>How it Works</h2>
+    <div class="container">
+      <div class="how-it-works-wrap">
+        <div class="title-row"><h2>How it Works</h2></div>
+        <div class="works-steps">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="step1-tab" data-toggle="tab" href="#step1" role="tab" aria-controls="step1" aria-selected="true">
+                <i class="steps-img">
+                  <img class="steps-img-1" src="{% static 'images/step-1.svg' %}" alt="" />
+                  <img class="steps-img-2" src="{% static 'images/step-1_h.svg' %}" alt="" />
+                </i>
+                <span>STEP 1<br>Plan Your Course</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="step2-tab" data-toggle="tab" href="#step2" role="tab" aria-controls="step2" aria-selected="false">
+                <i class="steps-img">
+                  <img class="steps-img-1" src="{% static 'images/step-2.svg' %}" alt="" />
+                  <img class="steps-img-2" src="{% static 'images/step-2_h.svg' %}" alt="" />
+                </i>
+                <span>STEP 2<br>Record Your Video</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="step3-tab" data-toggle="tab" href="#step3" role="tab" aria-controls="step3" aria-selected="false">
+                <i class="steps-img">
+                  <img class="steps-img-1" src="{% static 'images/step-3.svg' %}" alt="" />
+                  <img class="steps-img-2" src="{% static 'images/step-3_h.svg' %}" alt="" />
+                </i>
+                <span>STEP 3<br>Build Your Community</span>
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+              <div class="steps-content-wrap">
+                <div class="steps-content">
+                  <h3>Plan Your Course</h3>
+                  <p>Create a customised webpage Host your live lesson or webinar You determine the lesson price Announce your lesson</p>
+                </div>
+                <div class="steps-graphics">
+                  <img src="{% static 'images/step-grap-1.svg' %}" alt="" />
+                </div>
+              </div>
             </div>
-            <div class="works-steps">
-               <ul>
-                  <li class="active">
-                     <i class="steps-img">
-                     <img class="steps-img-1" src="{% static '/images/step-1.svg' %}" alt="" />
-                     <img class="steps-img-2" src="{% static '/images/step-1_h.svg' %}" alt="" />
-                     </i>
-                     <span>STEP 1<br>Plan Your Course</span>
-                  </li>
-                  <li>
-                     <i class="steps-img">
-                     <img class="steps-img-1" src="{% static '/images/step-2.svg' %}" alt="" />
-                     <img class="steps-img-2" src="{% static '/images/step-2_h.svg' %}" alt="" />
-                     </i>
-                     <span>STEP 2<br>Record Your Video</span>
-                  </li>
-                  <li>
-                     <i class="steps-img">
-                     <img class="steps-img-1" src="{% static '/images/step-3.svg' %}" alt="" />
-                     <img class="steps-img-2" src="{% static '/images/step-3_h.svg' %}" alt="" />
-                     </i>
-                     <span>STEP 3<br>Build Your Community</span>
-                  </li>
-               </ul>
-               <div class="steps-content-wrap">
-                  <div class="steps-content">
-                     <h3>Plan Your Course</h3>
-                     <p>Create a customised webpage Host your live lesson or webinar<br>
-                        You determine the lesson price Announce your lesson</p>
-                  </div>
-                  <div class="steps-graphics">
-                     <img src="{% static '/images/step-grap-1.svg' %}" alt="" />
-                  </div>
-               </div>
+            <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+              <div class="steps-content-wrap">
+                <div class="steps-content">
+                  <h3>Plan Your Course</h3>
+                  <p>Create a customised webpage Host your live lesson or webinar You determine the lesson price Announce your lesson</p>
+                </div>
+                <div class="steps-graphics">
+                  <img src="{% static 'images/step-grap-1.svg' %}" alt="" />
+                </div>
+              </div>
             </div>
-         </div>
+            <div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
+              <div class="steps-content-wrap">
+                <div class="steps-content">
+                  <h3>Plan Your Course</h3>
+                  <p>Create a customised webpage Host your live lesson or webinar You determine the lesson price Announce your lesson</p>
+                </div>
+                <div class="steps-graphics">
+                  <img src="{% static 'images/step-grap-1.svg' %}" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
    </div>
    <div class="comn-sec why-join-center" id="WhyUs">
       <div class="container-2">
