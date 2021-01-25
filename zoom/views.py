@@ -72,21 +72,30 @@ class ZoomMeetingAPIView(APIView):
     permission_classes = []
   
     def post(self, request):
-        account = request.user.teacher_profile_data.accounts.get(
-                        account_type=TeacherAccountTypes.ZOOM_VIDEO
-                    )
-        access_token = self.get_access_token(account)
-        if not access_token:
-            return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
+        """
+        Create New Zoom Meeting link
+        """
+        try:
+            account = request.user.teacher_profile_data.accounts.get(
+                            account_type=TeacherAccountTypes.ZOOM_VIDEO
+                        )
+            access_token = self.get_access_token(account)
+            if not access_token:
+                return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
-        topic = request.data.get('topic')
-        meeting_type = request.data.get('type')
-        start_time = request.data.get('start_time')
-        duration = request.data.get('duration')
+            topic = request.data.get('topic', 'Free Meeting')
+            meeting_type = request.data.get('type', '2')
+            start_time = request.data.get('start_time', timezone.now().isoformat())
+            duration = request.data.get('duration', '30')
 
-        meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
 
-        return Response(meeting, status=status.HTTP_200_OK)
+            return Response(meeting, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
         account = request.user.teacher_profile_data.accounts.get(
@@ -101,11 +110,13 @@ class ZoomMeetingAPIView(APIView):
 
     @staticmethod
     def get_access_token(account):
-        expire_time = datetime.strptime(account.info.get('expire_time'), '%Y-%m-%dT%H:%M:%S')
-        if expire_time > timezone.now():
-            # If expire time is greater than current time then return
-            return account.info.get('access_token')
-        
+        expire_time = account.info.get('expire_time')
+        if expire_time:
+            expire_time = datetime.strptime(expire_time, '%Y-%m-%dT%H:%M:%S')
+            if expire_time > timezone.now():
+                # If expire time is greater than current time then return
+                return account.info.get('access_token')
+
         # If token is expired then refresh token
         refresh_token = account.info.get('refresh_token')
         resp = zoomclient.refresh_token(refresh_token)
