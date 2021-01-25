@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from engine.models import LessonData, LessonSlots
+from engine.models import LessonData, LessonSlots, Meeting
 
 
 # ********* Lessons Serializers **********
@@ -26,4 +26,19 @@ class LessonSlotCreateSerializer(serializers.ModelSerializer):
         exclude = [
             'creator',
             'lesson'
+        ]
+
+
+# ********* Meetings Serializers **********
+class MeetingCreateSerializer(serializers.ModelSerializer):
+    """
+    Meeting Create Serializer
+    name -> required
+    """
+    topic = serializers.CharField(required=True)
+
+    class Meta:
+        model = Meeting
+        exclude = [
+            'creator'
         ]

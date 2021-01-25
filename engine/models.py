@@ -10,6 +10,11 @@ class LessonTypes(models.TextChoices):
     ONGOING_SESSION = 'ONGOING', _('Ongoing Session')
 
 
+class MeetingTypes(models.TextChoices):
+    FREE = 'FREE', _('FREE')
+    PAID = 'PAID', _('PAID')
+
+
 class CurrencyTypes(models.TextChoices):
     DOLLARS = 'DOLLARS', _('DOLLARS')
     INDIAN_RUPEES = 'INDIAN_RUPEES', _('INDIAN_RUPEES')
@@ -45,3 +50,14 @@ class LessonSlots(models.Model):
     lesson_from = models.DateTimeField(_("Start of the lesson")),
     lesson_to = models.DateTimeField(_("End of the lesson"))
     slot_booked = models.BooleanField(_('Slot Booked Status'), default=False)
+
+
+class Meeting(models.Model):
+    """
+    Meeting Model
+    """
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="meetings")
+    topic = models.CharField(_("Topic of the meeting"), max_length=256)
+    price = models.JSONField(default=dict)
+    invitees = models.JSONField(default=list)
+    meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=10)

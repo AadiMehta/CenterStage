@@ -40,7 +40,7 @@ from frontend.views.dashboard import (
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
     DashboardSchedulesUpcomingSessions, DashboardStatistics
 )
-from engine.views import LessonAPIView
+from engine.views import LessonAPIView, MeetingAPIView
 
 
 schema_view = get_schema_view(
@@ -95,6 +95,9 @@ urlpatterns = [
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
     path('api/lesson/upload/', AcceptFileAPI.as_view()),
+
+    # Meeting APIs
+    path('api/meeting/', MeetingAPIView.as_view()),
 
     # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
