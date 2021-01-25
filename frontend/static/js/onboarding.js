@@ -234,7 +234,7 @@ function onProceedButtonClicked () {
         if (isProfileUrl) {
             createTeacherProfile(profession, bio, subDomain, profileUrl)
         } else {
-            createTeacherProfile(profession, description, subDomain)
+            createTeacherProfile(profession, bio, subDomain)
         }
     }
 }

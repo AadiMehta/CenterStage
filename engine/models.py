@@ -19,7 +19,7 @@ class LessonData(models.Model):
     """
     All lesson data is stored in this model
     """
-    creator = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="lessons")
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="lessons")
     name = models.CharField(_("Name of the lesson"), max_length=256)
     description = models.TextField(_("Description of the lesson"), blank=True, null=True)
     no_of_participants = models.IntegerField(_('No of participants'), null=True)
@@ -40,7 +40,7 @@ class LessonSlots(models.Model):
     """
     Datetime slots of the lessons
     """
-    creator = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="slots")
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="slots")
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="slots")
     lesson_from = models.DateTimeField(_("Start of the lesson")),
     lesson_to = models.DateTimeField(_("End of the lesson"))

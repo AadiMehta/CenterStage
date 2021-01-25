@@ -59,16 +59,20 @@ class LessonCreateWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
-        user = self.get_user()
-        if not user:
-            return redirect('/')
-        print(form.errors)
+
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
             data['goals'] = json.loads(data['goals'])
             data['requirements'] = json.loads(data['requirements'])
             context.update({'form_data': data})
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        user = self.get_user()
+        if not user:
+            return redirect('/')
+        else:
+            super(LessonCreateWizard, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         return [self.TEMPLATES[self.steps.current]]

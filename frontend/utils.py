@@ -8,7 +8,7 @@ def get_user_from_token(auth_token):
         user_id = Token.objects.get(key=auth_token).user_id
         return User.objects.get(id=user_id)
     except User.DoesNotExist:
-        pass
+        return False
 
 
 def is_authenticated(auth_token):
