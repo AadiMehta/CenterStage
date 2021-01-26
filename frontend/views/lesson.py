@@ -15,7 +15,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.exceptions import ParseError
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-
+from rest_framework.parsers import MultiPartParser
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
@@ -26,17 +26,20 @@ class AcceptFileAPI(APIView):
     """
     Accept and store attached files in temporary storage
     """
-    parser_class = (FileUploadParser,)
 
-    def post(self, request, format=None):
-        if 'file' not in request.data:
-            raise ParseError("Empty content")
+    def post(self, request):
+        print(request.data)
+        # if 'file' not in request.data:
+        #     raise ParseError("Empty content")
 
-        fl = request.data['file']
-        fs = FileSystemStorage(location=settings.TEMP_DIR)
-        filename = fs.save(fl.name, fl)
+        # fl = request.data['file']
+        # fs = FileSystemStorage(location=settings.TEMP_DIR)
+        # filename = fs.save(fl.name, fl)
+        # return Response(dict({
+        #     "url": fs.url(filename)
+        # }))
         return Response(dict({
-            "url": fs.url(filename)
+            "url": 'asasd'
         }))
 
 
@@ -50,21 +53,22 @@ class LessonCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        ("step1", LessonCreateFormStep1),
-        ("step2", LessonCreateFormStep2),
-        ("step3", LessonCreateFormStep3),
-        ("step4", LessonCreateFormStep4),
+        # ("step1", LessonCreateFormStep1),
+        # ("step2", LessonCreateFormStep2),
+        # ("step3", LessonCreateFormStep3),
+        # ("step4", LessonCreateFormStep4),
         ("preview", LessonCreateFormPreview),
     ]
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
-
+        print(self.get_all_cleaned_data())
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
-            data['goals'] = json.loads(data['goals'])
-            data['requirements'] = json.loads(data['requirements'])
+            data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
+            data['requirements'] = json.loads(data.get('requirements', '')) if data.get('requirements') else []
             context.update({'form_data': data})
+        print(context)
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -72,7 +76,7 @@ class LessonCreateWizard(SessionWizardView):
         if not user:
             return redirect('/')
         else:
-            super(LessonCreateWizard, self).dispatch(request, *args, **kwargs)
+            return super(LessonCreateWizard, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         return [self.TEMPLATES[self.steps.current]]

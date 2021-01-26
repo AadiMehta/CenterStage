@@ -6,6 +6,7 @@ class LessonCreateFormStep1(forms.Form):
     description = forms.CharField(max_length=100)
     no_of_participants = forms.CharField(max_length=100)
     language = forms.CharField(max_length=100)
+    session_type = forms.CharField(max_length=100)
     lesson_type = forms.CharField(max_length=100)
 
 
@@ -29,18 +30,15 @@ class LessonCreateFormStep2(forms.Form):
     sun_start_time = forms.CharField(max_length=100, required=False)
     sun_end_time = forms.CharField(max_length=100, required=False)
     no_of_sessions = forms.CharField(max_length=100, required=False)
-    price_per_session_currency = forms.CharField(max_length=100, required=False)
-    price_per_session_value = forms.CharField(max_length=100, required=False)
-    weekly_session_currency = forms.CharField(max_length=100, required=False)
-    weekly_session_value = forms.CharField(max_length=100, required=False)
-    monthly_session_currency = forms.CharField(max_length=100, required=False)
-    monthly_session_value = forms.CharField(max_length=100, required=False)
+    price_type = forms.CharField(max_length=100, required=False)
+    price_currency = forms.CharField(max_length=100, required=False)
+    price_value = forms.CharField(max_length=100, required=False)
 
 
 class LessonCreateFormStep3(forms.Form):
     is_private = forms.CharField(max_length=100)
-    cover_image = forms.CharField(widget=forms.Textarea)
-    video_link = forms.CharField(max_length=500)
+    cover_image = forms.CharField(widget=forms.Textarea, required=False)
+    video_link = forms.CharField(max_length=500, required=False)
 
 
 class LessonCreateFormStep4(forms.Form):

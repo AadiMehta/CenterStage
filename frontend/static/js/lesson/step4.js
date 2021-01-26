@@ -1,5 +1,55 @@
+// ****** Utilities ******
+/**
+ * Get Cookie by Name
+ * @param {String} cname 
+ */
+function getCookie(cname) {
+  /**
+   * Gets Cookie from cookie name
+   */
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+// ****** End of Utilities ******
 
+// ****** API Handlers ******
 
+/**
+ * Upload file
+ */
+function uploadFile(file) {
+  const token = getCookie('auth_token');
+  var data = new FormData();
+  data.append('file', file);
+  $.ajax('/api/lesson/upload/', {
+    type: 'POST',
+    method: 'POST',
+    cache: false,
+    contentType: 'multipart/form-data',
+    processData: false,
+    data: data,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    success: function (data, status, xhr) {
+      console.log(data);
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      console.log('Error while uploading file', errorMessage)
+    }
+  });
+}
   
 // ****** Event Handlers ****** 
 
@@ -96,6 +146,10 @@ function init() {
       e.stopPropagation();
       addMoreRequirement();
     }
+  });
+
+  $("#uploadFile").on('change', function(event) {
+    uploadFile(event.target.files[0])
   });
 
   $('#lcs4Proceed').click(handleLCS4Proceed);

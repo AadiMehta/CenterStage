@@ -30,21 +30,30 @@ function hideModal(modalName) {
   $(`#${modalName}`).modal('hide');
 }  
 
+function redirectToDashboard() {
+  // var counter = 5;
+  // var timeInterval = setInterval(function(){
+  //     $("#redirectionMessage").text(`Redirecting to dashboard in ${counter} seconds`);
+  //     counter = counter - 1;
+  //     if(counter <= 0) {
+  //         window.location.href = '/dashboard';
+  //     }
+  // }, 1000)
+  window.location.href = '/dashboard';
+}
+
+
 function init() {
   /**
    * Init Function to add event handlers
    */
-  showModal('PublishLessonModal', true);
+  showModal('shareModal', true);
+  $('#shareModal').on('hidden.bs.modal', function () {
+    redirectToDashboard();
+  })
   $('#startNow').click(() => {
     hideModal('shareModal');
-    var counter = 2;
-    var timeInterval = setInterval(function(){
-        $("#redirectionMessage").text(`Redirecting to dashboard in ${counter} seconds`);
-        counter = counter - 1;
-        if(counter <= 0) {
-            window.location.href = '/dashboard';
-        }
-    }, 1000)
+    redirectToDashboard();
   })
 }
 
