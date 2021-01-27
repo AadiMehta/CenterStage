@@ -5,7 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.authentication import BearerAuthentication
-from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
+from engine.serializers import (
+    LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
+)
 
 
 def daterange(start_date, end_date):
@@ -93,3 +95,30 @@ class LessonAPIView(APIView):
                     ))
                     serializer.is_valid(raise_exception=True)
                     serializer.save(creator=creator, lesson=lesson)
+
+
+class MeetingAPIView(APIView):
+    """
+    API to create meeting
+    """
+    authentication_classes = [BearerAuthentication]
+    permission_classes = []
+
+    def post(self, request):
+        """
+        Create Meeting with meeting details
+        """
+        try:
+            serializer = MeetingCreateSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(creator=request.user.teacher_profile_data)
+            return Response({
+                "msg": "Meeting Created",
+                "meeting": serializer.validated_data
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

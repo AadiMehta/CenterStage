@@ -76,6 +76,7 @@ docs/_build/
 target/
 
 # Jupyter Notebook
+*.ipynb
 .ipynb_checkpoints
 
 # IPython
@@ -143,3 +144,9 @@ static/*
 .env
 
 tmp_files/*
+
+# VS Code
+.vscode/
+
+# Pem file
+cs.pem

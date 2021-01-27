@@ -159,7 +159,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False # Temporary Set to False on Jan 26 for ZoomMeetingAPIView
 
 
 # Static files (CSS, JavaScript, Images)
