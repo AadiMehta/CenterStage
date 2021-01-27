@@ -26,8 +26,8 @@ class LessonData(models.Model):
     language = models.CharField(_('Lesson language'), max_length=30)
     lesson_type = models.CharField(_("Type of lesson"), choices=LessonTypes.choices, max_length=10)
     price_per_session = models.IntegerField(_('Price per session'), null=True)
-    price_per_session_currency = models.CharField(_("Price per session currency type"), choices=CurrencyTypes.choices, max_length=20,
-                                    help_text="Type of session")
+    price_per_session_currency = models.CharField(_("Price per session currency type"), choices=CurrencyTypes.choices,
+                                                  max_length=20, help_text="Type of session")
     is_private = models.BooleanField(_('Lesson Privacy'), default=False)
     cover_image = models.ImageField(_("Lesson Cover image"), storage=S3_LessonCoverImage_Storage(), null=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)

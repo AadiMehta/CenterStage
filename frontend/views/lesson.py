@@ -72,7 +72,7 @@ class LessonCreateWizard(SessionWizardView):
         if not user:
             return redirect('/')
         else:
-            super(LessonCreateWizard, self).dispatch(request, *args, **kwargs)
+            return super(LessonCreateWizard, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         return [self.TEMPLATES[self.steps.current]]
@@ -80,6 +80,8 @@ class LessonCreateWizard(SessionWizardView):
     def get_user(self):
         if is_authenticated(self.request.COOKIES.get('auth_token')):
             return get_user_from_token(self.request.COOKIES.get('auth_token'))
+        else:
+            return False
 
     def done(self, form_list, **kwargs):
         final_data = {}

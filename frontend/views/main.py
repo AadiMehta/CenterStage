@@ -30,6 +30,6 @@ class TermsAndConditionsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
+        if 'auth_token' in self.request.COOKIES and is_authenticated(self.request.COOKIES.get('auth_token')):
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
         return context
