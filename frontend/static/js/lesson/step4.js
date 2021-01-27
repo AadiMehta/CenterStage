@@ -1,4 +1,35 @@
 // ****** Utilities ******
+
+/**
+ * Show a specific modal using modal id
+ * @param {String} modalName 
+ * @param {Boolean} hide 
+ */
+function showModal(modalName, hide) {
+  if (hide) {
+      hideAll();
+  }
+  $(`#${modalName}`).modal('toggle');
+  $(`#${modalName}`).modal('show');
+}
+
+/**
+* Hide a specific modal using modal id
+* @param {String} modalName 
+*/
+function hideModal(modalName) {
+  $(`#${modalName}`).modal('hide');
+}
+
+/**
+* Hide all Modals
+*/
+function hideAll() {
+  $('.modal').map((index, modalEl) => {
+      $(`#${modalEl.id}`).modal('hide');
+  })
+}
+
 /**
  * Get Cookie by Name
  * @param {String} cname 
@@ -29,21 +60,36 @@ function getCookie(cname) {
  */
 function uploadFile(file) {
   const token = getCookie('auth_token');
-  var data = new FormData();
-  data.append('file', file);
+  var form = new FormData();
+  form.append('file', file, file.name);
+  const fileInfo = {
+    name: file.name,
+    type: file.type
+  }
   $.ajax('/api/lesson/upload/', {
-    type: 'POST',
-    method: 'POST',
-    cache: false,
-    contentType: 'multipart/form-data',
-    processData: false,
-    data: data,
+    method: "POST",
+    timeout: 0,
     headers: {
       'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
     },
+    processData: false,
+    mimeType: "multipart/form-data",
+    contentType: false,
+    data: form,
     success: function (data, status, xhr) {
-      console.log(data);
+      const {url} = JSON.parse(data);
+      const uploadedFiles = $('#readingFiles')[0].value;
+      let files = []
+      if (uploadedFiles) {
+        files = JSON.parse(uploadedFiles);
+      }
+      files.push({
+        url,
+        ...fileInfo
+      })
+      $('#readingFiles')[0].value = JSON.stringify(files);
+      addMoreFile(fileInfo.name);
+      hideModal('uploadFilesModal');
     },
     error: function (jqXhr, textStatus, errorMessage) {
       console.log('Error while uploading file', errorMessage)
@@ -124,6 +170,22 @@ function addMoreRequirement() {
   $('#referenceRequirementInput').attr('data-index', index + 1);
 }
 
+
+function addMoreFile(fileName) {
+  console.log(fileName);
+  const newUploadedFile = $('#referenceUploadedFile').clone();
+  const { index } = newUploadedFile.data();
+  if (index === 5) {
+    return;
+  }
+  const uploadPlusButton = $("#uploadButton");
+  newUploadedFile.insertBefore(uploadPlusButton);
+  newUploadedFile.find('button').text(fileName);
+  newUploadedFile.removeAttr('id');
+  newUploadedFile.show();
+  $('#referenceUploadedFile').attr('data-index', index + 1);
+}
+
   
 // ****** End of Event Handlers ****** 
 
@@ -151,7 +213,6 @@ function init() {
   $("#uploadFile").on('change', function(event) {
     uploadFile(event.target.files[0])
   });
-
   $('#lcs4Proceed').click(handleLCS4Proceed);
 }
 

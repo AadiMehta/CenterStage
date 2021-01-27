@@ -42,8 +42,9 @@ class LessonCreateFormStep3(forms.Form):
 
 
 class LessonCreateFormStep4(forms.Form):
-    goals = forms.CharField(max_length=1000)
-    requirements = forms.CharField(max_length=1000)
+    goals = forms.CharField(max_length=10000)
+    requirements = forms.CharField(max_length=10000)
+    files = forms.CharField(max_length=10000)
 
 
 class LessonCreateFormPreview(forms.Form):

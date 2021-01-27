@@ -26,20 +26,17 @@ class AcceptFileAPI(APIView):
     """
     Accept and store attached files in temporary storage
     """
+    parser_class = (FileUploadParser,)
 
     def post(self, request):
-        print(request.data)
-        # if 'file' not in request.data:
-        #     raise ParseError("Empty content")
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
 
-        # fl = request.data['file']
-        # fs = FileSystemStorage(location=settings.TEMP_DIR)
-        # filename = fs.save(fl.name, fl)
-        # return Response(dict({
-        #     "url": fs.url(filename)
-        # }))
+        fl = request.data['file']
+        fs = FileSystemStorage(location=settings.TEMP_DIR)
+        filename = fs.save(fl.name, fl)
         return Response(dict({
-            "url": 'asasd'
+            "url": fs.url(filename)
         }))
 
 
@@ -53,10 +50,10 @@ class LessonCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        # ("step1", LessonCreateFormStep1),
-        # ("step2", LessonCreateFormStep2),
-        # ("step3", LessonCreateFormStep3),
-        # ("step4", LessonCreateFormStep4),
+        ("step1", LessonCreateFormStep1),
+        ("step2", LessonCreateFormStep2),
+        ("step3", LessonCreateFormStep3),
+        ("step4", LessonCreateFormStep4),
         ("preview", LessonCreateFormPreview),
     ]
 
@@ -67,6 +64,7 @@ class LessonCreateWizard(SessionWizardView):
             data = self.get_all_cleaned_data()
             data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
             data['requirements'] = json.loads(data.get('requirements', '')) if data.get('requirements') else []
+            data['files'] = json.loads(data.get('files', '')) if data.get('files') else []
             context.update({'form_data': data})
         print(context)
         return context
