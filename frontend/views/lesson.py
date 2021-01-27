@@ -59,14 +59,12 @@ class LessonCreateWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
-        print(self.get_all_cleaned_data())
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
             data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
             data['requirements'] = json.loads(data.get('requirements', '')) if data.get('requirements') else []
             data['files'] = json.loads(data.get('files', '')) if data.get('files') else []
             context.update({'form_data': data})
-        print(context)
         return context
 
     def dispatch(self, request, *args, **kwargs):
