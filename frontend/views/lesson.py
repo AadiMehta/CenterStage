@@ -82,6 +82,8 @@ class LessonCreateWizard(SessionWizardView):
     def get_user(self):
         if is_authenticated(self.request.COOKIES.get('auth_token')):
             return get_user_from_token(self.request.COOKIES.get('auth_token'))
+        else:
+            return False
 
     def done(self, form_list, **kwargs):
         final_data = {}
