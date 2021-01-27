@@ -19,25 +19,14 @@ function handleLCS2Proceed() {
   $('#SunStartTimeError').hide();
   $('#SunEndTimeError').hide();
   $('#timezoneSelectError').hide();
-  $('#pricePerSessionValueError').hide();
-  $('#weeklyPriceValueError').hide();
-  $('#monthlyPriceValueError').hide();
+  $('#pricePerSessionError').hide();
+  $('#weeklyPriceError').hide();
+  $('#monthlyPriceError').hide();
   const startDate = $('#startDatepicker')[0].value;
   const endDate = $('#endDatepicker')[0].value;
   const timezone = $('#timezoneSelect')[0].value;
-  const pricePerSessionCheck = $('#pricePerSessionCheck')[0].checked
-  const pricePerSessionCurrency = $('#pricePerSessionCurrency')[0].value
-  const pricePerSessionValue = $('#pricePerSessionValue')[0].value
-  const weeklyPriceCheck = $('#weeklyPriceCheck')[0].checked
-  const weeklyPriceCurrency = $('#weeklyPriceCurrency')[0].value
-  const weeklyPriceValue = $('#weeklyPriceValue')[0].value
-  const monthlyPriceCheck = $('#monthlyPriceCheck')[0].checked
-  const monthlyPriceCurrency = $('#monthlyPriceCurrency')[0].value
-  const monthlyPriceValue = $('#monthlyPriceValue')[0].value
   const $weekdaysInput = $('#weekdaysInput');
   let weekDayList = $weekdaysInput[0].value ? $weekdaysInput[0].value.split(',') : [];
-
-  console.log(timezone)
 
   weekDayList.map((day) => {
     console.log(day)
@@ -67,21 +56,19 @@ function handleLCS2Proceed() {
     $('#timezoneSelectError').show()
     isValid = false;
   }
-  if (pricePerSessionCheck && (!pricePerSessionCurrency || !pricePerSessionValue)) {
-    $('#pricePerSessionValueError').text('Please Provide Price Per Session Currency and Price');
-    $('#pricePerSessionValueError').show()
+
+  const priceType = $('#priceType')[0].value
+  const priceCurrency = $(`#${priceType}Currency`)[0].value
+  const priceValue = parseInt($(`#${priceType}Value`)[0].value)
+  if (!priceCurrency || !priceValue) {
+    $(`#${priceType}Error`).text('Please Provide Price');
+    $(`#${priceType}Error`).show()
     isValid = false;  
+  } else {
+    $('#priceCurrency')[0].value = priceCurrency;
+    $('#priceValue')[0].value = priceValue;
   }
-  if (weeklyPriceCheck && (!weeklyPriceCurrency || !weeklyPriceValue)) {
-    $('#weeklyPriceValueError').text('Please Provide Weekly Session Currency and Price');
-    $('#weeklyPriceValueError').show()
-    isValid = false;  
-  }
-  if (monthlyPriceCheck && (!monthlyPriceCurrency || !monthlyPriceValue)) {
-    $('#monthlyPriceValueError').text('Please Provide Monthly Session Currency and Price');
-    $('#monthlyPriceValueError').show()
-    isValid = false;  
-  }
+
   if (isValid) {
     $("#step2").submit();
   }
@@ -132,6 +119,19 @@ function handleSesionDaysSelect(event) {
   calculateNumberOfSessions()
 }
 
+function enablePriceCheck(name) {
+  $('#priceType')[0].value = name;
+  $(`#${name}Check`)[0].checked = true;
+  $(`#${name}Currency`)[0].disabled = false;
+  $(`#${name}Value`)[0].disabled = false;            
+}
+
+function disablePriceCheck(name) {
+  $(`#${name}Check`)[0].checked = false;
+  $(`#${name}Currency`)[0].disabled = true;
+  $(`#${name}Value`)[0].disabled = true;
+}
+
 function handleLessonTimeSlotTypeSelect(event) {
   $("#flexible-time-slot").removeClass('selected');
   $("#fixed-time-slot").removeClass('selected');
@@ -169,60 +169,77 @@ function init() {
   });
   $('.timepicker').timepicker({ 'timeFormat': 'h:i A' });
 
-
   $('#pricePerSessionCheck').change(function() {
     if(this.checked) {
-      $('#pricePerSessionCurrency')[0].disabled = false;
-      $('#pricePerSessionValue')[0].disabled = false;        
+      enablePriceCheck('pricePerSession');
+      disablePriceCheck('weeklyPrice');
+      disablePriceCheck('monthlyPrice');
     } else {
-      $('#pricePerSessionCurrency')[0].disabled = true;
-      $('#pricePerSessionValue')[0].disabled = true;        
+      this.checked = true;
     }
   })
   $('#weeklyPriceCheck').change(function() {
     if(this.checked) {
-      $('#weeklyPriceCurrency')[0].disabled = false;
-      $('#weeklyPriceValue')[0].disabled = false;        
+      disablePriceCheck('pricePerSession');
+      enablePriceCheck('weeklyPrice');
+      disablePriceCheck('monthlyPrice');
     } else {
-      $('#weeklyPriceCurrency')[0].disabled = true;
-      $('#weeklyPriceValue')[0].disabled = true;        
+      this.checked = true;
     }
   })
   $('#monthlyPriceCheck').change(function() {
     if(this.checked) {
-      $('#monthlyPriceCurrency')[0].disabled = false;
-      $('#monthlyPriceValue')[0].disabled = false;        
+      disablePriceCheck('pricePerSession');
+      disablePriceCheck('weeklyPrice');
+      enablePriceCheck('monthlyPrice');
     } else {
-      $('#monthlyPriceCurrency')[0].disabled = true;
-      $('#monthlyPriceValue')[0].disabled = true;        
+      this.checked = true;
     }
   })
 
   $('#pricePerSessionValue').change(function() {
     const selectedCurrency = $('#pricePerSessionCurrency')[0].value;
     const pricePerSessionValue = $('#pricePerSessionValue')[0].value;
+    const noOfSessions = parseInt($('#noOfSessions')[0].value);
+    const totalPrice = pricePerSessionValue * noOfSessions;
     const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
-    $('#pricePerSessionTotalPrice').text(`${currency} ${pricePerSessionValue}`);
+    $('#pricePerSessionTotalPrice').text(`${currency} ${totalPrice}`);
   })
 
   $('#weeklyPriceValue').change(function() {
     const selectedCurrency = $('#monthlyPriceCurrency')[0].value;
     const pricePerSessionValue = $('#weeklyPriceValue')[0].value;
+    const startDate = $('#startDatepicker').val()
+    const endDate = $('#endDatepicker').val()
+    const start = dateFns.parse(startDate, 'dd/MM/yyyy', new Date())
+    const end = dateFns.parse(endDate, 'dd/MM/yyyy', new Date())
+    const weekCount = dateFns.differenceInCalendarWeeks(end, start)
+    const totalPrice = pricePerSessionValue * weekCount;
     const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
-    $('#weeklyPriceTotalPrice').text(`${currency} ${pricePerSessionValue}`);
+    $('#weeklyPriceTotalPrice').text(`${currency} ${totalPrice}`);
   })
 
   $('#monthlyPriceValue').change(function() {
     const selectedCurrency = $('#monthlyPriceCurrency')[0].value;
     const pricePerSessionValue = $('#monthlyPriceValue')[0].value;
+    const startDate = $('#startDatepicker').val()
+    const endDate = $('#endDatepicker').val()
+    const start = dateFns.parse(startDate, 'dd/MM/yyyy', new Date())
+    const end = dateFns.parse(endDate, 'dd/MM/yyyy', new Date())
+    const daysCount = dateFns.differenceInCalendarDays(end, start)
+    let monthCount = dateFns.differenceInCalendarMonths(end, start)
+    if (daysCount < 31 && daysCount > 1) {
+      monthCount = 1
+    }
+    const totalPrice = pricePerSessionValue * monthCount;
     const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
-    $('#monthlyPriceTotalPrice').text(`${currency} ${pricePerSessionValue}`);
+    $('#monthlyPriceTotalPrice').text(`${currency} ${totalPrice}`);
   })
 
   $('#lcs2Proceed').click(handleLCS2Proceed);
   /*
-      Step2 Time Slot Selection
-  */
+   * Step2 Time Slot Selection
+   */
  $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
   $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
 }

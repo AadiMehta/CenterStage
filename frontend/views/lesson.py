@@ -15,7 +15,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.exceptions import ParseError
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-
+from rest_framework.parsers import MultiPartParser
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
@@ -28,7 +28,7 @@ class AcceptFileAPI(APIView):
     """
     parser_class = (FileUploadParser,)
 
-    def post(self, request, format=None):
+    def post(self, request):
         if 'file' not in request.data:
             raise ParseError("Empty content")
 
@@ -59,11 +59,11 @@ class LessonCreateWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
-
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
-            data['goals'] = json.loads(data['goals'])
-            data['requirements'] = json.loads(data['requirements'])
+            data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
+            data['requirements'] = json.loads(data.get('requirements', '')) if data.get('requirements') else []
+            data['files'] = json.loads(data.get('files', '')) if data.get('files') else []
             context.update({'form_data': data})
         return context
 

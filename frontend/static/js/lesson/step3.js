@@ -19,21 +19,6 @@ function handleLCS3Proceed() {
   let isValid = true;
   $('#coverImageError').hide();
   $('#videoLinkError').hide();
-
-  const isPrivate = $('#is_private')[0].value;
-  const coverImage = $('#previewCoverImageDataUrl')[0].value;
-  const videoLink = $('#videoLink').val();
-  console.log(isPrivate);
-  if (!coverImage) {
-    $('#coverImageError').text('Please Provide Cover Image');
-    $('#coverImageError').show()
-    isValid = false;
-  }
-  if (!videoLink) {
-    $('#videoLinkError').text('Please Provide Video Link');
-    $('#videoLinkError').show()
-    isValid = false;
-  }
   if (isValid) {
     $("#step3").submit();
   }

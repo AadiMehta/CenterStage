@@ -283,6 +283,9 @@
                      </div>
                      <p id="timezoneSelectError" style="color:red;"></p>
                   </div>
+                  <input type="text" name="step2-price_type" id="priceType" style="display:none" value="pricePerSession" />
+                  <input type="text" name="step2-price_currency" id="priceCurrency" style="display:none" />
+                  <input type="number" name="step2-price_value" id="priceValue" style="display:none" />
                   <div class="priceSection">
                      <label>Price<span class="required">*</span></label>
                      <div class="inp-price-wrap">
@@ -291,7 +294,7 @@
                               <div class="w-100">
                                  <div class="custom-check">
                                     <div class="checkbox">
-                                       <input type="checkbox" id="pricePerSessionCheck">
+                                       <input type="checkbox" id="pricePerSessionCheck" checked>
                                        <label for="pricePerSessionCheck"></label>
                                     </div>
                                  </div>
@@ -299,20 +302,20 @@
                               </div>
                               <div class="row">
                                  <div class="col-lg-5 liner-select-drop">
-                                    <select class="form-control" name="step2-price_per_session_currency" id="pricePerSessionCurrency" disabled >
+                                    <select class="form-control" id="pricePerSessionCurrency" >
                                        <option value="DOLLARS">$ US Dollar</option>
                                        <option value="RUPEES">₹ Indian Rupees</option>
                                     </select>
                                  </div>
                                  <div class="col-lg-7 liner-select-drop">
-                                    <input type="number" min="0" name="step2-price_per_session_value" id="pricePerSessionValue" value="0" disabled />
+                                    <input type="number" min="0" id="pricePerSessionValue" value="0" />
                                     {% comment %} 
                                     <select class="form-control">
                                        <option>$50</option>
                                     </select>
                                     {% endcomment %}
                                  </div>
-                                 <p id="pricePerSessionValueError" style="color:red;"></p>
+                                 <p id="pricePerSessionError" style="color:red;"></p>
                               </div>
                            </div>
                            <div class="session-price-col">
@@ -333,20 +336,20 @@
                               </div>
                               <div class="row">
                                  <div class="col-lg-5 liner-select-drop">
-                                    <select class="form-control" name="step2-weekly_session_currency" id="weeklyPriceCurrency" disabled >
+                                    <select class="form-control" id="weeklyPriceCurrency" disabled >
                                        <option value="DOLLARS">$ US Dollar</option>
                                        <option value="RUPEES">₹ Indian Rupees</option>
                                     </select>
                                  </div>
                                  <div class="col-lg-7 liner-select-drop">
-                                    <input type="number" min="0" name="step2-weekly_session_value" id="weeklyPriceValue" value="0" disabled />
+                                    <input type="number" min="0" id="weeklyPriceValue" value="0" disabled />
                                     {% comment %} 
                                     <select class="form-control">
                                        <option>$50</option>
                                     </select>
                                     {% endcomment %}
                                  </div>
-                                 <p id="weeklyPriceValueError" style="color:red;"></p>
+                                 <p id="weeklyPriceError" style="color:red;"></p>
                               </div>
                            </div>
                            <div class="session-price-col">
@@ -367,20 +370,20 @@
                               </div>
                               <div class="row">
                                  <div class="col-lg-5 liner-select-drop">
-                                    <select class="form-control" name="step2-monthly_session_currency" id="monthlyPriceCurrency" disabled >
+                                    <select class="form-control" id="monthlyPriceCurrency" disabled >
                                        <option value="DOLLARS">$ US Dollar</option>
                                        <option value="RUPEES">₹ Indian Rupees</option>
                                     </select>
                                  </div>
                                  <div class="col-lg-7 liner-select-drop">
-                                    <input type="number" min="0" name="step2-monthly_session_value" id="monthlyPriceValue" value="0" disabled />
+                                    <input type="number" min="0" id="monthlyPriceValue" value="0" disabled />
                                     {% comment %} 
                                     <select class="form-control">
                                        <option>$50</option>
                                     </select>
                                     {% endcomment %}
                                  </div>
-                                 <p id="monthlyPriceValueError" style="color:red;"></p>
+                                 <p id="monthlyPriceError" style="color:red;"></p>
                               </div>
                            </div>
                            <div class="session-price-col">

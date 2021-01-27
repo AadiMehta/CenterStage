@@ -26,7 +26,7 @@ function handleLCS1Proceed() {
       $('#lessonDescriptionError').show()
       isValid = false;
     }
-    if (lessonNoOfParticipants === 'none') {
+    if (!lessonNoOfParticipants) {
       $('#lessonNoOfParticipantsError').text('Please Select Number of participants');
       $('#lessonNoOfParticipantsError').show()
       isValid = false;
@@ -65,6 +65,16 @@ function init() {
   $('#singleSession').click(handleLessonTypeSelect);
   $('#multiSession').click(handleLessonTypeSelect);
   $('#ongoingSession').click(handleLessonTypeSelect);
+  $('#lessonNoOfParticipants').change((event) => {
+    if (event.target.value > 200) {
+      event.target.value = 200;
+    }
+    if (event.target.value == 2) {
+      $('#lessonType')[0].value = 'ONE_ON_ONE';
+    } else {
+      $('#lessonType')[0].value = 'GROUP';
+    }
+  })
 }
 
 init();

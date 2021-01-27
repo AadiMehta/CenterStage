@@ -158,7 +158,7 @@
 </div>
 <!-- Modal OTP End-->
 <!-- Modal Lesson Notes -->
-<div class="modal fade modal-upload" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade modal-upload" id="uploadFilesModal" tabindex="-1" aria-labelledby="uploadFilesModalLabel" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -179,7 +179,7 @@
                     <img src="{% static 'images/icon-laptop.svg' %}" alt="" />
                 </div>
                 <div class="file-dropbox">
-                    <input type="file" class="file-drop-inp" />
+                    <input id="uploadFile" type="file" class="file-drop-inp" data-file-no="0" multiple/>
                     <div class="fileDrop-content">
                         <figure class="file-dropbox-icon">
                             <img src="{% static 'images/add-file.svg' %}" alt="" />

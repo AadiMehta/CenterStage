@@ -1,5 +1,101 @@
+// ****** Utilities ******
 
+/**
+ * Show a specific modal using modal id
+ * @param {String} modalName 
+ * @param {Boolean} hide 
+ */
+function showModal(modalName, hide) {
+  if (hide) {
+      hideAll();
+  }
+  $(`#${modalName}`).modal('toggle');
+  $(`#${modalName}`).modal('show');
+}
 
+/**
+* Hide a specific modal using modal id
+* @param {String} modalName 
+*/
+function hideModal(modalName) {
+  $(`#${modalName}`).modal('hide');
+}
+
+/**
+* Hide all Modals
+*/
+function hideAll() {
+  $('.modal').map((index, modalEl) => {
+      $(`#${modalEl.id}`).modal('hide');
+  })
+}
+
+/**
+ * Get Cookie by Name
+ * @param {String} cname 
+ */
+function getCookie(cname) {
+  /**
+   * Gets Cookie from cookie name
+   */
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+// ****** End of Utilities ******
+
+// ****** API Handlers ******
+
+/**
+ * Upload file
+ */
+function uploadFile(file) {
+  const token = getCookie('auth_token');
+  var form = new FormData();
+  form.append('file', file, file.name);
+  const fileInfo = {
+    name: file.name,
+    type: file.type
+  }
+  $.ajax('/api/lesson/upload/', {
+    method: "POST",
+    timeout: 0,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    processData: false,
+    mimeType: "multipart/form-data",
+    contentType: false,
+    data: form,
+    success: function (data, status, xhr) {
+      const {url} = JSON.parse(data);
+      const uploadedFiles = $('#readingFiles')[0].value;
+      let files = []
+      if (uploadedFiles) {
+        files = JSON.parse(uploadedFiles);
+      }
+      files.push({
+        url,
+        ...fileInfo
+      })
+      $('#readingFiles')[0].value = JSON.stringify(files);
+      addMoreFile(fileInfo.name);
+      hideModal('uploadFilesModal');
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      console.log('Error while uploading file', errorMessage)
+    }
+  });
+}
   
 // ****** Event Handlers ****** 
 
@@ -74,6 +170,22 @@ function addMoreRequirement() {
   $('#referenceRequirementInput').attr('data-index', index + 1);
 }
 
+
+function addMoreFile(fileName) {
+  console.log(fileName);
+  const newUploadedFile = $('#referenceUploadedFile').clone();
+  const { index } = newUploadedFile.data();
+  if (index === 5) {
+    return;
+  }
+  const uploadPlusButton = $("#uploadButton");
+  newUploadedFile.insertBefore(uploadPlusButton);
+  newUploadedFile.find('button').text(fileName);
+  newUploadedFile.removeAttr('id');
+  newUploadedFile.show();
+  $('#referenceUploadedFile').attr('data-index', index + 1);
+}
+
   
 // ****** End of Event Handlers ****** 
 
@@ -98,6 +210,9 @@ function init() {
     }
   });
 
+  $("#uploadFile").on('change', function(event) {
+    uploadFile(event.target.files[0])
+  });
   $('#lcs4Proceed').click(handleLCS4Proceed);
 }
 
