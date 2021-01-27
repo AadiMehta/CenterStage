@@ -35,6 +35,7 @@ from frontend.views.onboarding import (
     AccountConnectedTemplate
 )
 from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI
+from frontend.views.schedule import ScheduleCreateWizard
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
@@ -106,7 +107,8 @@ urlpatterns = [
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
 
     # Lesson Wizard
-    path('lesson/', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="schedule-lesson"),
+    path('lesson/new', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="new-lesson"),
+    path('schedule/new', ScheduleCreateWizard.as_view(ScheduleCreateWizard.FORMS), name="new-schedule"),
 
     # Dashboard Templates
     path('dashboard', DashboardLessons.as_view(), name="dashboard-main"),
