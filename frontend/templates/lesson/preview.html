@@ -143,9 +143,15 @@
                   <div class="row">
                      <div class="col-md-6">
                         <div class="form-group">
-                           <label>Price per Session</label>
+                           {% if form_data.price_type == 'pricePerSession' %}
+                              <label>Price per Session</label>
+                           {% elif form_data.price_type == 'weeklyPrice' %}
+                              <label>Price per week</label>
+                           {% elif form_data.price_type == 'monthlyPrice' %}
+                              <label>Price per month</label>
+                           {% endif %}
                            <div class="content-area">
-                              {% if form_data.price_per_session_currency == 'DOLLARS' %}${% endif %}{{form_data.price_per_session_value}}
+                              {% if form_data.price_currency == 'DOLLARS' %}${% endif %}{{form_data.price_value}}
                            </div>
                         </div>
                      </div>
@@ -153,7 +159,7 @@
                         <div class="form-group">
                            <label>Total Price per Student</label>
                            <div class="content-area">
-                              {% if form_data.price_per_session_currency == 'DOLLARS' %}${% endif %}{{ form_data.price_per_session_value }}
+                              {% if form_data.price_currency == 'DOLLARS' %}${% endif %}{{ form_data.total_price }}
                            </div>
                         </div>
                      </div>
@@ -172,19 +178,31 @@
                      <div class="col-md-6">
                         <div class="form-group">
                            <label>Lesson Image</label>
-                           <div class="lession-img-video">
-                              <img src="{{form_data.cover_image}}" alt="" />
-                           </div>
+                           {% if form_data.cover_image %}
+                              <div class="lession-img-video">
+                                 <img src="{{form_data.cover_image}}" alt="" />
+                              </div>
+                           {% else %}
+                              <div class="lession-img-video">
+                                 <h6>Cover Not Provided</h6>
+                              </div>
+                           {% endif %}
                         </div>
                      </div>
                      <div class="col-md-6">
                         <div class="form-group">
                            <label>Lesson Video</label>
-                           <div class="lession-img-video">
-                              <video controls="true">
-                                 <source src="{{form_data.video_link}}" type="video/mp4" />
-                              </video>
-                           </div>
+                           {% if form_data.cover_image %}
+                              <div class="lession-img-video">
+                                 <video controls="true">
+                                    <source src="{{form_data.video_link}}" type="video/mp4" />
+                                 </video>
+                              </div>
+                           {% else %}
+                              <div class="lession-img-video">
+                                 <h6>Video Not Provided</h6>
+                              </div>
+                           {% endif %}
                         </div>
                      </div>
                   </div>
@@ -210,13 +228,11 @@
                   </div>
                   <div class="form-group">
                      <label>Lesson Reading</label>
-                     <div class="content-area">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit anim id est laborum.
-                     </div>
+                     {% for file in form_data.files %}
+                        <div class="btn-col mt-2">
+                           <button type="button" class="btn-large-default width-btn">{{ file.name }}</button>
+                        </div>
+                     {% endfor %}
                   </div>
                   <div class="btn-area">
                      <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary btn-lg btn-theme" style="margin-right:30px; float: left">

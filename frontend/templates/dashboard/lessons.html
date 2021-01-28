@@ -55,238 +55,102 @@
                   <a href="#" class="tag-link">Z - A</a>
                </div>
             </div>
-            <div class="searchresult-wrap lessons-wrap">
-               <h2 class="lession-title">Core JAVA Development</h2>
-               <div class="lessions-countDetail">
-                  <ul class="lessions-countDetail-list">
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4>$354.69</h4>
-                           <h5>Total Earned</h5>
-                        </div>
-                        <span class="growth-text">Lorem ipsum 25.30% <i><img src="{% static 'images/arrow-up.png' %}" alt="" /></i> growth this month</span>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4><img src="{% static 'images/star-w.svg' %}" alt="" /> 4.8</h4>
-                           <h5>Total Rating</h5>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4>259</h4>
-                           <h5>Sessions Conducted</h5>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <div class="crnt-studnt">
-                              <h4>158</h4>
-                              <div class="profimg-col">
-                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+            {% for lesson in lessons %}
+               <div class="searchresult-wrap lessons-wrap">
+                  <h2 class="lession-title">{{ lesson.name | title }}</h2>
+                  <div class="lessions-countDetail">
+                     <ul class="lessions-countDetail-list">
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <h4>NA</h4>
+                              <h5>Total Earned</h5>
+                           </div>
+                           <span class="growth-text">Lorem ipsum 25.30% <i><img src="{% static 'images/arrow-up.png' %}" alt="" /></i> growth this month</span>
+                        </li>
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <h4><img src="{% static 'images/star-w.svg' %}" alt="" />NA</h4>
+                              <h5>Total Rating</h5>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <h4>NA</h4>
+                              <h5>Sessions Conducted</h5>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <div class="crnt-studnt">
+                                 <h4>NA</h4>
+                                 <div class="profimg-col">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                 </div>
+                              </div>
+                              <h5>Current Students</h5>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="searchresult-row">
+                     <div class="lession-col-left">
+                        <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                     </div>
+                     <div class="lession-col-right">
+                        <ul class="lessons-steps">
+                           <li>
+                              <i><img src="{% static 'images/live.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Total Sessions</h4>
+                                 <span>{{lesson.no_of_sessions}} Sessions </span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Duration</h4>
+                                 <span>45 Minutes</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Type</h4>
+                                 {% if lesson.session_type == 'ONE_ON_ONE' %}
+                                    <span>One - on - One</span>
+                                 {% else %}
+                                    <span>Group</span>
+                                 {% endif %}
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Language</h4>
+                                 <span>Hosted in {{ lesson.language | title }}</span>
+                              </div>
+                           </li>
+                        </ul>
+                        <div class="linerbtn-row">
+                           <div class="lessonBtnCol">
+                              <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                 <a class="dropdown-item" href="#">Edit Session</a>
+                                 <a class="dropdown-item" href="#">Manage in Zoom</a>
                               </div>
                            </div>
-                           <h5>Current Students</h5>
-                        </div>
-                     </li>
-                  </ul>
-               </div>
-               <div class="searchresult-row">
-                  <div class="lession-col-left">
-                     <img src="{% static 'images/lession-1.jpg' %}" alt="" />
-                  </div>
-                  <div class="lession-col-right">
-                     <ul class="lessons-steps">
-                        <li>
-                           <i><img src="{% static 'images/live.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Total Sessions</h4>
-                              <span>05 Sessions </span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Duration</h4>
-                              <span>45 Minutes</span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Type</h4>
-                              <span>One - on - One</span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/language.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Language</h4>
-                              <span>Hosted in English</span>
-                           </div>
-                        </li>
-                     </ul>
-                     <div class="linerbtn-row">
-                        <div class="lessonBtnCol">
-                           <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
-                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#">Edit Session</a>
-                              <a class="dropdown-item" href="#">Manage in Zoom</a>
+                           <div class="lessonBtnCol">
+                              <button class="btn-liner active" data-toggle="modal" data-target="#shareModal">Share</button>
                            </div>
                         </div>
-                        <div class="lessonBtnCol"><a href="#" class="btn-liner active">Share</a></div>
                      </div>
                   </div>
-               </div>
-            </div>
-            <div class="searchresult-wrap lessons-wrap">
-               <h2 class="lession-title">Core JAVA Development</h2>
-               <div class="lessions-countDetail">
-                  <ul class="lessions-countDetail-list">
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4>$354.69</h4>
-                           <h5>Total Earned</h5>
-                        </div>
-                        <span class="growth-text">Lorem ipsum 25.30% <i><img src="{% static 'images/arrow-up.png' %}" alt="" /></i> growth this month</span>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4><img src="{% static 'images/star-w.svg' %}" alt="" /> 4.8</h4>
-                           <h5>Total Rating</h5>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4>259</h4>
-                           <h5>Sessions Conducted</h5>
-                        </div>
-                     </li>
-                  </ul>
-               </div>
-               <div class="searchresult-row">
-                  <div class="lession-col-left">
-                     <img src="{% static 'images/lession-1.jpg' %}" alt="" />
-                  </div>
-                  <div class="lession-col-right">
-                     <ul class="lessons-steps">
-                        <li>
-                           <i><img src="{% static 'images/live.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Total Sessions</h4>
-                              <span>05 Sessions </span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Duration</h4>
-                              <span>45 Minutes</span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Type</h4>
-                              <span>One - on - One</span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/language.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Language</h4>
-                              <span>Hosted in English</span>
-                           </div>
-                        </li>
-                     </ul>
-                     <div class="linerbtn-row">
-                        <div class="lessonBtnCol">
-                           <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
-                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#">Edit Session</a>
-                              <a class="dropdown-item" href="#">Manage in Zoom</a>
-                           </div>
-                        </div>
-                        <div class="lessonBtnCol"><a href="#" class="btn-liner active">Share</a></div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="searchresult-wrap lessons-wrap">
-               <h2 class="lession-title">Core JAVA Development</h2>
-               <div class="lessions-countDetail">
-                  <ul class="lessions-countDetail-list">
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4>$354.69</h4>
-                           <h5>Total Earned</h5>
-                        </div>
-                        <span class="growth-text">Lorem ipsum 25.30% <i><img src="{% static 'images/arrow-up.png' %}" alt="" /></i> growth this month</span>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4><img src="{% static 'images/star-w.svg' %}" alt="" /> 4.8</h4>
-                           <h5>Total Rating</h5>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="lessions-countDetail-box">
-                           <h4>259</h4>
-                           <h5>Sessions Conducted</h5>
-                        </div>
-                     </li>
-                  </ul>
-               </div>
-               <div class="searchresult-row">
-                  <div class="lession-col-left">
-                     <img src="{% static 'images/lession-1.jpg' %}" alt="" />
-                  </div>
-                  <div class="lession-col-right">
-                     <ul class="lessons-steps">
-                        <li>
-                           <i><img src="{% static 'images/live.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Total Sessions</h4>
-                              <span>05 Sessions </span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Duration</h4>
-                              <span>45 Minutes</span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Type</h4>
-                              <span>One - on - One</span>
-                           </div>
-                        </li>
-                        <li>
-                           <i><img src="{% static 'images/language.png' %}" alt=""></i>
-                           <div class="lessons-steps-text">
-                              <h4>Session Language</h4>
-                              <span>Hosted in English</span>
-                           </div>
-                        </li>
-                     </ul>
-                     <div class="linerbtn-row">
-                        <div class="lessonBtnCol">
-                           <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
-                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#">Edit Session</a>
-                              <a class="dropdown-item" href="#">Manage in Zoom</a>
-                           </div>
-                        </div>
-                        <div class="lessonBtnCol"><a href="#" class="btn-liner active">Share</a></div>
-                     </div>
-                  </div>
-               </div>
-            </div>
+               </div>   
+            {% empty %}
+               <h5>No Lessons Found<h5>
+            {% endfor %}
          </div>
       </div>
    </div>

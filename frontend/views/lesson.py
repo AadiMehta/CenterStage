@@ -87,10 +87,16 @@ class LessonCreateWizard(SessionWizardView):
         final_data = {}
         for form in form_list:
             final_data.update(form.cleaned_data)
-        lesson = self.create(final_data)
-        return render(self.request, 'lesson/done.html', {
-            'lesson': lesson,
-        })
+        final_data['goals'] = json.loads(final_data.get('goals')) if final_data.get('goals') else []
+        final_data['requirements'] = json.loads(final_data.get('requirements', '')) if final_data.get('requirements') else []
+        final_data['files'] = json.loads(final_data.get('files', '')) if final_data.get('files') else []
+        final_data['price'] = {
+            'type': final_data['price_type'],
+            'currency': final_data['price_currency'],
+            'value': final_data['price_value'],
+        }
+        final_data['notes'] = final_data['files']
+        return self.create(final_data)
 
     def create(self, form_data):
         """
@@ -99,22 +105,23 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.get_user()
-            cover_image = None
-            if "cover_image" in form_data.keys():
-                cover_image, _ = self.base64_file(form_data.pop("cover_image"))
+            cover_image = form_data.pop("cover_image")
+            if cover_image:
+                cover_image, _ = self.base64_file(cover_image)
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
             lesson = serializer.save(creator=user.teacher_profile_data)
 
             # Uncomment below lines once bucket gets created on s3
-            if cover_image is not None:
-                lesson.cover_image = cover_image
-                lesson.save()
+            # On Jan 29 - An error occurred (NoSuchBucket) when calling the PutObject operation: The specified bucket does not exist
+            # if cover_image:
+            #     lesson.cover_image = cover_image
+            #     lesson.save()
 
             now = timezone.now()
             thirty_months = now + timezone.timedelta(days=90)
-            start_date = form_data.get('start_date') or now.strftime('%d-%m-%Y')
-            end_date = form_data.get('end_date') or thirty_months.strftime('%d-%m-%Y')
+            start_date = form_data.get('start_date') or now.strftime('%m/%d/%Y')
+            end_date = form_data.get('end_date') or thirty_months.strftime('%m/%d/%Y')
             weekdays = form_data.get('weekdays')
             sessions_in_day = form_data.get('sessions_in_day') or [{
                 "start_time": "11:00",
@@ -126,16 +133,13 @@ class LessonCreateWizard(SessionWizardView):
                 weekdays, sessions_in_day
             )
 
-            return Response({
-                "msg": "Lesson Created",
-                "lesson": serializer.validated_data
-            }, status=status.HTTP_201_CREATED)
+            return render(self.request, 'lesson/done.html', {
+                'lesson': lesson,
+            })
         except Exception as e:
             print(str(e))
-            return Response(dict({
-                "error": str(e)
-            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+            raise e
+
     @staticmethod
     def base64_file(data, name=None):
         _format, _img_str = data.split(';base64,')
@@ -152,8 +156,8 @@ class LessonCreateWizard(SessionWizardView):
         end_date with weekdays filter and appending
         start_time and end_time with timezone
         """
-        start_date = timezone.datetime.strptime(start_date, '%d-%m-%Y')
-        end_date = timezone.datetime.strptime(end_date, '%d-%m-%Y')
+        start_date = timezone.datetime.strptime(start_date, '%m/%d/%Y')
+        end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
         for date in daterange(start_date, end_date):
             if date.strftime('%a') in weekdays:
                 for session in sessions_in_day:

@@ -29,10 +29,11 @@ class LessonCreateFormStep2(forms.Form):
     sat_end_time = forms.CharField(max_length=100, required=False)
     sun_start_time = forms.CharField(max_length=100, required=False)
     sun_end_time = forms.CharField(max_length=100, required=False)
-    no_of_sessions = forms.CharField(max_length=100, required=False)
-    price_type = forms.CharField(max_length=100, required=False)
-    price_currency = forms.CharField(max_length=100, required=False)
-    price_value = forms.CharField(max_length=100, required=False)
+    no_of_sessions = forms.CharField(max_length=100)
+    price_type = forms.CharField(max_length=100)
+    price_currency = forms.CharField(max_length=100)
+    price_value = forms.CharField(max_length=100)
+    total_price = forms.CharField(max_length=100)
 
 
 class LessonCreateFormStep3(forms.Form):

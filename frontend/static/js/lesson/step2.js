@@ -203,6 +203,7 @@ function init() {
     const noOfSessions = parseInt($('#noOfSessions')[0].value);
     const totalPrice = pricePerSessionValue * noOfSessions;
     const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
+    $('#totalPrice')[0].value = totalPrice;
     $('#pricePerSessionTotalPrice').text(`${currency} ${totalPrice}`);
   })
 
@@ -216,6 +217,7 @@ function init() {
     const weekCount = dateFns.differenceInCalendarWeeks(end, start)
     const totalPrice = pricePerSessionValue * weekCount;
     const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
+    $('#totalPrice')[0].value = totalPrice;
     $('#weeklyPriceTotalPrice').text(`${currency} ${totalPrice}`);
   })
 
@@ -233,6 +235,7 @@ function init() {
     }
     const totalPrice = pricePerSessionValue * monthCount;
     const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
+    $('#totalPrice')[0].value = totalPrice;
     $('#monthlyPriceTotalPrice').text(`${currency} ${totalPrice}`);
   })
 
