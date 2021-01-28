@@ -16,6 +16,17 @@ class LessonCreateSerializer(serializers.ModelSerializer):
             'creator'
         ]
 
+class LessonSerializer(serializers.ModelSerializer):
+    """
+    Lesson Serializer
+    """
+
+    class Meta:
+        model = LessonData
+        exclude = [
+            'creator'
+        ]
+
 
 class LessonSlotCreateSerializer(serializers.ModelSerializer):
     """

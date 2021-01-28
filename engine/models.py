@@ -28,6 +28,7 @@ class LessonData(models.Model):
     name = models.CharField(_("Name of the lesson"), max_length=256)
     description = models.TextField(_("Description of the lesson"), blank=True, null=True)
     no_of_participants = models.IntegerField(_('No of participants'), null=True)
+    no_of_sessions = models.IntegerField(_('No of sessions'), null=True)
     language = models.CharField(_('Lesson language'), max_length=30)
     lesson_type = models.CharField(_("Type of lesson"), choices=LessonTypes.choices, max_length=10)
     session_type = models.CharField(_("Type of lesson"), choices=SessionTypes.choices, max_length=10)
