@@ -2,89 +2,117 @@
 {% load static %}
 
 {% block style %}
-<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
-<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet" />
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
 <style>
-.selectct-sessionsNom {display: flex; margin-top:2px; flex-wrap: wrap;}
-.select-sessions-col {display: flex;  flex-wrap: wrap;  width: calc(33.333% - 15px); align-self: flex-start; margin:0 15px 15px 0;}
-.select-sessions-col:last-child{margin-right: 0px;}
+    .selectct-sessionsNom {
+        display: flex;
+        margin-top: 2px;
+        flex-wrap: wrap;
+    }
+    .select-sessions-col {
+        display: flex;
+        flex-wrap: wrap;
+        width: calc(33.333% - 15px);
+        align-self: flex-start;
+        margin: 0 15px 15px 0;
+    }
+    .select-sessions-col:last-child {
+        margin-right: 0px;
+    }
 </style>
 
 <div class="boarding-sec">
-<div class="host-header">
-    <div class="host-header-left">
-        <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> <h2>Schedule Meeting</h2>
+    <div class="host-header">
+        <div class="host-header-left">
+            <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button>
+            <h2>Schedule Meeting</h2>
+        </div>
+        <div class="board-process">
+            <div class="board-num"><span class="active">01</span>/02</div>
+            <span class="board-process-txt">Meeting Info</span>
+        </div>
     </div>
-    <div class="board-process">
-        <div class="board-num"><span class="active">01</span>/02</div>
-        <span class="board-process-txt">Meeting Info</span>
-    </div>
-</div>
 
-<div class="boarding-area">
-    <div class="container">
-       <div class="boarding-wrap">
-        <div class="title-row"><h2>Meeting Info</h2></div>
-        <div class="boarding-row">
-            <div class="boarding-left">
-                <div class="form-group">
-                    <div class="input-area">
-                        <label>Topic</label>
-                        <div class="liner-inp"> 
-                            <input type="text" class="form-control" placeholder="Meeting topic here" />
+    <div class="boarding-area">
+        <div class="container">
+            <div class="boarding-wrap">
+                <div class="title-row"><h2>Meeting Info</h2></div>
+                <div class="boarding-row">
+                    <form id="step1" action="" method="post">
+                        {% csrf_token %}
+                        {{ wizard.management_form }}
+                        <div class="boarding-left">
+                            <div class="form-group">
+                                <div class="input-area">
+                                    <label>Topic</label>
+                                    <div class="liner-inp">
+                                        <input type="text" name="step1-topic" id="lessonTopic" class="form-control" placeholder="Meeting topic here" />
+                                    </div>
+                                    <p id="lessonTopicError" style="color: red;"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-area addmore-fields">
+                                    <label>Add Invitee Email Address</label>
+                                    <input id="invitees" name="step1-invitees" style="display: none;" />
+                                    <div class="liner-inp mb-2" id="lastInviteeInput">
+                                        <input type="text" class="form-control invitee-input" placeholder="Add an email address" data-invitee-index="0" />
+                                        <button id="addMoreInviteeButton" class="btn-addmore add-invitee-button" type="button"><img src="{% static 'images/add-icon.svg' %}" alt="" /></button>
+                                    </div>
+                                    <div class="liner-inp mb-2" id="referenceInviteeInput" style="display: none;" data-index="1">
+                                        <input type="text" class="form-control" placeholder="Add an email address" />
+                                    </div>
+                                    <span class="addmore-text">Press enter to add more</span>
+                                </div>
+                                <p id="inviteesError" style="color: red;"></p>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Sessions in Lesson <span>*</span></label>
+                                <input id="sessionTypeValue" type="hidden" name="step1-session_type" value="SINGLE" />
+                                <p id="sessionTypeError" style="color: red;"></p>
+                                <div class="selectct-sessionsNom" id="sessionType">
+                                    <div class="select-sessions-col">
+                                        <button
+                                            id="singleSession"
+                                            type="button"
+                                            class="btn-select-session {% if wizard.form.session_type.value == None or wizard.form.session_type.value == 'SINGLE' %}selected{% endif %}"
+                                            data-lesson-type="SINGLE"
+                                        >
+                                            Single Session
+                                        </button>
+                                        <span class="select-session-text">This is a one time class</span>
+                                    </div>
+                                    <div class="select-sessions-col">
+                                        <button id="multiSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'MULTI' %}selected{% endif %}" data-lesson-type="MULTI">Multi Sessions</button>
+                                        <span class="select-session-text">This lesson will have a fixed start and end date</span>
+                                    </div>
+                                    <div class="select-sessions-col">
+                                        <button id="ongoingSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'ONGOING' %}selected{% endif %}" data-lesson-type="ONGOING">Ongoing</button>
+                                        <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-area">
+                                <button id="schedule1Proceed" type="button" class="btn btn-primary btn-lg btn-theme">
+                                    <span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i>
+                                </button>
+                            </div>
                         </div>
-                     </div>
+                        <div class="boarding-right">
+                            <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                        </div>
+                    </form>
                 </div>
-               
-                <div class="form-group">
-                    <div class="input-area addmore-fields">
-                        <label>Add Invitee Email Address</label>
-                        <div class="liner-inp mb-2"> 
-                            <input type="text" class="form-control" placeholder="loremipsum1598745@email.com" />
-                        </div>
-                        <div class="liner-inp mb-2"> 
-                            <input type="text" class="form-control" placeholder="Add an email address" />
-                            <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt="" /></button>
-                        </div>
-                        <span class="addmore-text">Press enter to add more</span>
-                     </div>
-                     
-                </div>
-               
-               
-                <div class="form-group">
-                    <label>Number of Sessions in Lesson <span>*</span></label>
-                    <div class="select-sessionsNom"> 
-                        <div class="select-sessions-col">
-                            <button type="button" class="btn-select-session selected">Single Session</button>
-                            <span class="select-session-text">This is a one time class</span>
-                        </div>
-                        <div class="select-sessions-col">
-                            <button type="button" class="btn-select-session">Multi Sessions</button>
-                            <span class="select-session-text">This lesson will have a fixed start and end date</span>
-                        </div>
-                        <div class="select-sessions-col">
-                            <button type="button" class="btn-select-session">Ongoing</button>
-                            <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="btn-area"> 
-                    <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
-                </div>
-            </div>
-            <div class="boarding-right">
-                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
             </div>
         </div>
     </div>
-    </div>
-  </div>
-
 </div>
+{% endblock %}
 
+{% block script %}
+<script src="{% static '/js/schedule/step1.js' %}" type="text/javascript"></script>
 {% endblock %}

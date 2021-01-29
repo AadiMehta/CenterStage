@@ -18,6 +18,7 @@ class LessonTypes(models.TextChoices):
 class MeetingTypes(models.TextChoices):
     FREE = 'FREE', _('FREE')
     PAID = 'PAID', _('PAID')
+    SCHEDULE = 'SCHEDULE', _('SCHEDULE')
 
 
 class LessonData(models.Model):
@@ -32,6 +33,7 @@ class LessonData(models.Model):
     language = models.CharField(_('Lesson language'), max_length=30)
     lesson_type = models.CharField(_("Type of lesson"), choices=LessonTypes.choices, max_length=10)
     session_type = models.CharField(_("Type of lesson"), choices=SessionTypes.choices, max_length=10)
+    meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=10)
     price = models.JSONField(default=list)
     is_private = models.BooleanField(_('Lesson Privacy'), default=False)
     cover_image = models.ImageField(_("Lesson Cover image"), storage=S3_LessonCoverImage_Storage(), null=True)

@@ -7,6 +7,7 @@ from formtools.wizard.views import SessionWizardView
 from rest_framework import status
 from rest_framework.response import Response
 from frontend.forms.schedule import ScheduleCreateFormStep1, ScheduleCreateFormStep2
+from frontend.forms.lesson import LessonCreateFormPreview
 from frontend.utils import get_user_from_token, is_authenticated
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
@@ -43,20 +44,23 @@ class ScheduleCreateWizard(SessionWizardView):
     TEMPLATES = {
         "step1": "schedule/schedule01.html",
         "step2": "schedule/schedule02.html",
+        "preview": "lesson/preview.html",
     }
 
     FORMS = [
         ("step1", ScheduleCreateFormStep1),
         ("step2", ScheduleCreateFormStep2),
+        ("preview", LessonCreateFormPreview),
+
     ]
 
     def get_context_data(self, form, **kwargs):
+        print(form)
+        print(kwargs)
         context = super(ScheduleCreateWizard, self).get_context_data(form=form, **kwargs)
-
+        print(self.get_all_cleaned_data())
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
-            data['goals'] = json.loads(data['goals'])
-            data['requirements'] = json.loads(data['requirements'])
             context.update({'form_data': data})
         return context
 
