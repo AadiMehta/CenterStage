@@ -105,7 +105,7 @@ function handleSesionDaysSelect(event) {
   const $dayStartTime = $(`#${targettedWeekday}StartTime`);
   const $dayEndTime = $(`#${targettedWeekday}EndTime`);
   if ($eventTarget.hasClass('active')) {
-    weekDayList.remove(targettedWeekday);
+    weekDayList.pop(targettedWeekday);
     $eventTarget.removeClass('active');
     $dayStartTime[0].disabled = true;
     $dayEndTime[0].disabled = true;

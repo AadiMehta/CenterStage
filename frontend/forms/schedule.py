@@ -2,7 +2,7 @@ from django import forms
 
 
 class ScheduleCreateFormStep1(forms.Form):
-    topic = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=100)
     invitees = forms.CharField(max_length=100)
     session_type = forms.CharField(max_length=100)
 
@@ -33,4 +33,5 @@ class ScheduleCreateFormStep2(forms.Form):
     total_price = forms.CharField(max_length=100)
 
 
-    
+class ScheduleCreateFormPreview(forms.Form):
+    success = forms.CharField(max_length=100, required=False)

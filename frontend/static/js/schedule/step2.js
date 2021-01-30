@@ -104,8 +104,9 @@ function handleSesionDaysSelect(event) {
   const targettedWeekday = event.currentTarget.dataset.weekday;
   const $dayStartTime = $(`#${targettedWeekday}StartTime`);
   const $dayEndTime = $(`#${targettedWeekday}EndTime`);
+  console.log($eventTarget.hasClass('active'));
   if ($eventTarget.hasClass('active')) {
-    weekDayList.remove(targettedWeekday);
+    weekDayList.pop(targettedWeekday);
     $eventTarget.removeClass('active');
     $dayStartTime[0].disabled = true;
     $dayEndTime[0].disabled = true;
