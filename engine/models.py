@@ -18,6 +18,8 @@ class LessonTypes(models.TextChoices):
 class MeetingTypes(models.TextChoices):
     FREE = 'FREE', _('FREE')
     PAID = 'PAID', _('PAID')
+    SCHEDULE = 'SCHEDULE', _('SCHEDULE')
+    HOST_LESSON = 'HOST_LESSON', _('HOST_LESSON')
 
 
 class LessonData(models.Model):
@@ -29,9 +31,10 @@ class LessonData(models.Model):
     description = models.TextField(_("Description of the lesson"), blank=True, null=True)
     no_of_participants = models.IntegerField(_('No of participants'), null=True)
     no_of_sessions = models.IntegerField(_('No of sessions'), null=True)
-    language = models.CharField(_('Lesson language'), max_length=30)
-    lesson_type = models.CharField(_("Type of lesson"), choices=LessonTypes.choices, max_length=10)
+    language = models.CharField(_('Lesson language'), null=True, max_length=30)
+    lesson_type = models.CharField(_("Type of lesson"), null=True, choices=LessonTypes.choices, max_length=10)
     session_type = models.CharField(_("Type of lesson"), choices=SessionTypes.choices, max_length=10)
+    meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
     price = models.JSONField(default=list)
     is_private = models.BooleanField(_('Lesson Privacy'), default=False)
     cover_image = models.ImageField(_("Lesson Cover image"), storage=S3_LessonCoverImage_Storage(), null=True)
@@ -39,6 +42,8 @@ class LessonData(models.Model):
     learnings = models.JSONField(default=list)
     requirements = models.JSONField(default=list)
     notes = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class LessonSlots(models.Model):
@@ -50,6 +55,7 @@ class LessonSlots(models.Model):
     lesson_from = models.DateTimeField(_("Start of the lesson")),
     lesson_to = models.DateTimeField(_("End of the lesson"))
     slot_booked = models.BooleanField(_('Slot Booked Status'), default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Meeting(models.Model):
@@ -60,4 +66,6 @@ class Meeting(models.Model):
     topic = models.CharField(_("Topic of the meeting"), max_length=256)
     price = models.JSONField(default=dict)
     invitees = models.JSONField(default=list)
-    meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=10)
+    meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

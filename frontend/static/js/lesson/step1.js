@@ -37,8 +37,8 @@ function handleLCS1Proceed() {
       isValid = false;
     }
     if (!lessonType) {
-      $('#lessonLanguageError').text('Please Select Lesson Type');
-      $('#lessonLanguageError').show()
+      $('#lessonTypeError').text('Please Select Lesson Type');
+      $('#lessonTypeError').show()
       isValid = false;
     }
     if (isValid) {

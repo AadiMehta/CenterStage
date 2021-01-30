@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
     LessonCreateFormStep4, LessonCreateFormPreview
 from frontend.utils import get_user_from_token, is_authenticated
+from engine.models import MeetingTypes
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
@@ -95,6 +96,7 @@ class LessonCreateWizard(SessionWizardView):
             'currency': final_data['price_currency'],
             'value': final_data['price_value'],
         }
+        final_data['meeting_type'] = MeetingTypes.HOST_LESSON
         final_data['notes'] = final_data['files']
         return self.create(final_data)
 

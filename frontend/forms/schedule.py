@@ -2,10 +2,9 @@ from django import forms
 
 
 class ScheduleCreateFormStep1(forms.Form):
-    topic = forms.CharField(max_length=100)
+    name = forms.CharField(max_length=100)
     invitees = forms.CharField(max_length=100)
-    no_of_participants = forms.CharField(max_length=100)
-    lesson_type = forms.CharField(max_length=100)
+    session_type = forms.CharField(max_length=100)
 
 
 class ScheduleCreateFormStep2(forms.Form):
@@ -27,10 +26,12 @@ class ScheduleCreateFormStep2(forms.Form):
     sat_end_time = forms.CharField(max_length=100, required=False)
     sun_start_time = forms.CharField(max_length=100, required=False)
     sun_end_time = forms.CharField(max_length=100, required=False)
-    no_of_sessions = forms.CharField(max_length=100, required=False)
-    price_per_session_currency = forms.CharField(max_length=100, required=False)
-    price_per_session_value = forms.CharField(max_length=100, required=False)
-    weekly_session_currency = forms.CharField(max_length=100, required=False)
-    weekly_session_value = forms.CharField(max_length=100, required=False)
-    monthly_session_currency = forms.CharField(max_length=100, required=False)
-    monthly_session_value = forms.CharField(max_length=100, required=False)
+    no_of_sessions = forms.CharField(max_length=100)
+    price_type = forms.CharField(max_length=100)
+    price_currency = forms.CharField(max_length=100)
+    price_value = forms.CharField(max_length=100)
+    total_price = forms.CharField(max_length=100)
+
+
+class ScheduleCreateFormPreview(forms.Form):
+    success = forms.CharField(max_length=100, required=False)

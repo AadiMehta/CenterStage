@@ -181,7 +181,6 @@ function addMoreInvitee() {
         $('#referenceInviteeInput').attr('data-index', index + 1);    
     }
 }
-  
 
 // ****** End of Event Handlers ****** 
 

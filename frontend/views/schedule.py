@@ -6,8 +6,9 @@ from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
 from rest_framework import status
 from rest_framework.response import Response
-from frontend.forms.schedule import ScheduleCreateFormStep1, ScheduleCreateFormStep2
+from frontend.forms.schedule import ScheduleCreateFormStep1, ScheduleCreateFormStep2, ScheduleCreateFormPreview
 from frontend.utils import get_user_from_token, is_authenticated
+from engine.models import MeetingTypes
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
@@ -43,20 +44,20 @@ class ScheduleCreateWizard(SessionWizardView):
     TEMPLATES = {
         "step1": "schedule/schedule01.html",
         "step2": "schedule/schedule02.html",
+        "preview": "schedule/preview.html",
     }
 
     FORMS = [
         ("step1", ScheduleCreateFormStep1),
         ("step2", ScheduleCreateFormStep2),
+        ("preview", ScheduleCreateFormPreview),
     ]
 
     def get_context_data(self, form, **kwargs):
         context = super(ScheduleCreateWizard, self).get_context_data(form=form, **kwargs)
-
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
-            data['goals'] = json.loads(data['goals'])
-            data['requirements'] = json.loads(data['requirements'])
+            data['invitees'] = json.loads(data.get('invitees')) if data.get('invitees') else []
             context.update({'form_data': data})
         return context
 
@@ -80,6 +81,8 @@ class ScheduleCreateWizard(SessionWizardView):
         final_data = {}
         for form in form_list:
             final_data.update(form.cleaned_data)
+        final_data['invitees'] = json.loads(final_data.get('invitees')) if final_data.get('invitees') else []
+        final_data['meeting_type'] = MeetingTypes.SCHEDULE
         lesson = self.create(final_data)
         return render(self.request, 'lesson/done.html', {
             'lesson': lesson,

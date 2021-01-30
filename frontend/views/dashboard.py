@@ -79,10 +79,9 @@ class DashboardLessons(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        lessons = LessonData.objects.all()
+        lessons = LessonData.objects.all().order_by('-created_at')
         serializer = LessonSerializer(lessons, many=True)
         context['lessons'] = serializer.data
-        print(context)
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
         return context
