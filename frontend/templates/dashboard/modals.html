@@ -1183,3 +1183,36 @@
     </div>
 </div>
 
+<div class="modal fade modal-logout" id="logoutConfirmation" tabindex="-1" aria-labelledby="logoutConfirmation" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <h2>Are you sure, you want to logout?</h2>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner" data-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="logout"><span>Logout</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade modal-logout" id="deleteConfirmation" tabindex="-1" aria-labelledby="deleteConfirmation" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <h2>Are you sure, you want to delete the account?</h2>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner" data-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Logout</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
