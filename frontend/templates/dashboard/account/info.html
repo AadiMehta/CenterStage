@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+{% include 'dashboard/modals.html' %}
 <div class="wrapper-main profileInfo-page">
    {% include 'dashboard/sidebar.html' with activeSection='account-info' %}
    <div class="main">
@@ -100,10 +101,18 @@
                            </div>
                            <div class="ac-veryfy-right">
                               <div class="custom-radios">
-                                 <input type="radio" id="test01" name="radio-group">
+                                 <input type="radio" id="test01" name="radio-group" {% if 'ZOOM' in teacher_accounts %}checked{% endif %} disabled>
                                  <label for="test01"></label>
                               </div>
-                              <button type="button" class="btn-liner">Disconnect</button>
+                              {% if 'ZOOM' in teacher_accounts %}
+                                 <button id="disconnectZoomAccount" type="button" class="btn-liner">Disconnect</button>
+                              {% else %}
+                                 <button
+                                    id="connectZoomAccount"
+                                    data-account-type="zoom"
+                                    data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"
+                                    type="button" class="btn-liner">Connect</button>
+                              {% endif %}
                            </div>
                         </div>
                         <div class="ac-veryfy-row">
@@ -249,7 +258,7 @@
                         </div>
                      </div>
                      <div class="prof-action-btn">
-                        <button type="button" class="btn-theme btn-theme-liner"><i><img src="{% static 'images/logout.svg' %}" alt="" /></i> <span>Logout</span></button><br>
+                        <button id="logoutButton" type="button" class="btn-theme btn-theme-liner"><i><img src="{% static 'images/logout.svg' %}" alt="" /></i> <span>Logout</span></button><br>
                         <button type="button" class="btn-theme btn-bgred"><i><img src="{% static 'images/delete.svg' %}" alt="" /></i> <span>Delete Account</span></button>
                      </div>
                   </div>
@@ -262,4 +271,5 @@
 {% endblock %}
 
 {% block script %}
+    <script src="{% static '/js/account/info.js' %}" type="text/javascript"></script> 
 {% endblock %}
