@@ -88,6 +88,7 @@ urlpatterns = [
 
     # Student APIs
     path('api/student/register/', StudentRegister.as_view()),
+    path('api/student/profile/', StudentRegister.as_view()),
 
     # zoom APIs
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),

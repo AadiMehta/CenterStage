@@ -3,7 +3,7 @@ import _thread
 from notifications.views import send_signup_email
 from rest_framework import serializers
 from users.constants import RESTRICTED_SUBDOMAINS
-from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments
+from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments, StudentProfile
 from django.db import IntegrityError
 from phonenumber_field.serializerfields import PhoneNumberField
 
@@ -198,6 +198,21 @@ class StudentUserCreateSerializer(serializers.ModelSerializer):
         except IntegrityError as e:
             error = dict({'error': str(e)})
             raise serializers.ValidationError(error)
+
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    # accounts = TeacherAccountsSerializer(many=True, read_only=True)
+    # payments = TeacherPaymentsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = StudentProfile
+        fields = (
+            'profile_image',
+            'bio',
+            'status',
+            # 'accounts',
+            # 'payments',
+        )
 
 
 # ********* Common Serializers ***********

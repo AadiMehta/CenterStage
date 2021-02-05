@@ -1,13 +1,10 @@
-import base64
 import re
+import base64
 import string
 import random
 import logging
-import urllib
-from django.conf import settings
 from django.core.cache import cache
 from django.core.files.base import ContentFile
-from django.views.generic import TemplateView
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -23,10 +20,10 @@ from notifications.twilio_sms_notification import twilio
 from django.utils import timezone
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
-    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
-    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, StudentUserCreateSerializer
+    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, TeacherPaymentsSerializer,
+    TeacherPaymentRemoveSerializer, StudentUserCreateSerializer, StudentProfileSerializer
 )
-from users.models import User, TeacherProfile, ProfileStatuses, TeacherPayments
+from users.models import User, TeacherProfile, ProfileStatuses, TeacherPayments, StudentProfile
 logger = logging.getLogger(__name__)
 
 
@@ -404,3 +401,78 @@ class TeacherPaymentsAPIView(APIView):
             return Response("", status=status.HTTP_204_NO_CONTENT)
         except TeacherPayments.DoesNotExist:
             return Response(dict({"error": "No Payment Found"}))
+
+
+# ************************* Student APIs *******************************
+
+class StudentProfileView(APIView):
+    """
+    API to create the additional teacher profile
+    info
+    """
+    @staticmethod
+    def base64_file(data, name=None):
+        _format, _img_str = data.split(';base64,')
+        _name, ext = _format.split('/')
+        if not name:
+            name = _name.split(":")[-1]
+        return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
+
+    def get(self, request):
+        try:
+            student = StudentProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
+        except StudentProfile.DoesNotExist:
+            return Response(dict({"error": "Student is yet to create the profile"}), status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = StudentProfileSerializer(instance=student)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        try:
+            student = StudentProfile.objects.get(user=request.user)
+            return Response(dict({
+                "error": "Teacher profile already created. Hit Put request to update the profile"
+            }), status=status.HTTP_400_BAD_REQUEST)
+        except StudentProfile.DoesNotExist:
+            profile_photo = None
+            if "profile_image" in request.data.keys():
+                profile_photo, ext = self.base64_file(request.data.pop("profile_image"))
+            serializer = StudentProfileSerializer(data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            student_profile = serializer.save(user=request.user)
+            if profile_photo is not None:
+                student_profile.profile_image.save(str(student_profile.user.first_name) + "_profile_photo." + ext,
+                                                   profile_photo, save=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request):
+        try:
+            student_profile = request.user.student_profile_data
+            if "profile_image" in request.data.keys():
+                profile_photo, ext = self.base64_file(request.data.pop("profile_image"))
+                student_profile.profile_image.save(str(student_profile.user.first_name) + "_profile_photo."
+                                                   + ext, profile_photo, save=True)
+            serializer = StudentProfileSerializer(student_profile, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except StudentProfile.DoesNotExist:
+            return Response(dict({
+                "error": "Student profile yet to be created. Hit Post request to create the profile."
+            }), status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        try:
+            student = request.user.student_profile_data
+        except StudentProfile.DoesNotExist:
+            return Response(dict({"error": "Teacher is yet to create the profile"}))
+
+        student.status = ProfileStatuses.DELETED
+        student.save()
+        return Response("", status=status.HTTP_204_NO_CONTENT)

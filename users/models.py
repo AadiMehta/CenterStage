@@ -165,12 +165,16 @@ class TeacherPayments(models.Model):
     info = models.JSONField(null=True)
 
 
+# ***************** Student Models ******************
+
+
 class StudentProfile(models.Model):
     """
     Additional data associated with the teacher user
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="student_profile_data")
-    description = models.TextField(_('About Student'), null=True, blank=True)
+    bio = models.TextField(_('Student Bio'), null=True, blank=True)
+    profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     status = models.CharField(_("Student Profile Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
                               help_text="Student Profile status", default=ProfileStatuses.ACTIVE)
 

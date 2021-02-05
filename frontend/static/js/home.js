@@ -437,6 +437,10 @@ function init() {
   $('#getOTPButton').click(onGetOTPClicked);
   $('#verifyOTPButton').click(onVerifyOTPClicked);
   $('#openSignUpButton').click(openSignupModal);
+  $('#startTeachingSignUp').click(openSignupModal);
+  $('#startTeachingSignUp1').click(openSignupModal);
+  $('#startTeachingSignUp2').click(openSignupModal);
+  $('#startTeachingSignUp3').click(openSignupModal);
   $('#openSignInButton').click(openSignInModal);
   $('#signUpButton').click(onSignUpClicked);
   $('#signInButton').click(onSignInClicked);
