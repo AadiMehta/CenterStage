@@ -30,12 +30,12 @@
           <div class="main-profile-menu">
             {% if user and user.first_name %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                <img alt="" src="{% static '/images/profile.svg' %}" />
                 <span>{{user.first_name}}</span>
               </a>
             {% else %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                <img alt="" src="{% static '/images/profile.svg' %}" />
                 <span>Login</span>
               </a>
               <div class="dropdown-menu">
@@ -44,7 +44,7 @@
                   <li><a href="#"><i><img src="{% static '/images/s-login.svg' %}" alt="" /></i><span>Student Login</span></a></li>
                   <li class="divider"></li>
                   <li><a href="#"><i><img src="{% static '/images/faq.svg' %}" alt="" /></i><span>FAQ</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
+                  <li><a href="mailto:help@centrestage.live"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
                 </ul>
               </div>
             {% endif %}

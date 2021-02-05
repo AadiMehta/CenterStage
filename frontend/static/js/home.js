@@ -122,7 +122,9 @@ function signUpAPI(firstName, lastName, phoneNo, emailId, password) {
         window.location.href = "/onboarding";
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        console.log('Error while signup', errorMessage)
+        $('#SignUpButtonError').text("Email already registered!")
+        $('#SignUpButtonError').show()
+        console.log('Error while signup: ', jqXhr)
         // hideModal('modalSignup');
       }
     });
@@ -147,7 +149,7 @@ function loginAPI(emailId, password) {
         location.reload();
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        alert('Error while login');
+        alert('Unable to login using given credentials');
         console.log('Error while Login', errorMessage)
         hideModal('modalLogin');
       }
