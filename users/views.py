@@ -351,6 +351,18 @@ class TeacherProfileView(APIView):
                 "error": "Teacher profile yet to be created. Hit Post request to create the profile."
             }), status=status.HTTP_400_BAD_REQUEST)
 
+    def patch(self, request):
+        try:
+            teacher_profile = request.user.teacher_profile_data
+            serializer = TeacherProfileSerializer(teacher_profile, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except TeacherProfile.DoesNotExist:
+            return Response(dict({
+                "error": "Teacher profile not updated."
+            }), status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request):
         try:
             teacher = request.user.teacher_profile_data
