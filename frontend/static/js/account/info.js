@@ -109,11 +109,31 @@ function handleZoomDisconnectAccount (event) {
   });
 }
 
+/**
+ * Delete Account
+ */
+function handleDeleteAccount (event) {
+  const token = getCookie('auth_token');
+  $.ajax('/api/teacher/profile/', {
+    type: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    success: function (data, status, xhr) {
+      location.reload();
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      alert('err')
+    }
+  });
+}
+
 function init() {
   $('#logoutButton').click(() => showModal('logoutConfirmation'));
   $('#logout').click(() => logout());
   $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
   $('#connectZoomAccount').click(handleZoomConnectAccount);
+  $('#deleteAccount').click(handleDeleteAccount);
 }
 
 init();
