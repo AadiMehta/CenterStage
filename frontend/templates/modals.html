@@ -24,6 +24,7 @@
                 </div>
                 <strong id="loginPasswordError" style="color:red;"></strong>
             </div>
+                <strong id="SignInButtonError" style="color:red;"></strong>
                 <button type="button" class="btn btn-primary btn-full btn-lg" id="signInButton">Log in</button>
                 <a href="#" class="forgot-pass link-small-text">Forgotten Your Password?</a>
                 <div class="or-row">
@@ -47,6 +48,7 @@
                 </div>
                 <strong id="loginPhoneNumberError" style="color:red;display: none;"></strong>
                 </div>
+                <strong id="OTPButtonError" style="color:red;"></strong>
                 <button id="getOTPButton" type="button" class="btn btn-primary btn-full btn-lg">Get OTP</button>
                 <div class="haveAc d-block">
                     Don't have an account?  <a href="javascript:void(0);" id="openSignUpButton">Sign Up</a>
@@ -150,7 +152,7 @@
             <strong id="otpCodeError" style="color:red;display: none;"></strong>
             <button id="verifyOTPButton" type="button" class="btn btn-primary btn-full btn-lg">Sign In</button>
             <div class="haveAc">
-                <span class="otp-time">Submit OTP in: 23</span> <span>Didn't get any OTP. <a href="#">Resend</a></span>
+                <span class="otp-time">Submit OTP in: <span id="timer"></span></span><span>Didn't get any OTP? <a href="#">Resend</a></span>
             </div>
             </div>
         </div>

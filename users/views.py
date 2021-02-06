@@ -23,7 +23,7 @@ from users.serializers import (
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, TeacherPaymentsSerializer,
     TeacherPaymentRemoveSerializer, StudentUserCreateSerializer, StudentProfileSerializer
 )
-from users.models import User, TeacherProfile, ProfileStatuses, TeacherPayments, StudentProfile
+from users.models import User, TeacherProfile, ProfileStatuses, TeacherPaymentAccounts, StudentProfile
 logger = logging.getLogger(__name__)
 
 

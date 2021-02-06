@@ -70,6 +70,8 @@ function sendOtpAPI(phoneNumber) {
         showModal('modalOTP', true);
       },
       error: function (jqXhr, textStatus, errorMessage) {
+        $('#OTPButtonError').text("Phone no. not registered with us!")
+        $('#OTPButtonError').show()
         console.log('Error while sending OTP', errorMessage)
       }
     });
@@ -94,7 +96,8 @@ function verifyOtpAPI(phoneNumber, otp) {
         location.reload();
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        console.log('Error while sending OTP', errorMessage)
+        $('#otpCodeError').text("Invalid OTP entered!")
+        $('#otpCodeError').show()
       }
     });
 }
@@ -130,6 +133,32 @@ function signUpAPI(firstName, lastName, phoneNo, emailId, password) {
     });
 }
 
+function timer(remaining) {
+  let timerOn = true;
+  var m = Math.floor(remaining / 60);
+  var s = remaining % 60;
+
+  m = m < 10 ? '0' + m : m;
+  s = s < 10 ? '0' + s : s;
+  document.getElementById('timer').innerHTML = m + ':' + s;
+  remaining -= 1;
+
+  if(remaining >= 0 && timerOn) {
+    setTimeout(function() {
+        timer(remaining);
+    }, 1000);
+    return;
+  }
+
+  if(!timerOn) {
+    // Do validate stuff here
+    return;
+  }
+
+  // Do timeout stuff here
+  alert('Timeout for otp');
+}
+
 /**
  * Login API
  * @param {String} emailId 
@@ -149,9 +178,9 @@ function loginAPI(emailId, password) {
         location.reload();
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        alert('Unable to login using given credentials');
+        $('#SignInButtonError').text("Unable to login with given credentials. Please try again!")
+        $('#SignInButtonError').show()
         console.log('Error while Login', errorMessage)
-        hideModal('modalLogin');
       }
     });
 }
@@ -182,6 +211,8 @@ function onGetOTPClicked () {
     }
     if (isValid) {
         sendOtpAPI(`${countryCode}${phoneNumber}`)
+        let timerOn = true;
+        timer(60);
     }
 }
 

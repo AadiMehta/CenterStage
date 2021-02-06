@@ -45,8 +45,9 @@
                   <input type="search" class="form-control" placeholder="Search Sessions" />
                </div>
                <div class="search-tags">
+                  <a href="#" class="tag-link active">All</a>
                   <a href="#" class="tag-link">One - on - One</a>
-                  <a href="#" class="tag-link active">Group Lesson</a>
+                  <a href="#" class="tag-link">Group Lesson</a>
                   <a href="#" class="tag-link">Personal Coaching</a>
                   <a href="#" class="tag-link">Recent</a>
                   <a href="#" class="tag-link">Popular</a>
@@ -149,7 +150,7 @@
                   </div>
                </div>   
             {% empty %}
-               <h5>No Lessons Found<h5>
+               <button type="button" class="btn-liner active">New Lesson</button>
             {% endfor %}
          </div>
       </div>

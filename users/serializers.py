@@ -3,7 +3,7 @@ import _thread
 from notifications.views import send_signup_email
 from rest_framework import serializers
 from users.constants import RESTRICTED_SUBDOMAINS
-from users.models import User, TeacherProfile, TeacherAccounts, TeacherPayments, StudentProfile
+from users.models import User, TeacherProfile, TeacherAccounts, TeacherPaymentAccounts, StudentProfile
 from django.db import IntegrityError
 from phonenumber_field.serializerfields import PhoneNumberField
 
@@ -52,7 +52,7 @@ class TeacherAccountsSerializer(serializers.ModelSerializer):
 class TeacherPaymentsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = TeacherPayments
+        model = TeacherPaymentAccounts
         fields = (
             'payment_type',
             'info'

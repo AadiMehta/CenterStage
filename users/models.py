@@ -155,16 +155,44 @@ class TeacherPaymentTypes(models.TextChoices):
     BANK = 'BANK', _('Bank Account')
 
 
-class TeacherPayments(models.Model):
+class TeacherPaymentAccounts(models.Model):
     """
     Data Associated to teacher payment accounts
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="payments")
     payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
                                     help_text="Type of payment account")
-    info = models.JSONField(null=True)
+    info = models.JSONField(null=False, blank=False)
+
+    class Meta:
+        unique_together = ['payment_type', 'teacher']
 
 
+class TeacherEarnings(models.Model):
+    """
+    Teacher earnings data
+    """
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="earnings")
+    amount = models.DecimalField(null=False, blank=False, decimal_places=2, max_digits=10)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('Earning Data')
+        verbose_name_plural = _('Earnings Data')
+
+
+class TeacherPageVisits(models.Model):
+    """
+    Teacher earnings data
+    """
+    teacher = models.OneToOneField(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
+    visits = models.PositiveBigIntegerField()
+    first_visited_on = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _('Page Visit')
+        verbose_name_plural = _('Page Visits')
 # ***************** Student Models ******************
 
 
@@ -183,10 +211,4 @@ class StudentProfile(models.Model):
         verbose_name_plural = _('Student Profiles')
 
 
-class EarningSchema(models.Model):
-    """
-    Earnings data
-    """
-    class Meta:
-        verbose_name = _('Earnings Data')
-        verbose_name_plural = _('Earnings Data')
+

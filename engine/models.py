@@ -62,7 +62,7 @@ class Meeting(models.Model):
     """
     Meeting Model
     """
-    creator = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="meetings")
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="meetings")
     topic = models.CharField(_("Topic of the meeting"), max_length=256)
     price = models.JSONField(default=dict)
     invitees = models.JSONField(default=list)
