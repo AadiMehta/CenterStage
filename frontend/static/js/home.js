@@ -477,6 +477,7 @@ function init() {
   $('#openSignInButton').click(openSignInModal);
   $('#signUpButton').click(onSignUpClicked);
   $('#signInButton').click(onSignInClicked);
+  $('#finalInput').change(onVerifyOTPClicked);
   initOTPInput();
   initHomePage();
 }

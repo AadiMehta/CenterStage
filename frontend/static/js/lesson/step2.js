@@ -197,6 +197,46 @@ function init() {
     }
   })
 
+  $('.validateendtime').change(function(e) {
+    if (!e.target.value) {
+      return;
+    }
+    const { check } = e.target.dataset
+    const endValue = moment(e.target.value, 'HH:mm A')
+    let startValue = $(`#${check}`)[0].value
+    $(`#${e.target.id}Error`).hide();
+    $(`#${check}Error`).hide();
+    if (!startValue) {
+      return;
+    }
+    startValue = moment(startValue, 'HH:mm A');
+    if (moment.duration(endValue.diff(startValue)).minutes() < 0 || moment.duration(endValue.diff(startValue)).hours() < 0) {
+      $(`#${e.target.id}Error`).text('Start time should not exceed end time');
+      $(`#${e.target.id}Error`).show()
+      e.target.value = null;
+    }
+  });
+
+  $('.validatestarttime').change(function(e) {
+    if (!e.target.value) {
+      return;
+    }
+    const { check } = e.target.dataset
+    const startValue = moment(e.target.value, 'HH:mm A')
+    let endValue = $(`#${check}`)[0].value
+    $(`#${e.target.id}Error`).hide();
+    $(`#${check}Error`).hide();
+    if (!endValue) {
+      return;
+    }
+    endValue = moment(endValue, 'HH:mm A');
+    if (moment.duration(endValue.diff(startValue)).minutes() < 0 || moment.duration(endValue.diff(startValue)).hours() < 0) {
+      $(`#${e.target.id}Error`).text('Start time should not exceed end time');
+      $(`#${e.target.id}Error`).show()
+      e.target.value = null;
+    }
+  });
+
   $('#pricePerSessionValue').change(function() {
     const selectedCurrency = $('#pricePerSessionCurrency')[0].value;
     const pricePerSessionValue = $('#pricePerSessionValue')[0].value;

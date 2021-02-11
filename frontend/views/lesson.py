@@ -1,9 +1,12 @@
 import json
+import pytz
 import base64
 from django.utils import timezone
+from pytz import timezone as pytztimezone
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
+
 from rest_framework import status
 from rest_framework.response import Response
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
@@ -17,6 +20,9 @@ from rest_framework.exceptions import ParseError
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from rest_framework.parsers import MultiPartParser
+from users.models import TeacherAccounts, TeacherAccountTypes, TeacherAccountTypes
+from zoom.utils import zoomclient
+
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
@@ -60,6 +66,7 @@ class LessonCreateWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
+        print(self.get_all_cleaned_data())
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
             data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
@@ -107,9 +114,24 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.get_user()
+            account = user.teacher_profile_data.accounts.get(
+                account_type=TeacherAccountTypes.ZOOM_VIDEO
+            )
+            access_token = self.get_access_token(account)
+            if not access_token:
+                return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
+
             cover_image = form_data.pop("cover_image")
             if cover_image:
                 cover_image, _ = self.base64_file(cover_image)
+
+            topic = form_data.get('name', 'Free Meeting')
+            meeting_type = form_data.get('type', '2')
+            start_time = form_data.get('start_time', timezone.now().isoformat())
+            duration = form_data.get('duration', '30')
+
+            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
             lesson = serializer.save(creator=user.teacher_profile_data)
@@ -125,14 +147,16 @@ class LessonCreateWizard(SessionWizardView):
             start_date = form_data.get('start_date') or now.strftime('%m/%d/%Y')
             end_date = form_data.get('end_date') or thirty_months.strftime('%m/%d/%Y')
             weekdays = form_data.get('weekdays')
+
             sessions_in_day = form_data.get('sessions_in_day') or [{
                 "start_time": "11:00",
                 "end_time": "12:00",
                 "timezone": "Asia/Kolkata"
             }]
+            session_tz = form_data.get('timezone')
             self.add_available_slots(
-                user.teacher_profile_data, lesson, start_date, end_date,
-                weekdays, sessions_in_day
+                user.teacher_profile_data, lesson, form_data, start_date, end_date,
+                weekdays, sessions_in_day, session_tz
             )
 
             return render(self.request, 'lesson/done.html', {
@@ -151,7 +175,7 @@ class LessonCreateWizard(SessionWizardView):
         return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
 
     @staticmethod
-    def add_available_slots(creator, lesson, start_date, end_date, weekdays, sessions_in_day):
+    def add_available_slots(creator, lesson, form_data, start_date, end_date, weekdays, sessions_in_day, session_tz):
         """
         Add Slots for lessons provided by creator
         using date range between start_date and
@@ -161,18 +185,18 @@ class LessonCreateWizard(SessionWizardView):
         start_date = timezone.datetime.strptime(start_date, '%m/%d/%Y')
         end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
         for date in daterange(start_date, end_date):
-            if date.strftime('%a') in weekdays:
-                for session in sessions_in_day:
-                    tz = timezone.pytz.timezone(session.get('timezone'))
-                    start_time = timezone.datetime.strptime(session.get('start_time'), '%H:%M').time()
-                    end_time = timezone.datetime.strptime(session.get('end_time'), '%H:%M').time()
-                    lesson_from = timezone.datetime.combine(date.today(), start_time)
-                    lesson_to = timezone.datetime.combine(date.today(), end_time)
-                    tz_lesson_from = tz.localize(lesson_from)
-                    tz_lesson_to = tz.localize(lesson_to)
-                    serializer = LessonSlotCreateSerializer(data=dict(
-                        lesson_from=tz_lesson_from,
-                        lesson_to=tz_lesson_to
-                    ))
-                    serializer.is_valid(raise_exception=True)
-                    serializer.save(creator=creator, lesson=lesson)
+            day = date.strftime('%a')
+            if day in weekdays:
+                lesson_tz = form_data.get('timezone', 'Asia/Kolkata')
+                start_time = form_data.get('{}_start_time'.format(day.lower()))
+                session_start_time = timezone.datetime.strptime(start_time, '%H:%M %p').time()
+                end_time = form_data.get('{}_end_time'.format(day.lower()))
+                session_end_time = timezone.datetime.strptime(end_time, '%H:%M %p').time()
+                lesson_from = timezone.datetime.combine(date, session_start_time)
+                lesson_to = timezone.datetime.combine(date, session_end_time)
+                serializer = LessonSlotCreateSerializer(data=dict(
+                    lesson_from=lesson_from.astimezone(pytz.timezone(lesson_tz)),
+                    lesson_to=lesson_to.astimezone(pytz.timezone(lesson_tz))
+                ))
+                serializer.is_valid(raise_exception=True)
+                serializer.save(creator=creator, lesson=lesson)

@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from users.models import TeacherProfile
 from users.s3_storage import S3_LessonCoverImage_Storage
@@ -36,6 +37,9 @@ class LessonData(models.Model):
     session_type = models.CharField(_("Type of lesson"), choices=SessionTypes.choices, max_length=10)
     meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
     price = models.JSONField(default=list)
+    timezone = models.CharField(_("Timezone of the lesson"), null=True, max_length=100)
+    meeting_link = models.URLField(max_length=200, null=True, blank=True) 
+    meeting_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     is_private = models.BooleanField(_('Lesson Privacy'), default=False)
     cover_image = models.ImageField(_("Lesson Cover image"), storage=S3_LessonCoverImage_Storage(), null=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)
@@ -52,7 +56,7 @@ class LessonSlots(models.Model):
     """
     creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="slots")
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="slots")
-    lesson_from = models.DateTimeField(_("Start of the lesson")),
+    lesson_from = models.DateTimeField(_("Start of the lesson"))
     lesson_to = models.DateTimeField(_("End of the lesson"))
     slot_booked = models.BooleanField(_('Slot Booked Status'), default=False)
     created_at = models.DateTimeField(auto_now_add=True)

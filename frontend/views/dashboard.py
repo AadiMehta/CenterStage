@@ -1,9 +1,14 @@
 import urllib
+import pytz
+
+from django.db.models import Q
+
+from django.utils import timezone
 from django.conf import settings
 from django.views.generic import TemplateView
 from frontend.utils import get_user_from_token
-from engine.models import LessonData
-from engine.serializers import LessonSerializer
+from engine.models import LessonData, LessonSlots
+from engine.serializers import LessonSerializer, LessonSlotSerializer
 from frontend.utils import get_user_from_token, is_authenticated
 
 class DashboardAccountAlerts(TemplateView):
@@ -67,11 +72,21 @@ class DashboardSchedulesPastSessions(TemplateView):
     template_name = "dashboard/schedules/pastsessions.html"
 
     def get_context_data(self, **kwargs):
+        user = self.get_user()
         context = super().get_context_data(**kwargs)
+        tz_now = timezone.now().astimezone(pytz.UTC)
+        lessonslots = LessonSlots.objects.filter(Q(lesson_from__lte=tz_now) | Q(lesson_to__lte=tz_now)).distinct('lesson_id')
+        serializer = LessonSlotSerializer(lessonslots, many=True)
+        context['lessons_slots'] = serializer.data
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
         return context
 
+    def get_user(self):
+        if is_authenticated(self.request.COOKIES.get('auth_token')):
+            return get_user_from_token(self.request.COOKIES.get('auth_token'))
+        else:
+            return False
 
 class DashboardSchedulesUpcomingSessions(TemplateView):
     """
@@ -80,10 +95,21 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
     template_name = "dashboard/schedules/upcoming.html"
 
     def get_context_data(self, **kwargs):
+        user = self.get_user()
         context = super().get_context_data(**kwargs)
+        tz_now = timezone.now().astimezone(pytz.UTC)
+        lessonslots = LessonSlots.objects.filter(Q(lesson_from__gte=tz_now) | Q(lesson_to__lte=tz_now)).distinct('lesson_id')
+        serializer = LessonSlotSerializer(lessonslots, many=True)
+        context['lessons_slots'] = serializer.data
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
         return context
+
+    def get_user(self):
+        if is_authenticated(self.request.COOKIES.get('auth_token')):
+            return get_user_from_token(self.request.COOKIES.get('auth_token'))
+        else:
+            return False
 
 
 class DashboardLessons(TemplateView):

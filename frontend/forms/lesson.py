@@ -15,6 +15,7 @@ class LessonCreateFormStep2(forms.Form):
     start_date = forms.CharField(max_length=100)
     end_date = forms.CharField(max_length=100)
     weekdays = forms.CharField(max_length=100)
+    timezone = forms.CharField(max_length=100)
     mon_start_time = forms.CharField(max_length=100, required=False)
     mon_end_time = forms.CharField(max_length=100, required=False)
     tue_start_time = forms.CharField(max_length=100, required=False)

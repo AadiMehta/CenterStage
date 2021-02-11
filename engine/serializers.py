@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
+from users.serializers import TeacherProfileSerializer
 
 
 # ********* Lessons Serializers **********
@@ -39,6 +40,41 @@ class LessonSlotCreateSerializer(serializers.ModelSerializer):
             'lesson'
         ]
 
+
+class LessonSlotSerializer(serializers.ModelSerializer):
+    """
+    Lesson Slot Serializer
+    """
+    lesson = LessonSerializer(read_only=True)
+    creator = TeacherProfileSerializer(read_only=True)
+    lesson_from = serializers.SerializerMethodField()
+    lesson_to = serializers.SerializerMethodField()
+    session_time = serializers.SerializerMethodField()
+    session_duration = serializers.SerializerMethodField()
+
+    def get_lesson_from(self, instance):
+        return instance.lesson_from.strftime('%A, %d %b %Y')
+
+    def get_lesson_to(self, instance):
+        return instance.lesson_to.strftime('%A, %d %b %Y')
+
+    def get_session_time(self, instance):
+        return '1:00 AM'
+
+    def get_session_duration(self, instance):
+        return '45 Minutes'
+
+    class Meta:
+        model = LessonSlots
+        fields = [
+            'creator',
+            'lesson',
+            'lesson_from',
+            'lesson_to',
+            'created_at',
+            'session_time',
+            'session_duration'
+        ]
 
 # ********* Meetings Serializers **********
 class MeetingCreateSerializer(serializers.ModelSerializer):

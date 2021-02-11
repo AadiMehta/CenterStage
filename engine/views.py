@@ -36,9 +36,9 @@ class LessonAPIView(APIView):
             lesson = serializer.save(creator=request.user.teacher_profile_data)
 
             # Uncomment below lines once bucket gets created on s3
-            if cover_image is not None:
-                lesson.cover_image = cover_image
-                lesson.save()
+            # if cover_image is not None:
+            #     lesson.cover_image = cover_image
+            #     lesson.save()
 
             now = timezone.now()
             thirty_months = now + timezone.timedelta(days=90)
