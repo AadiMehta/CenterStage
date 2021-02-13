@@ -5,7 +5,7 @@ class LessonCreateFormStep1(forms.Form):
     name = forms.CharField(max_length=100)
     description = forms.CharField(max_length=100)
     no_of_participants = forms.CharField(max_length=100)
-    language = forms.CharField(max_length=100)
+    language = forms.CharField(max_length=500)
     session_type = forms.CharField(max_length=100)
     lesson_type = forms.CharField(max_length=100)
 

@@ -34,10 +34,12 @@
                <div class="form-group">
                   <input id="slot_type" name="step2-slot_type" type="text" value="{{wizard.form.slot_type.value|default_if_none:'fixed'}}" style="display:none">
                   <div class="select-dateTime-row">
-                     <div class="select-dateTime-col">
-                        <button id="flexible-time-slot" type="button" class="btn-select-session  {% if wizard.form.slot_type.value == 'flexible' %}selected{% endif %}" data-slot-type="flexible">Flexible Date & Time</button>
-                        <span class="select-session-text">By selecting this option, students can book any time during your office hours. Please select office hours on your calendar to start receiving bookings after creating this lesson</span>
-                     </div>
+                     {% if form_data.no_of_participants == 1 %}
+                        <div class="select-dateTime-col">
+                           <button id="flexible-time-slot" type="button" class="btn-select-session  {% if wizard.form.slot_type.value == 'flexible' %}selected{% endif %}" data-slot-type="flexible">Flexible Date & Time</button>
+                           <span class="select-session-text">By selecting this option, students can book any time during your office hours. Please select office hours on your calendar to start receiving bookings after creating this lesson</span>
+                        </div>
+                     {% endif %}
                      <div class="select-dateTime-col">
                         <button id="fixed-time-slot" type="button" class="btn-select-session {% if wizard.form.slot_type.value == None or wizard.form.slot_type.value == 'fixed' %}selected{% endif %}" data-slot-type="fixed">Select Date & Time</button>
                         <span class="select-session-text">By selecting this option, students will be
@@ -87,9 +89,11 @@
                            <th>Start Time <span class="required"> *</span></th>
                            <th>End Time <span class="required"> *</span></th>
                         </thead>
+                        <button type="button" class="select-btn2" id="copySameTime" style="width:auto;">Copy Same Time</button>
                         <input id="weekdaysInput" name="step2-weekdays" style="display:none"/>
                         <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Mon">Mon</button></td>
+                           <td>
+                           <button type="button" class="select-btn2 week-days" data-weekday="Mon">Mon</button></td>
                            <td>
                               <div class="liner-select-drop">
                                  <input type="text" placeholder="Select Time" name="step2-mon_start_time" class="timepicker validatestarttime" id="MonStartTime" data-check="MonEndTime" disabled />
@@ -277,8 +281,9 @@
                      <div class="liner-select-drop">
                         <select class="form-control" name="step2-timezone" id="timezoneSelect" >
                            <option value="none">Select Time Zone</option>
-                           <option value="Asia/Kolkata">Asia/Kolkata</option>
-                           <option value="Asia/Pasific">Asia/Pasific</option>
+                           {% for timezone in timezone_options %}
+                              <option value="{{timezone}}">{{timezone}}</option>
+                           {% endfor %}
                         </select>
                      </div>
                      <p id="timezoneSelectError" style="color:red;"></p>

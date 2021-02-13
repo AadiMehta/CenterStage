@@ -2,6 +2,8 @@ from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
 from users.serializers import TeacherProfileSerializer
 
+from frontend.utils import get_time_duration
+
 
 # ********* Lessons Serializers **********
 class LessonCreateSerializer(serializers.ModelSerializer):
@@ -59,10 +61,10 @@ class LessonSlotSerializer(serializers.ModelSerializer):
         return instance.lesson_to.strftime('%A, %d %b %Y')
 
     def get_session_time(self, instance):
-        return '1:00 AM'
+        return instance.lesson_from.strftime('%I:%M %p')
 
     def get_session_duration(self, instance):
-        return '45 Minutes'
+        return get_time_duration(instance.lesson_to - instance.lesson_from, formatted=True)
 
     class Meta:
         model = LessonSlots

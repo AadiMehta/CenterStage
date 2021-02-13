@@ -15,7 +15,7 @@
                 you depending on your office hours
             </h3>
             <div class="finish-btn-area">
-                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#pcoatching2"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="continuePersonalCoaching"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
             </div>
         </div>
     </div>
@@ -36,7 +36,12 @@
                     <label>Duration per Session</label>
                     <div class="liner-inp select-drop">
                         <select class="form-control">
-                            <option>30 Min</option>
+                            <option>15 Mins</option>
+                            <option>30 Mins</option>
+                            <option>45 Mins</option>
+                            <option>1 Hour</option>
+                            <option>1.30 Hours</option>
+                            <option>2 Hour</option>
                         </select>
                     </div>
                 </div>
@@ -54,9 +59,10 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <div class="liner-inp select-drop">
-                            <select class="form-control">
+                             <input type="number" min="0" id="pricePerSessionValue" value="0" />
+                            {% comment %} <select class="form-control">
                                 <option>$50</option>
-                            </select>
+                            </select> {% endcomment %}
                             </div>
                             <span class="select-session-text">If you set price to zero, student can book for free</span>
                         </div>
@@ -77,7 +83,7 @@
                 </div>
             </div>
             <div class="finish-btn-area">
-                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish2"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" id="personalCoachingPublish"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
             </div>
         </div>
     </div>
@@ -1138,46 +1144,6 @@
                 </div>
             </div>
             <button type="button" class="btn btn-primary btn-lg btn-theme">Create Meeting</button>
-        </div>
-    </div>
-    </div>
-</div>
-<div class="modal fade modal-share" id="shareModal" tabindex="-1" aria-labelledby="shareLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="{% static 'images/close.svg' %}" alt="" />
-        </button>
-        <div class="modal-body">
-            <div class="share-modal-wrap">
-                <div class="share-modal-left">
-                <div class="sharecopy-link">
-                    <h2>Core JAVA Development</h2>
-                    <div class="sharecopy-inp">
-                        <input type="text" class="form-control" placeholder="https://www.centerstage.live/xyzjava/1548fghgytuj" />
-                        <button type="button" class="btn-theme">Copy</button>
-                    </div>
-                </div>
-                <div class="share-to">
-                    <h5>Share to</h5>
-                    <p>Sharing your lesson on social media right now will increase bookings</p>
-                    <div class="social-icons">
-                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
-                    </div>
-                </div>
-                <div class="btn-area mt-5 twobtn-wrap">
-                    <button id="startNow" type="button" class="btn btn-theme">Start Now</button>
-                </div>
-                </div>
-                <div class="share-graphics">
-                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
-                </div>
-            </div>
         </div>
     </div>
     </div>

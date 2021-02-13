@@ -283,8 +283,32 @@ function init() {
   /*
    * Step2 Time Slot Selection
    */
- $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
-  $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
+  $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
+    $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
+  }
+
+function updateCopySameTime($eventTarget) {
+  if ($eventTarget.hasClass('active')) {
+    $eventTarget.removeClass('active');
+  } else {
+    $eventTarget.addClass('active');
+    const $weekdaysInput = $('#weekdaysInput');
+    let weekDayList = $weekdaysInput[0].value ? $weekdaysInput[0].value.split(',') : [];
+    if (weekDayList.length > 1) {
+      const firstSelectedDay = weekDayList[0]
+      const firstSelectedDayStartTime = $(`#${firstSelectedDay}StartTime`)[0].value
+      const firstSelectedDayEndTime = $(`#${firstSelectedDay}EndTime`)[0].value      
+      const otherSelectedDays = weekDayList.slice(1);
+      otherSelectedDays.map((day) => {
+        $(`#${day}StartTime`)[0].value = firstSelectedDayStartTime;
+        $(`#${day}EndTime`)[0].value = firstSelectedDayEndTime;
+      })
+    }
+  }
 }
+
+$('#copySameTime').click((event) => {
+  updateCopySameTime($(event.target));
+});
 
 init();

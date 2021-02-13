@@ -23,6 +23,9 @@ from rest_framework.parsers import MultiPartParser
 from users.models import TeacherAccounts, TeacherAccountTypes, TeacherAccountTypes
 from zoom.utils import zoomclient
 
+from frontend.constants import languages as language_options
+from frontend.constants import timezones as timezone_options
+
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
@@ -66,11 +69,13 @@ class LessonCreateWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
-        print(self.get_all_cleaned_data())
+        context['language_options'] = language_options
+        context['timezone_options'] = timezone_options
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
             data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
             data['requirements'] = json.loads(data.get('requirements', '')) if data.get('requirements') else []
+            data['language'] = json.loads(data.get('language', '')) if data.get('language') else []
             data['files'] = json.loads(data.get('files', '')) if data.get('files') else []
             context.update({'form_data': data})
         return context
@@ -97,6 +102,7 @@ class LessonCreateWizard(SessionWizardView):
             final_data.update(form.cleaned_data)
         final_data['goals'] = json.loads(final_data.get('goals')) if final_data.get('goals') else []
         final_data['requirements'] = json.loads(final_data.get('requirements', '')) if final_data.get('requirements') else []
+        final_data['language'] = json.loads(final_data.get('language', '')) if final_data.get('language') else []
         final_data['files'] = json.loads(final_data.get('files', '')) if final_data.get('files') else []
         final_data['price'] = {
             'type': final_data['price_type'],
@@ -131,6 +137,8 @@ class LessonCreateWizard(SessionWizardView):
             duration = form_data.get('duration', '30')
 
             meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            form_data['meeting_link'] = meeting.get('join_url')
+            form_data['meeting_info'] = meeting
 
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
