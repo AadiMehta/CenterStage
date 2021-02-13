@@ -54,7 +54,7 @@ class ZoomClient(metaclass=Singleton):
         Get Encoded Token in Base64 format for API connections
         returns encoded base64 string of `client_id:secret_key`
         """
-        redirect_uri = urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+        redirect_uri = settings.ZOOM_REDIRECT_URL
         headers = {
             "Authorization": "Basic {}".format(self.encoded_auth_token),
             "Content-Type": "application/json"

@@ -15,6 +15,8 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.exceptions import ParseError
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from frontend.constants import languages as language_options
+from frontend.constants import timezones as timezone_options
 
 
 def daterange(start_date, end_date):
@@ -48,13 +50,15 @@ class ScheduleCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        ("step1", ScheduleCreateFormStep1),
+        # ("step1", ScheduleCreateFormStep1),
         ("step2", ScheduleCreateFormStep2),
         ("preview", ScheduleCreateFormPreview),
     ]
 
     def get_context_data(self, form, **kwargs):
         context = super(ScheduleCreateWizard, self).get_context_data(form=form, **kwargs)
+        context['language_options'] = language_options
+        context['timezone_options'] = timezone_options
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()
             data['invitees'] = json.loads(data.get('invitees')) if data.get('invitees') else []

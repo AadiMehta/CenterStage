@@ -6,9 +6,7 @@
  * @param {Boolean} hide 
  */
 function showModal(modalName, hide) {
-    if (hide) {
-        hideAll();
-    }
+    hideAll();
     $(`#${modalName}`).modal('toggle');
     $(`#${modalName}`).modal('show');
 }
@@ -199,6 +197,15 @@ function init() {
 
   $('#createPaidMeeting').click(handleCreatePaidMeeting);
   $('#createFreeMeeting').click(handleCreateFreeMeeting);
+  $('#personalCoaching').click(() => {
+    showModal('pcoatching');
+  })
+  $('#continuePersonalCoaching').click(() => {
+    showModal('pcoatching2');
+  })
+  $('#personalCoachingPublish').click(() => {
+    showModal('Publish2');
+  })
 }
 
 init();

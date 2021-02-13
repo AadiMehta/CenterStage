@@ -68,8 +68,9 @@
                         <div class="liner-select-drop">
                            <select id="lessonLanguage" name="step1-language" class="form-control">
                               <option value="none">Set language</option>
-                              <option value="english" {% if wizard.form.language.value == "english" %}selected{% endif %}>English</option>
-                              <option value="hindi" {% if wizard.form.language.value == "hindi" %}selected{% endif %}>Hindi</option>
+                              {% for language in language_options %}
+                                 <option value="{{language.value}}" {% if language.value in wizard.form.language.value %}selected{% endif %}>{{language.label}}</option>
+                              {% endfor %}
                            </select>
                         </div>
                         <p id="lessonLanguageError" style="color:red;"></p>

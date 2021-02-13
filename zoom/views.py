@@ -29,6 +29,7 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
             zoom_authorization_code = request.GET.get('code')
 
             resp = zoomclient.get_access_token(zoom_authorization_code)
+            resp.raise_for_status()
             if resp.status_code == status.HTTP_200_OK:
                 access_info = resp.json()
             else:
