@@ -55,7 +55,7 @@
                     <h2>Core JAVA Development</h2>
                     <div class="sharecopy-inp">
                         <input type="text" class="form-control" placeholder="{{lesson.meeting_link}}" />
-                        <button type="button" class="btn-theme">Copy</button>
+                        <button type="button" class="btn-theme" onclick="copyToClipboard({{lesson.meeting_link}})">Copy</button>
                     </div>
                 </div>
                 <div class="share-to">
@@ -104,4 +104,9 @@
 {% endblock %}
 {% block script %}
     <script src="{% static '/js/lesson/done.js' %}" type="text/javascript"></script>
+    <script>
+    function copyToClipboard(text) {
+        window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    }
+    </script>
 {% endblock %}
