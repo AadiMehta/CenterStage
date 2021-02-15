@@ -67,7 +67,7 @@
                               <i><img src="{% static 'images/language.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Language</h4>
-                                 <span>Hosted in {{ slot.lesson.language }}</span>
+                                 <span>Hosted in {% for language in slot.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                               </div>
                            </li>
                            <li>
@@ -86,9 +86,10 @@
                                  <a class="dropdown-item" href="#">Manage in Zoom</a>
                               </div>
                            </div>
-                           <div class="lessonBtnCol"> <a href="#" class="btn-liner" data-toggle="modal" data-target="#newmeeting">Share</a></div>
+                           <div class="lessonBtnCol">
+                           <a href="#" class="btn-liner" data-toggle="modal" data-target="#newmeeting">Share</a></div>
                            <a href="{{ slot.lesson.meeting_link }}" target="_blank">
-                              <div class="lessonBtnCol"><a href="#" class="btn-liner active">Start</a></div>
+                              <div class="lessonBtnCol"><a href="{{ slot.lesson.meeting_link }}" target="_blank" class="btn-liner active">Start</a></div>
                            </a>
                         </div>
                      </div>
