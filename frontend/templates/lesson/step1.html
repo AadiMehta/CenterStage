@@ -66,7 +66,8 @@
                      <div class="input-area">
                         <label>Lesson Language <span>*</span></label>
                         <div class="liner-select-drop">
-                           <select id="lessonLanguage" name="step1-language" class="form-control">
+                        <input  id="languages" name="step1-language" style="display: none"/>
+                           <select id="lessonLanguage" class="form-control">
                               <option value="none">Set language</option>
                               {% for language in language_options %}
                                  <option value="{{language.value}}" {% if language.value in wizard.form.language.value %}selected{% endif %}>{{language.label}}</option>

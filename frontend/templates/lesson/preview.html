@@ -86,9 +86,9 @@
                      <label>Lesson Language</label>
                      <div class="content-area">
                         <div class="search-tags">
-                           <a href="#" class="tag-link">{{form_data.language}}</a>
-<!--                           <a href="#" class="tag-link">Spanish</a>-->
-<!--                           <a href="#" class="tag-link">Hindi</a>-->
+                        {% for language in form_data.language %}
+                           <a href="javascript:void(0)" class="tag-link">{{language}}</a>
+                        {% endfor %}
                         </div>
                      </div>
                   </div>
