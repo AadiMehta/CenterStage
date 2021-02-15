@@ -123,7 +123,7 @@ class LessonCreateWizard(SessionWizardView):
             account = user.teacher_profile_data.accounts.get(
                 account_type=TeacherAccountTypes.ZOOM_VIDEO
             )
-            access_token = self.get_access_token(account)
+            access_token = zoomclient.get_access_token(account)
             if not access_token:
                 return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
