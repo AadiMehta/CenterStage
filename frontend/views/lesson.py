@@ -123,9 +123,9 @@ class LessonCreateWizard(SessionWizardView):
             account = user.teacher_profile_data.accounts.get(
                 account_type=TeacherAccountTypes.ZOOM_VIDEO
             )
-            access_token = zoomclient.get_access_token(account)
+            access_token = account.info.get('access_token')
             if not access_token:
-                return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
+                return redirect('new-lesson')
 
             cover_image = form_data.pop("cover_image")
             if cover_image:
@@ -173,6 +173,7 @@ class LessonCreateWizard(SessionWizardView):
         except Exception as e:
             print(str(e))
             raise e
+            return redirect('new-lesson')
 
     @staticmethod
     def base64_file(data, name=None):
