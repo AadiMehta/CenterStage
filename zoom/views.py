@@ -49,7 +49,7 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
             serializer.save(teacher=request.user.teacher_profile_data)
             return redirect('account-connected-success')
         except Exception as e:
-            print(str(e))
+            logger.exception(e)
             return Response(dict({
                 "error": str(e)
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -93,7 +93,7 @@ class ZoomMeetingAPIView(APIView):
 
             return Response(meeting, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(str(e))
+            logger.exception(e)
             return Response(dict({
                 "error": str(e)
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -104,6 +104,7 @@ class ZoomMeetingAPIView(APIView):
                     )
         access_token = self.get_access_token(account)
         if not access_token:
+            logger.error("Zoom Auth connection error")
             return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
 
         meetings = zoomclient.list_meetings(access_token)

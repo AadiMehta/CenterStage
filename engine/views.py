@@ -1,4 +1,5 @@
 import base64
+import logging
 from rest_framework import status
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -8,6 +9,7 @@ from users.authentication import BearerAuthentication
 from engine.serializers import (
     LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
 )
+logger = logging.getLogger(__name__)
 
 
 def daterange(start_date, end_date):

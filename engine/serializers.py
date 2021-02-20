@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
 from users.serializers import TeacherProfileSerializer
-
 from frontend.utils import get_time_duration
 
 
@@ -18,6 +17,7 @@ class LessonCreateSerializer(serializers.ModelSerializer):
         exclude = [
             'creator'
         ]
+
 
 class LessonSerializer(serializers.ModelSerializer):
     """
@@ -54,16 +54,20 @@ class LessonSlotSerializer(serializers.ModelSerializer):
     session_time = serializers.SerializerMethodField()
     session_duration = serializers.SerializerMethodField()
 
-    def get_lesson_from(self, instance):
+    @staticmethod
+    def get_lesson_from(instance):
         return instance.lesson_from.strftime('%A, %d %b %Y')
 
-    def get_lesson_to(self, instance):
+    @staticmethod
+    def get_lesson_to(instance):
         return instance.lesson_to.strftime('%A, %d %b %Y')
 
-    def get_session_time(self, instance):
+    @staticmethod
+    def get_session_time(instance):
         return instance.lesson_from.strftime('%I:%M %p')
 
-    def get_session_duration(self, instance):
+    @staticmethod
+    def get_session_duration(instance):
         return get_time_duration(instance.lesson_to - instance.lesson_from, formatted=True)
 
     class Meta:
@@ -77,6 +81,7 @@ class LessonSlotSerializer(serializers.ModelSerializer):
             'session_time',
             'session_duration'
         ]
+
 
 # ********* Meetings Serializers **********
 class MeetingCreateSerializer(serializers.ModelSerializer):

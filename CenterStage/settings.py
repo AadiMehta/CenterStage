@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_yasg',
     'phonenumber_field',
+    'corsheaders',
 
     # project specific apps
     'frontend',
@@ -56,12 +57,15 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'CenterStage.urls'
 
@@ -241,3 +245,71 @@ else:
     TEMP_DIR = Path("/tmp") / "tmp_files"
 
 os.makedirs(TEMP_DIR, exist_ok=True)
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(asctime)s - %(levelname)s - %(name)s : %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+        },
+        'CenterStageLogs': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024*1024*5,  # 5 MB
+            'backupCount': 5,
+            'formatter': 'simple',
+            'filename': os.path.join(BASE_DIR, 'logs', 'error.log'),
+            'level': 'ERROR',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'engine': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'frontend': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'notifications': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'payments': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'users': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'zoom': {
+            'handlers': ['console', 'CenterStageLogs'],
+            'level': 'ERROR',
+            'propagate': True,
+        }
+    }
+}

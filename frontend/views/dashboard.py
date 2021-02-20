@@ -1,15 +1,13 @@
 import urllib
 import pytz
-
 from django.db.models import Q
-
 from django.utils import timezone
 from django.conf import settings
 from django.views.generic import TemplateView
-from frontend.utils import get_user_from_token
 from engine.models import LessonData, LessonSlots
 from engine.serializers import LessonSerializer, LessonSlotSerializer
 from frontend.utils import get_user_from_token, is_authenticated
+
 
 class DashboardAccountAlerts(TemplateView):
     """
@@ -87,6 +85,7 @@ class DashboardSchedulesPastSessions(TemplateView):
             return get_user_from_token(self.request.COOKIES.get('auth_token'))
         else:
             return False
+
 
 class DashboardSchedulesUpcomingSessions(TemplateView):
     """

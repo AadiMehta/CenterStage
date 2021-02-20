@@ -1,13 +1,11 @@
 import json
 import pytz
 import base64
+import logging
 from django.utils import timezone
-from pytz import timezone as pytztimezone
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
-
-from rest_framework import status
 from rest_framework.response import Response
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
     LessonCreateFormStep4, LessonCreateFormPreview
@@ -19,12 +17,11 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.exceptions import ParseError
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from rest_framework.parsers import MultiPartParser
-from users.models import TeacherAccounts, TeacherAccountTypes, TeacherAccountTypes
+from users.models import TeacherAccountTypes
 from zoom.utils import zoomclient
-
 from frontend.constants import languages as language_options
 from frontend.constants import timezones as timezone_options
+logger = logging.getLogger(__name__)
 
 
 def daterange(start_date, end_date):
@@ -170,8 +167,7 @@ class LessonCreateWizard(SessionWizardView):
                 'lesson': lesson,
             })
         except Exception as e:
-            print(str(e))
-            raise e
+            logger.exception(e)
             return redirect('new-lesson')
 
     @staticmethod

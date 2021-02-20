@@ -1,5 +1,6 @@
 import json
 import base64
+import logging
 from django.utils import timezone
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
@@ -17,6 +18,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from frontend.constants import languages as language_options
 from frontend.constants import timezones as timezone_options
+logger = logging.getLogger(__name__)
 
 
 def daterange(start_date, end_date):
@@ -50,7 +52,7 @@ class ScheduleCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        # ("step1", ScheduleCreateFormStep1),
+        ("step1", ScheduleCreateFormStep1),
         ("step2", ScheduleCreateFormStep2),
         ("preview", ScheduleCreateFormPreview),
     ]
@@ -131,7 +133,7 @@ class ScheduleCreateWizard(SessionWizardView):
                 "lesson": serializer.validated_data
             }, status=status.HTTP_201_CREATED)
         except Exception as e:
-            print(str(e))
+            logger.exception(e)
             return Response(dict({
                 "error": str(e)
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
