@@ -82,6 +82,7 @@ function createPaidMeeting(topic, pricePerSessionCurrency, pricePerSession, invi
       }),
       success: function (data, status, xhr) {
         showModal('newmeetingsuccess', true);
+        $('#newmeetingsuccesslink')[0].placeholder = data.meeting.meeting_link;
       },
       error: function (jqXhr, textStatus, errorMessage) {
         console.log('Error while Creating paid meeting', errorMessage)
@@ -205,6 +206,10 @@ function init() {
   })
   $('#personalCoachingPublish').click(() => {
     showModal('Publish2');
+  })
+  $('#newmeetingsuccesslinkcopy').click(() => {
+    const meetingLink = $('#newmeetingsuccesslink')[0].placeholder;
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", meetingLink);
   })
 }
 

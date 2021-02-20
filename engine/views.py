@@ -2,13 +2,18 @@ import base64
 import logging
 from rest_framework import status
 from django.utils import timezone
+from django.shortcuts import redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.authentication import BearerAuthentication
+from frontend.utils import get_user_from_token, is_authenticated
 from engine.serializers import (
     LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
 )
+from users.models import TeacherAccountTypes
+from zoom.utils import zoomclient
+
 logger = logging.getLogger(__name__)
 
 
@@ -111,7 +116,25 @@ class MeetingAPIView(APIView):
         Create Meeting with meeting details
         """
         try:
-            serializer = MeetingCreateSerializer(data=request.data)
+            user = self.get_user()
+            account = user.teacher_profile_data.accounts.get(
+                account_type=TeacherAccountTypes.ZOOM_VIDEO
+            )
+            access_token = account.info.get('access_token')
+            if not access_token:
+                return redirect('dashboard-main')
+
+            request_data = request.data
+            topic = request_data.get('topic', 'Free Meeting')
+            meeting_type = request_data.get('type', '2')
+            start_time = request_data.get('start_time', timezone.now().isoformat())
+            duration = request_data.get('duration', '30')
+
+            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            request_data['meeting_link'] = meeting.get('join_url')
+            request_data['meeting_info'] = meeting
+
+            serializer = MeetingCreateSerializer(data=request_data)
             serializer.is_valid(raise_exception=True)
             serializer.save(creator=request.user.teacher_profile_data)
             return Response({
@@ -124,3 +147,8 @@ class MeetingAPIView(APIView):
                 "error": str(e)
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def get_user(self):
+        if is_authenticated(self.request.COOKIES.get('auth_token')):
+            return get_user_from_token(self.request.COOKIES.get('auth_token'))
+        else:
+            return False

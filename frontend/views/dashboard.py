@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.conf import settings
 from django.views.generic import TemplateView
-from engine.models import LessonData, LessonSlots
+from engine.models import LessonData, LessonSlots, LessonStatuses
 from engine.serializers import LessonSerializer, LessonSlotSerializer
 from frontend.utils import get_user_from_token, is_authenticated
 
@@ -73,7 +73,11 @@ class DashboardSchedulesPastSessions(TemplateView):
         user = self.get_user()
         context = super().get_context_data(**kwargs)
         tz_now = timezone.now().astimezone(pytz.UTC)
-        lessonslots = LessonSlots.objects.filter(Q(lesson_from__lte=tz_now) | Q(lesson_to__lte=tz_now)).distinct('lesson_id')
+        lessonslots = LessonSlots.objects.filter(
+            Q(lesson_from__lte=tz_now) | Q(lesson_to__lte=tz_now),
+            lesson__status=LessonStatuses.ACTIVE,
+            creator=user.teacher_profile_data
+        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id').count()
         serializer = LessonSlotSerializer(lessonslots, many=True)
         context['lessons_slots'] = serializer.data
         if 'auth_token' in self.request.COOKIES:
@@ -97,7 +101,11 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
         user = self.get_user()
         context = super().get_context_data(**kwargs)
         tz_now = timezone.now().astimezone(pytz.UTC)
-        lessonslots = LessonSlots.objects.filter(Q(lesson_from__gte=tz_now) | Q(lesson_to__lte=tz_now)).distinct('lesson_id')
+        lessonslots = LessonSlots.objects.filter(
+            Q(lesson_from__gte=tz_now) | Q(lesson_to__lte=tz_now),
+            lesson__status=LessonStatuses.ACTIVE,
+            creator=user.teacher_profile_data
+        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id').count()
         serializer = LessonSlotSerializer(lessonslots, many=True)
         context['lessons_slots'] = serializer.data
         if 'auth_token' in self.request.COOKIES:

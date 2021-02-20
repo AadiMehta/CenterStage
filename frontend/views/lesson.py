@@ -152,15 +152,10 @@ class LessonCreateWizard(SessionWizardView):
             end_date = form_data.get('end_date') or thirty_months.strftime('%m/%d/%Y')
             weekdays = form_data.get('weekdays')
 
-            sessions_in_day = form_data.get('sessions_in_day') or [{
-                "start_time": "11:00",
-                "end_time": "12:00",
-                "timezone": "Asia/Kolkata"
-            }]
             session_tz = form_data.get('timezone')
             self.add_available_slots(
                 user.teacher_profile_data, lesson, form_data, start_date, end_date,
-                weekdays, sessions_in_day, session_tz
+                weekdays, session_tz
             )
 
             return render(self.request, 'lesson/done.html', {
@@ -179,7 +174,7 @@ class LessonCreateWizard(SessionWizardView):
         return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
 
     @staticmethod
-    def add_available_slots(creator, lesson, form_data, start_date, end_date, weekdays, sessions_in_day, session_tz):
+    def add_available_slots(creator, lesson, form_data, start_date, end_date, weekdays, session_tz):
         """
         Add Slots for lessons provided by creator
         using date range between start_date and

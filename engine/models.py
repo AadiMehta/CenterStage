@@ -23,6 +23,12 @@ class MeetingTypes(models.TextChoices):
     HOST_LESSON = 'HOST_LESSON', _('HOST_LESSON')
 
 
+class LessonStatuses(models.TextChoices):
+    ACTIVE = 'ACTIVE', _('ACTIVE')
+    DELETED = 'DELETED', _('DELETED')
+    REMOVED = 'REMOVED', _('REMOVED')
+
+
 class LessonData(models.Model):
     """
     All lesson data is stored in this model
@@ -47,6 +53,8 @@ class LessonData(models.Model):
     learnings = models.JSONField(default=list)
     requirements = models.JSONField(default=list)
     notes = models.JSONField(default=list)
+    status = models.CharField(_("Lesson Status"), null=True, choices=LessonStatuses.choices, max_length=7,
+                              help_text="Lesson status", default=LessonStatuses.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -71,6 +79,9 @@ class Meeting(models.Model):
     topic = models.CharField(_("Topic of the meeting"), max_length=256)
     price = models.JSONField(default=dict)
     invitees = models.JSONField(default=list)
+    meeting_info = models.JSONField(default=dict)
+    meeting_link = models.URLField(max_length=200, null=True, blank=True)
+    meeting_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
