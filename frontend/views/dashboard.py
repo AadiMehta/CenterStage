@@ -77,7 +77,7 @@ class DashboardSchedulesPastSessions(TemplateView):
             Q(lesson_from__lte=tz_now) | Q(lesson_to__lte=tz_now),
             lesson__status=LessonStatuses.ACTIVE,
             creator=user.teacher_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id').count()
+        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
         serializer = LessonSlotSerializer(lessonslots, many=True)
         context['lessons_slots'] = serializer.data
         if 'auth_token' in self.request.COOKIES:
@@ -105,7 +105,7 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
             Q(lesson_from__gte=tz_now) | Q(lesson_to__lte=tz_now),
             lesson__status=LessonStatuses.ACTIVE,
             creator=user.teacher_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id').count()
+        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
         serializer = LessonSlotSerializer(lessonslots, many=True)
         context['lessons_slots'] = serializer.data
         if 'auth_token' in self.request.COOKIES:
