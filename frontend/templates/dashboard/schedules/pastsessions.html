@@ -67,7 +67,7 @@
                               <i><img src="{% static 'images/language.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Language</h4>
-                                 <span>Hosted in {{ slot.lesson.language }}</span>
+                                 <span>Hosted in {% for language in slot.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                               </div>
                            </li>
                            <li>
