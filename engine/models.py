@@ -81,7 +81,6 @@ class Meeting(models.Model):
     invitees = models.JSONField(default=list)
     meeting_info = models.JSONField(default=dict)
     meeting_link = models.URLField(max_length=200, null=True, blank=True)
-    meeting_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
