@@ -129,7 +129,7 @@ class LessonCreateWizard(SessionWizardView):
 
             topic = form_data.get('name', 'Free Meeting')
             meeting_type = form_data.get('type', '2')
-            start_time = form_data.get('start_time', timezone.now().isoformat())
+            start_time = timezone.now().isoformat()
             duration = form_data.get('duration', '30')
 
             meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
