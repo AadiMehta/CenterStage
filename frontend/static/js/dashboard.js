@@ -81,8 +81,9 @@ function createPaidMeeting(topic, pricePerSessionCurrency, pricePerSession, invi
         "meeting_type": "PAID"
       }),
       success: function (data, status, xhr) {
-        showModal('newmeetingsuccess', true);
+        console.log('newmeetingsuccess', data);
         $('#newmeetingsuccesslink')[0].placeholder = data.meeting.meeting_link;
+        showModal('newmeetingsuccess', true);
       },
       error: function (jqXhr, textStatus, errorMessage) {
         console.log('Error while Creating paid meeting', errorMessage)
