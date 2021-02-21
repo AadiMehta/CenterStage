@@ -212,6 +212,10 @@ function init() {
     const meetingLink = $('#newmeetingsuccesslink')[0].placeholder;
     window.prompt("Copy to clipboard: Ctrl+C, Enter", meetingLink);
   })
+  $('#newmeetingstartmeeting').click(() => {
+    const meetingLink = $('#newmeetingsuccesslink')[0].placeholder;
+    window.open(meetingLink, "_blank");
+  })
 }
 
 init();
