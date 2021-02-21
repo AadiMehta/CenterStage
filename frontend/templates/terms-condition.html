@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% block style %}
+<link href="{% static '/css/web/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/media.css' %}" rel="stylesheet">
 {% endblock %}
+
 {% block content %}
 <div class="wrapper inner-page">
   {% include 'plain_header.html' with user=user %}

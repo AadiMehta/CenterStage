@@ -28,7 +28,7 @@ from users.views import (
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
-    HomeTemplateView, TermsAndConditionsView
+    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView
 )
 from frontend.views.onboarding import (
     OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
@@ -127,6 +127,7 @@ urlpatterns = [
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
+    path('privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
 ]
 
 if settings.DEBUG:

@@ -92,10 +92,7 @@ class ScheduleCreateWizard(SessionWizardView):
             final_data.update(form.cleaned_data)
         final_data['invitees'] = json.loads(final_data.get('invitees')) if final_data.get('invitees') else []
         final_data['meeting_type'] = MeetingTypes.SCHEDULE
-        lesson = self.create(final_data)
-        return render(self.request, 'lesson/done.html', {
-            'lesson': lesson,
-        })
+        return self.create(final_data)
 
     def create(self, form_data):
         """
@@ -111,10 +108,6 @@ class ScheduleCreateWizard(SessionWizardView):
             if not access_token:
                 return redirect('new-schedule')
 
-            serializer = LessonCreateSerializer(data=form_data)
-            serializer.is_valid(raise_exception=True)
-            lesson = serializer.save(creator=user.teacher_profile_data)
-
             topic = form_data.get('name', 'Free Meeting')
             meeting_type = form_data.get('type', '2')
             start_time = timezone.now().isoformat()
@@ -123,6 +116,10 @@ class ScheduleCreateWizard(SessionWizardView):
             meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
             form_data['meeting_link'] = meeting.get('join_url')
             form_data['meeting_info'] = meeting
+
+            serializer = LessonCreateSerializer(data=form_data)
+            serializer.is_valid(raise_exception=True)
+            lesson = serializer.save(creator=user.teacher_profile_data)
 
             now = timezone.now()
             thirty_months = now + timezone.timedelta(days=90)
