@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'phonenumber_field',
     'corsheaders',
+    'sslserver',
 
     # project specific apps
     'frontend',
@@ -89,7 +90,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
+SCHEME = 'https'
 SITE_URL = 'center-stage.online'
+BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

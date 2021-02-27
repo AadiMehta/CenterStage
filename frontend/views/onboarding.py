@@ -1,7 +1,7 @@
 import urllib
 from django.conf import settings
 from django.views.generic import TemplateView
-from frontend.utils import get_user_from_token
+from frontend.utils.auth import get_user_from_token
 
 
 class AccountConnectedTemplate(TemplateView):
