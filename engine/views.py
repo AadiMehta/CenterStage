@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.authentication import BearerAuthentication
-from frontend.utils import get_user_from_token, is_authenticated
+from frontend.utils.auth import get_user_from_token, is_authenticated
 from engine.serializers import (
     LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
 )

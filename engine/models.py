@@ -67,6 +67,7 @@ class LessonSlots(models.Model):
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="slots")
     lesson_from = models.DateTimeField(_("Start of the lesson"))
     lesson_to = models.DateTimeField(_("End of the lesson"))
+    calendar_info = models.JSONField(default=dict, null=True)
     slot_booked = models.BooleanField(_('Slot Booked Status'), default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

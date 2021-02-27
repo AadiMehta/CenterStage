@@ -30,6 +30,9 @@ from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPI
 from frontend.views.main import (
     HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView
 )
+from frontend.views.google import (
+    AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
+)
 from frontend.views.onboarding import (
     OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
     AccountConnectedTemplate
@@ -93,6 +96,10 @@ urlpatterns = [
     # zoom APIs
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
     path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
+    # Google APIs
+    path('api/profile/google/calendar/connect', AuthorizeGoogleCalendar.as_view(), name="calendar-oauth-initiate"),
+    path('api/profile/google/calendar/oauth/callback', GoogleCalendarCallback.as_view(), name="calendar-oauthcallback"),
+    path('api/profile/google/calendar/disconnect', GoogleDisconnectAPIView.as_view()),
 
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),

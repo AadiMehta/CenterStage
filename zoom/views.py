@@ -61,10 +61,14 @@ class ZoomDisconnectAPIView(generics.RetrieveAPIView):
  
     def get(self, request, *args, **kwargs):
         redirection_url = request.GET.get('redirection_url')
-        account = TeacherAccounts.objects.get(teacher=request.user.teacher_profile_data)
-        account.delete()
-        if redirection_url:
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        account = TeacherAccounts.objects.get(
+            teacher=request.user.teacher_profile_data,
+            account_type=TeacherAccountTypes.ZOOM_VIDEO
+        )
+        if account:
+            account.delete()
+            if redirection_url:
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         return Response(dict(msg="Disconnected Zoom Account"), status=status.HTTP_200_OK)
 
 

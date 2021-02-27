@@ -135,7 +135,7 @@ class TeacherProfile(models.Model):
 
 class TeacherAccountTypes(models.TextChoices):
     ZOOM_VIDEO = 'ZOOM', _('Zoom Video')
-    GOOGLE = 'GOOGLE', _('Google')
+    GOOGLE_CALENDAR = 'GOOGLE_CALENDAR', _('GOOGLE_CALENDAR')
     TEAMS = 'TEAMS', _('Teams')
 
 
@@ -144,7 +144,7 @@ class TeacherAccounts(models.Model):
     Data Associated to Social Accounts
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="accounts")
-    account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=10,
+    account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=30,
                                     help_text="Type of account")
     info = models.JSONField(null=True)
 

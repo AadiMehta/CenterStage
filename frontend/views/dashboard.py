@@ -6,7 +6,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from engine.models import LessonData, LessonSlots, LessonStatuses
 from engine.serializers import LessonSerializer, LessonSlotSerializer
-from frontend.utils import get_user_from_token, is_authenticated
+from frontend.utils.auth import get_user_from_token, is_authenticated
 
 
 class DashboardAccountAlerts(TemplateView):
@@ -41,6 +41,7 @@ class DashboardAccountInfo(TemplateView):
             context.update({
                 'user': user,
                 'teacher_accounts': teacher_accounts,
+                'BASE_URL': settings.BASE_URL,
                 'zoom': {
                     'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
                     'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)

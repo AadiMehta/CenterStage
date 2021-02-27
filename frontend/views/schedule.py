@@ -9,7 +9,7 @@ from formtools.wizard.views import SessionWizardView
 from rest_framework import status
 from rest_framework.response import Response
 from frontend.forms.schedule import ScheduleCreateFormStep1, ScheduleCreateFormStep2, ScheduleCreateFormPreview
-from frontend.utils import get_user_from_token, is_authenticated
+from frontend.utils.auth import get_user_from_token, is_authenticated
 from engine.models import MeetingTypes
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
@@ -17,10 +17,12 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.exceptions import ParseError
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from users.models import TeacherAccountTypes
 from zoom.utils import zoomclient
 from frontend.constants import languages as language_options
 from frontend.constants import timezones as timezone_options
+from frontend.utils.google_calendar import GoogleCalendar
+from users.models import TeacherAccounts, TeacherAccountTypes
+
 logger = logging.getLogger(__name__)
 
 
@@ -129,7 +131,7 @@ class ScheduleCreateWizard(SessionWizardView):
 
             session_tz = form_data.get('timezone')
             self.add_available_slots(
-                user.teacher_profile_data, lesson, form_data, start_date, end_date,
+                user, lesson, form_data, start_date, end_date,
                 weekdays, session_tz
             )
 
@@ -149,7 +151,7 @@ class ScheduleCreateWizard(SessionWizardView):
         return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
 
     @staticmethod
-    def add_available_slots(creator, lesson, form_data, start_date, end_date, weekdays, session_tz):
+    def add_available_slots(user, lesson, form_data, start_date, end_date, weekdays, session_tz):
         """
         Add Slots for lessons provided by creator
         using date range between start_date and
@@ -158,6 +160,15 @@ class ScheduleCreateWizard(SessionWizardView):
         """
         start_date = timezone.datetime.strptime(start_date, '%m/%d/%Y')
         end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
+        creator = user.teacher_profile_data
+        google_calendar_account = TeacherAccounts.objects.get(
+            teacher=creator,
+            account_type=TeacherAccountTypes.GOOGLE_CALENDAR
+        )
+        calendar_service = None
+        if google_calendar_account:
+            calendar_service = GoogleCalendar(google_calendar_account.info)
+        session_no = 1
         for date in daterange(start_date, end_date):
             day = date.strftime('%a')
             if day in weekdays:
@@ -173,4 +184,13 @@ class ScheduleCreateWizard(SessionWizardView):
                     lesson_to=lesson_to.astimezone(pytz.timezone(lesson_tz))
                 ))
                 serializer.is_valid(raise_exception=True)
-                serializer.save(creator=creator, lesson=lesson)
+                session = serializer.save(creator=creator, lesson=lesson)
+                if calendar_service:
+                    session.calendar_info = calendar_service.create_calendar_invite(
+                        lesson,
+                        lesson_from_tz,
+                        lesson_to_tz,
+                        session_no,
+                        emails=[user.email]
+                    )
+                    session.save()

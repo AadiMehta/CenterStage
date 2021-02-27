@@ -150,3 +150,5 @@ tmp_files/*
 
 # Pem file
 cs.pem
+
+credentials.json

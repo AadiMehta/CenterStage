@@ -110,6 +110,34 @@ function handleZoomDisconnectAccount (event) {
 }
 
 /**
+ * Connect Google Account Handler
+ */
+function handleGoogleConnectAccount () {
+  const {baseUrl} = event.target.dataset;
+  const url = `${baseUrl}/api/profile/google/calendar/connect`;
+  openWindow(url, 'Authorize Zoom', 600, 700, 1);
+}
+
+/**
+ * Disconnect Zoom Account handler
+ */
+function handleGoogleDisconnectAccount (event) {
+  const token = getCookie('auth_token');
+  $.ajax('/api/profile/google/calendar/disconnect', {
+    type: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    success: function (data, status, xhr) {
+      location.reload();
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      alert('err')
+    }
+  });
+}
+
+/**
  * Delete Account
  */
 function handleDeleteAccount (event) {
@@ -133,6 +161,8 @@ function init() {
   $('#logout').click(() => logout());
   $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
   $('#connectZoomAccount').click(handleZoomConnectAccount);
+  $('#disconnectGoogleAccount').click(handleGoogleDisconnectAccount);
+  $('#connectGoogleAccount').click(handleGoogleConnectAccount);
   $('#deleteAccount').click(handleDeleteAccount);
 }
 
