@@ -26,6 +26,9 @@ class AuthorizeGoogleCalendar(generics.RetrieveAPIView):
         flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
             'credentials.json',
             scopes=[
+                'openid',
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/userinfo.profile',
                 'https://www.googleapis.com/auth/calendar.events',
                 'https://www.googleapis.com/auth/calendar',
                 'https://www.googleapis.com/auth/calendar.readonly'
@@ -53,6 +56,9 @@ class GoogleCalendarCallback(generics.RetrieveAPIView):
             flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
                 'credentials.json',
                 scopes=[
+                    'openid',
+                    'https://www.googleapis.com/auth/userinfo.email',
+                    'https://www.googleapis.com/auth/userinfo.profile',
                     'https://www.googleapis.com/auth/calendar.events',
                     'https://www.googleapis.com/auth/calendar',
                     'https://www.googleapis.com/auth/calendar.readonly'
