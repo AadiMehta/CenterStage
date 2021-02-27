@@ -30,7 +30,7 @@ from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPI
 from frontend.views.main import (
     HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView
 )
-from frontend.views.google import (
+from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
 )
 from frontend.views.onboarding import (
