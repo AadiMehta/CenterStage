@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'dashboard/modals.html' %}
+<div class="wrapper-main">
+    {% include 'dashboard/sidebar.html' with activeSection='students' %}
+    <div class="main">
+        {% include 'dashboard/header.html' with user=user %}
+        <div class="main-content">
+            {% include 'dashboard/actionbar.html' %}
+            <div class="main-content">
+                <div class="admin-mid-sec container-fluid">
+                    <h2 class="title-2">My Students</h2>
+                    <div class="search-row">
+                        <div class="searchInp-col">
+                            <img src="{% static 'images/icon-search.svg' %}" alt=""/>
+                            <input type="search" class="form-control" placeholder="Search Students"/>
+                        </div>
+                        <div class="search-tags">
+                            <a href="#" class="tag-link">Today</a>
+                            <a href="#" class="tag-link">This Week</a>
+                            <a href="#" class="tag-link">Recent</a>
+                            <a href="#" class="tag-link">A - Z</a>
+                            <a href="#" class="tag-link">Z - A</a>
+                        </div>
+                    </div>
+                    <div class="studientList-sec">
+                        <div class="my-students-table-wrap table-responsive">
+                            <table class="table default-table" width="100%">
+                                <thead>
+                                <th>Student Name</th>
+                                <th>Email Address</th>
+                                <th>Contact NO.</th>
+                                <th>Attendance</th>
+                                <th>Status</th>
+                                <th># Lessons Taken</th>
+                                <th>Student Since</th>
+                                <th>Earnings</th>
+                                <th>Performance</th>
+                                </thead>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="tableprofile-img">
+                                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""
+                                                                              class="mCS_img_loaded"></div>
+                                            <div class="prof-name02">Edwina Thomas</div>
+                                            <i><img src="{% static 'images/noun_message.svg' %}" alt=""/></i>
+                                        </div>
+                                    </td>
+                                    <td><a href="mailto:thomas.edy1578@gmail.com">thomas.edy1578@gmail.com</a></td>
+                                    <td>+01 123 456 7890</td>
+                                    <td><a href="#" class="btn btn-liner">View Attendance</a></td>
+                                    <td>Past Student</td>
+                                    <td align="center">25</td>
+                                    <td>23 Dec 2020</td>
+                                    <td>$159.25</td>
+                                    <td>Need Improvement <em><img src="{% static 'images/face-sad.svg' %}"></em></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

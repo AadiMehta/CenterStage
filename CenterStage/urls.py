@@ -39,7 +39,7 @@ from frontend.views.schedule import ScheduleCreateWizard
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
-    DashboardSchedulesUpcomingSessions, DashboardStatistics
+    DashboardSchedulesUpcomingSessions, DashboardStatistics, DashboardStudents
 )
 from engine.views import LessonAPIView, MeetingAPIView
 
@@ -123,7 +123,8 @@ urlpatterns = [
          name="dashboard-schedules-upcoming-sessions"),
     path('dashboard/messages', DashboardMessages.as_view(), name="dashboard-messages"),
     path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
- 
+    path('dashboard/my-students', DashboardStudents.as_view(), name="dashboard-students"),
+
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),

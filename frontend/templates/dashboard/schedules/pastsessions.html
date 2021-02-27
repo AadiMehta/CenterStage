@@ -9,7 +9,7 @@
 {% block content %}
 {% include 'dashboard/modals.html' %}
 <div class="wrapper-main">
-   {% include 'dashboard/sidebar.html' with activeSection='upcomingsessions' %}
+   {% include 'dashboard/sidebar.html' with activeSection='pastsessions' %}
    <div class="main">
       {% include 'dashboard/header.html' with user=user %}
       <div class="main-content">
@@ -22,8 +22,9 @@
                   <input type="search" class="form-control" placeholder="Search Sessions" />
                </div>
                <div class="search-tags">
+                  <a href="#" class="tag-link active">All</a>
                   <a href="#" class="tag-link">One - on - One</a>
-                  <a href="#" class="tag-link active">Group Lesson</a>
+                  <a href="#" class="tag-link">Group Lesson</a>
                   <a href="#" class="tag-link">Personal Coaching</a>
                   <a href="#" class="tag-link">A - Z</a>
                   <a href="#" class="tag-link">Z - A</a>

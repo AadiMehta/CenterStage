@@ -11,7 +11,7 @@
             <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#One" aria-expanded="true" aria-controls="One"><i><img src="{% static 'images/my_schedule.svg' %}" alt="" /></i>
                 <span>My Schedule</span>
             </a>
-            <ul id="One" class="collapse submenu {% if activeSection in "upcomingsessions,pastsessions" %}show{% endif %}" data-parent="#accordion">
+            <ul id="One" class="collapse submenu {% if activeSection in 'upcomingsessions,pastsessions' %}show{% endif %}" data-parent="#accordion">
                 <li><a href="{% url 'dashboard-schedules-upcoming-sessions' %}">- Upcoming Sessions {% if activeSection == 'upcomingsessions' %}<span class="badge-small"></span>{% endif %}</a></li>
                 <li><a href="{% url 'dashboard-schedules-past-sessions' %}">- Past Sessions {% if activeSection == 'pastsessions' %}<span class="badge-small"></span>{% endif %}</a></li>
                 {% comment %} <li class="{% if activeSection == 'calendar' %}active{% endif %}"><a href="#">- Calendar</a></li> {% endcomment %}
@@ -19,13 +19,15 @@
         </li>
         <li><a href="{% url 'dashboard-messages' %}"><i><img src="{% static 'images/my_message.svg' %}" alt="" /></i><span>My Messages {% if activeSection == 'messages' %}<span class="badge-small"></span>{% endif %}</span></a></li>
         <li><a href="{% url 'dashboard-lessons' %}"><i><img src="{% static 'images/my_lesson.svg' %}" alt="" /></i><span>My Lessons {% if activeSection == 'lessons' %}<span class="badge-small"></span>{% endif %}</span></a></li>
-        {% comment %} <li class="{% if activeSection == 'message' %}active{% endif %}"><a href="{% url 'dashboard-drive' %}"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive {% if activeSection == 'lessons' %}<span class="badge-small"></span>{% endif %}</span></a></li> {% endcomment %}
+        <li><a href="#"><i><img src="{% static 'images/notes-icon.svg' %}" alt="" /></i><span>My Notes {% if activeSection == 'notes' %}<span class="badge-small"></span>{% endif %}</span></a></li>
+        <li><a href="{% url 'dashboard-students' %}"><i><img src="{% static 'images/studients-icon.svg' %}" alt="" /></i><span>My Students {% if activeSection == 'students' %}<span class="badge-small"></span>{% endif %}</span></a></li>
+        <li><a href="#"><i><img src="{% static 'images/google_save.svg' %}" alt="" /></i><span>My Drive {% if activeSection == 'drive' %}<span class="badge-small"></span>{% endif %}</span></a></li>
         <li><a href="{% url 'dashboard-statistics' %}"><i><img src="{% static 'images/my_stats.svg' %}" alt="" /></i><span>My Stats {% if activeSection == 'stats' %}<span class="badge-small"></span>{% endif %}</span></a></li>
         <li>
             <a href="#" class="ac-link collapsed" data-toggle="collapse" data-target="#Five" aria-expanded="false" aria-controls="Five"><i><img src="{% static 'images/my_ac.svg' %}" alt="" /></i>
                 <span>My Account </span>
             </a>
-            <ul id="Five" class="collapse submenu {% if activeSection in "account-info,account-payment,account-alerts" %}show{% endif %}" data-parent="#accordion">
+            <ul id="Five" class="collapse submenu {% if activeSection in 'account-info,account-payment,account-alerts' %}show{% endif %}" data-parent="#accordion">
                 <li><a href="{% url 'dashboard-account-info' %}">- Info {% if activeSection == 'account-info' %}<span class="badge-small"></span>{% endif %}</a></li>
                 <li><a href="{% url 'dashboard-account-payment' %}">- Payments {% if activeSection == 'account-payment' %}<span class="badge-small"></span>{% endif %}</a></li>
                 <li><a href="{% url 'dashboard-account-alerts' %}">- Alerts {% if activeSection == 'account-alerts' %}<span class="badge-small"></span>{% endif %}</a></li>
