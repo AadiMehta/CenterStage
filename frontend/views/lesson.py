@@ -51,11 +51,11 @@ class AcceptFileAPI(APIView):
 
 class LessonCreateWizard(SessionWizardView):
     TEMPLATES = {
-        "step1": "lesson/step1.html",
-        "step2": "lesson/step2.html",
-        "step3": "lesson/step3.html",
-        "step4": "lesson/step4.html",
-        "preview": "lesson/preview.html",
+        "step1": "teacher/lesson/step1.html",
+        "step2": "teacher/lesson/step2.html",
+        "step3": "teacher/lesson/step3.html",
+        "step4": "teacher/lesson/step4.html",
+        "preview": "teacher/lesson/preview.html",
     }
 
     FORMS = [

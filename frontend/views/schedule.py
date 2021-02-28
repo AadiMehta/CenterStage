@@ -6,7 +6,6 @@ from django.utils import timezone
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
-from rest_framework import status
 from rest_framework.response import Response
 from frontend.forms.schedule import ScheduleCreateFormStep1, ScheduleCreateFormStep2, ScheduleCreateFormPreview
 from frontend.utils.auth import get_user_from_token, is_authenticated
@@ -51,9 +50,9 @@ class AcceptFileAPI(APIView):
 
 class ScheduleCreateWizard(SessionWizardView):
     TEMPLATES = {
-        "step1": "schedule/schedule01.html",
-        "step2": "schedule/schedule02.html",
-        "preview": "schedule/preview.html",
+        "step1": "teacher/schedule/schedule01.html",
+        "step2": "teacher/schedule/schedule02.html",
+        "preview": "teacher/schedule/preview.html",
     }
 
     FORMS = [
@@ -188,8 +187,8 @@ class ScheduleCreateWizard(SessionWizardView):
                 if calendar_service:
                     session.calendar_info = calendar_service.create_calendar_invite(
                         lesson,
-                        lesson_from_tz,
-                        lesson_to_tz,
+                        lesson_from,
+                        lesson_to,
                         session_no,
                         emails=[user.email]
                     )

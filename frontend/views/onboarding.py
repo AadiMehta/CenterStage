@@ -20,7 +20,7 @@ class OnboardStep1TemplateView(TemplateView):
         - Bio
         - Custom Page name
     """
-    template_name = "onboarding/step1.html"
+    template_name = "teacher/onboarding/step1.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,7 +34,7 @@ class OnboardStep2TemplateView(TemplateView):
     """
     Onboarding step 2
     """
-    template_name = "onboarding/step2.html"
+    template_name = "teacher/onboarding/step2.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,7 +59,7 @@ class OnboardStep3TemplateView(TemplateView):
     """
     Onboarding step 3
     """
-    template_name = "onboarding/step3.html"
+    template_name = "teacher/onboarding/step3.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

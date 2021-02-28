@@ -1,13 +1,8 @@
 import logging
-
-import google.oauth2.credentials
 import google_auth_oauthlib.flow
-import googleapiclient.discovery
-
-from django.urls import reverse
 from django.conf import settings
 from rest_framework import status
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from rest_framework import generics
 from rest_framework.response import Response
@@ -66,9 +61,8 @@ class GoogleCalendarCallback(generics.RetrieveAPIView):
                 state=state
             )
             flow.redirect_uri = '{}/api/profile/google/calendar/oauth/callback'.format(settings.BASE_URL)
-            authorization_response = '{}{}'.format(
-                settings.BASE_URL,
-                request.get_full_path())
+            authorization_response = '{}{}'.format(settings.BASE_URL, request.get_full_path())
+
             flow.fetch_token(authorization_response=authorization_response)
             credentials = flow.credentials
             session_credentials = {

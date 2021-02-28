@@ -13,7 +13,7 @@ class DashboardAccountAlerts(TemplateView):
     """
     Dashboard Account Alerts
     """
-    template_name = "dashboard/account/alerts.html"
+    template_name = "teacher/dashboard/account/alerts.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -26,7 +26,7 @@ class DashboardAccountInfo(TemplateView):
     """
     Dashboard Account Info
     """
-    template_name = "dashboard/account/info.html"
+    template_name = "teacher/dashboard/account/info.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,7 +55,7 @@ class DashboardAccountPayment(TemplateView):
     """
     Dashboard Account Payment
     """
-    template_name = "dashboard/account/payment.html"
+    template_name = "teacher/dashboard/account/payment.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -68,7 +68,7 @@ class DashboardSchedulesPastSessions(TemplateView):
     """
     Dashboard Schedules Past Sessions
     """
-    template_name = "dashboard/schedules/pastsessions.html"
+    template_name = "teacher/dashboard/schedules/pastsessions.html"
 
     def get_context_data(self, **kwargs):
         user = self.get_user()
@@ -96,7 +96,7 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
     """
     Dashboard Schedules Upcoming Sessions
     """
-    template_name = "dashboard/schedules/upcoming.html"
+    template_name = "teacher/dashboard/schedules/upcoming.html"
 
     def get_context_data(self, **kwargs):
         user = self.get_user()
@@ -124,7 +124,7 @@ class DashboardLessons(TemplateView):
     """
     Dashboard Lessons
     """
-    template_name = "dashboard/lessons.html"
+    template_name = "teacher/dashboard/lessons.html"
 
     def get_context_data(self, **kwargs):
         user = self.get_user()
@@ -147,7 +147,7 @@ class DashboardMessages(TemplateView):
     """
     Dashboard Messages
     """
-    template_name = "dashboard/messages.html"
+    template_name = "teacher/dashboard/messages.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -160,7 +160,7 @@ class DashboardStatistics(TemplateView):
     """
     Dashboard Statistics
     """
-    template_name = "dashboard/statistics.html"
+    template_name = "teacher/dashboard/statistics.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -173,7 +173,7 @@ class DashboardStudents(TemplateView):
     """
     Dashboard Students
     """
-    template_name = "dashboard/students.html"
+    template_name = "teacher/dashboard/students.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
