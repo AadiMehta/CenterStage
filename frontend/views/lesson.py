@@ -208,7 +208,8 @@ class LessonCreateWizard(SessionWizardView):
                 lesson_to_tz = lesson_to.astimezone(pytz.timezone(lesson_tz))
                 serializer = LessonSlotCreateSerializer(data=dict(
                     lesson_from=lesson_from_tz,
-                    lesson_to=lesson_to_tz
+                    lesson_to=lesson_to_tz,
+                    session_no=session_no
                 ))
                 serializer.is_valid(raise_exception=True)
                 session = serializer.save(creator=creator, lesson=lesson)
