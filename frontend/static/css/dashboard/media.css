@@ -1,3 +1,7 @@
+@media only screen and (min-width:2200px) {
+    .notifaction-content {max-height:800px;}
+}
+
 @media only screen and (max-width:1800px) {
     .container-fluid {padding-left: 3rem;  padding-right: 3rem;}
 }
@@ -23,7 +27,7 @@
     .board-num {font-size: 30px;}
     .board-process-txt {font-size: 12px;}
     .link-back {margin-top: -7px; width: 28px;}
-    .boarding-left .form-control, .liner-inp .form-control {height: 48px; font-size: 16px;}
+    .boarding-left .form-control, .liner-inp .form-control, .liner-select-drop input {height: 48px; font-size: 16px;}
     .input-area {width:550px;}
     .boarding-right {width: 500px;}
     .btn-select-session {height: 70px;font-size: 18px;}
@@ -45,7 +49,9 @@
     .reating-col .reating-text {font-size: 46px;}
     .reating-col .reating-text i, .slide-inner-top .reating-text i {width: 35px;}
     .lession-title2, .recommendations-col, .slide-inner-top .reating-text {font-size:22px;}
-    .profile-info-header {margin-top: -140px;}
+	.hasDatepicker, .timepicker{font-size:16px;}
+    .notifaction-content {max-height:450px;}
+    .profile-image-area {top: -40px;}
 }
 
 @media only screen and (max-width:1400px) {
@@ -99,7 +105,8 @@
     .your-teacher-wrap .prof-name h4 {font-size: 28px;}
     .your-teacher-wrap .desigation {font-size: 16px;}
     .yourtchr-dtl-col i {margin-right: 12px; display: inline-block; width: 35px; vertical-align: top;}
-    .yourtchr-dtl, .lession-title2, .recommendations-col, .slide-inner-top .reating-text, .card-number, .card-cvv, .cvv-input {font-size:18px;} {font-size: 20px;}
+    .yourtchr-dtl, .lession-title2, .recommendations-col, .slide-inner-top .reating-text, .card-number, .card-cvv, .cvv-input {font-size:18px;}
+    .notification-slide{top: 100px;}
 }
 
 @media only screen and (max-width:1279px) {
@@ -243,6 +250,7 @@
     .large-font-check.checkbox label{font-size: 18px;}
     .month-hour-text {padding-top: 10px;}
     .card-number, .card-cvv, .cvv-input {font-size:18px;}
+    .notification-slide {top: 72px;}
 }
 
 @media only screen and (max-width:767px) {
@@ -293,7 +301,7 @@
     .top-button-area .btn i, .btn-with-icon i{margin: 0px;}
     .top-button-area .btn, .btn-with-icon{width: 40px; height: 40px; align-items: center; justify-content: center; padding: 0px;}
     .top-button-area {top: 15px; right: 15px;}
-    .share-btn-col {position: relative; margin-top: 1rem;}
+    .share-btn-col {position: relative; margin-top: 1rem; width: 100%;}
     .share-btn-col > .btn{margin: 0px;}
     .reating-col {padding: 10px 15px;  width: 50%;}
     .video-wrapper h5{font-size: 16px;}
@@ -319,10 +327,17 @@
     .note-doc span {width: 100%; margin: 5px 0;}
     .note-doc .icon-remove {margin-left: 0;}
     .pay-action-row .btn {margin: 0 0 15px 0;}
+    .profile-image-area {top: 0;}
+    .share-btn-col .btn-heart{width:85px;}
+    .share-btn-col .btn{margin:5px;}
+    .cocial-icons-row a {width: 30px; margin-right: 3px;}
+    .title-with-button h2{width: 100%;}
+    
 }
 
 @media only screen and (max-width:640px) {
     .saved-card-row{flex-wrap: wrap;}
     .card-type, .card-number, .card-cvv {width: 100%;}
     .card-number{padding-left: 0px;}
+    .share-btn-col {flex-wrap: wrap; justify-content: center;}
 }
