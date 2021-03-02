@@ -178,9 +178,12 @@ class ScheduleCreateWizard(SessionWizardView):
                 session_end_time = timezone.datetime.strptime(end_time, '%H:%M %p').time()
                 lesson_from = timezone.datetime.combine(date, session_start_time)
                 lesson_to = timezone.datetime.combine(date, session_end_time)
+                lesson_from_tz = lesson_from.astimezone(pytz.timezone(lesson_tz))
+                lesson_to_tz = lesson_to.astimezone(pytz.timezone(lesson_tz))
                 serializer = LessonSlotCreateSerializer(data=dict(
-                    lesson_from=lesson_from.astimezone(pytz.timezone(lesson_tz)),
-                    lesson_to=lesson_to.astimezone(pytz.timezone(lesson_tz))
+                    lesson_from=lesson_from_tz,
+                    lesson_to=lesson_to_tz,
+                    session_no=session_no
                 ))
                 serializer.is_valid(raise_exception=True)
                 session = serializer.save(creator=creator, lesson=lesson)

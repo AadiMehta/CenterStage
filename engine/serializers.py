@@ -76,6 +76,7 @@ class LessonSlotSerializer(serializers.ModelSerializer):
             'creator',
             'lesson',
             'lesson_from',
+            'lesson_no',
             'lesson_to',
             'created_at',
             'session_time',

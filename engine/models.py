@@ -1,7 +1,8 @@
 import uuid
 from django.db import models
-from users.models import TeacherProfile
+from users.models import TeacherProfile, StudentProfile
 from users.s3_storage import S3_LessonCoverImage_Storage
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -27,6 +28,12 @@ class LessonStatuses(models.TextChoices):
     ACTIVE = 'ACTIVE', _('ACTIVE')
     DELETED = 'DELETED', _('DELETED')
     REMOVED = 'REMOVED', _('REMOVED')
+
+
+class EnrollmentChoices(models.TextChoices):
+    ACTIVE = 'ACTIVE', _('ACTIVE')
+    STUDENT_CANCELLED = 'STUDENT_CANCELLED', _('STUDENT_CANCELLED')
+    TEACHER_CANCELLED = 'TEACHER_CANCELLED', _('TEACHER_CANCELLED')
 
 
 class LessonData(models.Model):
@@ -66,6 +73,7 @@ class LessonSlots(models.Model):
     creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="slots")
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="slots")
     lesson_from = models.DateTimeField(_("Start of the lesson"))
+    session_no = models.IntegerField(_('Session Number'), null=True)
     lesson_to = models.DateTimeField(_("End of the lesson"))
     calendar_info = models.JSONField(default=dict, null=True)
     slot_booked = models.BooleanField(_('Slot Booked Status'), default=False)
@@ -85,3 +93,36 @@ class Meeting(models.Model):
     meeting_type = models.CharField(_("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Enrollment(models.Model):
+    """
+    Enrollment Model
+    """
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="enrollments")
+    lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="enrollments")
+    lessonslot = models.ForeignKey(LessonSlots, on_delete=models.CASCADE, related_name="enrollments")
+    status = models.CharField(_("Status of Enrollment"), choices=EnrollmentChoices.choices, max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Rating(models.Model):
+    """
+    Rating Model
+    """
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="ratings")
+    lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="ratings")
+    rate = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5.0)],)
+    review = models.CharField(_("Review"), max_length=256)
+    endorsements = models.JSONField(default=list, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Likes(models.Model):
+    """
+    Likes Model
+    """
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="likes")
+    lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="likes")
+    created_at = models.DateTimeField(auto_now_add=True)
