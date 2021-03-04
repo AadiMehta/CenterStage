@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 from notifications.views import health_check
 from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView, SubdomainAvailabilityAPIView,
-    TeacherRegister, StudentRegister
+    TeacherRegister, StudentRegister, StudentProfileView
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
@@ -34,8 +34,8 @@ from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
 )
 from frontend.views.onboarding import (
-    OnboardStep1TemplateView, OnboardStep2TemplateView, OnboardStep3TemplateView,
-    AccountConnectedTemplate
+    StudentOnboardStep1TemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
+    OnboardStep3TemplateView, AccountConnectedTemplate
 )
 from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI
 from frontend.views.schedule import ScheduleCreateWizard
@@ -43,6 +43,11 @@ from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
     DashboardSchedulesUpcomingSessions, DashboardStatistics, DashboardStudents
+)
+
+from frontend.views.studentdashboard import (
+    StudentDashboardEnrollments, StudentDashboardAccountAlerts, StudentDashboardAccountInfo, StudentDashboardMessages, 
+    StudentDashboardSchedulesPastSessions, StudentDashboardSchedulesUpcomingSessions
 )
 from engine.views import LessonAPIView, MeetingAPIView
 
@@ -91,7 +96,7 @@ urlpatterns = [
 
     # Student APIs
     path('api/student/register/', StudentRegister.as_view()),
-    path('api/student/profile/', StudentRegister.as_view()),
+    path('api/student/profile/', StudentProfileView.as_view()),
 
     # zoom APIs
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
@@ -110,6 +115,9 @@ urlpatterns = [
 
     # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
+    
+    path('student/onboarding', StudentOnboardStep1TemplateView.as_view(), name="student-onboarding-step-1"),
+    
     path('onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
     path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
     path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
@@ -117,6 +125,19 @@ urlpatterns = [
     # Lesson Wizard
     path('lesson/new', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="new-lesson"),
     path('schedule/new', ScheduleCreateWizard.as_view(ScheduleCreateWizard.FORMS), name="new-schedule"),
+
+
+    # Dashboard Templates
+    path('student/dashboard', StudentDashboardEnrollments.as_view(), name="student-dashboard-main"),
+    path('student/dashboard/enrollments', StudentDashboardEnrollments.as_view(), name="student-dashboard-enrollments"),
+    path('student/dashboard/account/alerts', StudentDashboardAccountAlerts.as_view(), name="student-dashboard-account-alerts"),
+    path('student/dashboard/account/info', StudentDashboardAccountInfo.as_view(), name="student-dashboard-account-info"),
+    path('student/dashboard/schedules/pastsessions', StudentDashboardSchedulesPastSessions.as_view(),
+         name="student-dashboard-schedules-past-sessions"),
+    path('student/dashboard/schedules/upcoming', StudentDashboardSchedulesUpcomingSessions.as_view(),
+         name="student-dashboard-schedules-upcoming-sessions"),
+    path('student/dashboard/messages', StudentDashboardMessages.as_view(), name="student-dashboard-messages"),
+
 
     # Dashboard Templates
     path('dashboard', DashboardLessons.as_view(), name="dashboard-main"),

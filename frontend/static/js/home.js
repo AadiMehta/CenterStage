@@ -51,6 +51,14 @@ function setCookie(cookieName, value, exdays) {
     var cookieValue = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
     document.cookie = cookieName + "=" + cookieValue;
 }
+
+function getClassName(userType, className) {
+  if (userType === 'student') {
+    return `#${userType}${className}`
+  }
+  return `#${className}`;
+}
+
 // ****** End of Utilities ******
 
 // ****** API Handlers ******
@@ -59,7 +67,7 @@ function setCookie(cookieName, value, exdays) {
  * Send OTP to Phone Number API
  * @param {Number} phoneNumber 
  */
-function sendOtpAPI(phoneNumber) {
+function sendOtpAPI(userType, phoneNumber) {
     window.sentOTPtoPhoneNumber = phoneNumber; 
     $.ajax('/api/otp/send/', {
       type: 'POST',
@@ -70,8 +78,8 @@ function sendOtpAPI(phoneNumber) {
         showModal('modalOTP', true);
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        $('#OTPButtonError').text("Phone no. not registered with us!")
-        $('#OTPButtonError').show()
+        $(getClassName(userType, 'OTPButtonError')).text("Phone no. not registered with us!")
+        $(getClassName(userType, 'OTPButtonError')).show()
         console.log('Error while sending OTP', errorMessage)
       }
     });
@@ -82,7 +90,7 @@ function sendOtpAPI(phoneNumber) {
  * @param {Number} phoneNumber 
  * @param {String, Number} otp 
  */
-function verifyOtpAPI(phoneNumber, otp) {
+function verifyOtpAPI(userType, phoneNumber, otp) {
     $.ajax('/api/otp/verify/', {
       type: 'POST',
       data: {
@@ -96,8 +104,8 @@ function verifyOtpAPI(phoneNumber, otp) {
         location.reload();
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        $('#otpCodeError').text("Invalid OTP entered!")
-        $('#otpCodeError').show()
+        $(getClassName(userType, 'otpCodeError')).text("Invalid OTP entered!")
+        $(getClassName(userType, 'otpCodeError')).show()
       }
     });
 }
@@ -110,8 +118,8 @@ function verifyOtpAPI(phoneNumber, otp) {
  * @param {String} emailId 
  * @param {String} password 
  */
-function signUpAPI(firstName, lastName, phoneNo, emailId, password) {
-    $.ajax('/api/teacher/register/', {
+function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
+    $.ajax(`/api/${userType}/register/`, {
       type: 'POST',
       data: {
         "email": emailId,
@@ -122,11 +130,15 @@ function signUpAPI(firstName, lastName, phoneNo, emailId, password) {
       },
       success: function (data, status, xhr) {
         setCookie("auth_token", data.token, 1);
-        window.location.href = "/onboarding";
+        if (userType === 'student') {
+          window.location.href = "/student/onboarding";
+        } else {
+          window.location.href = "/onboarding";
+        }
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        $('#SignUpButtonError').text("Email already registered!")
-        $('#SignUpButtonError').show()
+        $(getClassName(userType, 'SignUpButtonError')).text("Email already registered!")
+        $(getClassName(userType, 'SignUpButtonError')).show()
         console.log('Error while signup: ', jqXhr)
         // hideModal('modalSignup');
       }
@@ -164,10 +176,11 @@ function timer(remaining) {
  * @param {String} emailId 
  * @param {String} password 
  */
-function loginAPI(emailId, password) {
+function loginAPI(userType, emailId, password) {
     $.ajax('/api/login/', {
       type: 'POST',
       data: {
+        "user_type": userType,
         "username": emailId,
         "password": password
       },
@@ -178,8 +191,8 @@ function loginAPI(emailId, password) {
         location.reload();
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        $('#SignInButtonError').text("Unable to login with given credentials. Please try again!")
-        $('#SignInButtonError').show()
+        $(getClassName(userType, 'SignInButtonError')).text("Unable to login with given credentials. Please try again!")
+        $(getClassName(userType, 'SignInButtonError')).show()
         console.log('Error while Login', errorMessage)
       }
     });
@@ -193,24 +206,29 @@ function loginAPI(emailId, password) {
  * On Get OTP Clicked,
  * Validate Input and Hit Send OTP API
  */
-function onGetOTPClicked () {
+function onGetOTPClicked (event) {
     let isValid = true;
-    $('#loginCountryCodeError').hide()
-    $('#loginPhoneNumberError').hide()
-    const countryCode = $('#loginCountryCode')[0].value;
-    const phoneNumber = $('#loginPhoneNumber')[0].value;
+    let { userType } = event.target.dataset;
+    if (!userType) {
+      userType = 'teacher'
+    }
+
+    $(getClassName(userType, 'loginCountryCodeError')).hide()
+    $(getClassName(userType, 'loginPhoneNumberError')).hide()
+    const countryCode = $(getClassName(userType, 'loginCountryCode'))[0].value;
+    const phoneNumber = $(getClassName(userType, 'loginPhoneNumber'))[0].value;
     if (countryCode === 'none') {
-        $('#loginCountryCodeError').text('Please select country code');
-        $('#loginCountryCodeError').show()
+        $(getClassName(userType, 'loginCountryCodeError')).text('Please select country code');
+        $(getClassName(userType, 'loginCountryCodeError')).show()
         isValid = false;
     }
     if (phoneNumber && !isPhoneNumberValid(phoneNumber)) {
-        $('#loginPhoneNumberError').text('Please add valid phone number');
-        $('#loginPhoneNumberError').show()
+        $(getClassName(userType, 'loginPhoneNumberError')).text('Please add valid phone number');
+        $(getClassName(userType, 'loginPhoneNumberError')).show()
         isValid = false;
     }
     if (isValid) {
-        sendOtpAPI(`${countryCode}${phoneNumber}`)
+        sendOtpAPI(userType, `${countryCode}${phoneNumber}`)
         let timerOn = true;
         timer(60);
     }
@@ -220,16 +238,21 @@ function onGetOTPClicked () {
  * On Verify OTP Clicked,
  * Validate Input and Hit Verify OTP API
  */
-function onVerifyOTPClicked () {
+function onVerifyOTPClicked (event) {
     let isValid = true;
+    let { userType } = event.target.dataset;
+    if (!userType) {
+      userType = 'teacher'
+    }
+
     const phoneNumber = window.sentOTPtoPhoneNumber;
     const otp = $('.otp-input').toArray().map((input) => input.value).join('');
     if (otp.length !== 6) {
-        $('#otpCodeError').text('Please provide valid OTP');
+        $(getClassName(userType, 'otpCodeError')).text('Please provide valid OTP');
         isValid = false;
     }
     if (isValid) {
-        verifyOtpAPI(phoneNumber, otp);
+        verifyOtpAPI(userType, phoneNumber, otp);
     }
 }
 
@@ -239,53 +262,58 @@ function onVerifyOTPClicked () {
  * Show validation errors if inValid
  * If valid: Hit Signup API
  */
-function onSignUpClicked () {
+function onSignUpClicked (event) {
     let isValid = true;
-    $('#signUpFirstNameError').hide()
-    $('#signUpLastNameError').hide()
-    $('#signUpCountryCodeError').hide()
-    $('#SignUpPhoneNumberError').hide()
-    $('#SignUpEmailError').hide()
-    $('#SignUpPasswordError').hide()
-    const firstName = $('#signUpFirstName')[0].value;
-    const lastName = $('#signUpLastName')[0].value;
-    const countryCode = $('#signUpCountryCode')[0].value;
-    const phoneNumber = $('#signUpPhoneNumber')[0].value;
-    const emailId = $('#signUpEmail')[0].value;
-    const password = $('#signUpPassword')[0].value;
+    let { userType } = event.target.dataset;
+    if (!userType) {
+      userType = 'teacher'
+    }
+
+    $(getClassName(userType, 'signUpFirstNameError')).hide()
+    $(getClassName(userType, 'signUpLastNameError')).hide()
+    $(getClassName(userType, 'signUpCountryCodeError')).hide()
+    $(getClassName(userType, 'SignUpPhoneNumberError')).hide()
+    $(getClassName(userType, 'SignUpEmailError')).hide()
+    $(getClassName(userType, 'SignUpPasswordError')).hide()
+    const firstName = $(getClassName(userType, 'signUpFirstName'))[0].value;
+    const lastName = $(getClassName(userType, 'signUpLastName'))[0].value;
+    const countryCode = $(getClassName(userType, 'signUpCountryCode'))[0].value;
+    const phoneNumber = $(getClassName(userType, 'signUpPhoneNumber'))[0].value;
+    const emailId = $(getClassName(userType, 'signUpEmail'))[0].value;
+    const password = $(getClassName(userType, 'signUpPassword'))[0].value;
     if (!firstName) {
-        $('#signUpFirstNameError').text('Please provide First Name');
-        $('#signUpFirstNameError').show()
+        $(getClassName(userType, 'signUpFirstNameError')).text('Please provide First Name');
+        $(getClassName(userType, 'signUpFirstNameError')).show()
         isValid = false;
     }
     if (!lastName) {
-        $('#signUpLastNameError').text('Please provide Last Name');
-        $('#signUpLastNameError').show()
+        $(getClassName(userType, 'signUpLastNameError')).text('Please provide Last Name');
+        $(getClassName(userType, 'signUpLastNameError')).show()
         isValid = false;
     }
     if (countryCode === 'none') {
-        $('#signUpCountryCodeError').text('Please select country code');
-        $('#signUpCountryCodeError').show()
+        $(getClassName(userType, 'signUpCountryCodeError')).text('Please select country code');
+        $(getClassName(userType, 'signUpCountryCodeError')).show()
         isValid = false;
     }
     if (phoneNumber && !isPhoneNumberValid(phoneNumber)) {
-        $('#SignUpPhoneNumberError').text('Please add valid phone number');
-        $('#SignUpPhoneNumberError').show()
+        $(getClassName(userType, 'SignUpPhoneNumberError')).text('Please add valid phone number');
+        $(getClassName(userType, 'SignUpPhoneNumberError')).show()
         isValid = false;
     }
     if (!emailId) {
-        $('#SignUpEmailError').text('Please provide email');
-        $('#SignUpEmailError').show()
+        $(getClassName(userType, 'SignUpEmailError')).text('Please provide email');
+        $(getClassName(userType, 'SignUpEmailError')).show()
         isValid = false;
     }
     if (!password) {
-        $('#SignUpPasswordError').text('Please provide password');
-        $('#SignUpPasswordError').show()
+        $(getClassName(userType, 'SignUpPasswordError')).text('Please provide password');
+        $(getClassName(userType, 'SignUpPasswordError')).show()
         isValid = false;
     }
 
     if (isValid) {
-        signUpAPI(firstName, lastName, `${countryCode}${phoneNumber}`, emailId, password)
+        signUpAPI(userType, firstName, lastName, `${countryCode}${phoneNumber}`, emailId, password)
     }
 }
 
@@ -295,25 +323,30 @@ function onSignUpClicked () {
  * Show validation errors if inValid
  * If valid: Hit Login API
  */
-function onSignInClicked () {
+function onSignInClicked (event) {
     let isValid = true;
-    $('#loginEmailError').hide()
-    $('#loginPasswordError').hide()
-    const emailId = $('#loginEmail')[0].value;
-    const password = $('#loginPassword')[0].value;
+    let { userType } = event.target.dataset;
+    if (!userType) {
+      userType = 'teacher'
+    }
+
+    $(getClassName(userType, 'loginEmailError')).hide()
+    $(getClassName(userType, 'loginPasswordError')).hide()
+    const emailId = $(getClassName(userType, 'loginEmail'))[0].value;
+    const password = $(getClassName(userType, 'loginPassword'))[0].value;
     if (!emailId) {
-        $('#loginEmailError').text('Please provide email');
-        $('#loginEmailError').show()
+        $(getClassName(userType, 'loginEmailError')).text('Please provide email');
+        $(getClassName(userType, 'loginEmailError')).show()
         isValid = false;
     }
     if (!password) {
-        $('#loginPasswordError').text('Please provide password');
-        $('#loginPasswordError').show()
+        $(getClassName(userType, 'loginPasswordError')).text('Please provide password');
+        $(getClassName(userType, 'loginPasswordError')).show()
         isValid = false;
     }
 
     if (isValid) {
-        loginAPI(emailId, password)
+        loginAPI(userType, emailId, password)
     }
 }
 
@@ -333,6 +366,24 @@ function openSignupModal (event) {
 function openSignInModal (event) {
     event.preventDefault();
     showModal('modalLogin', true);
+}
+
+/**
+ * Open SignUp Modal on bottom signup text clicked
+ * @param {Object} event 
+ */
+function openStudentSignupModal (event) {
+  event.preventDefault();
+  showModal('modalStudentSignup', true);
+}
+
+/**
+* Open Login Modal on bottom login text clicked
+* @param {Object} event 
+*/
+function openStudentSignInModal (event) {
+  event.preventDefault();
+  showModal('modalStudentLogin', true);
 }
 
 /**
@@ -467,16 +518,25 @@ function init() {
   /**
    * Init Function to add event handlers
    */
-  $('#getOTPButton').click(onGetOTPClicked);
-  $('#verifyOTPButton').click(onVerifyOTPClicked);
-  $('#openSignUpButton').click(openSignupModal);
   $('#startTeachingSignUp').click(openSignupModal);
   $('#startTeachingSignUp1').click(openSignupModal);
   $('#startTeachingSignUp2').click(openSignupModal);
   $('#startTeachingSignUp3').click(openSignupModal);
+  
+  $('#openSignUpButton').click(openSignupModal);
   $('#openSignInButton').click(openSignInModal);
   $('#signUpButton').click(onSignUpClicked);
   $('#signInButton').click(onSignInClicked);
+  $('#getOTPButton').click(onGetOTPClicked);
+  $('#verifyOTPButton').click(onVerifyOTPClicked);
+
+  $('#openStudentSignUpButton').click(openStudentSignupModal);
+  $('#openStudentSignInButton').click(openStudentSignInModal);
+  $('#studentSignUpButton').click(onSignUpClicked);
+  $('#studentSignInButton').click(onSignInClicked);
+  $('#studentGetOTPButton').click(onGetOTPClicked);
+  $('#studentVerifyOTPButton').click(onVerifyOTPClicked);
+
   $('#finalInput').change(onVerifyOTPClicked);
   initOTPInput();
   initHomePage();
