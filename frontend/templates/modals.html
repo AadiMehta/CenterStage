@@ -160,6 +160,170 @@
     </div>
 </div>
 <!-- Modal OTP End-->
+
+<!-- Student Modal Login-->
+<div class="modal fade login-modal comn-modal" id="modalStudentLogin" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"><i><img src="{% static '/images/login-icon.svg' %}" alt="" /></i> Log In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-form">
+            <div class="form-group">
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                    <input id="studentloginEmail" type="email" class="form-control" placeholder="Email Address" />
+                </div>
+                <strong id="studentloginEmailError" style="color:red;"></strong>
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                    <input id="studentloginPassword" type="password" class="form-control" placeholder="Password" />
+                </div>
+                <strong id="studentloginPasswordError" style="color:red;"></strong>
+            </div>
+                <strong id="studentSignInButtonError" style="color:red;"></strong>
+                <button type="button" class="btn btn-primary btn-full btn-lg" id="studentSignInButton" data-user-type="student">Log in</button>
+                <a href="#" class="forgot-pass link-small-text">Forgotten Your Password?</a>
+                <div class="or-row">
+                <span>OR</span>
+                </div>
+    
+                <h3>Log In Via OTP</h3>
+                <div class="form-group">
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
+                    <select id="studentloginCountryCode" class="form-control">
+                    <option value="none">Country Code</option>
+                    <option value="+1">United States +1</option>
+                    <option value="+91">India +91</option>
+                    </select>
+                </div>
+                <strong id="studentloginCountryCodeError" style="color:red;display: none;"></strong>
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-mobile.svg' %}" alt="" /></i>
+                    <input id="studentloginPhoneNumber" type="text" class="form-control" placeholder="Phone Number" />
+                </div>
+                <strong id="studentloginPhoneNumberError" style="color:red;display: none;"></strong>
+                </div>
+                <strong id="studentOTPButtonError" style="color:red;"></strong>
+                <button id="studentstudentGetOTPButton" type="button" class="btn btn-primary btn-full btn-lg" data-user-type="student">Get OTP</button>
+                <div class="haveAc d-block">
+                    Don't have an account?  <a href="javascript:void(0);" id="openStudentSignUpButton">Sign Up</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- Student Modal Login End-->
+
+<!-- Student Modal Signup-->
+<div class="modal fade login-modal comn-modal" id="modalStudentSignup" tabindex="2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i><img src="{% static '/images/icon-signup.svg' %}" alt="" /></i> Sign Up</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="signup-form">
+                    <div class="form-group">
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                            <input id="studentsignUpFirstName" type="text" class="form-control" placeholder="First Name" />
+                        </div>
+                        <strong id="studentsignUpFirstNameError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                            <input id="studentsignUpLastName" type="text" class="form-control" placeholder="Last Name" />
+                        </div>
+                        <strong id="studentsignUpLastNameError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
+                            <select id="studentsignUpCountryCode" class="form-control">
+                                <option value="none">Country Code</option>
+                                <option value="+1">United States +1</option>
+                                <option value="+91">India +91</option>
+                            </select>
+                        </div>
+                        <strong id="studentsignUpCountryCodeError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-mobile.svg' %}" alt="" /></i>
+                            <input id="studentsignUpPhoneNumber" type="number" class="form-control" placeholder="Mobile Number" maxLength="10"/>
+                        </div>
+                        <strong id="studentSignUpPhoneNumberError" style="color:red;display: none;"></strong>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                            <input id="studentsignUpEmail" type="email" class="form-control" placeholder="Email Address" />
+                        </div>
+                        <strong id="studentSignUpEmailError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                            <input id="studentsignUpPassword" type="password" class="form-control" placeholder="Password" />
+                        </div>
+                        <strong id="studentSignUpPasswordError" style="color:red;display: none;"></strong>
+                    </div>
+
+                    <div class="modal-text">
+                        By selecting <strong>Sign Up</strong> below, I agree to CentreStage’s <a href="#">Terms of Service, Payments Terms of Service, Privacy Policy,</a> and <a href="#">Nondiscrimination Policy</a>.
+                    </div>
+                    <button type="button" class="btn btn-primary btn-full btn-lg" id="studentSignUpButton" data-user-type="student">Sign Up</button>
+                    <strong id="studentSignUpButtonError" style="color:red;display: none;"></strong>
+                    <div class="haveAc d-block">Already have an account? <a href="javascript:void(0);" id="openStudentSignInButton">Sign In</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Student Modal Signup End-->
+
+<!-- Student Modal OTP-->
+<div class="modal fade login-modal comn-modal" id="modalStudentOTP" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+            <i><img src="{% static '/images/login-icon.svg' %}" alt="" /></i>
+            OTP Authentication
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-form">
+            <div>Please enter the One Time Password (OTP) sent to your phone number</div>
+            <div class="otp-inp">
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number" id="studentfinalInput" />
+            </div>
+            <strong id="studentotpCodeError" style="color:red;display: none;"></strong>
+            <button id="studentVerifyOTPButton" type="button" class="btn btn-primary btn-full btn-lg" data-user-type="student">Sign In</button>
+            <div class="haveAc">
+                <span class="otp-time">Submit OTP in: <span id="studenttimer"></span></span><span>Didn't get any OTP? <a href="#">Resend</a></span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- Student Modal OTP End-->
+
+
+
 <!-- Modal Lesson Notes -->
 <div class="modal fade modal-upload" id="uploadFilesModal" tabindex="-1" aria-labelledby="uploadFilesModalLabel" aria-hidden="true">
     <div class="modal-dialog">

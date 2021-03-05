@@ -201,17 +201,12 @@ class StudentUserCreateSerializer(serializers.ModelSerializer):
 
 
 class StudentProfileSerializer(serializers.ModelSerializer):
-    # accounts = TeacherAccountsSerializer(many=True, read_only=True)
-    # payments = TeacherPaymentsSerializer(many=True, read_only=True)
-
     class Meta:
         model = StudentProfile
         fields = (
             'profile_image',
             'bio',
             'status',
-            # 'accounts',
-            # 'payments',
         )
 
 

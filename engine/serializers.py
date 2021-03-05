@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
-from users.serializers import TeacherProfileSerializer
+from users.serializers import TeacherProfileSerializer, StudentProfileSerializer
 from frontend.utils.auth import get_time_duration
 
 
@@ -69,6 +69,47 @@ class LessonSlotSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_session_duration(instance):
         return get_time_duration(instance.lesson_to - instance.lesson_from, formatted=True)
+
+    class Meta:
+        model = LessonSlots
+        fields = [
+            'creator',
+            'lesson',
+            'lesson_from',
+            'lesson_no',
+            'lesson_to',
+            'created_at',
+            'session_time',
+            'session_duration'
+        ]
+
+
+class EnrollmentSerializer(serializers.ModelSerializer):
+    """
+    Enrollment Serializer
+    """
+    lesson = LessonSerializer(read_only=True)
+    student = StudentProfileSerializer(read_only=True)
+    lesson_from = serializers.SerializerMethodField()
+    lesson_to = serializers.SerializerMethodField()
+    session_time = serializers.SerializerMethodField()
+    session_duration = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_lesson_from(instance):
+        return instance.lessonslot.lesson_from.strftime('%A, %d %b %Y')
+
+    @staticmethod
+    def get_lesson_to(instance):
+        return instance.lessonslot.lesson_to.strftime('%A, %d %b %Y')
+
+    @staticmethod
+    def get_session_time(instance):
+        return instance.lessonslot.lesson_from.strftime('%I:%M %p')
+
+    @staticmethod
+    def get_session_duration(instance):
+        return get_time_duration(instance.lessonslot.lesson_to - instance.lessonslot.lesson_from, formatted=True)
 
     class Meta:
         model = LessonSlots

@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from frontend.utils.auth import get_user_from_token, is_authenticated
+from users.models import UserTypes
 
 
 class HomeTemplateView(TemplateView):
@@ -16,10 +17,19 @@ class HomeTemplateView(TemplateView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        if is_authenticated(self.request.COOKIES.get('auth_token')):
+        user = self.get_user()
+        if user:
+            if user.user_type == UserTypes.STUDENT_USER:
+                return redirect('student-dashboard-main')
             return redirect('dashboard-lessons')
 
         return super(HomeTemplateView, self).dispatch(request, *args, **kwargs)
+
+    def get_user(self):
+        if is_authenticated(self.request.COOKIES.get('auth_token')):
+            return get_user_from_token(self.request.COOKIES.get('auth_token'))
+        else:
+            return False
 
 
 class TermsAndConditionsView(TemplateView):
