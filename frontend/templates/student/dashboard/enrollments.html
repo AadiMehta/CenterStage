@@ -17,7 +17,7 @@
             <h2 class="title-2">My Enrollments</h2>
             <div class="search-row">
                <div class="searchInp-col">
-                  <img src="{% static 'images/icon-search.svg' %}" alt="" />
+                  <img src="{% static 'images/icon-search.svg' %}' %}" alt="" />
                   <input type="search" class="form-control" placeholder="Search Sessions" />
                </div>
                <div class="search-tags">
@@ -37,7 +37,7 @@
                   <h2 class="lession-title">{{ enrollment.lesson.name | title }}</h2>
                   <div class="d-flex mb-4 msgbtnProfile">
                      <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="images/user-img.png" alt="" /></div>
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                            <div class="prof-name">
                               <h4>{{enrollment.lesson.creator.user.first_name}} {{enrollment.lesson.creator.user.last_name}}</h4>
                               <span class="lession-time">Monday, 06 Nov 2020</span>
@@ -45,7 +45,7 @@
                      </div>
                      <div>
                            <button type="button" class="btn-rounded btn-with-icon">
-                              <i><img src="images/message.svg" alt="" /></i> Message {{enrollment.lesson.creator.user.first_name}}
+                              <i><img src="{% static 'images/message.svg' %}" alt="" /></i> Message {{enrollment.lesson.creator.user.first_name}}
                            </button>
                      </div>
                   </div>
@@ -61,7 +61,7 @@
                               </li>
                               <li>
                                  <div class="lessions-countDetail-box">
-                                       <h4><img src="images/happy.svg" alt="" /> Happy</h4>
+                                       <h4><img src="{% static 'images/happy.svg' %}" alt="" /> Happy</h4>
                                        <h5>Teacher Feedback</h5>
                                  </div>
                               </li>
@@ -70,9 +70,9 @@
                      <div class="col-right">
                            <div class="profimg-name">
                               <div class="profimg-col">
-                                 <div class="profimg-rounded"><img src="images/user-img.png" alt="" /></div>
-                                 <div class="profimg-rounded"><img src="images/user-img.png" alt="" /></div>
-                                 <div class="profimg-rounded"><img src="images/user-img.png" alt="" /></div>
+                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                               </div>
                               <div class="prof-name">
                                  <h4>
@@ -88,47 +88,47 @@
 
                   <div class="searchresult-row">
                      <div class="lession-col-left">
-                           <img src="images/lession-1.jpg" alt="" />
+                           <img src="{% static 'images/lession-1.jpg' %}" alt="" />
                      </div>
                      <div class="lession-col-right">
                            <ul class="lessons-steps">
                               <li>
-                                 <i><img src="images/time.png" alt="" /></i>
+                                 <i><img src="{% static 'images/time.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Time</h4>
                                        <span>{{ enrollment.session_time }} IST</span>
                                  </div>
                               </li>
                               <li>
-                                 <i><img src="images/hour-glass.png" alt="" /></i>
+                                 <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Duration</h4>
                                        <span>{{ slot.session_duration }}</span>
                                  </div>
                               </li>
                               <li>
-                                 <i><img src="images/webinar.png" alt="" /></i>
+                                 <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Type</h4>
                                        <span>One - on - One</span>
                                  </div>
                               </li>
                               <li>
-                                 <i><img src="images/language.png" alt="" /></i>
+                                 <i><img src="{% static 'images/language.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Language</h4>
                                        <span>Hosted in {% for language in slot.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                                  </div>
                               </li>
                               <li>
-                                 <i><img src="images/session-number2.png" alt="" /></i>
+                                 <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Number</h4>
                                        <a href="#">03</a> <span>Out of 05</span>
                                  </div>
                               </li>
                               <li>
-                                 <i><img src="images/documents.png" alt="" /></i>
+                                 <i><img src="{% static 'images/documents.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Lesson Documents</h4>
                                        <a href="#">View Documents</a>

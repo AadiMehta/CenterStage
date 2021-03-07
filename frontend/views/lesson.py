@@ -160,7 +160,7 @@ class LessonCreateWizard(SessionWizardView):
                 weekdays, session_tz
             )
 
-            return render(self.request, 'lesson/done.html', {
+            return render(self.request, 'teacher/lesson/done.html', {
                 'lesson': lesson,
             })
         except Exception as e:

@@ -39,6 +39,8 @@ from frontend.views.onboarding import (
 )
 from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI
 from frontend.views.schedule import ScheduleCreateWizard
+from frontend.views.booking import BookLessonWizard
+
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
     DashboardLessons, DashboardMessages, DashboardSchedulesPastSessions,
@@ -125,6 +127,9 @@ urlpatterns = [
     # Lesson Wizard
     path('lesson/new', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="new-lesson"),
     path('schedule/new', ScheduleCreateWizard.as_view(ScheduleCreateWizard.FORMS), name="new-schedule"),
+
+    # Book Lesson Wizard
+    path('lesson/<uuid:lesson_uuid>/book', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="book-lesson"),
 
 
     # Dashboard Templates

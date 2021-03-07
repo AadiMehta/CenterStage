@@ -1,0 +1,593 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/booking/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/booking/media.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.css">
+
+{% endblock %}
+
+{% block content %}
+<!-- Modal -->
+<div class="modal fade modal-pick-dateTime" id="modal1" tabindex="-1" aria-labelledby="modal1" aria-hidden="true">
+   <div class="modal-dialog">
+      <form id="preview" action="" method="post">
+      {% csrf_token %}
+      {{ wizard.management_form }}
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <img src="images/close.svg" alt="" />
+            </button>
+            <div class="modal-body">
+                <h2>Pick Date &amp; Time</h2>
+                <div class="cald-area mb-3">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Select Date <span class="required">*</span></label>
+                                <div class="liner-select-drop">
+                                    <input type="text" id="selectDateSlotpicker" name="preview-date_slot">
+                                </div>
+                                <p id="dateSlotError" style="color:red;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="select-datetime-dropdown mb-3">
+                <select id="timeSlot" class="form-control" name="preview-time_slot">
+                    <option value="none">None Selected</option>
+                    {% for slot in lesson_time_slots %}
+                        <option value="{{ forloop.counter }}">{{ slot.0 }} - {{ slot.1 }} (GMT+5:30)</option>
+                    {% endfor %}
+                </select>
+                    <p id="timeSlotError" style="color:red;"></p>
+                </div>
+                <div class="custom-check">
+                <div class="checkbox">
+                    <input id="check" type="checkbox" name="preview-set_to_all_sessions">
+                    <label for="check">Set this for all sessions</label>
+                </div>
+                </div>
+                <div class="btn-proceed">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="proceedBooking"><span>Proceed</span> <i><img src="images/next.svg" alt="" /></i></button>
+                </div>
+            </div>
+        </div>
+      </form>
+   </div>
+</div>
+
+<div class="modal fade modal-pick-dateTime" id="modal2" tabindex="-1" aria-labelledby="modal2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <img src="images/close.svg" alt="" />
+            </button>
+            <div class="modal-body">
+                <h2>All Sessions</h2>
+
+                <div id="sessionWrapper" class="session-wrapper">
+                </div>
+
+                <div class="btn-proceed">
+                    <button id="comfirmBooking" type="button" class="btn btn-primary btn-lg btn-theme">
+                        <span>Confirm</span> <i><img src="images/next.svg" alt="" /></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End-->
+
+<div class="wrapper-main paddtb-4">
+    <div class="container">
+        <div class="top-section">
+            <div class="host-header-left">
+                <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button>
+                <h2>Book Group Lesson</h2>
+            </div>
+        </div>
+
+        <div class="page-wrap d-flex mt-4">
+            <div class="page-left-area">
+                <div class="lessons-wrap">
+                    <h2 class="lession-title">Core JAVA Development</h2>
+                    <div class="d-flex mb-5 msgbtnProfile">
+                        <div class="profimg-name">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                            <div class="prof-name">
+                                <h4>by Thomas Edward</h4>
+                                <span class="lession-time">Monday, 06 Nov 2020</span>
+                            </div>
+                        </div>
+                        <div class="dic2">
+                            <div class="dic2-col">
+                                <i class=""><img src="{% static 'images/rating-fill.svg' %}" alt="" /></i> 4.7
+                            </div>
+                            <div class="icon-heart">
+                                <a href="#"><img src="{% static 'images/heart.png' %}" alt="" /></a>
+                            </div>
+                            <button type="button" class="btn-rounded pl-5 pr-5">Share</button>
+                        </div>
+                    </div>
+
+                    <div class="content-area mb-5">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+                        id est laborum.
+                    </div>
+
+                    <div class="searchresult-row mb-5">
+                        <div class="lession-col-left">
+                            <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                        </div>
+                        <div class="lession-col-right">
+                            <ul class="lessons-steps">
+                                <li>
+                                    <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
+                                    <div class="lessons-steps-text">
+                                        <h4>Session Number</h4>
+                                        <a href="#">03</a> <span>Out of 05</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                                    <div class="lessons-steps-text">
+                                        <h4>Session Duration</h4>
+                                        <span>45 Minutes</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                                    <div class="lessons-steps-text">
+                                        <h4>Session Type</h4>
+                                        <span>One - on - One</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                                    <div class="lessons-steps-text">
+                                        <h4>Session Language</h4>
+                                        <span>Hosted in English</span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="profimg-name">
+                                <div class="profimg-col">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                </div>
+                                <div class="prof-name">
+                                    <h4>
+                                        <a href="#">
+                                            With Edwina, abc, xyz<br />
+                                            + 5 other students
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>What You Will Learn</label>
+                        <div class="content-area">
+                            <ul class="listStyle">
+                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
+                                <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</li>
+                                <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</li>
+                                <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</li>
+                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
+                                <li>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lesson Requirements</label>
+                        <div class="content-area">
+                            <ul class="listStyle">
+                                <li>Prior knowledge of JAVA</li>
+                                <li>laptop</li>
+                                <li>GitHub Account</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Who Is This Lesson For?</label>
+                        <div class="content-area">
+                            <ul class="listStyle">
+                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
+                                <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</li>
+                                <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</li>
+                                <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group reviews-section">
+                        <label>
+                            Reviews
+                            <strong class="review-reating">
+                                <i class=""><img src="{% static 'images/rating-fill.svg' %}" alt="" /></i> 4.7
+                            </strong>
+                        </label>
+                        <div class="reviewbox-wrap">
+                            <div class="reviewbox">
+                                <div class="review-msg">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                    aliquip ex ea commodo consequat.
+                                </div>
+                                <div class="profimg-name">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    <div class="prof-name">
+                                        <h4>Manjula Wijemanna</h4>
+                                        <span class="lession-time">2 Weeks Ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reviewbox">
+                                <div class="review-msg">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                    aliquip ex ea commodo consequat.
+                                </div>
+                                <div class="profimg-name">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    <div class="prof-name">
+                                        <h4>by Thomas Edward</h4>
+                                        <span class="lession-time">Monday, 06 Nov 2020</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reviewbox">
+                                <div class="review-msg">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                    aliquip ex ea commodo consequat.
+                                </div>
+                                <div class="profimg-name">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    <div class="prof-name">
+                                        <h4>by Thomas Edward</h4>
+                                        <span class="lession-time">Monday, 06 Nov 2020</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="reviewbox">
+                                <div class="review-msg">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                    aliquip ex ea commodo consequat.
+                                </div>
+                                <div class="profimg-name">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    <div class="prof-name">
+                                        <h4>by Thomas Edward</h4>
+                                        <span class="lession-time">Monday, 06 Nov 2020</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="showall-btn"><a href="#" class="btn btn-liner">Show All</a></div>
+                    </div>
+
+                    <div class="form-group your-teacher-section">
+                        <label>Your Teacher</label>
+                        <div class="your-teacher-wrap">
+                            <div class="profimg-name">
+                                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                <div class="prof-name">
+                                    <div>
+                                        <h4>Thomas Edward</h4>
+                                        <span class="desigation">Web Developer and JAVA Expert</span>
+                                    </div>
+                                    <button type="button" class="btn-rounded btn-with-icon">
+                                        <i><img src="{% static 'images/message.svg' %}" alt="" /></i> Message Thomas
+                                    </button>
+                                    <div class="yourtchr-dtl">
+                                        <div class="yourtchr-dtl-col">
+                                            <i class=""><img src="{% static 'images/rating-fill.svg' %}" alt="" /></i> 4.7
+                                        </div>
+                                        <div class="yourtchr-dtl-col">
+                                            <i class=""><img src="{% static 'images/Video-Lesson.png' %}" alt="" /></i> 99+ Lessons
+                                        </div>
+                                        <div class="yourtchr-dtl-col">
+                                            <i class=""><img src="{% static 'images/View.png' %}" alt="" /></i> 10,998 Minutes Watched
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="teacher-msgarea">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                                deserunt mollit anim id est laborum.
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-theme">Book This Lesson</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>More Lessons by Thomas Edward</label>
+                        <div class="searchresult-row mb-5 pb-4">
+                            <div class="lession-col-left">
+                                <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                            </div>
+                            <div class="lession-col-right">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Number</h4>
+                                            <a href="#">03</a> <span>Out of 05</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Duration</h4>
+                                            <span>45 Minutes</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Type</h4>
+                                            <span>One - on - One</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="btn-area-2">
+                                    <button type="button" class="btn btn-theme">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="searchresult-row mb-5 pb-4">
+                            <div class="lession-col-left">
+                                <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                            </div>
+                            <div class="lession-col-right">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Number</h4>
+                                            <a href="#">03</a> <span>Out of 05</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Duration</h4>
+                                            <span>45 Minutes</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Type</h4>
+                                            <span>One - on - One</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="btn-area-2">
+                                    <button type="button" class="btn btn-theme">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="searchresult-row mb-5">
+                            <div class="lession-col-left">
+                                <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                            </div>
+                            <div class="lession-col-right">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Number</h4>
+                                            <a href="#">03</a> <span>Out of 05</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Duration</h4>
+                                            <span>45 Minutes</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Type</h4>
+                                            <span>One - on - One</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="btn-area-2">
+                                    <button type="button" class="btn btn-theme">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-right-area">
+                <div class="default-box-style">
+                    <h2>$500/person</h2>
+                    <h3>for 5 sessions</h3>
+                </div>
+                <button type="button" class="btn btn-theme w-100 mb-4" data-toggle="modal" data-target="#modal1">Book Now</button>
+                <div class="default-box-style">
+                    <div class="seat-remaining-title">
+                        <div class="circle-area">04</div>
+                        Seats remaining
+                    </div>
+                    <div class="session-seat-row">
+                        <h5>First Session on</h5>
+                        <div class="sessionDayDate">
+                            <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Start Time</label>
+                                    <div class="content-area">
+                                        03:30 PM
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>End Time</label>
+                                    <div class="content-area">
+                                        04:45 (BST)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="session-seat-row">
+                        <h5>Next Session on</h5>
+                        <div class="next-session-row">
+                            <div class="sessionDayDate">
+                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Start Time</label>
+                                        <div class="content-area">
+                                            03:30 PM
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>End Time</label>
+                                        <div class="content-area">
+                                            04:45 (BST)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="next-session-row">
+                            <div class="sessionDayDate">
+                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Start Time</label>
+                                        <div class="content-area">
+                                            03:30 PM
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>End Time</label>
+                                        <div class="content-area">
+                                            04:45 (BST)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="next-session-row">
+                            <div class="sessionDayDate">
+                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Start Time</label>
+                                        <div class="content-area">
+                                            03:30 PM
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>End Time</label>
+                                        <div class="content-area">
+                                            04:45 (BST)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="next-session-row">
+                            <div class="sessionDayDate">
+                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-0">
+                                        <label>Start Time</label>
+                                        <div class="content-area">
+                                            03:30 PM
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-0">
+                                        <label>End Time</label>
+                                        <div class="content-area">
+                                            04:45 (BST)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="see-allS-btn d-flex mb-4">
+                    <a href="#" class="btn btn-liner">See All Sessions</a>
+                </div>
+                <button type="button" class="btn btn-theme w-100">Share Now</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        var lessonDateSlots = '{{ lesson_date_slots|escapejs }}';
+        var lessonTimeSlots = '{{ lesson_time_slots|escapejs }}';
+    </script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+   <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js" integrity="sha512-F+u8eWHrfY8Xw9BLzZ8rG/0wIvs0y+JyRJrXjp3VjtFPylAEEGwKbua5Ip/oiVhaTDaDs4eU2Xtsxjs/9ag2bQ==" crossorigin="anonymous"></script>
+    <script src="{% static '/js/booking/custom.js' %}" type="text/javascript"></script> 
+    <script src="{% static '/js/booking/preview.js' %}" type="text/javascript"></script> 
+{% endblock %}
