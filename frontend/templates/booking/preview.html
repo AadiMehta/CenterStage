@@ -88,20 +88,24 @@
         <div class="top-section">
             <div class="host-header-left">
                 <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button>
-                <h2>Book Group Lesson</h2>
+                {% if lesson.no_of_participants > 1 %}
+                    <h2>Book Group Lesson</h2>
+                {% else %}
+                    <h2>Book One on One Lesson</h2>
+                {% endif %}
             </div>
         </div>
 
         <div class="page-wrap d-flex mt-4">
             <div class="page-left-area">
                 <div class="lessons-wrap">
-                    <h2 class="lession-title">Core JAVA Development</h2>
+                    <h2 class="lession-title">{{lesson.name}}</h2>
                     <div class="d-flex mb-5 msgbtnProfile">
                         <div class="profimg-name">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                             <div class="prof-name">
-                                <h4>by Thomas Edward</h4>
-                                <span class="lession-time">Monday, 06 Nov 2020</span>
+                                <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                                <span class="lession-time">{{slot.lesson_from}}</span>
                             </div>
                         </div>
                         <div class="dic2">
@@ -116,9 +120,7 @@
                     </div>
 
                     <div class="content-area mb-5">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-                        id est laborum.
+                        {{lesson.description}}
                     </div>
 
                     <div class="searchresult-row mb-5">
@@ -131,28 +133,33 @@
                                     <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
                                     <div class="lessons-steps-text">
                                         <h4>Session Number</h4>
-                                        <a href="#">03</a> <span>Out of 05</span>
+                                        <a href="#">{{ slot.session_no }}</a> <span>Out of {{ no_of_slots }}</span>
                                     </div>
                                 </li>
                                 <li>
                                     <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
                                     <div class="lessons-steps-text">
                                         <h4>Session Duration</h4>
-                                        <span>45 Minutes</span>
+                                        <span>{{ slot.session_duration }}</span>
                                     </div>
                                 </li>
                                 <li>
                                     <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
                                     <div class="lessons-steps-text">
                                         <h4>Session Type</h4>
-                                        <span>One - on - One</span>
+                                        {% if lesson.no_of_participants > 1 %}
+                                            <span>Group</span>
+                                        {% else %}
+                                            <span>One - on - One</span>
+                                        {% endif %}
+                                    
                                     </div>
                                 </li>
                                 <li>
                                     <i><img src="{% static 'images/language.png' %}" alt="" /></i>
                                     <div class="lessons-steps-text">
                                         <h4>Session Language</h4>
-                                        <span>Hosted in English</span>
+                                        <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                                     </div>
                                 </li>
                             </ul>
@@ -179,12 +186,9 @@
                         <label>What You Will Learn</label>
                         <div class="content-area">
                             <ul class="listStyle">
-                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
-                                <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</li>
-                                <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.</li>
-                                <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</li>
-                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</li>
-                                <li>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</li>
+                                {% for goal in form_data.goals %}
+                                    <li>{{goal}}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -193,14 +197,14 @@
                         <label>Lesson Requirements</label>
                         <div class="content-area">
                             <ul class="listStyle">
-                                <li>Prior knowledge of JAVA</li>
-                                <li>laptop</li>
-                                <li>GitHub Account</li>
+                                {% for requirement in form_data.requirements %}
+                                    <li>{{requirement}}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    {% comment %} <div class="form-group">
                         <label>Who Is This Lesson For?</label>
                         <div class="content-area">
                             <ul class="listStyle">
@@ -210,7 +214,7 @@
                                 <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</li>
                             </ul>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
 
                     <div class="form-group reviews-section">
                         <label>
@@ -283,8 +287,8 @@
                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                                 <div class="prof-name">
                                     <div>
-                                        <h4>Thomas Edward</h4>
-                                        <span class="desigation">Web Developer and JAVA Expert</span>
+                                        <h4>{{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                                        <span class="desigation">{{lesson.creator.description}}</span>
                                     </div>
                                     <button type="button" class="btn-rounded btn-with-icon">
                                         <i><img src="{% static 'images/message.svg' %}" alt="" /></i> Message Thomas
@@ -304,16 +308,14 @@
                             </div>
 
                             <div class="teacher-msgarea">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                                deserunt mollit anim id est laborum.
+                                {{lesson.creator.description}}
                             </div>
                         </div>
                         <button type="button" class="btn btn-theme">Book This Lesson</button>
                     </div>
 
                     <div class="form-group">
-                        <label>More Lessons by Thomas Edward</label>
+                        <label>More Lessons by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</label>
                         <div class="searchresult-row mb-5 pb-4">
                             <div class="lession-col-left">
                                 <img src="{% static 'images/lession-1.jpg' %}" alt="" />
@@ -439,8 +441,8 @@
             </div>
             <div class="page-right-area">
                 <div class="default-box-style">
-                    <h2>$500/person</h2>
-                    <h3>for 5 sessions</h3>
+                    <h2>{% if lesson.price.currency == 'DOLLARS' %}${% else %}₹{% endif %} {{lesson.price.value}}/person</h2>
+                    <h3>for {{no_of_slots}} sessions</h3>
                 </div>
                 <button type="button" class="btn btn-theme w-100 mb-4" data-toggle="modal" data-target="#modal1">Book Now</button>
                 <div class="default-box-style">
@@ -451,14 +453,14 @@
                     <div class="session-seat-row">
                         <h5>First Session on</h5>
                         <div class="sessionDayDate">
-                            <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
+                            <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{lesson_time_slots.0.3}}
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Start Time</label>
                                     <div class="content-area">
-                                        03:30 PM
+                                        {{lesson_time_slots.0.0}}
                                     </div>
                                 </div>
                             </div>
@@ -466,7 +468,7 @@
                                 <div class="form-group">
                                     <label>End Time</label>
                                     <div class="content-area">
-                                        04:45 (BST)
+                                        {{lesson_time_slots.0.1}}
                                     </div>
                                 </div>
                             </div>
@@ -474,98 +476,31 @@
                     </div>
                     <div class="session-seat-row">
                         <h5>Next Session on</h5>
-                        <div class="next-session-row">
-                            <div class="sessionDayDate">
-                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Start Time</label>
-                                        <div class="content-area">
-                                            03:30 PM
+                        {% for slot in lesson_time_slots|slice:"1" %}
+                            <div class="next-session-row">
+                                <div class="sessionDayDate">
+                                    <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{slot.3}}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Start Time</label>
+                                            <div class="content-area">
+                                               {{slot.0}}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>End Time</label>
-                                        <div class="content-area">
-                                            04:45 (BST)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="next-session-row">
-                            <div class="sessionDayDate">
-                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Start Time</label>
-                                        <div class="content-area">
-                                            03:30 PM
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>End Time</label>
-                                        <div class="content-area">
-                                            04:45 (BST)
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>End Time</label>
+                                            <div class="content-area">
+                                               {{slot.1}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="next-session-row">
-                            <div class="sessionDayDate">
-                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Start Time</label>
-                                        <div class="content-area">
-                                            03:30 PM
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>End Time</label>
-                                        <div class="content-area">
-                                            04:45 (BST)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="next-session-row">
-                            <div class="sessionDayDate">
-                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> Mon, 20 Dec
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-0">
-                                        <label>Start Time</label>
-                                        <div class="content-area">
-                                            03:30 PM
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-0">
-                                        <label>End Time</label>
-                                        <div class="content-area">
-                                            04:45 (BST)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="see-allS-btn d-flex mb-4">

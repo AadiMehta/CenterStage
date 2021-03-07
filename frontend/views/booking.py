@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
 from frontend.forms.booking import BookLessonForm1, BookLessonForm2
 from frontend.utils.auth import get_user_from_token, is_authenticated
+from engine.serializers import LessonSlotSerializer
 from engine.models import LessonData, LessonSlots, EnrollmentChoices, Enrollment
 from users.models import StudentProfile
 from django.conf import settings
@@ -31,6 +32,7 @@ class BookLessonWizard(SessionWizardView):
         lesson_date_slots = []
         lesson_time_slots = []
         lesson_time_slot_nos = []
+        first_slot = lesson.slots.first()
         for slot in lesson.slots.all():
             lesson_date_slots.append(slot.lesson_from.strftime('%Y-%m-%d'))
             lesson_time_slot_nos.append(slot.session_no)
@@ -40,6 +42,8 @@ class BookLessonWizard(SessionWizardView):
                 slot.session_no,
                 slot.lesson_from.strftime('%a, %d %b'),
             ])
+        context['no_of_slots'] = lesson.slots.count()
+        context['slot'] = LessonSlotSerializer(first_slot).data
         context['lesson_date_slots'] = lesson_date_slots
         context['lesson_time_slots'] = lesson_time_slots
         return context

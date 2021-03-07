@@ -13,7 +13,11 @@
       <div class="top-section">
           <div class="host-header-left">
             <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
-            <h2>Book Group Lesson</h2>
+            {% if lesson.no_of_participants > 1 %}
+                <h2>Book Group Lesson</h2>
+            {% else %}
+                <h2>Book One on One Lesson</h2>
+            {% endif %}
           </div>
       </div>
       <form id="payment" action="" method="post">
@@ -168,16 +172,16 @@
           <div class="page-right-area">
             <div class="default-box-style">
                 <div class="group-row">
-                  <h3>Core Java Development</h3>
+                  <h3>{{lesson.name}}</h3>
                   <div class="profimg-name mb-3">
                       <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                       <div class="prof-name">
-                        <h4>by Thomas Edward</h4>
-                        <span class="desigation">Web and Java Developer</span>
+                        <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                        <span class="desigation">{{lesson.creator.description}}</span>
                       </div>
                   </div>
                   <div class="card-total mb-0">
-                      Total = <span> $150 ($USD)</span>
+                      Total = <span> {% if lesson.price.currency == 'DOLLARS' %}${% else %}₹{% endif %} {{lesson.price.value}} ({% if lesson.price.currency == 'DOLLARS' %}$USD{% else %}₹INR{% endif %})</span>
                   </div>
                 </div>
                 <div class="group-row">
@@ -186,118 +190,56 @@
                         <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
                         <div class="lessons-steps-text">
                             <h4>Session Number</h4>
-                            <a href="#">03</a> <span>Out of 05</span>
+                            <a href="#">{{ slot.session_no }}</a> <span>Out of {{ no_of_slots }}</span>
                         </div>
                       </li>
                       <li>
                         <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
                         <div class="lessons-steps-text">
                             <h4>Session Duration</h4>
-                            <span>45 Minutes</span>
+                            <span>{{ slot.session_duration }}</span>
                         </div>
                       </li>
                       <li>
                         <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
                         <div class="lessons-steps-text">
                             <h4>Session Type</h4>
-                            <span>One - on - One</span>
+                            {% if lesson.no_of_participants > 1 %}
+                                <span>Group</span>
+                            {% else %}
+                                <span>One - on - One</span>
+                            {% endif %}
                         </div>
                       </li>
                       <li>
                         <i><img src="{% static 'images/language.png' %}" alt=""></i>
                         <div class="lessons-steps-text">
                             <h4>Session Language</h4>
-                            <span>Hosted in English</span>
+                            <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                         </div>
                       </li>
                   </ul>
                 </div>
                 <div class="group-row">
+                  {% for slot in lesson_time_slots %}
                   <div class="next-session-row">
                       <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
-                      <h5>Session 1</h5>
-                      <div class="sessionDayDate">Mon, 20 Dec</div>
+                      <h5>Session {{forloop.counter}}</h5>
+                      <div class="sessionDayDate">{{slot.3}}</div>
                       <div class="row">
                         <div class="col-md-6">
                             <div class="content-area">
-                              03:30 PM
+                              {{slot.0}}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="content-area">
-                              04:45 (BST)
+                              {{slot.1}}
                             </div>
                         </div>
                       </div>
                   </div>
-                  <div class="next-session-row">
-                      <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
-                      <h5>Session 2</h5>
-                      <div class="sessionDayDate">Mon, 20 Dec</div>
-                      <div class="row">
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              03:30 PM
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              04:45 (BST)
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="next-session-row">
-                      <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
-                      <h5>Session 3</h5>
-                      <div class="sessionDayDate">Mon, 20 Dec</div>
-                      <div class="row">
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              03:30 PM
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              04:45 (BST)
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="next-session-row">
-                      <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
-                      <h5>Session 4</h5>
-                      <div class="sessionDayDate">Mon, 20 Dec</div>
-                      <div class="row">
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              03:30 PM
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              04:45 (BST)
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="next-session-row">
-                      <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
-                      <h5>Session 5</h5>
-                      <div class="sessionDayDate">Mon, 20 Dec</div>
-                      <div class="row">
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              03:30 PM
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="content-area">
-                              04:45 (BST)
-                            </div>
-                        </div>
-                      </div>
-                  </div>
+                  {% endfor %}
                 </div>
             </div>
           </div>
