@@ -2,11 +2,9 @@ import logging
 from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
 from frontend.forms.booking import BookLessonForm1, BookLessonForm2
-from frontend.utils.auth import get_user_from_token, is_authenticated
 from engine.serializers import LessonSlotSerializer
 from engine.models import LessonData, LessonSlots, EnrollmentChoices, Enrollment
 from users.models import StudentProfile
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -49,20 +47,13 @@ class BookLessonWizard(SessionWizardView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        user = self.get_user()
-        if not user:
+        if not request.user.is_authenticated:
             return redirect('/')
         else:
             return super(BookLessonWizard, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         return [self.TEMPLATES[self.steps.current]]
-
-    def get_user(self):
-        if is_authenticated(self.request.COOKIES.get('auth_token')):
-            return get_user_from_token(self.request.COOKIES.get('auth_token'))
-        else:
-            return False
 
     def done(self, form_list, **kwargs):
         final_data = {}
@@ -74,15 +65,16 @@ class BookLessonWizard(SessionWizardView):
 
     def book_lesson(self, form_data):
         try:
-            user = self.get_user()
+            user = self.request.user
             lesson_uuid = self.request.resolver_match.kwargs.get('lesson_uuid')
             student = StudentProfile.objects.get(user=user)
             lesson = LessonData.objects.get(lesson_uuid=lesson_uuid)
-            lessonslot = LessonSlots.objects.get(session_no=form_data.get('time_slot'), lesson=lesson)
+            lesson_slot = LessonSlots.objects.get(session_no=form_data.get('time_slot'), lesson=lesson)
 
-            enrollment = Enrollment.objects.filter(student=student, lesson=lesson, lessonslot=lessonslot).first()
+            enrollment = Enrollment.objects.filter(student=student, lesson=lesson, lessonslot=lesson_slot).first()
             if not enrollment:
-                enrollment = Enrollment(student=student, lesson=lesson, lessonslot=lessonslot, status=EnrollmentChoices.ACTIVE)
+                enrollment = Enrollment(student=student, lesson=lesson, lessonslot=lesson_slot,
+                                        status=EnrollmentChoices.ACTIVE)
                 enrollment.save()
             return render(self.request, 'booking/done.html', {
                 'enrollment': enrollment

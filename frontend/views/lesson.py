@@ -9,7 +9,6 @@ from formtools.wizard.views import SessionWizardView
 from rest_framework.response import Response
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
     LessonCreateFormStep4, LessonCreateFormPreview
-from frontend.utils.auth import get_user_from_token, is_authenticated
 from engine.models import MeetingTypes
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
@@ -79,20 +78,13 @@ class LessonCreateWizard(SessionWizardView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        user = self.get_user()
-        if not user:
+        if not self.request.user.is_authenticated:
             return redirect('/')
         else:
             return super(LessonCreateWizard, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         return [self.TEMPLATES[self.steps.current]]
-
-    def get_user(self):
-        if is_authenticated(self.request.COOKIES.get('auth_token')):
-            return get_user_from_token(self.request.COOKIES.get('auth_token'))
-        else:
-            return False
 
     def done(self, form_list, **kwargs):
         final_data = {}
@@ -117,7 +109,7 @@ class LessonCreateWizard(SessionWizardView):
         Create slots based on slot session information
         """
         try:
-            user = self.get_user()
+            user = self.request.user
             account = user.teacher_profile_data.accounts.get(
                 account_type=TeacherAccountTypes.ZOOM_VIDEO
             )
@@ -156,7 +148,7 @@ class LessonCreateWizard(SessionWizardView):
 
             session_tz = form_data.get('timezone')
             self.add_available_slots(
-                user, lesson, form_dawta, start_date, end_date,
+                user, lesson, form_data, start_date, end_date,
                 weekdays, session_tz
             )
 

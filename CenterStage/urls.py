@@ -14,6 +14,7 @@ Including another URL conf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.conf.urls import url
 from rest_framework import permissions
@@ -72,7 +73,7 @@ admin.site.index_title = 'CenterStage Admin Area'               # default: "Site
 admin.site.site_title = 'CenterStage Admin'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls, name="admin"),
 
     path('health/check/', health_check, name="health_check"),
 
@@ -101,12 +102,13 @@ urlpatterns = [
     path('api/student/profile/', StudentProfileView.as_view()),
 
     # zoom APIs
-    path('api/profile/zoom/connect', ZoomConnectAPIView.as_view()),
-    path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view()),
+    path('api/profile/zoom/connect', ZoomConnectAPIView.as_view(), name="zoom-connect"),
+    path('api/profile/zoom/disconnect', ZoomDisconnectAPIView.as_view(), name="zoom-disconnect"),
+
     # Google APIs
     path('api/profile/google/calendar/connect', AuthorizeGoogleCalendar.as_view(), name="calendar-oauth-initiate"),
     path('api/profile/google/calendar/oauth/callback', GoogleCalendarCallback.as_view(), name="calendar-oauthcallback"),
-    path('api/profile/google/calendar/disconnect', GoogleDisconnectAPIView.as_view()),
+    path('api/profile/google/calendar/disconnect', GoogleDisconnectAPIView.as_view(), name="calendar-disconnect"),
 
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
@@ -120,9 +122,9 @@ urlpatterns = [
     
     path('student/onboarding', StudentOnboardStep1TemplateView.as_view(), name="student-onboarding-step-1"),
     
-    path('onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
-    path('onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
-    path('onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
+    path('teacher/onboarding', OnboardStep1TemplateView.as_view(), name="onboarding-step-1"),
+    path('teacher/onboarding/accounts', OnboardStep2TemplateView.as_view(), name="onboarding-step-2"),
+    path('teacher/onboarding/intro-video', OnboardStep3TemplateView.as_view(), name="onboarding-step-3"),
 
     # Lesson Wizard
     path('lesson/new', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="new-lesson"),
@@ -135,8 +137,10 @@ urlpatterns = [
     # Dashboard Templates
     path('student/dashboard', StudentDashboardEnrollments.as_view(), name="student-dashboard-main"),
     path('student/dashboard/enrollments', StudentDashboardEnrollments.as_view(), name="student-dashboard-enrollments"),
-    path('student/dashboard/account/alerts', StudentDashboardAccountAlerts.as_view(), name="student-dashboard-account-alerts"),
-    path('student/dashboard/account/info', StudentDashboardAccountInfo.as_view(), name="student-dashboard-account-info"),
+    path('student/dashboard/account/alerts', StudentDashboardAccountAlerts.as_view(),
+         name="student-dashboard-account-alerts"),
+    path('student/dashboard/account/info', StudentDashboardAccountInfo.as_view(),
+         name="student-dashboard-account-info"),
     path('student/dashboard/schedules/pastsessions', StudentDashboardSchedulesPastSessions.as_view(),
          name="student-dashboard-schedules-past-sessions"),
     path('student/dashboard/schedules/upcoming', StudentDashboardSchedulesUpcomingSessions.as_view(),
@@ -160,8 +164,8 @@ urlpatterns = [
 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
-    path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
-    path('privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
+    path('centrestage/terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
+    path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
 ]
 
 if settings.DEBUG:

@@ -98,7 +98,7 @@ ul.cta-links li span{ width: 100%; font-size: 22px; color: #000; margin-top:10px
 .sidebar-menu ul#accordion ul.submenu a:hover, .sidebar-menu ul#accordion li.active a{background: #fff;}
 .sidebar-menu ul#accordion li a{position: relative;}
 .badge-small{width: 10px; height: 10px; background: #13A0F0; border-radius: 100%; display: inline-block; position: relative; top: -8px;}
-.sidebar-menu ul#accordion li a.ac-link:after {content: "";position: absolute; right:15px; top:20px; width:20px; height: 20px; background: url(../images/menu-arrow.svg) left top no-repeat; transform: rotate(90deg); transition: all ease 0.4s;}
+.sidebar-menu ul#accordion li a.ac-link:after {content: "";position: absolute; right:15px; top:20px; width:20px; height: 20px; background: url(../../images/menu-arrow.svg) left top no-repeat; transform: rotate(90deg); transition: all ease 0.4s;}
 .sidebar-menu ul#accordion li a.ac-link.collapsed:after{transform: rotate(0deg); transition: all ease 0.4s; right: 10px;}
 /*============End==================*/
 .dropdown-toggle::after{display: none;}
@@ -330,7 +330,7 @@ ul.rating-steps {display: flex; flex-wrap: wrap; justify-content: space-between;
 .statistics-btn {background: #fff; border-radius: 15px;  padding:1.5rem 1rem; color: #13A0F0; text-align: center; border: solid 2px #13A0F0; min-height: 120px; display:flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; line-height: normal;}
 .statistics-graphics {margin-bottom: 4rem;}
 
-.profile-info-bg{background: url(../images/info-header.jpg) left top no-repeat; background-size: cover; height: 320px; width: 100%; display: inline-block;} 
+.profile-info-bg{background: url(../../images/info-header.jpg) left top no-repeat; background-size: cover; height: 320px; width: 100%; display: inline-block;}
 .profileInfo-page .header {background: rgba(256,256,256,0.5);}
 .profile-info-header {display:flex;  width: 100%;  margin-top: -100px; margin-bottom: 4rem; position: relative;}
 .profile-info-col {display:flex; align-items: flex-end;}
@@ -391,7 +391,7 @@ i.camera img{width:45px;}
 .custom-radios [type="radio"]:checked + label, .custom-radios [type="radio"]:not(:checked) + label{position: relative; cursor: pointer; line-height: 20px; display: inline-block; color: #666; vertical-align: top;}
 .custom-radios [type="radio"]:checked + label:before, .custom-radios [type="radio"]:not(:checked) + label:before {content: ''; position: absolute; left: 0; top: 0; width:40px; height: 40px; border: 1px solid #ddd; border-radius: 100%;
 background: #fff;}
-.custom-radios [type="radio"]:checked + label:after, .custom-radios [type="radio"]:not(:checked) + label:after {content: ''; width:40px; height: 40px; background: #23D117 url(../images/check.svg) center center no-repeat; position: absolute; top:0px; left:0px; border-radius: 100%;
+.custom-radios [type="radio"]:checked + label:after, .custom-radios [type="radio"]:not(:checked) + label:after {content: ''; width:40px; height: 40px; background: #23D117 url(../../images/check.svg) center center no-repeat; position: absolute; top:0px; left:0px; border-radius: 100%;
 -webkit-transition: all 0.2s ease; transition: all 0.2s ease;}
 .custom-radios [type="radio"]:not(:checked) + label:after {opacity: 0; -webkit-transform: scale(0); transform: scale(0);}
 .custom-radios [type="radio"]:checked + label:after {opacity: 1; -webkit-transform: scale(1); transform: scale(1);}
@@ -399,7 +399,7 @@ background: #fff;}
 .checkbox input[type="checkbox"] {display: none;}
 .checkbox label {position: relative;  cursor: pointer; padding-left:55px; font-size: 18px; margin: 0px;}
 .checkbox label:before {content:'';  -webkit-appearance: none;  background-color: transparent;  border: 2px solid #9D9D9D; position: absolute; cursor: pointer; left: 0px; top:5px; width: 40px; height: 40px;} 
-.checkbox input[type="checkbox"]:checked + label:after {content: ''; display: block; position: absolute; top:5px; left:0px; width:40px; height:40px; background: #23D117 url(../images/check.svg) center center no-repeat;}
+.checkbox input[type="checkbox"]:checked + label:after {content: ''; display: block; position: absolute; top:5px; left:0px; width:40px; height:40px; background: #23D117 url(../../images/check.svg) center center no-repeat;}
 
 .bankbottom{display: flex; flex-wrap: wrap; width: 100%; justify-content: space-between;}
 .checkbox-wrap {margin-bottom: 2rem;}
@@ -438,7 +438,7 @@ background: #fff;}
 .account-right-col h5{ font-size: 24px; margin-bottom: 1rem;}
 .ph-area{display: block; border: solid 1px #E5E5E5; border-radius: 6px; padding: 1rem; margin-bottom:1rem;}
 .ph-number-row{font-size: 24px; position: relative; padding-right: 2rem;}
-.ph-number-row:after{content: ""; position: absolute; right:0px; top:12px; background: url(../images/down-arrow.svg) left top no-repeat; background-size: 100%; width:18px; height: 12px;} 
+.ph-number-row:after{content: ""; position: absolute; right:0px; top:12px; background: url(../../images/down-arrow.svg) left top no-repeat; background-size: 100%; width:18px; height: 12px;}
 .studient-list-sec .host-header{padding-left: 0px; padding-right: 0px;}
 
 .session-days {overflow: auto;}

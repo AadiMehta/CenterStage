@@ -1,7 +1,6 @@
 import urllib
 from django.conf import settings
 from django.views.generic import TemplateView
-from frontend.utils.auth import get_user_from_token
 
 
 class AccountConnectedTemplate(TemplateView):
@@ -23,8 +22,7 @@ class StudentOnboardStep1TemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        context['user'] = self.request.user
         context['site_name'] = settings.SITE_URL
         return context
 
@@ -41,8 +39,7 @@ class OnboardStep1TemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        context['user'] = self.request.user
         context['site_name'] = settings.SITE_URL
         return context
 
@@ -55,20 +52,19 @@ class OnboardStep2TemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            user = get_user_from_token(self.request.COOKIES.get('auth_token'))
-            teacher_accounts = {}
-            accounts = user.teacher_profile_data.accounts.all()
-            for account in accounts:
-                teacher_accounts[account.account_type] = account
-            context.update({
-                'user': user,
-                'teacher_accounts': teacher_accounts,
-                'zoom': {
-                    'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
-                    'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
-                }
-            })
+        context['user'] = self.request.user
+        teacher_accounts = {}
+        accounts = self.request.user.teacher_profile_data.accounts.all()
+        for account in accounts:
+            teacher_accounts[account.account_type] = account
+        context.update({
+            'user': self.request.user,
+            'teacher_accounts': teacher_accounts,
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            }
+        })
         return context
 
 
@@ -80,6 +76,5 @@ class OnboardStep3TemplateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES:
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        context['user'] = self.request.user
         return context

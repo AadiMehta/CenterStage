@@ -95,7 +95,7 @@ function checkSubdomainAvailability(event) {
     return;
   }
 
-  $.ajax('api/teacher/subdomain/availability/', {
+  $.ajax('/api/teacher/subdomain/availability/', {
     type: 'POST',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -160,7 +160,7 @@ function createTeacherProfile(profession, bio, subDomain, profileUrl) {
           "subdomain": subDomain
         }),
         success: function (data, status, xhr) {
-          window.location.href = "/onboarding/accounts";
+          window.location.href = "/teacher/onboarding/accounts";
         },
         error: function (jqXhr, textStatus, errorMessage) {
           // Todo: Show Error Message on UI
@@ -244,7 +244,7 @@ function onProceedButtonClicked () {
  * Route to stage 3
  */
 function onProceed2ButtonClicked () {
-    window.location.href = "/onboarding/intro-video";
+    window.location.href = "/teacher/onboarding/intro-video";
 }
 
 /**

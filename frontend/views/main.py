@@ -10,26 +10,13 @@ class HomeTemplateView(TemplateView):
     """
     template_name = "home.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES and is_authenticated(self.request.COOKIES.get('auth_token')):
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
-        return context
-
     def dispatch(self, request, *args, **kwargs):
-        user = self.get_user()
-        if user:
-            if user.user_type == UserTypes.STUDENT_USER:
+        if request.user.is_authenticated:
+            if request.user.user_type == UserTypes.STUDENT_USER:
                 return redirect('student-dashboard-main')
             return redirect('dashboard-lessons')
 
         return super(HomeTemplateView, self).dispatch(request, *args, **kwargs)
-
-    def get_user(self):
-        if is_authenticated(self.request.COOKIES.get('auth_token')):
-            return get_user_from_token(self.request.COOKIES.get('auth_token'))
-        else:
-            return False
 
 
 class TermsAndConditionsView(TemplateView):
@@ -40,8 +27,8 @@ class TermsAndConditionsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES and is_authenticated(self.request.COOKIES.get('auth_token')):
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        if self.request.user.is_authenticated:
+            context['user'] = self.request.user
         return context
 
 
@@ -53,6 +40,6 @@ class PrivacyPolicyView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if 'auth_token' in self.request.COOKIES and is_authenticated(self.request.COOKIES.get('auth_token')):
-            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        if self.request.user.is_authenticated:
+            context['user'] = self.request.user
         return context

@@ -20,9 +20,10 @@ from notifications.twilio_sms_notification import twilio
 from django.utils import timezone
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
-    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, TeacherPaymentsSerializer,
-    TeacherPaymentRemoveSerializer, StudentUserCreateSerializer, StudentProfileSerializer
+    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, StudentUserCreateSerializer,
+    StudentProfileSerializer
 )
+from django.contrib.auth import login
 from users.models import User, TeacherProfile, ProfileStatuses, TeacherPaymentAccounts, StudentProfile
 logger = logging.getLogger(__name__)
 
@@ -70,7 +71,11 @@ class ObtainAuthToken(APIView):
         user.save()
         user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        headers = dict({
+            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+        })
+        login(request, user)
+        return Response({'token': token.key}, headers=headers)
 
 
 class TeacherRegister(generics.CreateAPIView):
@@ -122,6 +127,7 @@ class Logout(APIView):
     def get(self, request, format=None):
         # simply delete the token to force a login
         request.user.auth_token.delete()
+        request.session.flush()
         resp = dict({
             "message": "Successfully Logout"
         })
@@ -270,6 +276,7 @@ class VerifyOtp(generics.CreateAPIView):
 
         if provided_otp == cached_otp:
             token, created = self.authenticate(user)
+            login(request, user)
             return Response(dict({"token": token.key}), status=status.HTTP_200_OK)
         else:
             logger.error("Invalid OTP!")

@@ -63,11 +63,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'CenterStage.middleware.general_checks.CheckOnboarding',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'CenterStage.urls'
+
+API_URL = '/api'
+TEACHER_TEMPLATES_PATH = '/teacher'
+STUDENT_TEMPLATES_PATH = '/student'
+CENTERSTAGE_STATIC_PATH = "/centrestage"
 
 TEMPLATES = [
     {
@@ -183,6 +189,8 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBacke
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'users.authentication.BearerAuthentication',
+        # 'users.authentication.AuthCookieAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
