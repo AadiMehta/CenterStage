@@ -112,7 +112,7 @@ function handleZoomDisconnectAccount (event) {
 /**
  * Connect Google Account Handler
  */
-function handleGoogleConnectAccount () {
+function handleGoogleConnectAccount (event) {
   const {baseUrl} = event.target.dataset;
   const url = `${baseUrl}/api/profile/google/calendar/connect`;
   openWindow(url, 'Authorize Zoom', 600, 700, 1);

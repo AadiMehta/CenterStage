@@ -76,7 +76,7 @@ class LessonSlotSerializer(serializers.ModelSerializer):
             'creator',
             'lesson',
             'lesson_from',
-            'lesson_no',
+            'session_no',
             'lesson_to',
             'created_at',
             'session_time',
@@ -114,10 +114,10 @@ class EnrollmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonSlots
         fields = [
-            'creator',
             'lesson',
+            'student',
             'lesson_from',
-            'lesson_no',
+            'session_no',
             'lesson_to',
             'created_at',
             'session_time',

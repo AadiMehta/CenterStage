@@ -99,7 +99,7 @@ function validateSubdomain(subDomain) {
             "bio": bio,
           }),
           success: function (data, status, xhr) {
-            window.location.href = "/dashboard";
+            window.location.href = "/student/dashboard";
           },
           error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI
@@ -118,7 +118,7 @@ function validateSubdomain(subDomain) {
             "bio": bio,
           }),
           success: function (data, status, xhr) {
-            window.location.href = "/dashboard";
+            window.location.href = "/student/dashboard";
           },
           error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI

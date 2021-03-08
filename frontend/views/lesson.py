@@ -156,11 +156,11 @@ class LessonCreateWizard(SessionWizardView):
 
             session_tz = form_data.get('timezone')
             self.add_available_slots(
-                user, lesson, form_data, start_date, end_date,
+                user, lesson, form_dawta, start_date, end_date,
                 weekdays, session_tz
             )
 
-            return render(self.request, 'lesson/done.html', {
+            return render(self.request, 'teacher/lesson/done.html', {
                 'lesson': lesson,
             })
         except Exception as e:

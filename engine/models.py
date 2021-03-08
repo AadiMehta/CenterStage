@@ -53,7 +53,7 @@ class LessonData(models.Model):
     timezone = models.CharField(_("Timezone of the lesson"), null=True, max_length=100)
     meeting_info = models.JSONField(default=dict)
     meeting_link = models.URLField(max_length=200, null=True, blank=True) 
-    meeting_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    lesson_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     is_private = models.BooleanField(_('Lesson Privacy'), default=False)
     cover_image = models.ImageField(_("Lesson Cover image"), storage=S3_LessonCoverImage_Storage(), null=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)
