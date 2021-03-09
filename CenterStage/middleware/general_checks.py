@@ -16,7 +16,7 @@ def check_onboarding(user):
         elif user.user_type == "ST" and user.student_profile_data is not None:
             return True, user.user_type
         else:
-            return False
+            return False, ""
     except TeacherProfile.DoesNotExist:
         return False, "CR"
     except StudentProfile.DoesNotExist:
@@ -37,8 +37,14 @@ class CheckOnboarding(object):
         if request.path.startswith(API_URL) or request.path.startswith(CENTERSTAGE_STATIC_PATH):
             return self.get_response(request)
 
-        if is_authenticated(request.COOKIES.get('auth_token', None)):
-            status, user_type = check_onboarding(get_user_from_token(request.COOKIES.get('auth_token')))
+        if request.user.is_authenticated:
+            if "sessionid" not in request.COOKIES or "auth_token" not in request.COOKIES:
+                # log out user
+                request.user.auth_token.delete()
+                request.session.flush()
+                return HttpResponseRedirect(reverse('homepage'))
+
+            status, user_type = check_onboarding(request.user)
             # if onboarded, don't route to onboarding
             if status:
                 if user_type == "CR":

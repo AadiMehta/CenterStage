@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.authentication import BearerAuthentication
-from frontend.utils.auth import get_user_from_token, is_authenticated
 from engine.serializers import (
     LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
 )
@@ -116,7 +115,7 @@ class MeetingAPIView(APIView):
         Create Meeting with meeting details
         """
         try:
-            user = self.get_user()
+            user = request.user
             account = user.teacher_profile_data.accounts.get(
                 account_type=TeacherAccountTypes.ZOOM_VIDEO
             )
@@ -146,9 +145,3 @@ class MeetingAPIView(APIView):
             return Response(dict({
                 "error": str(e)
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def get_user(self):
-        if is_authenticated(self.request.COOKIES.get('auth_token')):
-            return get_user_from_token(self.request.COOKIES.get('auth_token'))
-        else:
-            return False
