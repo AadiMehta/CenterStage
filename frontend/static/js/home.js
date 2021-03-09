@@ -129,11 +129,10 @@ function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
         "phone_no": phoneNo
       },
       success: function (data, status, xhr) {
-        setCookie("auth_token", data.token, 1);
         if (userType === 'student') {
           window.location.href = "/student/onboarding";
         } else {
-          window.location.href = "/onboarding";
+          window.location.href = "/teacher/onboarding";
         }
       },
       error: function (jqXhr, textStatus, errorMessage) {

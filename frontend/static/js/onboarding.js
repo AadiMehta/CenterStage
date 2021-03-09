@@ -138,7 +138,7 @@ function createTeacherProfile(profession, bio, subDomain, profileUrl) {
           "subdomain": subDomain
         }),
         success: function (data, status, xhr) {
-          window.location.href = "/onboarding/accounts";
+          window.location.href = "/teacher/onboarding/accounts";
         },
         error: function (jqXhr, textStatus, errorMessage) {
           // Todo: Show Error Message on UI

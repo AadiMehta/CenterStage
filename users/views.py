@@ -96,7 +96,11 @@ class TeacherRegister(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
-        return Response(dict({'token': token.key}), status=status.HTTP_201_CREATED)
+        headers = dict({
+            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+        })
+        login(request, user)
+        return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
 
 
 class StudentRegister(generics.CreateAPIView):
@@ -117,7 +121,11 @@ class StudentRegister(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
-        return Response(dict({'token': token.key}), status=status.HTTP_201_CREATED)
+        headers = dict({
+            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+        })
+        login(request, user)
+        return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
 
 
 class Logout(APIView):
