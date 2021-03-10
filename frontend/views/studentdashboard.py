@@ -47,10 +47,9 @@ class StudentDashboardAccountInfo(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
-        user = self.request.user
         student_accounts = {}
         context.update({
-            'user': user,
+            'user': context['user'],
             'student_accounts': student_accounts,
             'BASE_URL': settings.BASE_URL,
             'zoom': {
