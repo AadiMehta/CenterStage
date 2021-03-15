@@ -6,9 +6,9 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from rest_framework import generics
 from rest_framework.response import Response
-from users.serializers import TeacherAccountsSerializer
+from users.serializers import AccountsSerializer
 from users.authentication import BearerAuthentication, AuthCookieAuthentication
-from users.models import TeacherAccounts, TeacherAccountTypes
+from users.models import Accounts, AccountTypes
 
 logger = logging.getLogger(__name__)
 
@@ -73,12 +73,12 @@ class GoogleCalendarCallback(generics.RetrieveAPIView):
                 'client_secret': credentials.client_secret,
                 'scopes': credentials.scopes
             }
-            serializer = TeacherAccountsSerializer(data=dict(
-                                                account_type=TeacherAccountTypes.GOOGLE_CALENDAR,
+            serializer = AccountsSerializer(data=dict(
+                                                account_type=AccountTypes.GOOGLE_CALENDAR,
                                                 info=session_credentials
                                             ))
             serializer.is_valid(raise_exception=True)
-            serializer.save(teacher=request.user.teacher_profile_data)
+            serializer.save(user=request.user)
             return redirect('account-connected-success')
         except Exception as e:
             logger.exception(e)
@@ -93,9 +93,9 @@ class GoogleDisconnectAPIView(generics.RetrieveAPIView):
  
     def get(self, request, *args, **kwargs):
         redirection_url = request.GET.get('redirection_url')
-        account = TeacherAccounts.objects.get(
-            teacher=request.user.teacher_profile_data,
-            account_type=TeacherAccountTypes.GOOGLE_CALENDAR
+        account = Accounts.objects.get(
+            user=request.user,
+            account_type=AccountTypes.GOOGLE_CALENDAR
         )
         if account:
             account.delete()

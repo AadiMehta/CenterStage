@@ -31,7 +31,7 @@ class DashboardAccountInfo(TemplateView):
         context['user'] = self.request.user
 
         teacher_accounts = {}
-        accounts = self.request.user.teacher_profile_data.accounts.all()
+        accounts = self.request.user.accounts.all()
         for account in accounts:
             teacher_accounts[account.account_type] = account
         context.update({

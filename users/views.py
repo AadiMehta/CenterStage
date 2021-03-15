@@ -24,7 +24,7 @@ from users.serializers import (
     StudentProfileSerializer
 )
 from django.contrib.auth import login
-from users.models import User, TeacherProfile, ProfileStatuses, TeacherPaymentAccounts, StudentProfile
+from users.models import User, TeacherProfile, ProfileStatuses, PaymentAccounts, StudentProfile
 logger = logging.getLogger(__name__)
 
 
