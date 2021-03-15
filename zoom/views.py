@@ -9,9 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from zoom.serializer import ZoomAuthResponseSerializer
 from zoom.utils import zoomclient
-from users.serializers import TeacherAccountsSerializer
+from users.serializers import AccountsSerializer
 from users.authentication import BearerAuthentication, AuthCookieAuthentication
-from users.models import TeacherAccounts, TeacherAccountTypes
+from users.models import Accounts, AccountTypes
 
 logger = logging.getLogger(__name__)
 
@@ -41,12 +41,12 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
             expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
             serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
 
-            serializer = TeacherAccountsSerializer(data=dict(
-                                                account_type=TeacherAccountTypes.ZOOM_VIDEO,
+            serializer = AccountsSerializer(data=dict(
+                                                account_type=AccountTypes.ZOOM_VIDEO,
                                                 info=access_info
                                             ))
             serializer.is_valid(raise_exception=True)
-            serializer.save(teacher=request.user.teacher_profile_data)
+            serializer.save(user=request.user)
             return redirect('account-connected-success')
         except Exception as e:
             logger.exception(e)
@@ -61,9 +61,9 @@ class ZoomDisconnectAPIView(generics.RetrieveAPIView):
  
     def get(self, request, *args, **kwargs):
         redirection_url = request.GET.get('redirection_url')
-        account = TeacherAccounts.objects.get(
-            teacher=request.user.teacher_profile_data,
-            account_type=TeacherAccountTypes.ZOOM_VIDEO
+        account = Accounts.objects.get(
+            user=request.user,
+            account_type=AccountTypes.ZOOM_VIDEO
         )
         if account:
             account.delete()
@@ -81,8 +81,8 @@ class ZoomMeetingAPIView(APIView):
         Create New Zoom Meeting link
         """
         try:
-            account = request.user.teacher_profile_data.accounts.get(
-                            account_type=TeacherAccountTypes.ZOOM_VIDEO
+            account = request.user.accounts.get(
+                            account_type=AccountTypes.ZOOM_VIDEO
                         )
             access_token = self.get_access_token(account)
             if not access_token:
@@ -103,8 +103,8 @@ class ZoomMeetingAPIView(APIView):
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
-        account = request.user.teacher_profile_data.accounts.get(
-                        account_type=TeacherAccountTypes.ZOOM_VIDEO
+        account = request.user.accounts.get(
+                        account_type=AccountTypes.ZOOM_VIDEO
                     )
         access_token = self.get_access_token(account)
         if not access_token:
