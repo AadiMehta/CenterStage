@@ -110,7 +110,7 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.request.user
-            account = user.teacher_profile_data.accounts.get(
+            account = user.accounts.get(
                 account_type=AccountTypes.ZOOM_VIDEO
             )
             access_token = account.info.get('access_token')
@@ -179,7 +179,7 @@ class LessonCreateWizard(SessionWizardView):
         end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
         creator = user.teacher_profile_data
         google_calendar_account = Accounts.objects.get(
-            teacher=creator,
+            user=user,
             account_type=AccountTypes.GOOGLE_CALENDAR
         )
         calendar_service = None
