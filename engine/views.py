@@ -10,7 +10,7 @@ from users.authentication import BearerAuthentication
 from engine.serializers import (
     LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
 )
-from users.models import TeacherAccountTypes
+from users.models import AccountTypes
 from zoom.utils import zoomclient
 
 logger = logging.getLogger(__name__)
@@ -116,8 +116,8 @@ class MeetingAPIView(APIView):
         """
         try:
             user = request.user
-            account = user.teacher_profile_data.accounts.get(
-                account_type=TeacherAccountTypes.ZOOM_VIDEO
+            account = user.accounts.get(
+                account_type=AccountTypes.ZOOM_VIDEO
             )
             access_token = account.info.get('access_token')
             if not access_token:

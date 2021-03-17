@@ -93,7 +93,7 @@ urlpatterns = [
     path('api/teacher/register/', TeacherRegister.as_view()),
     path('api/teacher/profile/', TeacherProfileView.as_view()),
     path('api/teacher/subdomain/availability/', SubdomainAvailabilityAPIView.as_view()),
-    # path('api/profile/teacher/accounts/', TeacherAccountsAPIView.as_view()),
+    # path('api/profile/teacher/accounts/', AccountsAPIView.as_view()),
     # path('api/profile/teacher/payments/', TeacherPaymentsAPIView.as_view()),
     path('api/teacher/zoom/meeting/', ZoomMeetingAPIView.as_view()),
 

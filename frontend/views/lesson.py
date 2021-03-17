@@ -20,7 +20,7 @@ from zoom.utils import zoomclient
 from frontend.constants import languages as language_options
 from frontend.constants import timezones as timezone_options
 from frontend.utils.google_calendar import GoogleCalendar
-from users.models import TeacherAccounts, TeacherAccountTypes
+from users.models import Accounts, AccountTypes
 
 logger = logging.getLogger(__name__)
 
@@ -110,8 +110,8 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.request.user
-            account = user.teacher_profile_data.accounts.get(
-                account_type=TeacherAccountTypes.ZOOM_VIDEO
+            account = user.accounts.get(
+                account_type=AccountTypes.ZOOM_VIDEO
             )
             access_token = account.info.get('access_token')
             if not access_token:
@@ -178,9 +178,9 @@ class LessonCreateWizard(SessionWizardView):
         start_date = timezone.datetime.strptime(start_date, '%m/%d/%Y')
         end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
         creator = user.teacher_profile_data
-        google_calendar_account = TeacherAccounts.objects.get(
-            teacher=creator,
-            account_type=TeacherAccountTypes.GOOGLE_CALENDAR
+        google_calendar_account = Accounts.objects.get(
+            user=user,
+            account_type=AccountTypes.GOOGLE_CALENDAR
         )
         calendar_service = None
         if google_calendar_account:

@@ -133,39 +133,39 @@ class TeacherProfile(models.Model):
         verbose_name_plural = _('Teacher Profiles')
 
 
-class TeacherAccountTypes(models.TextChoices):
+class AccountTypes(models.TextChoices):
     ZOOM_VIDEO = 'ZOOM', _('Zoom Video')
     GOOGLE_CALENDAR = 'GOOGLE_CALENDAR', _('GOOGLE_CALENDAR')
     TEAMS = 'TEAMS', _('Teams')
 
 
-class TeacherAccounts(models.Model):
+class Accounts(models.Model):
     """
     Data Associated to Social Accounts
     """
-    teacher = models.ForeignKey(TeacherProfile, on_delete=models.DO_NOTHING, related_name="accounts")
-    account_type = models.CharField(_("account type"), choices=TeacherAccountTypes.choices, max_length=30,
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="accounts")
+    account_type = models.CharField(_("account type"), choices=AccountTypes.choices, max_length=30,
                                     help_text="Type of account")
     info = models.JSONField(null=True)
 
 
-class TeacherPaymentTypes(models.TextChoices):
+class PaymentTypes(models.TextChoices):
     STRIPE = 'STRIPE', _('Stripe payment')
     PAYPAL = 'PAYPAL', _('Paypal payment')
     BANK = 'BANK', _('Bank Account')
 
 
-class TeacherPaymentAccounts(models.Model):
+class PaymentAccounts(models.Model):
     """
     Data Associated to teacher payment accounts
     """
-    teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="payments")
-    payment_type = models.CharField(_("payment type"), choices=TeacherPaymentTypes.choices, max_length=10,
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
+    payment_type = models.CharField(_("payment type"), choices=PaymentTypes.choices, max_length=10,
                                     help_text="Type of payment account")
     info = models.JSONField(null=False, blank=False)
 
     class Meta:
-        unique_together = ['payment_type', 'teacher']
+        unique_together = ['payment_type', 'user']
 
 
 class TeacherEarnings(models.Model):
