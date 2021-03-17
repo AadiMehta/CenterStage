@@ -54,6 +54,11 @@ from frontend.views.studentdashboard import (
 )
 from engine.views import LessonAPIView, MeetingAPIView
 
+from frontend.views.public import (
+    TeacherPageView, LessonPageView
+)
+
+
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -161,6 +166,8 @@ urlpatterns = [
     path('dashboard/messages', DashboardMessages.as_view(), name="dashboard-messages"),
     path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
     path('dashboard/my-students', DashboardStudents.as_view(), name="dashboard-students"),
+
+    path('teacherpagetest', TeacherPageView.as_view(), name="teacher-page"),
 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),

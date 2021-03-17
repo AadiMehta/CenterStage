@@ -79,7 +79,8 @@ class CheckOnboarding(object):
                     response = self.get_response(request)
         else:
             # user not logged in
-            if request.path != "/":
+            print(request.path)
+            if request.path != "/" and request.path != "/teacherpagetest":
                 return HttpResponseRedirect(reverse('homepage'))
             else:
                 response = self.get_response(request)
