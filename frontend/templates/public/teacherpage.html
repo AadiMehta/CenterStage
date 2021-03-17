@@ -1,0 +1,755 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/public/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/public/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'public/modals.html' %}
+<div class="wrapper-main teacher-consult-page">
+    <div class="teacher-consult-wrap">
+        <div class="profile-info-bg"></div>
+        <div class="top-button-area">
+            <button type="button" class="btn btn-liner" data-toggle="modal" data-target="#writeReview"><i><img src="{% static 'images/edit-bold.svg' %}" alt="" /></i> <span>Write Reviews</span></button>
+            <button type="button" class="btn-rounded btn-with-icon" data-toggle="modal" data-target="#sendMsg"><i><img src="{% static 'images/message.svg' %}" alt=""></i> <span>Message Thomas</span></button>
+        </div>
+        <div class="admin-mid-sec container-fluid">
+            <div class="profile-info-header">
+                <div class="profile-info-col">
+                    <div class="profile-image-area">
+                    <img class="profile-image" src="{% static 'images/profile-img.jpg' %}" alt="" />
+                    <i class="camera"><img src="{% static 'images/camera.png' %}" alt="" /></i>
+                    </div>
+                    <div class="profile-info-name">
+                    <h3>{{teacher.user.first_name}} {{teacher.user.last_name}} <i><img src="{% static 'images/done_blue.svg' %}" alt="" /></i></h3>
+                    <span class="desigation">{{teacher.profession}}</span>
+                    <div class="cocial-icons-row">
+                        <a href="#"><img src="{% static 'images/fb-liner.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitt-liner.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-liner.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/insta-liner.svg' %}" alt="" /></a>
+                    </div>
+                    </div>
+                </div>
+                <div class="share-btn-col">
+                    <button type="button" class="btn btn-heart"><img src="{% static 'images/heart.png' %}"></button>
+                    <button type="button" class="btn btn-theme btn-theme-liner">Share</button>
+                    <button type="button" class="btn btn-theme">Follow</button>
+                </div>
+            </div>
+            <div class="reating-sec">
+                <div class="reating-col">
+                    <div class="reating-text"><i><img src="{% static 'images/star-fill.svg' %}" alt="" /></i><span>4.8</span></div>
+                    <div class="reating-text2">Rating</div>
+                </div>
+                <div class="reating-col">
+                    <div class="reating-text">07</div>
+                    <div class="reating-text2">Years Experience</div>
+                </div>
+                <div class="reating-col">
+                    <div class="reating-text">153</div>
+                    <div class="reating-text2">Total Students</div>
+                </div>
+                <div class="reating-col">
+                    <div class="reating-text">1028</div>
+                    <div class="reating-text2">Teaching Minutes</div>
+                </div>
+                <div class="reating-col">
+                    <div class="reating-text">05</div>
+                    <div class="reating-text2">Countries Taught In</div>
+                </div>
+            </div>
+            {% if teacher.bio %}
+                <div class="italic-text text-raea-2">
+                    {{teacher.bio}}
+                </div>
+            {% endif %}
+            <div class="video-wrapper video-slide">
+                <div class="owl-carousel owl-theme">
+                    <div class="item">
+                    <div class="vide-slide-img">
+                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
+                    </div>
+                    <h5>Lorem ipsum video title here</h5>
+                    </div>
+                    <div class="item">
+                    <div class="vide-slide-img">
+                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
+                    </div>
+                    <h5>Lorem ipsum video title here</h5>
+                    </div>
+                    <div class="item">
+                    <div class="vide-slide-img">
+                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
+                    </div>
+                    <h5>Lorem ipsum video title here</h5>
+                    </div>
+                    <div class="item">
+                    <div class="vide-slide-img">
+                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
+                    </div>
+                    <h5>Lorem ipsum video title here</h5>
+                    </div>
+                </div>
+                <div class="slide-btm-area">
+                    <button type="button" class="btn btn-theme">Consult Thomas</button>
+                    <span class="italic-text d-block w-100 text-gray">Click here to take a One on One<br /> live session</span>
+                </div>
+            </div>
+            <div class="section-all-lessions mt-5">
+                <h2 class="title-2">All Lessons</h2>
+                <div class="search-row">
+                    <div class="searchInp-col">
+                    <img src="{% static 'images/icon-search.svg' %}" alt="">
+                    <input type="search" class="form-control" placeholder="Search Lessons">
+                    </div>
+                </div>
+                <div class="lessions-slide-sec">
+                    <div class="lessions-slide-wrap">
+                        <div class="owl-carousel owl-theme">
+                            {% for lesson in lessons %}
+                            <div class="item">
+                                <div class="lessions-box-slide">
+                                    <div class="slide-inner-top">
+                                        <div class="name-and-ribbion">
+                                            <h2 class="lession-title2">{{lesson.name}}</h2>
+                                            <div class="profimg-name">
+                                                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                                <div class="prof-name">
+                                                    <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if forloop.counter == 1 %}
+                                            <div class="new-ribbion">
+                                                <img src="{% static 'images/new-ribbion.svg' %}" alt="" />
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="lession-img-area">
+                                        <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                    </div>
+                                    <div class="group-row">
+                                        <ul class="lessons-steps">
+                                            <li>
+                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Number</h4>
+                                                    <a href="#">03</a> <span>Out of 05</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Duration</h4>
+                                                    <span>{{ slot.session_duration }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Type</h4>
+                                                    {% if lesson.no_of_participants > 1 %}
+                                                        <span>Group</span>
+                                                    {% else %}
+                                                        <span>One - on - One</span>
+                                                    {% endif %}
+                                                
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Language</h4>
+                                                    <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-inner-bottom">
+                                    <a href="{% url 'book-lesson' lesson_uuid=lesson.lesson_uuid %}">
+                                        <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button>
+                                    </a>
+                                    <div class="seats-col">
+                                        <div class="seats-circle">04<span>/15</span></div>
+                                        <div class="remaining-sts">Seats<br />
+                                            Remaining
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="lessions-slide-sec">
+                    <h2 class="title-2">Most Popular</h2>
+                    <div class="lessions-slide-wrap">
+                    <div class="owl-carousel owl-theme">
+                        {% for lesson in lessons %}
+                            <div class="item">
+                                <div class="lessions-box-slide">
+                                    <div class="slide-inner-top">
+                                        <div class="name-and-ribbion">
+                                            <h2 class="lession-title2">{{lesson.name}}</h2>
+                                            <div class="profimg-name">
+                                                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                                <div class="prof-name">
+                                                    <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="new-ribbion">
+                                            <img src="{% static 'images/new-ribbion.svg' %}" alt="" />
+                                        </div>
+                                    </div>
+                                    <div class="lession-img-area">
+                                        <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                    </div>
+                                    <div class="group-row">
+                                        <ul class="lessons-steps">
+                                            <li>
+                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Number</h4>
+                                                    <a href="#">03</a> <span>Out of 05</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Duration</h4>
+                                                    <span>{{ slot.session_duration }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Type</h4>
+                                                    {% if lesson.no_of_participants > 1 %}
+                                                        <span>Group</span>
+                                                    {% else %}
+                                                        <span>One - on - One</span>
+                                                    {% endif %}
+                                                
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Language</h4>
+                                                    <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-inner-bottom">
+                                    <a href="{% url 'book-lesson' lesson_uuid=lesson.lesson_uuid %}">
+                                        <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button>
+                                    </a>
+                                    <div class="seats-col">
+                                        <div class="seats-circle">04<span>/15</span></div>
+                                        <div class="remaining-sts">Seats<br />
+                                            Remaining
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                    </div>
+                </div>
+                <div class="lessions-slide-sec">
+                    <h2 class="title-2">One On One</h2>
+                    <div class="lessions-slide-wrap">
+                    <div class="owl-carousel owl-theme">
+                        {% for lesson in lessons %}
+                            <div class="item">
+                                <div class="lessions-box-slide">
+                                    <div class="slide-inner-top">
+                                        <div class="name-and-ribbion">
+                                            <h2 class="lession-title2">{{lesson.name}}</h2>
+                                            <div class="profimg-name">
+                                                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                                <div class="prof-name">
+                                                    <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="new-ribbion">
+                                            <img src="{% static 'images/new-ribbion.svg' %}" alt="" />
+                                        </div>
+                                    </div>
+                                    <div class="lession-img-area">
+                                        <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                    </div>
+                                    <div class="group-row">
+                                        <ul class="lessons-steps">
+                                            <li>
+                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Number</h4>
+                                                    <a href="#">03</a> <span>Out of 05</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Duration</h4>
+                                                    <span>{{ slot.session_duration }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Type</h4>
+                                                    {% if lesson.no_of_participants > 1 %}
+                                                        <span>Group</span>
+                                                    {% else %}
+                                                        <span>One - on - One</span>
+                                                    {% endif %}
+                                                
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Language</h4>
+                                                    <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-inner-bottom">
+                                    <a href="{% url 'book-lesson' lesson_uuid=lesson.lesson_uuid %}">
+                                        <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button>
+                                    </a>
+                                    <div class="seats-col">
+                                        <div class="seats-circle">04<span>/15</span></div>
+                                        <div class="remaining-sts">Seats<br />
+                                            Remaining
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                    </div>
+                </div>
+                <div class="lessions-slide-sec">
+                    <h2 class="title-2">Group Lessons</h2>
+                    <div class="lessions-slide-wrap">
+                    <div class="owl-carousel owl-theme">
+                        {% for lesson in lessons %}
+                            <div class="item">
+                                <div class="lessions-box-slide">
+                                    <div class="slide-inner-top">
+                                        <div class="name-and-ribbion">
+                                            <h2 class="lession-title2">{{lesson.name}}</h2>
+                                            <div class="profimg-name">
+                                                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                                <div class="prof-name">
+                                                    <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="new-ribbion">
+                                            <img src="{% static 'images/new-ribbion.svg' %}" alt="" />
+                                        </div>
+                                    </div>
+                                    <div class="lession-img-area">
+                                        <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                    </div>
+                                    <div class="group-row">
+                                        <ul class="lessons-steps">
+                                            <li>
+                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Number</h4>
+                                                    <a href="#">03</a> <span>Out of 05</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Duration</h4>
+                                                    <span>{{ slot.session_duration }}</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Type</h4>
+                                                    {% if lesson.no_of_participants > 1 %}
+                                                        <span>Group</span>
+                                                    {% else %}
+                                                        <span>One - on - One</span>
+                                                    {% endif %}
+                                                
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                                <div class="lessons-steps-text">
+                                                    <h4>Session Language</h4>
+                                                    <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="slide-inner-bottom">
+                                    <a href="{% url 'book-lesson' lesson_uuid=lesson.lesson_uuid %}">
+                                        <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button>
+                                    </a>
+                                    <div class="seats-col">
+                                        <div class="seats-circle">04<span>/15</span></div>
+                                        <div class="remaining-sts">Seats<br />
+                                            Remaining
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                    </div>
+                </div>
+                {% comment %} <div class="lessions-slide-sec">
+                    <h2 class="title-2">Notes / Documents</h2>
+                    <div class="lessions-slide-wrap">
+                    <div class="owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="lessions-box-slide">
+                                <div class="slide-inner-top">
+                                <div class="name-and-ribbion">
+                                    <h2 class="lession-title2">Core JAVA Development</h2>
+                                    <div class="profimg-name">
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                        <div class="prof-name">
+                                            <h4>by Thomas Edward</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="new-ribbion"><img src="{% static 'images/new-ribbion.svg' %}" alt="" /></div>
+                                </div>
+                                <div class="lession-img-area">
+                                <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                </div>
+                                <div class="group-row">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Reading Duration</h4>
+                                            <span>05 Hours</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/time_date.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Subscription</h4>
+                                            <span>Monthly</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="slide-inner-bottom">
+                                <button type="button" class="btn btn-theme">View Note</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="lessions-box-slide">
+                                <div class="slide-inner-top">
+                                <div class="name-and-ribbion">
+                                    <h2 class="lession-title2">Core JAVA Development</h2>
+                                    <div class="profimg-name">
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                        <div class="prof-name">
+                                            <h4>by Thomas Edward</h4>
+                                            <span class="lession-time">1598 views</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="reating-text"><i><img src="{% static 'images/star-fill.svg' %}" alt=""></i><span>4.8</span></div>
+                                </div>
+                                <div class="lession-img-area">
+                                <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                </div>
+                                <div class="group-row">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Reading Duration</h4>
+                                            <span>05 Hours</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/time_date.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Subscription</h4>
+                                            <span>Monthly</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="slide-inner-bottom">
+                                <button type="button" class="btn btn-theme">View Note</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="lessions-box-slide">
+                                <div class="slide-inner-top">
+                                <div class="name-and-ribbion">
+                                    <h2 class="lession-title2">Core JAVA Development</h2>
+                                    <div class="profimg-name">
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                        <div class="prof-name">
+                                            <h4>by Thomas Edward</h4>
+                                            <span class="lession-time">1598 views</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="reating-text"><i><img src="{% static 'images/star-fill.svg' %}" alt=""></i><span>4.8</span></div>
+                                </div>
+                                <div class="lession-img-area">
+                                <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                </div>
+                                <div class="group-row">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Reading Duration</h4>
+                                            <span>05 Hours</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/time_date.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Subscription</h4>
+                                            <span>Monthly</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="slide-inner-bottom">
+                                <button type="button" class="btn btn-theme">View Note</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="lessions-box-slide">
+                                <div class="slide-inner-top">
+                                <div class="name-and-ribbion">
+                                    <h2 class="lession-title2">Core JAVA Development</h2>
+                                    <div class="profimg-name">
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                        <div class="prof-name">
+                                            <h4>by Thomas Edward</h4>
+                                            <span class="lession-time">1598 views</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="new-ribbion"><img src="{% static 'images/new-ribbion.svg' %}" alt="" /></div>
+                                </div>
+                                <div class="lession-img-area">
+                                <img src="{% static 'images/Image56.jpg' %}" alt="" />
+                                </div>
+                                <div class="group-row">
+                                <ul class="lessons-steps">
+                                    <li>
+                                        <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Reading Duration</h4>
+                                            <span>05 Hours</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Session Language</h4>
+                                            <span>Hosted in English</span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i><img src="{% static 'images/time_date.png' %}" alt=""></i>
+                                        <div class="lessons-steps-text">
+                                            <h4>Subscription</h4>
+                                            <span>Monthly</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                                </div>
+                                <div class="slide-inner-bottom">
+                                <button type="button" class="btn btn-theme">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+            <div class="form-group write-reviews-section">
+                <h2 class="title-2">Reviews</h2>
+                <div class="btn-write-review"><a href="#" class="btn btn-liner"><i><img src="{% static 'images/edit-bold.svg' %}" alt="" /></i> <span>Write Reviews</span></a></div>
+                <div class="reviewbox-wrap">
+                    <div class="reviewbox">
+                    <div class="review-msg">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                        laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                    <div class="profimg-name">
+                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        <div class="prof-name">
+                            <h4>Manjula Wijemanna</h4>
+                            <span class="lession-time">2 Weeks Ago</span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="reviewbox">
+                    <div class="review-msg">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                        laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                    <div class="profimg-name">
+                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        <div class="prof-name">
+                            <h4>by Thomas Edward</h4>
+                            <span class="lession-time">Monday, 06 Nov 2020</span>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="reviewbox">
+                    <div class="review-msg">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                        laboris nisi ut aliquip ex ea commodo consequat.
+                    </div>
+                    <div class="profimg-name">
+                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        <div class="prof-name">
+                            <h4>by Thomas Edward</h4>
+                            <span class="lession-time">Monday, 06 Nov 2020</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="showall-btn"><a href="#" class="btn btn-liner">View All Reviews (32)</a></div>
+            </div>
+            <div class="recommendations-section">
+                <h2 class="title-2">Recommendations</h2>
+                <div class="recommendations-wrap">
+                    <div class="recommendations-row">
+                    <div class="recommendations-col"><i><img src="{% static 'images/quality.svg' %}" alt="" /></i> <span>Lesson Quality</span></div>
+                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col">
+                        <div class="profimg-col">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                    </div>
+                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    </div>
+                    <div class="recommendations-row">
+                    <div class="recommendations-col"><i><img src="{% static 'images/content.svg' %}" alt="" /></i> <span>Lesson Content</span></div>
+                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col">
+                        <div class="profimg-col">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                    </div>
+                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    </div>
+                    <div class="recommendations-row">
+                    <div class="recommendations-col"><i><img src="{% static 'images/organization.svg' %}" alt="" /></i> <span>Lesson Structure</span></div>
+                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col">
+                        <div class="profimg-col">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                    </div>
+                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    </div>
+                    <div class="recommendations-row">
+                    <div class="recommendations-col"><i><img src="{% static 'images/explain.svg' %}" alt="" /></i> <span>Teacher Helpfulness</span></div>
+                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col">
+                        <div class="profimg-col">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                    </div>
+                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    </div>
+                    <div class="recommendations-row">
+                    <div class="recommendations-col"><i><img src="{% static 'images/communication.svg' %}" alt="" /></i> <span>Teacher Communication</span></div>
+                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col">
+                        <div class="profimg-col">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                    </div>
+                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    </div>
+                    <div class="recommendations-row">
+                    <div class="recommendations-col"><i><img src="{% static 'images/knowledge.svg' %}" alt="" /></i> <span>Teacher Knowledge</span></div>
+                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col">
+                        <div class="profimg-col">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        </div>
+                    </div>
+                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- custom scrollbar plugin -->
+<script src="{% static 'js/public/custom.js' %}"></script>
+{% endblock %}
