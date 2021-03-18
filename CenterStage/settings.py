@@ -96,7 +96,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
 SCHEME = 'https'
-SITE_URL = 'www.center-stage.online'
+SITE_URL = 'www.centrestage.live'
 BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
 
 # Database

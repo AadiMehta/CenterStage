@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
-from frontend.utils.auth import get_user_from_token, is_authenticated
 from users.models import UserTypes
 
 

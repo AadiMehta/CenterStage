@@ -2,7 +2,6 @@ import logging
 from django.urls import reverse
 from django.shortcuts import HttpResponseRedirect
 from users.models import TeacherProfile, StudentProfile
-from frontend.utils.auth import is_authenticated, get_user_from_token
 from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH
 
 logger = logging.getLogger(__name__)
@@ -34,6 +33,9 @@ class CheckOnboarding(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
+        # check if its a teacher page
+        print(request.META['HTTP_REFERER'])
+
         if request.path.startswith(API_URL) or request.path.startswith(CENTERSTAGE_STATIC_PATH):
             return self.get_response(request)
 
@@ -79,8 +81,9 @@ class CheckOnboarding(object):
                     response = self.get_response(request)
         else:
             # user not logged in
-            print(request.path)
-            if request.path != "/" and request.path != "/teacherpagetest":
+            if request.path.startswith(CENTERSTAGE_STATIC_PATH):
+                response = self.get_response(request)
+            elif request.path != "/":
                 return HttpResponseRedirect(reverse('homepage'))
             else:
                 response = self.get_response(request)
