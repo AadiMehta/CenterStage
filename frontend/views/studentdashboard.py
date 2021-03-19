@@ -57,7 +57,6 @@ class StudentDashboardAccountInfo(TemplateView):
                 'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
             }
         })
-        context['site_name'] = settings.SITE_URL
         return context
 
 

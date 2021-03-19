@@ -96,8 +96,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
 SCHEME = 'https'
-SITE_URL = 'www.centrestage.live'
-BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
+SITE_URL = 'centrestage.live'
+BASE_URL = '{}://www.{}'.format(SCHEME, SITE_URL)
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -172,7 +172,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False # Temporary Set to False on Jan 26 for ZoomMeetingAPIView
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

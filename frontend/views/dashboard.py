@@ -38,12 +38,13 @@ class DashboardAccountInfo(TemplateView):
             'user': self.request.user,
             'teacher_accounts': teacher_accounts,
             'BASE_URL': settings.BASE_URL,
+            'teacher_url': "{}://{}.{}".format(settings.SCHEME,  self.request.user.teacher_profile_data.subdomain,
+                                               settings.SITE_URL),
             'zoom': {
                 'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
                 'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
             }
         })
-        context['site_name'] = settings.SITE_URL
         return context
 
 

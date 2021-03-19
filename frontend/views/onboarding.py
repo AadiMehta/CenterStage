@@ -23,7 +23,6 @@ class StudentOnboardStep1TemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
-        context['site_name'] = settings.SITE_URL
         return context
 
 
