@@ -81,7 +81,7 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Subdomain not permitted!")
         elif bool(re.match(subdomain_regex_pattern, value)):
             try:
-                teacher = TeacherProfile.objects.get(subdomain=value)
+                teacher = TeacherProfile.objects.get(subdomain=value.lower())
                 raise serializers.ValidationError("Subdomain not available or already in use.")
             except TeacherProfile.DoesNotExist:
                 return value
@@ -145,7 +145,7 @@ class SubdomainCheckSerializer(serializers.Serializer):
             raise serializers.ValidationError("Subdomain not permitted!")
         elif bool(re.match(subdomain_regex_pattern, value)):
             try:
-                teacher = TeacherProfile.objects.get(subdomain=value)
+                teacher = TeacherProfile.objects.get(subdomain=value.lower())
                 raise serializers.ValidationError("Subdomain not available or already in use.")
             except TeacherProfile.DoesNotExist:
                 return value

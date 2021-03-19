@@ -189,8 +189,6 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBacke
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'users.authentication.BearerAuthentication',
-        # 'users.authentication.AuthCookieAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -288,37 +286,37 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         },
         'engine': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         },
         'frontend': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         },
         'notifications': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         },
         'payments': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         },
         'users': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         },
         'zoom': {
             'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR',
+            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
             'propagate': True,
         }
     }

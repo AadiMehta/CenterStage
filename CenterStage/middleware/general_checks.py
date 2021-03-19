@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.shortcuts import HttpResponseRedirect
 from users.models import TeacherProfile, StudentProfile
 from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH
+from django.template.response import TemplateResponse
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +34,22 @@ class CheckOnboarding(object):
     def __call__(self, request):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
+
         # check if its a teacher page
-        print(request.META['HTTP_REFERER'])
+        # its a subdomain
+        if "localhost" in request.META['HTTP_HOST']:
+            pass
+        elif request.META['HTTP_HOST'] not in ["centrestage.live", "www.centrestage.live"]:
+            teacher_subdomain = request.META['HTTP_HOST'].split(".centrestage.live")[0]
+            try:
+                teacher = TeacherProfile.objects.get(subdomain=teacher_subdomain)
+                context = dict({
+                    "teacher": teacher,
+                    "lessons": teacher.lessons.filter(is_private=False)
+                })
+                return TemplateResponse(request, 'public/teacherpage.html', context).render()
+            except TeacherProfile.DoesNotExist:
+                return HttpResponseRedirect(reverse('homepage'))
 
         if request.path.startswith(API_URL) or request.path.startswith(CENTERSTAGE_STATIC_PATH):
             return self.get_response(request)

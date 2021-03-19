@@ -2,7 +2,7 @@ from django.db import models
 from django.core.mail import send_mail
 from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator
+from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator, MaxLengthValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -118,7 +118,8 @@ class TeacherProfile(models.Model):
     Additional data associated with the teacher user
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="teacher_profile_data")
-    subdomain = models.CharField(_('Domain Prefix'), max_length=32, unique=True, validators=[MinLengthValidator(4)])
+    subdomain = models.CharField(_('Domain Prefix'), max_length=32, unique=True,
+                                 validators=[MinLengthValidator(4), MaxLengthValidator(32)])
     profile_image = models.ImageField(_("profile image"), storage=S3_ProfileImage_Storage(), null=True)
     year_of_experience = models.IntegerField(_('years of experience'), null=True, validators=[MinValueValidator(0),
                                                                                               MaxValueValidator(100)])
@@ -127,6 +128,10 @@ class TeacherProfile(models.Model):
     intro_video = models.URLField(max_length=200, null=True, blank=True)
     status = models.CharField(_("Teacher Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
                               help_text="Teacher Profile status", default=ProfileStatuses.ACTIVE)
+
+    def save(self, *args, **kwargs):
+        self.subdomain = self.subdomain.lower()
+        super(TeacherProfile, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = _('Teacher Profile')
@@ -143,7 +148,7 @@ class Accounts(models.Model):
     """
     Data Associated to Social Accounts
     """
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="accounts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="accounts")
     account_type = models.CharField(_("account type"), choices=AccountTypes.choices, max_length=30,
                                     help_text="Type of account")
     info = models.JSONField(null=True)
@@ -193,6 +198,8 @@ class TeacherPageVisits(models.Model):
     class Meta:
         verbose_name = _('Page Visit')
         verbose_name_plural = _('Page Visits')
+
+
 # ***************** Student Models ******************
 
 
