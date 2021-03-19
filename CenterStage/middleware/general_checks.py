@@ -1,5 +1,7 @@
 import logging
 from django.urls import reverse
+from django.conf import settings
+from django.shortcuts import redirect
 from django.shortcuts import HttpResponseRedirect
 from users.models import TeacherProfile, StudentProfile
 from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH
@@ -49,7 +51,7 @@ class CheckOnboarding(object):
                 })
                 return TemplateResponse(request, 'public/teacherpage.html', context).render()
             except TeacherProfile.DoesNotExist:
-                return HttpResponseRedirect(reverse('homepage'))
+                return redirect(settings.BASE_URL)
 
         if request.path.startswith(API_URL) or request.path.startswith(CENTERSTAGE_STATIC_PATH):
             return self.get_response(request)
