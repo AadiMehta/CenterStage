@@ -1,14 +1,15 @@
+{% load static %}
 <!-- Modal -->
 <div class="modal fade modal-formtype" id="modal10" tabindex="-1" aria-labelledby="modal10" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body">
             <div class="div-3">
                 <div class="profimg-name">
-                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                <div class="profimg-rounded"><img src="{% static 'images/user-img' %}.png" alt=""></div>
                 <div class="prof-name">
                     <h4>by Thomas Edward</h4>
                     <span class="lession-time">Monday, 06 Nov 2020</span>
@@ -23,24 +24,24 @@
             <div class="modal-form">
                 <div class="form-group">
                 <div class="inp-col">
-                    <i><img src="images/user-gray.png" alt=""></i><input type="text" class="form-control" placeholder="First Name *">
+                    <i><img src="{% static 'images/user-gray' %}.png" alt=""></i><input type="text" class="form-control" placeholder="First Name *">
                 </div>
                 <div class="inp-col">
-                    <i><img src="images/user-gray.png" alt=""></i><input type="text" class="form-control" placeholder="Last Name *">
+                    <i><img src="{% static 'images/user-gray' %}.png" alt=""></i><input type="text" class="form-control" placeholder="Last Name *">
                 </div>
                 <div class="inp-col mobilenumber-inp">
                     <div class="mob-inp">
-                        <i><img src="images/mobile-gray.png" alt=""></i><input type="text" class="form-control" placeholder="Mobile Number">
+                        <i><img src="{% static 'images/mobile-gray' %}.png" alt=""></i><input type="text" class="form-control" placeholder="Mobile Number">
                     </div>
                     <button type="button" class="btn btn-theme">Send OTP</button>
                 </div>
                 </div>
                 <div class="form-group">
                 <div class="inp-col">
-                    <i><img src="images/email-gray.png" alt=""></i><input type="text" class="form-control" placeholder="Email Address *">
+                    <i><img src="{% static 'images/email-gray' %}.png" alt=""></i><input type="text" class="form-control" placeholder="Email Address *">
                 </div>
                 <div class="inp-col">
-                    <i><img src="images/password-gray.png" alt=""></i><input type="text" class="form-control" placeholder="Password *">
+                    <i><img src="{% static 'images/password-gray' %}.png" alt=""></i><input type="text" class="form-control" placeholder="Password *">
                 </div>
                 </div>
             </div>
@@ -59,12 +60,12 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body">
             <h2>Pick Date &amp; Time</h2>
             <div class="cald-area mb-3">
-                <img src="images/Calendar.svg" alt="" />
+                <img src="{% static 'images/Calendar.svg' %}" alt="" />
             </div>
             <div class="select-datetime-dropdown mb-3">
                 <select class="form-control">
@@ -75,7 +76,7 @@
                 </select>
             </div>
             <div class="btn-proceed">
-                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="images/next.svg" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
             </div>
         </div>
     </div>
@@ -87,11 +88,11 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body text-center">
             <div class="busy-graphics">
-                <img src="images/busy-graphics.svg" alt="" />
+                <img src="{% static 'images/busy-graphics.svg' %}" alt="" />
             </div>
             <h3 class="text-3">Sorry!  Unfortunately I am fully booked 
                 on this day.
@@ -111,11 +112,11 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body text-center">
             <div class="busy-graphics">
-                <img src="images/message-graphics.svg" alt="" />
+                <img src="{% static 'images/message-graphics.svg' %}" alt="" />
             </div>
             <h2>Send Message</h2>
             <h3 class="text-3">Please mention your desired time to consult me and
@@ -125,7 +126,7 @@
                 <input type="text" class="form-control" placeholder="Message">
             </div>
             <div class="btn-send text-right">
-                <button type="button" class="btn btn-primary btn-lg btn-theme"><span> Send</span> <i><img src="images/send-white.svg" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span> Send</span> <i><img src="{% static 'images/send-white.svg' %}" alt="" /></i></button>
             </div>
         </div>
     </div>
@@ -137,7 +138,7 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body">
             <div class="share-modal-wrap">
@@ -156,22 +157,22 @@
                 <div class="share-to">
                     <h5>Share to</h5>
                     <div class="social-icons">
-                        <a href="#"><img src="images/whatsapp-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/telegram-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/facebook-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/linkedin-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/twitter-icon.svg" alt="" /></a>
-                        <a href="#"><img src="images/email-icon.svg" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
                     </div>
                 </div>
                 <div class="share-to">
                     <h5>How was your overall booking process experience?</h5>
                     <div class="rating-row">
-                        <a href="#"><img src="images/rating-fill.svg" alt=""></a>
-                        <a href="#"><img src="images/rating-fill.svg" alt=""></a>
-                        <a href="#"><img src="images/rating-fill.svg" alt=""></a>
-                        <a href="#"><img src="images/rating-blank.svg" alt=""></a>
-                        <a href="#"><img src="images/rating-blank.svg" alt=""></a>
+                        <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt=""></a>
                     </div>
                 </div>
                 <div class="btn-area mt-5 twobtn-wrap">
@@ -179,7 +180,7 @@
                 </div>
                 </div>
                 <div class="share-graphics">
-                <img src="images/share-graphics.svg" alt="" />
+                <img src="{% static 'images/share-graphics' %}.svg" alt="" />
                 </div>
             </div>
         </div>
@@ -191,19 +192,19 @@
     <div class="modal-dialog">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="images/close.svg" alt="" />
+        <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
         <div class="modal-body">
             <h2>Write a review for</h2>
             <div class="review-modal-top">
-                <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                <div class="profimg-rounded"><img src="{% static 'images/user-img' %}.png" alt=""></div>
                 <div class="d-block writer-name mt-2"><a href="#">Thomas Edward</a></div>
                 <div class="rating-row">
-                <a href="#"><img src="images/rating-fill.svg" alt=""></a>
-                <a href="#"><img src="images/rating-fill.svg" alt=""></a>
-                <a href="#"><img src="images/rating-fill.svg" alt=""></a>
-                <a href="#"><img src="images/rating-blank.svg" alt=""></a>
-                <a href="#"><img src="images/rating-blank.svg" alt=""></a>
+                <a href="#"><img src="{% static 'images/rating-fill' %}.svg" alt=""></a>
+                <a href="#"><img src="{% static 'images/rating-fill' %}.svg" alt=""></a>
+                <a href="#"><img src="{% static 'images/rating-fill' %}.svg" alt=""></a>
+                <a href="#"><img src="{% static 'images/rating-blank' %}.svg" alt=""></a>
+                <a href="#"><img src="{% static 'images/rating-blank' %}.svg" alt=""></a>
                 </div>
             </div>
             <div class="liner-inp"> 
@@ -239,7 +240,7 @@
                 </div>
             </div>
             <div class="btn-center">
-                <button type="button" class="btn btn-theme"><span>Submit</span> <i><img src="images/next.svg" alt=""></i></button>
+                <button type="button" class="btn btn-theme"><span>Submit</span> <i><img src="{% static 'images/next.svg' %}" alt=""></i></button>
             </div>
         </div>
     </div>
