@@ -136,7 +136,7 @@ function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
         }
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        $(getClassName(userType, 'SignUpButtonError')).text("Email already registered!")
+        $(getClassName(userType, 'SignUpButtonError')).text("Email/Phone no already registered!")
         $(getClassName(userType, 'SignUpButtonError')).show()
         console.log('Error while signup: ', jqXhr)
         // hideModal('modalSignup');

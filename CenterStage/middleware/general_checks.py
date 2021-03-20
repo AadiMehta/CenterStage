@@ -59,8 +59,17 @@ class CheckOnboarding(object):
         if request.user.is_authenticated:
             if "sessionid" not in request.COOKIES or "auth_token" not in request.COOKIES:
                 # log out user
-                request.user.auth_token.delete()
-                request.session.flush()
+                try:
+                    # delete the auth_token
+                    request.user.auth_token.delete()
+                except Exception as e:
+                    pass
+
+                try:
+                    # delete the sessionid
+                    request.session.flush()
+                except Exception as e:
+                    pass
                 return HttpResponseRedirect(reverse('homepage'))
 
             status, user_type = check_onboarding(request.user)

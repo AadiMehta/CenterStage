@@ -1,10 +1,11 @@
 from django.db import models
+from django.utils import timezone
 from django.core.mail import send_mail
 from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator, MaxLengthValidator
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator, MaxLengthValidator
 
 
 class UserTypes(models.TextChoices):
@@ -190,14 +191,14 @@ class TeacherPageVisits(models.Model):
     """
     Teacher earnings data
     """
-    teacher = models.OneToOneField(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
+    teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
     visits = models.PositiveBigIntegerField()
-    first_visited_on = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
+    visit_date = models.DateField(default=timezone.now().date)
 
     class Meta:
         verbose_name = _('Page Visit')
         verbose_name_plural = _('Page Visits')
+        unique_together = ('teacher', 'visit_date')
 
 
 # ***************** Student Models ******************

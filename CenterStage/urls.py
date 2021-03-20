@@ -29,7 +29,7 @@ from users.views import (
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
-    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView
+    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs
 )
 from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
@@ -53,11 +53,7 @@ from frontend.views.studentdashboard import (
     StudentDashboardSchedulesPastSessions, StudentDashboardSchedulesUpcomingSessions
 )
 from engine.views import LessonAPIView, MeetingAPIView
-
-from frontend.views.public import (
-    TeacherPageView, LessonPageView
-)
-
+from frontend.views.public import TeacherPageView
 
 
 schema_view = get_schema_view(
@@ -173,6 +169,7 @@ urlpatterns = [
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('centrestage/terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
     path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
+    path('centrestage/faqs', Faqs.as_view(), name="faqs"),
 ]
 
 if settings.DEBUG:
