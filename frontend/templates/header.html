@@ -3,7 +3,7 @@
 <header class="header">
     <div class="container">
       <div class="header-wrap">
-        <a class="main-logo" href="/"><img src="{% static '/images/CenterStage_logo.svg' %}" alt="" /></a>
+        <a class="main-logo" href="/"><img style='width:15%; min-width: 200px;' src="{% static '/images/CenterStage-WhiteLogo.svg' %}" alt="" /></a>
         <div class="top-navigation">
           <nav class="navbar navbar-expand-lg">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,13 +16,13 @@
                   <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Why Us</a>
+                  <a class="nav-link" href="#WhyUs">Why Us</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Join</a>
+                  <a class="nav-link" href="#Join">Join</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Blog</a>
+                  <a class="nav-link" target="_blank" href="https://medium.com/@tanaydesai/why-we-are-building-center-stage-53e3cbaf244d">Blog</a>
                 </li>
               </ul>
             </div>
@@ -30,21 +30,21 @@
           <div class="main-profile-menu">
             {% if user and user.first_name %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                <img alt="" src="{% static '/images/profile.svg' %}" />
                 <span>{{user.first_name}}</span>
               </a>
             {% else %}
               <a class="profile-user d-flex dropdown-toggle" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img alt="" src="{% static '/images/profile.svg' %}" alt="" />
+                <img alt="" src="{% static '/images/profile.svg' %}" />
                 <span>Login</span>
               </a>
               <div class="dropdown-menu">
                 <ul>
                   <li><a href="#" data-toggle="modal" data-target="#modalLogin"><i><img src="{% static '/images/t-login.svg' %}" alt="" /></i><span>Teacher Login</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/s-login.svg' %}" alt="" /></i><span>Student Login</span></a></li>
+                  <li><a href="#" data-toggle="modal" data-target="#modalStudentLogin"><i><img src="{% static '/images/s-login.svg' %}" alt="" /></i><span>Student Login</span></a></li>
                   <li class="divider"></li>
                   <li><a href="#"><i><img src="{% static '/images/faq.svg' %}" alt="" /></i><span>FAQ</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
+                  <li><a href="mailto:help@centrestage.live"><i><img src="{% static '/images/email.svg' %}" alt="" /></i><span>Contact Us</span></a></li>
                 </ul>
               </div>
             {% endif %}

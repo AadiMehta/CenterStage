@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'teacher/dashboard/modals.html' %}
+<div class="wrapper-main">
+   {% include 'teacher/dashboard/sidebar.html' with activeSection='lessons' %}
+   <div class="main">
+      {% include 'teacher/dashboard/header.html' with user=user %}
+      <div class="main-content">
+         {% include 'teacher/dashboard/actionbar.html' %}
+         <div class="admin-mid-sec container-fluid">
+            <h2 class="title-2">My Lessons</h2>
+            <div class="search-row">
+               <div class="searchInp-col">
+                  <img src="{% static 'images/icon-search.svg' %}" alt="" />
+                  <input type="search" class="form-control" placeholder="Search Sessions" />
+               </div>
+               <div class="search-tags">
+                  <a href="#" class="tag-link active">All</a>
+                  <a href="#" class="tag-link">One - on - One</a>
+                  <a href="#" class="tag-link">Group Lesson</a>
+                  <a href="#" class="tag-link">Personal Coaching</a>
+                  <a href="#" class="tag-link">Recent</a>
+                  <a href="#" class="tag-link">Popular</a>
+                  <a href="#" class="tag-link">Top Rated</a>
+                  <a href="#" class="tag-link">A - Z</a>
+                  <a href="#" class="tag-link">Z - A</a>
+               </div>
+            </div>
+            {% for lesson in lessons %}
+               <div class="searchresult-wrap lessons-wrap">
+                  <h2 class="lession-title">{{ lesson.name | title }}</h2>
+                  <div class="lessions-countDetail">
+                     <ul class="lessions-countDetail-list">
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <h4>NA</h4>
+                              <h5>Total Earned</h5>
+                           </div>
+                           <span class="growth-text">Lorem ipsum 25.30% <i><img src="{% static 'images/arrow-up.png' %}" alt="" /></i> growth this month</span>
+                        </li>
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <h4><img src="{% static 'images/star-w.svg' %}" alt="" />NA</h4>
+                              <h5>Total Rating</h5>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <h4>NA</h4>
+                              <h5>Sessions Conducted</h5>
+                           </div>
+                        </li>
+                        <li>
+                           <div class="lessions-countDetail-box">
+                              <div class="crnt-studnt">
+                                 <h4>NA</h4>
+                                 <div class="profimg-col">
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                                 </div>
+                              </div>
+                              <h5>Current Students</h5>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+                  <div class="searchresult-row">
+                     <div class="lession-col-left">
+                        <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                     </div>
+                     <div class="lession-col-right">
+                        <ul class="lessons-steps">
+                           <li>
+                              <i><img src="{% static 'images/live.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Total Sessions</h4>
+                                 <span>{{lesson.no_of_sessions}} Sessions </span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Duration</h4>
+                                 <span>45 Minutes</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Type</h4>
+                                 {% if lesson.session_type == 'ONE_ON_ONE' %}
+                                    <span>One - on - One</span>
+                                 {% else %}
+                                    <span>Group</span>
+                                 {% endif %}
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Language</h4>
+                                 <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                              </div>
+                           </li>
+                        </ul>
+                        <div class="linerbtn-row">
+                           <div class="lessonBtnCol">
+                              <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                 <a class="dropdown-item" href="#">Edit Session</a>
+                                 <a class="dropdown-item" href="#">Manage in Zoom</a>
+                              </div>
+                           </div>
+                           <div class="lessonBtnCol">
+                              <button class="btn-liner active" data-toggle="modal" data-target="#shareModal">Share</button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            {% empty %}
+               <button type="button" class="btn-liner active">New Lesson</button>
+            {% endfor %}
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- custom scrollbar plugin -->
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+   (function($){
+         $(window).on("load",function(){
+            $("#mC-scroll").mCustomScrollbar({
+               theme:"minimal"
+            });
+            $("#mC-scroll2").mCustomScrollbar({
+               theme:"minimal"
+         });
+         });
+      })(jQuery);
+</script>
+{% endblock %}

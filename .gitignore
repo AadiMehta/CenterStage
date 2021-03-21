@@ -76,6 +76,7 @@ docs/_build/
 target/
 
 # Jupyter Notebook
+*.ipynb
 .ipynb_checkpoints
 
 # IPython
@@ -132,6 +133,8 @@ dmypy.json
 # migrations
 migrations/__0*
 
+migrations*
+
 # media files
 media/*
 
@@ -139,3 +142,13 @@ media/*
 static/*
 
 .env
+
+tmp_files/*
+
+# VS Code
+.vscode/
+
+# Pem file
+cs.pem
+
+credentials.json

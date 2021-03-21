@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'student/dashboard/modals.html' %}
+<div class="wrapper-main">
+   {% include 'student/dashboard/sidebar.html' with activeSection='lessons' %}
+   <div class="main">
+      {% include 'student/dashboard/header.html' with user=user %}
+      <div class="main-content">
+         <div class="admin-mid-sec container-fluid">
+            <h2 class="title-2">My Enrollments</h2>
+            <div class="search-row">
+               <div class="searchInp-col">
+                  <img src="{% static 'images/icon-search.svg' %}" alt="" />
+                  <input type="search" class="form-control" placeholder="Search Sessions" />
+               </div>
+               <div class="search-tags">
+                  <a href="#" class="tag-link active">All</a>
+                  <a href="#" class="tag-link">One - on - One</a>
+                  <a href="#" class="tag-link">Group Lesson</a>
+                  <a href="#" class="tag-link">Personal Coaching</a>
+                  <a href="#" class="tag-link">Recent</a>
+                  <a href="#" class="tag-link">Popular</a>
+                  <a href="#" class="tag-link">Top Rated</a>
+                  <a href="#" class="tag-link">A - Z</a>
+                  <a href="#" class="tag-link">Z - A</a>
+               </div>
+            </div>
+            {% for enrollment in enrollments %}
+               <div class="searchresult-wrap lessons-wrap">
+                  <h2 class="lession-title">{{ enrollment.lesson.name | title }}</h2>
+                  <div class="d-flex mb-4 msgbtnProfile">
+                     <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                           <div class="prof-name">
+                              <h4>{{enrollment.lesson.creator.user.first_name}} {{enrollment.lesson.creator.user.last_name}}</h4>
+                              <span class="lession-time">Monday, 06 Nov 2020</span>
+                           </div>
+                     </div>
+                     <div>
+                           <button type="button" class="btn-rounded btn-with-icon">
+                              <i><img src="{% static 'images/message.svg' %}" alt="" /></i> Message {{enrollment.lesson.creator.user.first_name}}
+                           </button>
+                     </div>
+                  </div>
+
+                  <div class="lessions-countDetail countDetail-twoCol">
+                     <div class="col-left">
+                           <ul class="lessions-countDetail-list">
+                              <li>
+                                 <div class="lessions-countDetail-box">
+                                       <h4>{{enrollment.lesson_slot.session_no}} out of 05</h4>
+                                       <h5>Sessions Completed</h5>
+                                 </div>
+                              </li>
+                              <li>
+                                 <div class="lessions-countDetail-box">
+                                       <h4><img src="{% static 'images/happy.svg' %}" alt="" /> Happy</h4>
+                                       <h5>Teacher Feedback</h5>
+                                 </div>
+                              </li>
+                           </ul>
+                     </div>
+                     <div class="col-right">
+                           <div class="profimg-name">
+                              <div class="profimg-col">
+                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                 <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                              </div>
+                              <div class="prof-name">
+                                 <h4>
+                                       <a href="#">
+                                          With Edwina, abc, xyz<br />
+                                          + 5 other students
+                                       </a>
+                                 </h4>
+                              </div>
+                           </div>
+                     </div>
+                  </div>
+
+                  <div class="searchresult-row">
+                     <div class="lession-col-left">
+                           <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                     </div>
+                     <div class="lession-col-right">
+                           <ul class="lessons-steps">
+                              <li>
+                                 <i><img src="{% static 'images/time.png' %}" alt="" /></i>
+                                 <div class="lessons-steps-text">
+                                       <h4>Session Time</h4>
+                                       <span>{{ enrollment.session_time }} IST</span>
+                                 </div>
+                              </li>
+                              <li>
+                                 <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                                 <div class="lessons-steps-text">
+                                       <h4>Session Duration</h4>
+                                       <span>{{ slot.session_duration }}</span>
+                                 </div>
+                              </li>
+                              <li>
+                                 <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                                 <div class="lessons-steps-text">
+                                       <h4>Session Type</h4>
+                                       <span>One - on - One</span>
+                                 </div>
+                              </li>
+                              <li>
+                                 <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                                 <div class="lessons-steps-text">
+                                       <h4>Session Language</h4>
+                                       <span>Hosted in {% for language in slot.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                 </div>
+                              </li>
+                              <li>
+                                 <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
+                                 <div class="lessons-steps-text">
+                                       <h4>Session Number</h4>
+                                       <a href="#">03</a> <span>Out of 05</span>
+                                 </div>
+                              </li>
+                              <li>
+                                 <i><img src="{% static 'images/documents.png' %}" alt="" /></i>
+                                 <div class="lessons-steps-text">
+                                       <h4>Lesson Documents</h4>
+                                       <a href="#">View Documents</a>
+                                 </div>
+                              </li>
+                           </ul>
+                           <div class="linerbtn-row">
+                              <div class="lessonBtnCol"><a href="#" class="btn-liner">Edit</a></div>
+                              <div class="lessonBtnCol"><a href="#" class="btn-liner">Share</a></div>
+                              <div class="lessonBtnCol"><a href="#" class="btn-liner active">Book Next Session</a></div>
+                           </div>
+                     </div>
+                  </div>
+               </div>
+
+            {% empty %}
+               <button type="button" class="btn-liner active" disabled>No Enrollments</button>
+            {% endfor %}
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- custom scrollbar plugin -->
+<script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script>
+   (function($){
+         $(window).on("load",function(){
+            $("#mC-scroll").mCustomScrollbar({
+               theme:"minimal"
+            });
+            $("#mC-scroll2").mCustomScrollbar({
+               theme:"minimal"
+         });
+         });
+      })(jQuery);
+</script>
+{% endblock %}

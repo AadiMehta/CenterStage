@@ -1,0 +1,343 @@
+@media only screen and (min-width:2200px) {
+    .notifaction-content {max-height:800px;}
+}
+
+@media only screen and (max-width:1800px) {
+    .container-fluid {padding-left: 3rem;  padding-right: 3rem;}
+}
+
+@media only screen and (max-width:1600px) {
+    .header-prof-col h3 {font-size: 26px;}
+    .desigation {font-size: 14px;}
+    .header-prof-img, .header-prof-img img {width: 70px; height: 70px;}
+    ul.cta-links li span {font-size: 18px;}
+    .cta-link-icon {width: 90px; height: 90px; border-radius: 25px;}
+    .title-2, .lession-title, .host-header-left h2, .title-row h2, .upImage-video-wrap h3, .yourac-wrap h3 {font-size: 28px;}
+    .lessons-steps li .lessons-steps-text h4, .searchresult-right-top h3 {font-size: 24px;}
+    .lessons-steps li .lessons-steps-text span, .lessons-steps li .lessons-steps-text a {font-size:18px;}
+    .lessons-steps li i {width: 60px;}
+    .notifaction-badge {width: 26px; height: 26px;font-size: 15px;}
+    .header-actions-icon {width: 32px;}
+    .search-tags a.tag-link {padding: 5px 20px;}
+    .btn-liner {height:46px;  font-size: 18px;}
+    .searchresult-right-top a {font-size: 14px;}
+    .sidebar-menu > ul#accordion > li > a {font-size: 18px;}
+    .sidebar-menu ul#accordion ul.submenu a {font-size: 16px;}
+    .prof-name h4, .boarding-left label, .form-group label  {font-size: 18px;}
+    .board-num {font-size: 30px;}
+    .board-process-txt {font-size: 12px;}
+    .link-back {margin-top: -7px; width: 28px;}
+    .boarding-left .form-control, .liner-inp .form-control, .liner-select-drop input {height: 48px; font-size: 16px;}
+    .input-area {width:550px;}
+    .boarding-right {width: 500px;}
+    .btn-select-session {height: 70px;font-size: 18px;}
+    .boarding-left .btn, .btn-theme {height: 60px;}
+    .select-session-text, .dtl-txt, .addmore-text {font-size: 13px;}
+    .btn-large-default {height: 70px; font-size: 18px;}
+    .blank-box, .add-plusbtn.btn-large-default {width: 70px;  height: 70px;}
+    .add-plusbtn img {width: 40px;}
+    .profile-image-area .profile-image {width: 180px; height: 180px;}
+    .profile-info-name h3 {font-size: 32px; margin: 0px;}
+    .edit-btn {top: 6px; width: 18px;}
+    .profile-wrap {margin-bottom: 2rem;}
+    .personal-dtl-label, .session-days thead th {font-size: 18px;}
+    .pop-graphics {width: 360px;}
+    .default-box-style h2 {font-size: 28px;}
+    .default-box-style h3, .video-wrapper h5 {font-size: 22px;}
+    .circle-area {width: 54px; height: 54px;}
+    .share-btn-col {bottom: 0;}
+    .reating-col .reating-text {font-size: 46px;}
+    .reating-col .reating-text i, .slide-inner-top .reating-text i {width: 35px;}
+    .lession-title2, .recommendations-col, .slide-inner-top .reating-text {font-size:22px;}
+	.hasDatepicker, .timepicker{font-size:16px;}
+    .notifaction-content {max-height:450px;}
+    .profile-image-area {top: -40px;}
+}
+
+@media only screen and (max-width:1400px) {
+    body{font-size: 14px;}
+    .cta-links-wrap {padding:15px 25px;}
+    .lessons-steps li .lessons-steps-text h4, .searchresult-right-top h3 {font-size: 20px;}
+    .lessons-steps li .lessons-steps-text span, .lessons-steps li .lessons-steps-text a {font-size: 16px;}
+    .title-2, .lession-title, .yourac-wrap h3, .modal-body h2 {font-size: 24px;}
+    .prof-name h4 {font-size: 18px; margin-bottom: 2px;}
+    .prof-name span.lession-time {font-size: 14px;}
+    .profimg-rounded, .profimg-rounded img {width: 55px;  height: 55px;}
+    .btn-liner {height: 42px; font-size: 16px; padding: 6px 2rem;}
+    .lessons-steps li i {width: 50px;}
+    .addNewPost-inp .form-control {padding-left: 32px;  font-size: 16px;}
+    .lessons-steps {margin-top: 2rem;}
+    .header, .logo-area {height: 100px;}
+    .main-content {padding-top: 100px;}
+    .cta-link-icon {width: 80px; height: 80px;}
+    .dropdown-menu .dropdown-item {font-size: 16px;}
+    .notifaction-badge {width: 25px;  height: 25px; font-size: 16px;}
+    .prof-name h4 {font-size: 16px;}
+    .messages-row.messages-child .profimg-name {width: 90%;}
+    .my-messages-left-col {width: 350px; margin-right: 1.5rem;}
+    .request-action-btn {height: 50px; font-size: 18px;}
+    .request-action-btn i {width: 38px;}
+    .statistics-box h4 {font-size: 26px;}
+    .statistics-list li h5, .lessions-countDetail-box h5 {font-size: 18px;}
+    .title-3, .lessions-countDetail-box h4 {font-size: 28px;}
+    .statistics-btn {font-size: 20px;}
+    .lessions-countDetail-box h4 img {width:32px;}
+    .lession-col-right, .col-right {padding-left: 2rem;}
+    .select-btn2 {height: 40px; width: 65px;font-size: 14px;}
+    .required-text {font-size: 14px;}
+    .host-header {padding: 3rem 2rem;}
+    .boarding-wrap {padding-left: 3rem;}
+    .boarding-left { padding-right: 2rem;}
+    .lesson-availability {padding-right: 3rem;}
+    .selectdatetile-wrap {margin-bottom: 2rem;}
+    .input-area {width: 500px;}
+    .custom-radios [type="radio"]:checked + label:before, .custom-radios [type="radio"]:not(:checked) + label:before, .custom-radios [type="radio"]:checked + label:after, .custom-radios [type="radio"]:not(:checked) + label:after, .custom-radios {width:34px; height: 34px;}
+    .ac-veryfy-right .btn-liner {height: 42px; font-size: 16px; }
+    .tansc-text {font-size: 18px;}
+    .pop-graphics {width: 320px;}
+    .ph-number-row {font-size: 22px;}
+    .default-table th, .default-table td, .default-table .btn-liner{font-size: 14px;}
+    .page-right-area {width: 360px;}
+    .page-left-area .form-group label {font-size: 24px;}
+    .default-box-style h5, .sessionDayDate {font-size: 22px;}
+    .sessionDayDate i {width: 40px;display: inline-block;}
+    .yourtchr-dtl-col {margin-right:2rem;}
+    .your-teacher-wrap .prof-name h4 {font-size: 28px;}
+    .your-teacher-wrap .desigation {font-size: 16px;}
+    .yourtchr-dtl-col i {margin-right: 12px; display: inline-block; width: 35px; vertical-align: top;}
+    .yourtchr-dtl, .lession-title2, .recommendations-col, .slide-inner-top .reating-text, .card-number, .card-cvv, .cvv-input {font-size:18px;}
+    .notification-slide{top: 100px;}
+}
+
+@media only screen and (max-width:1279px) {
+    .searchresult-col-left {width: 100%; margin-bottom: 2.5rem;}
+    .searchresult-col-right {width: 100%; padding: 0;}
+    .searchresult-wrap {margin-bottom: 3rem; padding-bottom: 3rem;}
+    .cta-link-icon {width: 60px;  height: 60px; border-radius: 15px; padding: 10px}
+    ul.cta-links li span {font-size: 15px;}
+    .header-prof-col h3 {font-size: 22px;}
+    .header-prof-img, .header-prof-img img {width: 60px; height: 60px;}
+    .check-green {right: -24px; width: 30px;}
+    .container-fluid {padding-left: 2rem; padding-right:2rem;}
+    .my-messages-left-col {width: 100%; margin: 0 0 20px 0;}
+    .my-messages-right-col, .messages-row.messages-child .profimg-name{width: 100%;}
+    .statistics-list li h5, .lessions-countDetail-box h5 {font-size: 14px;}
+    .statistics-btn {font-size: 18px;}
+    .title-3, .lessions-countDetail-box h4 {font-size: 22px;}
+    .lessions-countDetail-box h4 img {width: 28px;}
+    .lessions-countDetail {margin-bottom: 2rem;}
+    .input-area {width: 100%;}
+    .boarding-right {width: 400px;}
+    .host-header-left h2, .title-row h2, .upImage-video-wrap h3{font-size: 24px;}
+    .form-group {margin-bottom: 2rem;}
+    .boarding-row {padding-top: 1rem;}
+    .select-btn2 {height: 35px; width: 50px; font-size: 13px;}
+    .btn-select-session {height: 60px; font-size: 16px;}
+    .tansc-text {font-size: 16px;}
+    .pop-graphics {width: 300px;}
+    .ph-number-row {font-size: 20px;}
+    .inp-price-wrap {padding: 1rem;}
+    .session-days thead th:first-child {width: 150px;}
+    .btn-liner {padding: 6px 1.5rem;}
+    .lessonBtnCol {margin-right:10px;}
+    .col-left .lessions-countDetail-list li {width: calc(220px - 15px);}
+    .col-right {padding-left: 1rem;}
+    .page-left-area .form-group label {font-size:22px;}
+    .default-box-style h2 {font-size: 26px;}
+    .default-box-style h3, .seat-remaining-title {font-size: 20px;}
+    .circle-area {width: 50px; height: 50px;}
+    .page-right-area {width: 300px;}
+    .page-left-area {padding-right: 2rem;}
+    .yourtchr-dtl {font-size:18px;}
+    .your-teacher-wrap .profimg-rounded, .your-teacher-wrap .profimg-rounded img { width: 90px;  height: 90px;}
+    .default-box-style h5, .sessionDayDate, .card-total, .default-box-style h3, .video-wrapper h5 {font-size:20px;}
+    .lessons-steps li i {width: 40px;}
+    .recommendations-col i {width: 30px;}
+    .reating-col .reating-text {font-size: 40px;}
+    .section-all-lessions .searchInp-col {width: 100%; padding: 0;}
+    .profile-info-name h3 i {width: 35px;}
+    .reating-col {padding: 10px 1rem;}
+    .lessions-slide-sec {margin-bottom: 3rem;}
+    .write-reviews-section {padding-bottom: 3rem;}
+}
+
+@media only screen and (max-width:991px) {
+    .header, .logo-area {height: 72px;}
+    .main-content {padding-top: 72px;}
+    .admin-mid-sec {padding-top: 2rem; padding-bottom: 2rem;}
+    .search-row {flex-wrap: wrap; margin-bottom: 2rem;}
+    .searchInp-col {width: 100%; padding-right: 0;  margin-bottom: 1rem;}
+    .search-tags {width: 100%;}
+    .lessons-steps li, .msg-date {width: 100%;}
+    ul.cta-links li {width: 50%; padding: 15px 0;}
+    .toggle-menu {display: block;}
+    .sidebar{left: -300px;}
+    .main, .header  {padding-left:0;}
+    .wrapper-main.sidebar-collapse .sidebar{left:0px;}
+    .header-prof-col {display: none;}
+    .container-fluid {padding-left: 1rem; padding-right: 1rem;}
+    .logo-area .main-logo-img {width: 180px;}
+    .close-btn {position: absolute; right: 15px;  top: 15px;}
+    .sidebar-menu > ul#accordion > li > a {font-size: 16px;}
+    .sidebar-menu ul#accordion ul.submenu a {font-size: 14px; padding: 10px 10px 10px 3rem;}
+    .sidebar-menu > ul#accordion > li > a > i {width: 28px;}
+    .sidebar-menu {padding-top:0px;}
+    .close-btn{display: block;}
+    .cta-links-wrap {padding: 10px;}
+    .request-action-btn {width: 150px;}
+    .request-action-row {padding: 2rem 10px;}
+    .boarding-right {display: none;}
+    .host-header {padding: 1rem;}
+    .boarding-wrap {padding: 0;}
+    .boarding-left, .lesson-availability {padding-right: 0;}
+    .selectdatetile-wrap {margin-bottom: 20px;}
+    .personal-dtl-row, .exp-area, .yourac-wrap {width: 100%;}
+    .title-2 {margin-bottom: 1rem;}
+    .profileInfo-page .main-content.pt-0 {padding-top: 100px !important;}
+    .profileInfo-page .header {background: #fff;}
+    .yourac-wrap {margin-bottom: 2rem;}
+    .tansc-text {font-size: 14px;}
+    .pop-graphics, .share-graphics {display: none;}
+    .modal-dialog { max-width: 98% !important;}
+    .pop-inner { margin-bottom: 1rem;}
+    .modal-body, .modal-share .modal-body {padding: 2rem 1rem;}
+    .pop-left ,.share-modal-left {padding-right: 0;}
+    .finish-btn-area {margin-top: 1rem;}
+    .rating-row {margin: 2rem 0px;}
+    .rating-row a, .social-icons a {width: 30px;}
+    .social-icons {margin-top:1rem;}
+    .social-icons a {margin-right:5px;}
+    .verticalTabb {flex-wrap: wrap;}
+    .tabb-left{width: 100%;}
+    .tabb-right {padding: 2rem 0;}
+    .col-text h4{font-size: 18px;}
+    .account-left-col{width: 100%; padding-right: 0px; padding-bottom: 2rem;}
+    .account-right-col{width: 100%; border: 0px; padding-left: 0px;}
+    .lessons-steps li{padding-right: 0px; margin-bottom: 2rem;}
+    .page-left-area .form-group label {font-size:18px;}
+    .page-right-area {width: 100%; margin-top: 1rem;}
+    .your-teacher-wrap .profimg-name .btn-rounded { width: 100%; margin-top: 1rem; justify-content: center;}
+    .yourtchr-dtl-col {margin: 0 0 1rem 0; width: 100%;}
+    .review-reating i {width: 25px;}
+    .page-left-area{padding-right: 0px;}
+    .reviewbox {width: 100%; margin: 0 0 1rem 0;}
+    .yourtchr-dtl {font-size: 16px;}
+    .your-teacher-wrap .profimg-rounded, .your-teacher-wrap .profimg-rounded img { width:80px;  height: 80px;}
+    .your-teacher-wrap {padding: 1rem;}
+    .default-box-style h5, .sessionDayDate, .card-total {font-size:18px;}
+    .lessons-steps li i {width:32px;}
+    .write-reviews-section .reviewbox {width: 100%; margin-right: 0px !important;}
+    .recommendations-row{flex-wrap: wrap;}
+    .recommendations-col {width: 100%;  padding: 0;  margin: 12px 0; text-align: left;}
+    .rec-text {justify-content: flex-start;}
+    .profile-info-name h3 {font-size: 26px;}
+    .profile-info-name h3 i {width: 30px;}
+
+    .owl-carousel .owl-nav button {width: 38px; height: 38px;}
+    .video-wrapper {padding: 0 3rem;}
+    .owl-carousel .owl-nav button {left: -3rem;}
+    .owl-carousel .owl-nav button.owl-next { left: inherit; right: -3rem;}
+    .lessions-slide-wrap {padding: 0 2rem;}
+    .lessions-slide-wrap .owl-carousel .owl-nav button {left: -2rem;}
+    .lessions-slide-wrap .owl-carousel .owl-nav button.owl-next { left: inherit; right: -2rem;}
+    .reating-col .reating-text {font-size: 30px;}
+    .reating-col .reating-text i, .slide-inner-top .reating-text i {width: 30px;}
+    .lessions-slide-sec {margin-bottom: 2rem;}
+    .write-reviews-section {padding-bottom:2rem;}
+    .review-modal-top .rating-row a {width: 30px;}
+    .review-modal-top .rating-row { margin: 10px 0px 2rem 0px;}
+    .title-with-search-area .searchInp-col, .title-with-search-row .searchInp-col {width: 100%;  padding: 0;  margin: 1rem 0 0 0;}
+    .large-font-check.checkbox label{font-size: 18px;}
+    .month-hour-text {padding-top: 10px;}
+    .card-number, .card-cvv, .cvv-input {font-size:18px;}
+    .notification-slide {top: 72px;}
+}
+
+@media only screen and (max-width:767px) {
+    .statistics-list li, .lessonBtnCol, .sessions-subscription .select-sessions-col {width: 100%;}
+    .lession-col-left {width: 100%; margin-bottom:2rem;}
+    .lession-col-right {padding-left: 0; width: 100%;}
+    .lessions-countDetail-list li, .btn-theme-liner, .select-sessions-col, .intro-video, .boarding-left .btn, .select-dateTime-col, .dateTime-cald-col, .session-price-col, .width250, .upImage-video-col, .btn-theme, .btn-col, .width-btn, .blank-box, .add-plusbtn.btn-large-default {width: 100%;}
+    ul.lessions-countDetail-list {flex-wrap: wrap;}
+    .host-header {flex-direction: column-reverse;}
+    .board-process {width: 100%;  text-align: left;  margin-bottom: 1rem;}
+    .upImage-video-col {flex: auto;}
+    .ac-veryfy-left i {width: 30px;}
+    .admin-mid-sec {padding-top: 2rem; padding-bottom: 2rem;}
+    .profile-info-col {align-items: center; width: 100%;}
+    .profile-info-header {margin-top: 0; margin-bottom: 2rem; flex-wrap: wrap;}
+    .profile-image-area .profile-image {width: 100px; height: 100px;}
+    i.camera {width: 50px; height: 50px;}
+    i.camera img {width: 25px;}
+    .profile-info-name h3 {font-size: 22px;}
+    .personal-dtl-label {height:44px; font-size: 16px; width: 100%;}
+    .personal-dtl-inp {height:44px;}
+    .personal-dtl-row .edit-btn {top: 8px;}
+    .ac-veryfy-right .btn-liner { height: 40px; font-size: 14px;  width: 110px; }
+    .intro-video .edit-btn { right: 0; }
+    .profile-info-name {padding-right: 30px; padding-left: 15px;}
+    .profile-info-bg {height: 150px;}
+    .lessions-countDetail-box {min-height: auto;}
+    .col-text h4{font-size: 16px;}
+    .select-sessions-col, .select-dateTime-col, .comn-col, .upImage-video-col, .btn-col, .lessonBtnCol, .lessions-countDetail-list li, .statistics-list li, .dateTime-cald-col{margin-right: 0px;}
+    .select-price01 {padding-bottom:1rem;}
+    .btn-col {margin-bottom:10px;}
+    .col-text {padding: 5px 10px 0 10px;}
+    .ac-veryfy-right .custom-radios {margin-right: 10px;}
+    .btn-theme i{margin:0 10px;}
+    .ac-veryfy-row, .msg-header{flex-wrap: wrap;}
+    .ac-veryfy-left {width: 100%; flex: none; margin-bottom: 1rem;}
+    .ac-veryfy-right, .col-left, .col-left .lessions-countDetail-list li, .see-allS-btn .btn {width: 100%;}
+    .msg-header .profimg-name {width: 100%;flex: none; margin-bottom: 1rem;}
+    .msg-h-action-col {margin: 0 10px 0 0;}
+    .prof-action-btn .btn-theme {width: 100%; justify-content: center;}
+    .sharecopy-inp .btn-theme {margin: 15px 0 0 0;}
+    .col-right {padding-left: 0;}
+    .msgbtnProfile .profimg-name {width: 100%; flex: auto;  margin-bottom: 1rem;}
+    .your-teacher-wrap .prof-name h4 {font-size: 22px;}
+    .your-teacher-wrap .desigation {font-size: 14px;}
+    .btn-with-condations .btn{margin: 0 0 1rem 0;}
+    .top-button-area span { display: none;}
+    .top-button-area .btn i, .btn-with-icon i{margin: 0px;}
+    .top-button-area .btn, .btn-with-icon{width: 40px; height: 40px; align-items: center; justify-content: center; padding: 0px;}
+    .top-button-area {top: 15px; right: 15px;}
+    .share-btn-col {position: relative; margin-top: 1rem; width: 100%;}
+    .share-btn-col > .btn{margin: 0px;}
+    .reating-col {padding: 10px 15px;  width: 50%;}
+    .video-wrapper h5{font-size: 16px;}
+    .new-ribbion {width: 30px;}
+    .seats-col {margin: 1rem 0 0 0; justify-content: center; width: 100%;}
+    .endorse-wrap .checkbox {width: 100%; margin-right: 0; margin-bottom: 1rem;}
+    .endorse-sec h4 {margin: 0 0 1rem 0;}
+    .endorse-wrap {margin-bottom: 1rem;}
+    .btn-flexy {flex-wrap: wrap; margin-top: 2rem;}
+    .btn-flexy .or-text {font-size: 20px; width: 100%;}
+    .modal-discussion .modal-body {padding:2rem 1rem 1rem 1rem;}
+    .add-video-area {width: 280px;}
+    .refer-teacher-cta ul.cta-links li {width:50%; padding: 15px 0;}
+    .uploadDoc-note .gray-box{margin-top: 1rem;}
+    .btn-area{flex-wrap: wrap !important;}
+    .btn-area .btn{margin: 0 !important; margin-bottom: 1rem !important;}
+    .header-actions-col .btn-rounded {margin-right: 0; padding: 0;  width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;}
+    .header-actions-col .btn-rounded span{display: none;}
+    .header-actions-col .btn-rounded i{margin: 0px; width: 24px;}
+    .btn-connected {width: 100%; flex-wrap: wrap; margin-top: 1rem;}
+    .btn-connected .btn-connected {margin:0px 0px 10px 0px; justify-content: center;}
+    .note-doc .gray-box {width: 100%;height: 80px; margin: 0;}
+    .note-doc span {width: 100%; margin: 5px 0;}
+    .note-doc .icon-remove {margin-left: 0;}
+    .pay-action-row .btn {margin: 0 0 15px 0;}
+    .profile-image-area {top: 0;}
+    .share-btn-col .btn-heart{width:85px;}
+    .share-btn-col .btn{margin:5px;}
+    .cocial-icons-row a {width: 30px; margin-right: 3px;}
+    .title-with-button h2{width: 100%;}
+    
+}
+
+@media only screen and (max-width:640px) {
+    .saved-card-row{flex-wrap: wrap;}
+    .card-type, .card-number, .card-cvv {width: 100%;}
+    .card-number{padding-left: 0px;}
+    .share-btn-col {flex-wrap: wrap; justify-content: center;}
+}

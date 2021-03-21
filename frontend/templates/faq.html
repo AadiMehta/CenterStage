@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<link href="{% static '/css/web/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/media.css' %}" rel="stylesheet">
+<style>
+   ul {
+    list-style: inherit;
+    margin: 10px;
+    padding: 15px;
+   }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper inner-page">
+  {% include 'plain_header.html' with user=user %}
+  <div class="mid-sec">
+    <div class="container">
+        To submit requests for assistance, or provide feedback regarding accessibility, please contact <a href="mailto:help@centrestage.live">help@centrestage.live</a>
+        <p></p>
+        <h2>FAQ</h2>
+        <h4>General</h4>
+        <h6>What is Centrestage?</h6>
+        <p>Centrestage is a simple and easy to use platform for creating, hosting and organising your Live Video lessons, all in one place. You can instantly create one-on-one or group lessons using our platform.</p>
+
+        <h6>How does Centrestage work?</h6>
+        <p>In less than 5 minutes, you can set up your customised profile page, create your first live lesson and share it with your students.</p>
+        <p>Centrestage brings the best tools together for you to run your education academy seamlessly. We provide for a calendar, automatic payments using your preferred method, document management, student messaging, lesson discussions, analytics and much more. You can bring over your existing students instantly and manage your student database and interactions inside the platform.</p>
+        <p>We use Zoom for conducting live lessons. You can simply connect your existing Zoom account to host your lessons, or use a platform of your choice..</p>
+
+        <h6>Why do I need Centrestage?</h6>
+        <p>If you are a Teacher or Trainer in any category, there is a chance you are using many different apps to create, host, organise and keep your lesson information in one place. We bring all of this together in a simple and easy to use way so that you can focus on what you love doing - teaching.</p>
+        <p>With us, there are no prior commitments or contracts. We play by your rules.</p>
+
+        <h6>Who is Centrestage for?</h6>
+        <p>Centrestage can be used by Teachers, Trainers & Coaches in any category. You can teach what you love, expand your reach, inspire your audience and become a super Educator or Tutor using our tools from the comfort of your home.</p>
+
+        <h6>Are there any upfront fees to become an educator on Centrestage?</h6>
+        <p>There is no upfront fee to become an educator.</p>
+
+
+        <h6>How does Centrestage earn?</h6>
+        <p>We earn only when you do. For every paid lesson hosted by you, our platform will collect a small percentage fee after the lesson is conducted. No other hidden fees, ever.</p>
+
+        <h6>Can I host free lessons on Centrestage?</h6>
+        <p>Yes, you can host as many free lessons and meetings as you want. We will not charge any fee from you.</p>
+
+        <h6>What makes the Centrestage team and product special over other platforms?</h6>
+        <p>Try us for a week, and you will know :)</p>
+
+        <h4>Lessons</h4>
+        <h6>What kind of lessons can I host on Centrestage?</h6>
+        <p>You can host one-on-one lessons, group lessons or personal consultation. The number of participants for group lessons will depend on your existing Zoom account type.</p>
+
+        <h6>How long does it take to create a lesson on Centrestage?</h6>
+        <p>Typically it takes between 2 to 5 minutes to create any lesson.</p>
+
+        <h6>What can I teach on Centrestage?</h6>
+        <p>You can teach any subject of your choice. We have teachers across categories like academia, test-prep, music, art, dance, games, sports, fitness, wellness, business, finance, personal coaching, products, technology and many more.</p>
+
+        <h6>Can I teach a course in any language?</h6>
+        <p>You can teach a course in any language of your choice.</p>
+
+        <h6>Can my lesson have multiple sessions?</h6>
+        <p>Yes. Your lesson can be a single session, have multiple sessions or be an ongoing session. You can schedule your lessons at a select or flexible time based on your convenience.</p>
+
+
+        <h6>What is the difference between select and flexible timing?</h6>
+        <p>For each session you can have a specific date or time based on your prior schedule. This is called select timing.</p>
+        <p>You may also allow students to choose a date or time of their convenience between your pre-determined office hours. This is called flexible timing.</p>
+        <p>For example, if you are taking a lesson containing 4 sessions, select timing would ask you to schedule each of the 4 sessions at a specific time on your calendar.</p>
+        <p>Flexible timing lets your students pick a different time for each session depending on your office hours.</p>
+
+        <h4>Payments & Payouts</h4>
+        <h6>How and when will I get paid on Centrestage?</h6>
+        <p>All Teachers, Trainers and Coaches are paid within our platform. You can start earning as soon as your students pay you for your lesson. We will collect all payments from your students and credit it to your bank account or wallet after deducting a small platform fee.</p>
+
+        <h6>How can my students pay for my lessons?</h6>
+        <p>Any student will have the option to pay via a valid Credit or Debit Card, or a payment wallet, if supported in their region.</p>
+
+        <h6>Can I edit or delete any lesson after creating it?</h6>
+        <p>Yes, you may edit or delete any lesson information before the student has booked.</p>
+        <h6>Can I reschedule a session after it has been booked by a student?</h6>
+        <p>Yes, as long as your student(s) accepts rescheduling of a session, you can reschedule the session. Students may request rescheduling a session as well.</p>
+        <h6>Can I teach anything on Centrestage?</h6>
+        <p>You are free to choose the subject you wish to teach on Centrestage. Please refer our restricted topic list for details on subjects that we do not accept.</p>
+        <h6>Do I need to sign any contract or bonds to use Centrestage?</h6>
+        <p>No, you don’t. Centrestage is a highly flexible tool for you to use. You teach at your convenient time. You do not have to sign any contract or bond with us.</p>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

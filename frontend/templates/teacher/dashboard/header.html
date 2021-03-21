@@ -1,0 +1,26 @@
+{% load static %}
+
+<header class="header">
+ <div class="container-fluid">
+    <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+    <div class="header-prof-col">
+       <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
+       <div class="header-prof-name">
+          <h3>{{user.get_full_name}}</h3>
+          <span class="desigation">{{user.teacher_profile_data.profession}}</span>
+       </div>
+    </div>
+    <div class="header-actions-col">
+       <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+       <div class="header-actions-icon notifications">
+          <div class="icon-notification">
+             <a href="#">
+             <span class="notifaction-badge">4</span>
+             <img src="{% static 'images/icon-notification.svg' %}" alt="">
+             </a>
+          </div>
+       </div>
+       <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+    </div>
+ </div>
+</header>

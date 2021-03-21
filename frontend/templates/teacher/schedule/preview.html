@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Modal Lesson Preview -->
+<div class="modal fade modal-finish" id="PublishLessonModal" tabindex="-1" aria-labelledby="PublishLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/finish-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thank you for completing your lesson</h2>
+            <h3>How was your overall experience?</h3>
+            <div class="rating-row">
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt="" /></a>
+            </div>
+            <div class="form-group">
+                <div class="liner-inp"> 
+                <input type="text" class="form-control" placeholder="Your Feedback">
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#share"><span>Finish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                {% comment %} <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Report Issue</button> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="modal fade modal-share" id="share" tabindex="-1" aria-labelledby="shareLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3>Congratulations!</h3>
+                <h4>You have successfully created your meeting schedule</h4>
+                <div class="sharecopy-link">
+                    <h2>Core JAVA Development</h2>
+                    <div class="sharecopy-inp">
+                        <input type="text" class="form-control" placeholder="https://www.centerstage.live/xyzjava/1548fghgytuj" />
+                        <button type="button" class="btn-theme">Copy</button>
+                    </div>
+                </div>
+                <div class="share-to">
+                    <h5>Share to</h5>
+                    <p>Sharing your lesson on social media right now will increase bookings</p>
+                    <div class="social-icons">
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                    </div>
+                </div>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <a href="{{lesson.meeting_link}}" style="margin-right:10px" target="_blank">
+                        <button type="button" class="btn btn-theme">Start Now</button>
+                    </a>
+                    <a href="/">
+                        <button id="goToDashboard" type="button" class="btn btn-theme">Go to Dashboard</button>
+                    </a>
+                </div>
+                </div>
+                <div class="share-graphics">
+                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal Lesson Preview -->
+
+<div class="boarding-sec">
+   <div class="host-header">
+      <div class="host-header-left">
+         <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+         <h2>SCHEDULE MEETING</h2>
+      </div>
+      <div class="board-process">
+         <div class="board-num"><span class="active">03</span>/03</div>
+         <span class="board-process-txt">Meeting Schedule Info</span>
+      </div>
+   </div>
+   <div class="boarding-area">
+      <form action="" method="post">
+      {% csrf_token %}
+      {{ wizard.management_form }}
+      <div class="container">
+         <div class="boarding-wrap">
+            <div class="title-row">
+               <h2>Schedule Meeting Preview</h2>
+            </div>
+            <div class="boarding-row">
+               <div class="boarding-left">
+                  <div class="form-group">
+                     <label>Topic your Lesson</label>
+                     <div class="content-area">
+                        {{form_data.name}}
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Invitees</label>
+                     <div class="content-area">
+                        <ul class="listStyle">
+                           {% for invitee in form_data.invitees %}
+                              <li>{{invitee}}</li>
+                           {% endfor %}
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Number of Sessions in Lesson</label>
+                     <div class="content-area">
+                        {{form_data.no_of_sessions}}
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           {% if form_data.price_type == 'pricePerSession' %}
+                              <label>Price per Session</label>
+                           {% elif form_data.price_type == 'weeklyPrice' %}
+                              <label>Price per week</label>
+                           {% elif form_data.price_type == 'monthlyPrice' %}
+                              <label>Price per month</label>
+                           {% endif %}
+                           <div class="content-area">
+                              {% if form_data.price_currency == 'DOLLARS' %}${% endif %}{{form_data.price_value}}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Total Price per Student</label>
+                           <div class="content-area">
+                              {% if form_data.price_currency == 'DOLLARS' %}${% endif %}{{ form_data.total_price }}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="btn-area">
+                     <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn btn-primary btn-lg btn-theme" style="margin-right:30px; float: left">
+                        <i style="margin-right:15px;margin-left:0px;"><img src="{% static 'images/next.svg' %}" alt="" style="transform: rotateY(180deg);"/></i><span>Previous</span></button>
+                     <button type="submit" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish"><span>Save & Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                  </div>
+               </div>
+               <div class="boarding-right text-left">
+                  <div class="form-group">
+                     <div class="cald-right-col">
+                        <img src="{% static 'images/cald-2.png' %}" alt="" />
+                     </div>
+                     {% comment %} <span class="required-text pl-5">Please select 5 session dates</span> {% endcomment %}
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Start Date</label>
+                           <div class="content-area">
+                              {{form_data.start_date}}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>End Date</label>
+                           <div class="content-area">
+                              {{form_data.end_date}}
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      </form>
+   </div>
+</div>
+{% endblock %}

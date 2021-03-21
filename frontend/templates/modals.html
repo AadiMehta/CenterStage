@@ -24,6 +24,7 @@
                 </div>
                 <strong id="loginPasswordError" style="color:red;"></strong>
             </div>
+                <strong id="SignInButtonError" style="color:red;"></strong>
                 <button type="button" class="btn btn-primary btn-full btn-lg" id="signInButton">Log in</button>
                 <a href="#" class="forgot-pass link-small-text">Forgotten Your Password?</a>
                 <div class="or-row">
@@ -35,9 +36,45 @@
                 <div class="inp-col">
                     <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
                     <select id="loginCountryCode" class="form-control">
-                    <option value="none">Country Code</option>
-                    <option value="+1">United States +1</option>
-                    <option value="+91">India +91</option>
+                        <option value="none">Country Code</option>
+                        <option value="+91">INDIA +91</option>
+                        <option value="+1">UNITED STATES +1</option>
+                        <option value="+61">AUSTRALIA +61</option>
+                        <option value="+61">AUSTRIA +43</option>
+                        <option value="+880">BANGLADESH +880</option>
+                        <option value="+32">BELGIUM +32</option>
+                        <option value="+55">BRAZIL +55</option>
+                        <option value="+1">CANADA +1</option>
+                        <option value="+33">FRANCE +33</option>
+                        <option value="+49">GERMANY +49</option>
+                        <option value="+852">HONG KONG +852</option>
+                        <option value="+353">IRELAND +353</option>
+                        <option value="+972">ISRAEL +972</option>
+                        <option value="+39">ITALY +39</option>
+                        <option value="+81">JAPAN +81</option>
+                        <option value="+82">South Korea +82</option>
+                        <option value="+960">MALDIVES +960</option>
+                        <option value="+52">MEXICO +52</option>
+                        <option value="+31">NETHERLANDS +31</option>
+                        <option value="+974">QATAR +974</option>
+                        <option value="+64">NEW ZEALAND +64</option>
+                        <option value="+51">PERU +51</option>
+                        <option value="+48">POLAND +48</option>
+                        <option value="+351">PORTUGAL +351</option>
+                        <option value="+7">RUSSIA +7</option>
+                        <option value="+966">SAUDI ARABIA +966</option>
+                        <option value="+65">SINGAPORE +65</option>
+                        <option value="+27">SOUTH AFRICA +27</option>
+                        <option value="+34">SPAIN +34</option>
+                        <option value="+94">SRI LANKA +94</option>
+                        <option value="+46">SWEDEN +46</option>
+                        <option value="+41">SWITZERLAND +41</option>
+                        <option value="+66">THAILAND +66</option>
+                        <option value="+90">TURKEY +90</option>
+                        <option value="+380">UKRAINE +380</option>
+                        <option value="+971">UNITED ARAB EMIRATES +971</option>
+                        <option value="+44">UNITED KINGDOM +44</option>
+                        <option value="+84">VIETNAM +84</option>
                     </select>
                 </div>
                 <strong id="loginCountryCodeError" style="color:red;display: none;"></strong>
@@ -47,9 +84,10 @@
                 </div>
                 <strong id="loginPhoneNumberError" style="color:red;display: none;"></strong>
                 </div>
+                <strong id="OTPButtonError" style="color:red;"></strong>
                 <button id="getOTPButton" type="button" class="btn btn-primary btn-full btn-lg">Get OTP</button>
                 <div class="haveAc d-block">
-                    Don't have an account?<a href="javascript:void(0);" class="open-sign-up-button">Sign Up</a>
+                    Don't have an account?  <a href="javascript:void(0);" id="openSignUpButton">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -85,8 +123,44 @@
                             <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
                             <select id="signUpCountryCode" class="form-control">
                                 <option value="none">Country Code</option>
-                                <option value="+1">United States +1</option>
-                                <option value="+91">India +91</option>
+                                <option value="+91">INDIA +91</option>
+                                <option value="+1">UNITED STATES +1</option>
+                                <option value="+61">AUSTRALIA +61</option>
+                                <option value="+61">AUSTRIA +43</option>
+                                <option value="+880">BANGLADESH +880</option>
+                                <option value="+32">BELGIUM +32</option>
+                                <option value="+55">BRAZIL +55</option>
+                                <option value="+1">CANADA +1</option>
+                                <option value="+33">FRANCE +33</option>
+                                <option value="+49">GERMANY +49</option>
+                                <option value="+852">HONG KONG +852</option>
+                                <option value="+353">IRELAND +353</option>
+                                <option value="+972">ISRAEL +972</option>
+                                <option value="+39">ITALY +39</option>
+                                <option value="+81">JAPAN +81</option>
+                                <option value="+82">South Korea +82</option>
+                                <option value="+960">MALDIVES +960</option>
+                                <option value="+52">MEXICO +52</option>
+                                <option value="+31">NETHERLANDS +31</option>
+                                <option value="+64">NEW ZEALAND +64</option>
+                                <option value="+51">PERU +51</option>
+                                <option value="+48">POLAND +48</option>
+                                <option value="+351">PORTUGAL +351</option>
+                                <option value="+974">QATAR +974</option>
+                                <option value="+7">RUSSIA +7</option>
+                                <option value="+966">SAUDI ARABIA +966</option>
+                                <option value="+65">SINGAPORE +65</option>
+                                <option value="+27">SOUTH AFRICA +27</option>
+                                <option value="+34">SPAIN +34</option>
+                                <option value="+94">SRI LANKA +94</option>
+                                <option value="+46">SWEDEN +46</option>
+                                <option value="+41">SWITZERLAND +41</option>
+                                <option value="+66">THAILAND +66</option>
+                                <option value="+90">TURKEY +90</option>
+                                <option value="+380">UKRAINE +380</option>
+                                <option value="+971">UNITED ARAB EMIRATES +971</option>
+                                <option value="+44">UNITED KINGDOM +44</option>
+                                <option value="+84">VIETNAM +84</option>
                             </select>
                         </div>
                         <strong id="signUpCountryCodeError" style="color:red;display: none;"></strong>
@@ -111,10 +185,11 @@
                     </div>
 
                     <div class="modal-text">
-                        By selecting <strong>Sign Up</strong> below, I agree to CenterStage’s <a href="#">Terms of Service, Payments Terms of Service, Privacy Policy,</a> and <a href="#">Nondiscrimination Policy</a>.
+                        By selecting <strong>Sign Up</strong> below, I agree to CentreStage’s <a href="#">Terms of Service, Payments Terms of Service, Privacy Policy,</a> and <a href="#">Nondiscrimination Policy</a>.
                     </div>
                     <button type="button" class="btn btn-primary btn-full btn-lg" id="signUpButton">Sign Up</button>
-                    <div class="haveAc d-block">Already have an account? <a href="javascript:void(0);" class="open-sign-in-button">Sign In</a></div>
+                    <strong id="SignUpButtonError" style="color:red;display: none;"></strong>
+                    <div class="haveAc d-block">Already have an account? <a href="javascript:void(0);" id="openSignInButton">Sign In</a></div>
                 </div>
             </div>
         </div>
@@ -144,12 +219,12 @@
                 <input class="form-control otp-input" type="number"/>
                 <input class="form-control otp-input" type="number"/>
                 <input class="form-control otp-input" type="number"/>
-                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number" id="finalInput" />
             </div>
             <strong id="otpCodeError" style="color:red;display: none;"></strong>
             <button id="verifyOTPButton" type="button" class="btn btn-primary btn-full btn-lg">Sign In</button>
             <div class="haveAc">
-                <span class="otp-time">Submit OTP in: 23</span> <span>Didn't get any OTP. <a href="#">Resend</a></span>
+                <span class="otp-time">Submit OTP in: <span id="timer"></span></span><span>Didn't get any OTP? <a href="#">Resend</a></span>
             </div>
             </div>
         </div>
@@ -157,4 +232,208 @@
     </div>
 </div>
 <!-- Modal OTP End-->
-  
+
+<!-- Student Modal Login-->
+<div class="modal fade login-modal comn-modal" id="modalStudentLogin" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"><i><img src="{% static '/images/login-icon.svg' %}" alt="" /></i> Log In</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-form">
+            <div class="form-group">
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                    <input id="studentloginEmail" type="email" class="form-control" placeholder="Email Address" />
+                </div>
+                <strong id="studentloginEmailError" style="color:red;"></strong>
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                    <input id="studentloginPassword" type="password" class="form-control" placeholder="Password" />
+                </div>
+                <strong id="studentloginPasswordError" style="color:red;"></strong>
+            </div>
+                <strong id="studentSignInButtonError" style="color:red;"></strong>
+                <button type="button" class="btn btn-primary btn-full btn-lg" id="studentSignInButton" data-user-type="student">Log in</button>
+                <a href="#" class="forgot-pass link-small-text">Forgotten Your Password?</a>
+                <div class="or-row">
+                <span>OR</span>
+                </div>
+    
+                <h3>Log In Via OTP</h3>
+                <div class="form-group">
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
+                    <select id="studentloginCountryCode" class="form-control">
+                    <option value="none">Country Code</option>
+                    <option value="+1">United States +1</option>
+                    <option value="+91">India +91</option>
+                    </select>
+                </div>
+                <strong id="studentloginCountryCodeError" style="color:red;display: none;"></strong>
+                <div class="inp-col">
+                    <i><img src="{% static '/images/icon-mobile.svg' %}" alt="" /></i>
+                    <input id="studentloginPhoneNumber" type="text" class="form-control" placeholder="Phone Number" />
+                </div>
+                <strong id="studentloginPhoneNumberError" style="color:red;display: none;"></strong>
+                </div>
+                <strong id="studentOTPButtonError" style="color:red;"></strong>
+                <button id="studentGetOTPButton" type="button" class="btn btn-primary btn-full btn-lg" data-user-type="student">Get OTP</button>
+                <div class="haveAc d-block">
+                    Don't have an account?  <a href="javascript:void(0);" id="openStudentSignUpButton">Sign Up</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- Student Modal Login End-->
+
+<!-- Student Modal Signup-->
+<div class="modal fade login-modal comn-modal" id="modalStudentSignup" tabindex="2" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i><img src="{% static '/images/icon-signup.svg' %}" alt="" /></i> Sign Up</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="signup-form">
+                    <div class="form-group">
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                            <input id="studentsignUpFirstName" type="text" class="form-control" placeholder="First Name" />
+                        </div>
+                        <strong id="studentsignUpFirstNameError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                            <input id="studentsignUpLastName" type="text" class="form-control" placeholder="Last Name" />
+                        </div>
+                        <strong id="studentsignUpLastNameError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-globe.svg' %}" alt="" /></i>
+                            <select id="studentsignUpCountryCode" class="form-control">
+                                <option value="none">Country Code</option>
+                                <option value="+1">United States +1</option>
+                                <option value="+91">India +91</option>
+                            </select>
+                        </div>
+                        <strong id="studentsignUpCountryCodeError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-mobile.svg' %}" alt="" /></i>
+                            <input id="studentsignUpPhoneNumber" type="number" class="form-control" placeholder="Mobile Number" maxLength="10"/>
+                        </div>
+                        <strong id="studentSignUpPhoneNumberError" style="color:red;display: none;"></strong>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-email.svg' %}" alt="" /></i>
+                            <input id="studentsignUpEmail" type="email" class="form-control" placeholder="Email Address" />
+                        </div>
+                        <strong id="studentSignUpEmailError" style="color:red;display: none;"></strong>
+                        <div class="inp-col">
+                            <i><img src="{% static '/images/icon-lock.svg' %}" alt="" /></i>
+                            <input id="studentsignUpPassword" type="password" class="form-control" placeholder="Password" />
+                        </div>
+                        <strong id="studentSignUpPasswordError" style="color:red;display: none;"></strong>
+                    </div>
+
+                    <div class="modal-text">
+                        By selecting <strong>Sign Up</strong> below, I agree to CentreStage’s <a href="#">Terms of Service, Payments Terms of Service, Privacy Policy,</a> and <a href="#">Nondiscrimination Policy</a>.
+                    </div>
+                    <button type="button" class="btn btn-primary btn-full btn-lg" id="studentSignUpButton" data-user-type="student">Sign Up</button>
+                    <strong id="studentSignUpButtonError" style="color:red;display: none;"></strong>
+                    <div class="haveAc d-block">Already have an account? <a href="javascript:void(0);" id="openStudentSignInButton">Sign In</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Student Modal Signup End-->
+
+<!-- Student Modal OTP-->
+<div class="modal fade login-modal comn-modal" id="modalStudentOTP" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+            <i><img src="{% static '/images/login-icon.svg' %}" alt="" /></i>
+            OTP Authentication
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="login-form">
+            <div>Please enter the One Time Password (OTP) sent to your phone number</div>
+            <div class="otp-inp">
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number"/>
+                <input class="form-control otp-input" type="number" id="studentfinalInput" />
+            </div>
+            <strong id="studentotpCodeError" style="color:red;display: none;"></strong>
+            <button id="studentVerifyOTPButton" type="button" class="btn btn-primary btn-full btn-lg" data-user-type="student">Sign In</button>
+            <div class="haveAc">
+                <span class="otp-time">Submit OTP in: <span id="studenttimer"></span></span><span>Didn't get any OTP? <a href="#">Resend</a></span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<!-- Student Modal OTP End-->
+
+<!-- Modal Lesson Notes -->
+<div class="modal fade modal-upload" id="uploadFilesModal" tabindex="-1" aria-labelledby="uploadFilesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body verticalTabb">
+            <div class="nav flex-column nav-pills tabb-left" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-device-tab" data-toggle="pill" href="#v-pills-device" role="tab" aria-controls="v-pills-device" aria-selected="true"><i><img src="{% static 'images/icon-laptop.svg' %}" alt="" /></i> My Device</a>
+                <a class="nav-link" id="v-pills-link-tab" data-toggle="pill" href="#v-pills-link" role="tab" aria-controls="v-pills-link" aria-selected="false"><i><img src="{% static 'images/icon-link.svg' %}" alt="" /></i> Link (URL)</a>
+                <a class="nav-link" id="v-pills-web-tab" data-toggle="pill" href="#v-pills-web" role="tab" aria-controls="v-pills-web" aria-selected="false"><i><img src="{% static 'images/icon-websearch.svg' %}" alt="" /></i> Web Search</a>
+                <a class="nav-link" id="v-pills-facebook-tab" data-toggle="pill" href="#v-pills-facebook" role="tab" aria-controls="v-pills-facebook" aria-selected="false"><i><img src="{% static 'images/icon-facebook.svg' %}" alt="" /></i> Facebook</a>
+                <a class="nav-link" id="v-pills-instagram-tab" data-toggle="pill" href="#v-pills-instagram" role="tab" aria-controls="v-pills-instagram" aria-selected="false"><i><img src="{% static 'images/icon-insta.svg' %}" alt="" /></i> Instagram</a>
+                <a class="nav-link" id="v-pills-gd-tab" data-toggle="pill" href="#v-pills-gd" role="tab" aria-controls="v-pills-gd" aria-selected="false"><i><img src="{% static 'images/icon-gd.svg' %}" alt="" /></i> Google Drive</a>
+            </div>
+            <div class="tab-content tabb-right" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-device" role="tabpanel" aria-labelledby="v-pills-device-tab">
+                <div class="tabselect-icon-row">
+                    <img src="{% static 'images/icon-laptop.svg' %}" alt="" />
+                </div>
+                <div class="file-dropbox">
+                    <input id="uploadFile" type="file" class="file-drop-inp" data-file-no="0" multiple/>
+                    <div class="fileDrop-content">
+                        <figure class="file-dropbox-icon">
+                            <img src="{% static 'images/add-file.svg' %}" alt="" />
+                        </figure>
+                        <h2>Select Files to Upload</h2>
+                        <span class="grayText">or Drag and Drop, Copy and Paste Files</span>
+                    </div>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-link" role="tabpanel" aria-labelledby="v-pills-link-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-web" role="tabpanel" aria-labelledby="v-pills-web-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-facebook" role="tabpanel" aria-labelledby="v-pills-facebook-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-instagram" role="tabpanel" aria-labelledby="v-pills-instagram-tab">...</div>
+                <div class="tab-pane fade" id="v-pills-gd" role="tabpanel" aria-labelledby="v-pills-gd-tab">...</div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal Lesson Notes -->

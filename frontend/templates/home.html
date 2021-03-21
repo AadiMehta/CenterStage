@@ -1,26 +1,47 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block style %}
+<link href="{% static '/css/web/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/media.css' %}" rel="stylesheet">
 <style>
    /**** Remove scrollbar on number input ****/
    /* For Chrome, Safari, Edge, Opera */
    input::-webkit-outer-spin-button,
    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+   -webkit-appearance: none;
+   margin: 0;
    }
    /* Firefox */
    input[type=number] {
-      -moz-appearance: textfield;
+   -moz-appearance: textfield;
    }
    /**** End - Remove scrollbar on number input ****/
    .modal {
       overflow:auto;
    }
+   html {
+      scroll-behavior: smooth;
+   }
 </style>
 {% endblock %}
+
 {% block content %}
 {% include 'modals.html' %}
+<!-- Modal OnLoad-->
+<!--<div id="OnLoad" class="modal-onload">-->
+<!--    <button type="button" class="close-small-modal close" data-dismiss="modal" aria-label="Close"><img src="{% static '/images/close-small.svg' %}" alt="" /></button>-->
+<!--    <div class="text-1">Teacher in category XYZ signed up 3 minutes ago</div>-->
+<!--        <div class="signedup-teachers">-->
+<!--            <div class="profimg-col">-->
+<!--            <div class="profimg-rounded"><img src="{% static '/images/profile-img.jpg' %}" alt=""></div>-->
+<!--            <div class="profimg-rounded"><img src="{% static '/images/profile-img.jpg' %}" alt=""></div>-->
+<!--            <div class="profimg-rounded"><img src="{% static '/images/profile-img.jpg' %}" alt=""></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <p>4 Teachers from your region just signed up today</p>-->
+<!--</div>-->
+<!-- Modal OnLoad End-->
 <div class="wrapper homePage">
    {% include 'header.html' with user=user %}
    <div class="comn-sec section-1">
@@ -34,19 +55,19 @@
                      </h2>
                   </div>
                   <div class="text-content">
-                     Setup in minutes
-                     Organise and schedule live lessons
-                     Teach independently. No upfront fees
+                     Setup in minutes<br>
+                     Organise and schedule live lessons<br>
+                     Teach independently. No upfront fees<br>
                      Start earning on day 1
                   </div>
                   <div class="button-area mt-5">
-                     <a class="btn btn-primary btn-lg btn-theme" href="{% url 'onboarding-step-1' %}">Start Teaching</a>
+                     <a class="btn btn-primary btn-lg btn-theme" href="#" id="startTeachingSignUp">Start Teaching</a>
                      <span class="btn-btm-txt">last 20 spots left</span>
                   </div>
                </div>
             </div>
             <div class="col-md-6 right-col">
-               <video src="{% static '/video/video-1.mp4' %}" autoplay muted loop></video>
+               <video src="https://d1pd2miwobcqwo.cloudfront.net/video-1.mp4" autoplay muted loop></video>
             </div>
          </div>
       </div>
@@ -58,18 +79,18 @@
                <img src="{% static '/images/Image2.jpg' %}" alt="" />
             </div>
             <div class="col-md-6 right-col">
-               <div class="content-col">
+               <div class="content-col pl-3">
                   <div class="title-row">
                      <h2>Build your Independent<br>
                         School
                      </h2>
                   </div>
                   <div class="text-content">
-                     The world's top 10% teachers use Center Stage to conduct Live Online Lessons.
+                     The world's top 10% teachers use Centrestage to conduct Live Online Lessons.
                      We provide the simplest and best tools for you to enjoy doing what you love
                   </div>
                   <div class="button-area mt-5">
-                     <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching Today</a>
+                     <a class="btn btn-primary btn-lg btn-theme" href="#" id="startTeachingSignUp1">Start Teaching Today</a>
                   </div>
                </div>
             </div>
@@ -80,10 +101,10 @@
       <div class="container">
          <div class="business-wrap">
             <div class="title-row">
-               <h2>Your business before<br>Center Stage...</h2>
+               <h2>Your business before<br>Centrestage...</h2>
             </div>
-            <div class="business-logos">
-               <div class="grid-logo grid">
+            <div class="business-logos text-center">
+               <!--<div class="grid-logo grid">
                   <img src="{% static '/images/logo1.jpg' %}" alt="" />
                   <img src="{% static '/images/logo2.jpg' %}" alt="" />
                   <img src="{% static '/images/logo3.jpg' %}" alt="" />
@@ -93,80 +114,140 @@
                   <img src="{% static '/images/logo7.jpg' %}" alt="" />
                   <img src="{% static '/images/logo8.jpg' %}" alt="" />
                   <img src="{% static '/images/logo9.jpg' %}" alt="" />
-               </div>
+                  </div>-->
+               <img src="{% static '/images/brand-logos.svg' %}" alt="" />
             </div>
          </div>
          <div class="business-wrap">
             <div class="title-row">
-               <h2>Your business before<br>Center Stage...</h2>
+               <h2>But your business after <br />Centrestage...</h2>
             </div>
             <div class="business-text">
-               ...lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
-               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip 
-               ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore 
-               eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
-               deserunt mollit anim id est laborum adipiscing elit, sed do eiusmod.
+               It's time to finally go beyond Zoom, Whatsapp and 5 other different platforms to conduct your
+               online lessons. Now manage everything from the comfort of your home or office, all under one platform.
+               That means you will never have to spend unnecessary time or money to do what you love doing the most!
+               With Centrestage you get these benefits instantly
+            </div>
+            <div class="businessAfter_row">
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/check_document.svg' %}" alt="" /></i>
+                  <span>Unlimited Live Lesson Hosting</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/users.svg' %}" alt="" /></i>
+                  <span>Unlimited Student Enrolment</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/Communication.svg' %}" alt="" /></i>
+                  <span>Instant & Secure Lesson Payment Processing</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/conf.svg' %}" alt="" /></i>
+                  <span>Interactive Messaging</span>
+               </div>
+               <div class="businessAfter_col">
+                  <i><img src="{% static '/images/payment.svg' %}" alt="" /></i>
+                  <span>Calendar Management and Platform Analytics</span>
+               </div>
             </div>
          </div>
       </div>
    </div>
    <div class="comn-sec how-it-works">
-      <div class="container">
-         <div class="how-it-works-wrap">
-            <div class="title-row">
-               <h2>How it Works</h2>
+    <div class="container">
+      <div class="how-it-works-wrap">
+        <div class="title-row"><h2>How it Works</h2></div>
+        <div class="works-steps">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="step1-tab" data-toggle="tab" href="#step1" role="tab" aria-controls="step1" aria-selected="true">
+                <i class="steps-img">
+                  <img class="steps-img-1" src="{% static 'images/step-1.svg' %}" alt="" />
+                  <img class="steps-img-2" src="{% static 'images/step-1_h.svg' %}" alt="" />
+                </i>
+                <span>STEP 1<br>Setup Your Page</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="step2-tab" data-toggle="tab" href="#step2" role="tab" aria-controls="step2" aria-selected="false">
+                <i class="steps-img">
+                  <img class="steps-img-1" src="{% static 'images/step-2.svg' %}" alt="" />
+                  <img class="steps-img-2" src="{% static 'images/step-2_h.svg' %}" alt="" />
+                </i>
+                <span>STEP 2<br>Manage Your Program</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="step3-tab" data-toggle="tab" href="#step3" role="tab" aria-controls="step3" aria-selected="false">
+                <i class="steps-img">
+                  <img class="steps-img-1" src="{% static 'images/step-3.svg' %}" alt="" />
+                  <img class="steps-img-2" src="{% static 'images/step-3_h.svg' %}" alt="" />
+                </i>
+                <span>STEP 3<br>Run a Successful Online Business</span>
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+              <div class="steps-content-wrap">
+                <div class="steps-content">
+                  <h3>Setup Your Page</h3>
+                  <p> - Create Your Customise Profile Page<br>
+ - Host Your Live One-on-One or Group Lessons<br>
+ - Share Lessons With Your Students</p>
+                </div>
+                <div class="steps-graphics">
+                  <img src="{% static 'images/step-grap-1.svg' %}" alt="" />
+                </div>
+              </div>
             </div>
-            <div class="works-steps">
-               <ul>
-                  <li class="active">
-                     <i class="steps-img">
-                     <img class="steps-img-1" src="{% static '/images/step-1.svg' %}" alt="" />
-                     <img class="steps-img-2" src="{% static '/images/step-1_h.svg' %}" alt="" />
-                     </i>
-                     <span>STEP 1<br>Plan Your Course</span>
-                  </li>
-                  <li>
-                     <i class="steps-img">
-                     <img class="steps-img-1" src="{% static '/images/step-2.svg' %}" alt="" />
-                     <img class="steps-img-2" src="{% static '/images/step-2_h.svg' %}" alt="" />
-                     </i>
-                     <span>STEP 2<br>Record Your Video</span>
-                  </li>
-                  <li>
-                     <i class="steps-img">
-                     <img class="steps-img-1" src="{% static '/images/step-3.svg' %}" alt="" />
-                     <img class="steps-img-2" src="{% static '/images/step-3_h.svg' %}" alt="" />
-                     </i>
-                     <span>STEP 3<br>Build Your Community</span>
-                  </li>
-               </ul>
-               <div class="steps-content-wrap">
-                  <div class="steps-content">
-                     <h3>Plan Your Course</h3>
-                     <p>Create a customised webpage Host your live lesson or webinar You determine the lesson price Announce your lesson</p>
-                  </div>
-                  <div class="steps-graphics">
-                     <img src="{% static '/images/step-grap-1.svg' %}" alt="" />
-                  </div>
-               </div>
+            <div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+              <div class="steps-content-wrap">
+                <div class="steps-content">
+                  <h3>Manage Your Program</h3>
+                  <p> - Manage Your Lesson Information<br>
+ - Keep Your Calendar Up To Date<br>
+ - Interact With Your Students Instantly<br>
+ - Organise Your Lesson Files</p>
+                </div>
+                <div class="steps-graphics">
+                  <img src="{% static 'images/step-grap-1.svg' %}" alt="" />
+                </div>
+              </div>
             </div>
-         </div>
+            <div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
+              <div class="steps-content-wrap">
+                <div class="steps-content">
+                  <h3>Run a Successful Online Business</h3>
+                  <p> - Manage Lesson Payments<br>
+ - Receive Lesson Reminders<br>
+ - Leverage Powerful Platform Analytics
+                  </p>
+                </div>
+                <div class="steps-graphics">
+                  <img src="{% static 'images/step-grap-1.svg' %}" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
    </div>
-   <div class="comn-sec why-join-center">
+   <div class="comn-sec why-join-center" id="WhyUs">
       <div class="container-2">
          <div class="why-join-wrap">
             <div class="title-row text-center">
-               <h2>WHY JOIN CENTER STAGE?</h2>
+               <h2>WHY JOIN CENTRESTAGE?</h2>
                <div class="button-area mt-5">
-                  <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
+                  <a class="btn btn-primary btn-lg btn-theme" href="#" id="startTeachingSignUp2">Start Teaching</a>
                   <span class="btn-btm-txt">last 20 spots left</span>
                </div>
             </div>
             <div class="content-img-wrap mt-5">
                <div class="service-wrap whyjoin-1">
                   <div class="service-left-col vide-col">
-                     <video src="{% static '/video/4A_Video.mp4' %}" autoplay muted loop></video>
+                     <video src="https://d1pd2miwobcqwo.cloudfront.net/4A_Video.mp4" autoplay muted loop></video>
                   </div>
                   <div class="service-right-col">
                      <div class="content-col">
@@ -174,59 +255,60 @@
                            <h3>YOU ARE GOOD AT SOMETHING</h3>
                         </div>
                         <div class="text-content font-light">
-                           You have the knowledge to teach live lessons
-                           You are a top instructor in your category
+                           You have the knowledge to teach live lessons<br>
+                           You are a top instructor in your category<br>
                            You want to own your brand 100%
                         </div>
                      </div>
                   </div>
                </div>
-            </div>
-            <div class="service-wrap whyjoin-2">
-               <div class="service-right-col">
-                  <div class="content-col">
-                     <div class="title-row">
-                        <h3>YOU WANT TO SHARE YOUR<br>KNOWLEDGE</h3>
+               <div class="service-wrap whyjoin-2">
+                  <div class="service-right-col">
+                     <div class="content-col">
+                        <div class="title-row">
+                           <h3>YOU WANT TO SHARE YOUR<br>KNOWLEDGE</h3>
+                        </div>
+                        <div class="text-content font-light">
+                           You want to focus on your lessons<br>
+                           You don't want to worry about the tools, a website,
+                           mailing lists, calendars, payments and analytics
+                        </div>
                      </div>
-                     <div class="text-content font-light">
-                        You want to focus on your lessons You don't want to worry about the tools, a website,
-                        mailing lists, calendars, payments and analytics
+                  </div>
+                  <div class="service-left-col vide-col">
+                     <video src="https://d1pd2miwobcqwo.cloudfront.net/4B_Video.mp4" autoplay muted loop></video>
+                  </div>
+               </div>
+               <div class="service-wrap whyjoin-3">
+                  <div class="service-left-col">
+                     <img src="{% static '/images/Image5.jpg' %}" alt="" />
+                  </div>
+                  <div class="service-right-col">
+                     <div class="content-col">
+                        <div class="title-row">
+                           <h3>YOU WANT TO EARN</h3>
+                        </div>
+                        <div class="text-content font-light">
+                           <p>Your lessons are worth paying for and not just views
+                              or likes on social media 
+                           </p>
+                           <p>You want total control of your earnings</p>
+                        </div>
                      </div>
                   </div>
                </div>
-               <div class="service-left-col vide-col">
-                  <video src="{% static '/video/4B_Video.mp4' %}" autoplay muted loop></video>
-               </div>
-            </div>
-            <div class="service-wrap whyjoin-3">
-               <div class="service-left-col">
-                  <img src="{% static '/images/Image5.jpg' %}" alt="" />
-               </div>
-               <div class="service-right-col">
-                  <div class="content-col">
+               <div class="whoIs-sec text-center pt-100">
+                  <div class="container">
                      <div class="title-row">
-                        <h3>YOU WANT TO EARN</h3>
-                     </div>
-                     <div class="text-content font-light">
-                        <p>Your lessons are worth paying for and not just views
-                           or likes on social media 
+                        <h2>WHO IS CENTRESTAGE FOR?</h2>
+                        <p>Teacher. Dancer. Coder. Fitness Enthusiast. Public Speaker.<br />
+                           Finance Guru. Masterchef. Spiritual Coach. Healer. Painter. Singer. Musician.
                         </p>
-                        <p>You want total control of your earnings</p>
                      </div>
-                  </div>
-               </div>
-            </div>
-            <div class="whoIs-sec text-center pt-100">
-               <div class="container">
-                  <div class="title-row">
-                     <h2>WHO IS CENTER STAGE FOR?</h2>
-                     <p>Teacher. Dancer. Coder. Fitness Enthusiast. Public Speaker.<br />
-                        Finance Guru. Masterchef. Spiritual Coach. Healer. Painter. Singer. Musician.
-                     </p>
-                  </div>
-                  <span class="font-small">and many more</span>
-                  <div class="button-area">
-                     <a class="btn btn-primary btn-lg btn-theme" href="#">Start Teaching</a>
+                     <span class="font-small">and many more</span>
+                     <div class="button-area">
+                        <a class="btn btn-primary btn-lg btn-theme" href="#" id="startTeachingSignUp3">Start Teaching</a>
+                     </div>
                   </div>
                </div>
             </div>
@@ -234,8 +316,8 @@
       </div>
    </div>
    <div class="instructor-sec">
-      <h2>INSTRUCTORS ON CENTER STAGE GET</h2>
-      <video src="{% static '/video/instructor.mp4' %}" autoplay muted loop></video>
+      <h2>INSTRUCTORS ON CENTRESTAGE GET</h2>
+      <video src="https://d1pd2miwobcqwo.cloudfront.net/instructor.mp4" autoplay muted loop></video>
    </div>
    <div class="comn-sec">
       <div class="container">
@@ -258,74 +340,74 @@
          </div>
       </div>
    </div>
-   <div class="comn-sec creators-sec">
+   <div class="comn-sec creators-sec" id="Join">
       <div class="container">
          <div class="title-row text-center">
-            <h2>WHO WILL TEACH ON CENTER STAGE?</h2>
+            <h2>WHO WILL TEACH ON CENTRESTAGE?</h2>
             <p>Top creators who have the passion and skills to change what the<br> world will learn in the future</p>
          </div>
          <div class="creators-slide">
             <div class="owl-carousel owl-theme">
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor01.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img01.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <h3>Thomas Edward</h3>
-                        <span>Teaches Cooking</span>
+                        <h3></h3>
+                        <span>Fitness Trainers</span>
                      </div>
                   </div>
                </div>
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor02.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img02.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <h3>Thomas Edward</h3>
-                        <span>Teaches Cooking</span>
+                        <h3></h3>
+                        <span>Music Teachers</span>
                      </div>
                   </div>
                </div>
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor03.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img03.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <button class="btn btn-primary btn-theme">New Class</button>
-                        <h3>Thomas Edward</h3>
-                        <span>Teaches Cooking</span>
+<!--                        <button class="btn btn-primary btn-theme">New Class</button>-->
+                        <h3></h3>
+                        <span>Yoga Trainers</span>
                      </div>
                   </div>
                </div>
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor04.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img04.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <h3>Thomas Edward</h3>
-                        <span>Teaches Cooking</span>
+                        <h3></h3>
+                        <span>Literature Teachers</span>
                      </div>
                   </div>
                </div>
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor05.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img05.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <h3>Thomas Edward</h3>
-                        <span>Teaches Cooking</span>
+                        <h3></h3>
+                        <span>Sports Trainers</span>
                      </div>
                   </div>
                </div>
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor04.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img06.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <h3>Thomas Edward</h3>
-                        <span>Teaches Cooking</span>
+                        <h3></h3>
+                        <span>Art Teachers</span>
                      </div>
                   </div>
                </div>
                <div class="item creators-col">
-                  <figure class="creators-img"><img src="{% static '/images/instructor05.jpg' %}" alt="" /></figure>
+                  <figure class="creators-img"><img src="{% static '/images/teacher_img07.jpg' %}" alt="" /></figure>
                   <div class="creator-text">
                      <div>
-                        <h3>Thomas Edward</h3>
+                        <h3></h3>
                         <span>Teaches Cooking</span>
                      </div>
                   </div>
@@ -375,29 +457,29 @@
                <div class="owl-carousel owl-theme">
                   <div class="item">
                      <div class="teacher-name">
-                        <div class="teacher-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
-                        <span>Rose Gerry</span>
+                        <div class="teacher-prof-img"><img src="{% static '/images/user_img02.jpg' %}" alt="" /></div>
+                        <span>Priyanka Somani</span>
                      </div>
                      <div class="teacher-msg">
-                        " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. "
+                        "After using Centrestage my teaching efficiency has increased tremendously. I've started taking on twice the number of online classes now. The team at Centrestage has carefully thought about every single teacher requirement while developing the platform features. A must try for all!"
                      </div>
                   </div>
                   <div class="item">
                      <div class="teacher-name">
-                        <div class="teacher-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
-                        <span>Rose Gerry</span>
+                        <div class="teacher-prof-img"><img src="{% static '/images/user_img01.jpg' %}" alt="" /></div>
+                        <span>Garry Marss</span>
                      </div>
                      <div class="teacher-msg">
-                        " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. "
+                        "I used to pay for 4 different products in order to run my Public Speaking Program online. Now I can deliver the same skills to my students on Centrestage and build a healthy community around me. I've never been as happy with a product and team until this point"
                      </div>
                   </div>
                   <div class="item">
                      <div class="teacher-name">
-                        <div class="teacher-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
-                        <span>Rose Gerry</span>
+                        <div class="teacher-prof-img"><img src="{% static '/images/user_img05.jpg' %}" alt="" /></div>
+                        <span>Samantha Cilic</span>
                      </div>
                      <div class="teacher-msg">
-                        " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. "
+                        "I am never moving away from this product! This is exactly what I needed to run my live online lessons. The team at Centrestage responds extremely fast to troubleshoot problems and receive new feature suggestions. Would recommend it to every trainer and coach out there!"
                      </div>
                   </div>
                </div>
@@ -415,29 +497,43 @@
                <div class="owl-carousel owl-theme">
                   <div class="item">
                      <div class="studient-name">
-                        <div class="stud-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <div class="stud-prof-img"><img src="{% static '/images/user_img04.jpg' %}" alt="" /></div>
                         <div class="stud-name">
-                           <h3>Petrica Perry</h3>
+                           <h3>Frida Horitz</h3>
                            <span>Entertainer USA</span>
                         </div>
                      </div>
                      <div class="studient-msg-col">
                         <div class="studient-msg">
-                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+                           Initially I remember being skeptical when my Teacher moved our Dance Lessons online to Centrestage. However, since our first class I am in love with how smooth our experience has been. Learning is more fun than ever now!
                         </div>
                      </div>
                   </div>
                   <div class="item">
                      <div class="studient-name">
-                        <div class="stud-prof-img"><img src="{% static '/images/teacher-img.jpg' %}" alt="" /></div>
+                        <div class="stud-prof-img"><img src="{% static '/images/user_img02.jpg' %}" alt="" /></div>
                         <div class="stud-name">
-                           <h3>Petrica Perry</h3>
+                           <h3>Mansi Dave</h3>
                            <span>Entertainer USA</span>
                         </div>
                      </div>
                      <div class="studient-msg-col">
                         <div class="studient-msg">
-                           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+                           Paying for my writing classes has become a whole lot easier with Centrestage. Everything from lesson enrolment to completion of the course is organised so well! I no longer have to go back and forth with my teacher on multiple platforms
+                        </div>
+                     </div>
+                  </div>
+                  <div class="item">
+                     <div class="studient-name">
+                        <div class="stud-prof-img"><img src="{% static '/images/user_img03.jpg' %}" alt="" /></div>
+                        <div class="stud-name">
+                           <h3>Jess Steiner</h3>
+                           <span>Entertainer USA</span>
+                        </div>
+                     </div>
+                     <div class="studient-msg-col">
+                        <div class="studient-msg">
+                           Group lessons on Centrestage are the most fun! I get to interact with my peers on the same platform while never worrying missing a notification or reminder for my next class!
                         </div>
                      </div>
                   </div>
@@ -458,13 +554,13 @@
                   <div class="card-header" id="headingOne">
                      <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        What is Center Stage?
+                        What is Centrestage?
                         </button>
                      </h5>
                   </div>
                   <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                      <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        Centrestage is a simple and easy to use platform for creating, hosting and organising your Live Video lessons, all in one place. You can instantly create one-on-one or group lessons using our platform.
                      </div>
                   </div>
                </div>
@@ -472,13 +568,14 @@
                   <div class="card-header" id="headingTwo">
                      <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        What is included in a Center Stage membership?
+                        How does Centrestage work?
                         </button>
                      </h5>
                   </div>
                   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                      <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        In less than 5 minutes, you can set up your customised profile page, create your first live lesson and share it with your students.<br>
+                        Centrestage brings the best tools together for you to run your education academy seamlessly. We provide for a calendar, automatic payments using your preferred method, document management, student messaging, lesson discussions, analytics and much more. You can bring over your existing students instantly and manage your student database and interactions inside the platform.
                      </div>
                   </div>
                </div>
@@ -486,13 +583,13 @@
                   <div class="card-header" id="headingThree">
                      <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Where can I watch?
+                        Why do I need Centrestage?
                         </button>
                      </h5>
                   </div>
                   <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                      <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        If you are a Teacher or Trainer in any category, there is a chance you are using many different apps to create, host, organise and keep your lesson information in one place. We bring all of this together in a simple and easy to use way so that you can focus on what you love doing - teaching.
                      </div>
                   </div>
                </div>
@@ -501,13 +598,13 @@
                   <div class="card-header" id="headingFour">
                      <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        How much does Center Stage cost?
+                        How and when will I get paid on Centrestage?
                         </button>
                      </h5>
                   </div>
                   <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
                      <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        All Teachers, Trainers and Coaches are paid within our platform. You can start earning as soon as your students pay you for your lesson. We will collect all payments from your students and credit it to your bank account or wallet after deducting a small platform fee.
                      </div>
                   </div>
                </div>
@@ -515,13 +612,13 @@
                   <div class="card-header" id="headingFive">
                      <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        Will I be charged taxes?
+                        How can my students pay for my lessons?
                         </button>
                      </h5>
                   </div>
                   <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
                      <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        Any student will have the option to pay via a valid Credit or Debit Card, or a payment wallet, if supported in their region.
                      </div>
                   </div>
                </div>
@@ -529,75 +626,28 @@
                   <div class="card-header" id="headingSix">
                      <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                        How does the 30-day guarantee work?
+                        Can I reschedule a session after it has been booked by a student?
                         </button>
                      </h5>
                   </div>
                   <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordion">
                      <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        Yes, as long as your student(s) accepts rescheduling of a session, you can reschedule the session. Students may request rescheduling a session as well.
                      </div>
                   </div>
                </div>
-               <a href="#" class="text-link mt-3">View All</a>
+               <a href="{% url 'faqs' %}" class="text-link mt-3">View All</a>
             </div>
          </div>
       </div>
    </div>
-   <div class="timechanged-sec">
-      <div class="container">
-         <h2>TIMES HAVE CHANGED. LEARNING WON'T</h2>
-      </div>
+   <div class="instructor-sec">
+      <h2>TIMES HAVE CHANGED. LEARNING WON'T</h2>
+      <video src="https://d1pd2miwobcqwo.cloudfront.net/7-video.mp4" autoplay muted loop></video>
    </div>
-   <footer class="footer">
-      <div class="container">
-         <div class="row">
-            <div class="col-md-3">
-               <div class="logo-ftr"><img src="{% static '/images/CenterStage_logo.svg' %}" alt="" /></div>
-               <div class="footer-address">
-                  <p>© 2020 Center Stage<br>
-                     All Rights Reserved
-                  </p>
-                  <div class="secured"><img src="{% static '/images/lock.svg' %}" alt="" /> <span>Secured with SSL</span></div>
-               </div>
-            </div>
-            <div class="col-md-3">
-               <h2>Explore</h2>
-               <ul class="ftr-nav">
-                  <li><a href="#">Classes</a></li>
-                  <li><a href="#">Center Stage Live</a></li>
-                  <li><a href="#">Articles</a></li>
-                  <li><a href="#">Sitemap</a></li>
-                  <li><a href="#">Gifts</a></li>
-               </ul>
-            </div>
-            <div class="col-md-3">
-               <h2>About</h2>
-               <ul class="ftr-nav">
-                  <li><a href="#">Diversity, Equity, and Inclusion</a></li>
-                  <li><a href="#">Careers</a></li>
-                  <li><a href="#">Privacy</a></li>
-                  <li><a href="#">Terms</a></li>
-                  <li><a href="#">Grants</a></li>
-                  <li><a href="#">Groups</a></li>
-                  <li><a href="#">Support</a></li>
-               </ul>
-            </div>
-            <div class="col-md-3">
-               <h2>Social</h2>
-               <ul class="ftr-nav">
-                  <li><a href="#"><i><img src="{% static '/images/twitter.svg' %}" alt="" /></i><span>Twitter</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/instagram.svg' %}" alt="" /></i><span>Instagram</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/facebook.svg' %}" alt="" /></i><span>Facebook</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/youtube.svg' %}" alt="" /></i><span>Youtube</span></a></li>
-                  <li><a href="#"><i><img src="{% static '/images/linkedin.svg' %}" alt="" /></i><span>LinkedIn</span></a></li>
-               </ul>
-            </div>
-         </div>
-      </div>
-   </footer>
+   {% include 'footer.html' %}
 </div>
 {% endblock %}
 {% block script %}
-<script src="{% static '/js/home.js' %}" type="text/javascript"></script> 
+<script src="{% static '/js/home.js' %}" type="text/javascript"></script>
 {% endblock %}

@@ -1,13 +1,10 @@
-import base64
 import re
+import base64
 import string
 import random
 import logging
-import urllib
-from django.conf import settings
 from django.core.cache import cache
 from django.core.files.base import ContentFile
-from django.views.generic import TemplateView
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -23,10 +20,11 @@ from notifications.twilio_sms_notification import twilio
 from django.utils import timezone
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
-    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer,
-    TeacherPaymentsSerializer, TeacherPaymentRemoveSerializer, StudentUserCreateSerializer
+    SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, StudentUserCreateSerializer,
+    StudentProfileSerializer
 )
-from users.models import User, TeacherProfile, ProfileStatuses, TeacherPayments
+from django.contrib.auth import login
+from users.models import User, TeacherProfile, ProfileStatuses, PaymentAccounts, StudentProfile
 logger = logging.getLogger(__name__)
 
 
@@ -73,7 +71,11 @@ class ObtainAuthToken(APIView):
         user.save()
         user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        headers = dict({
+            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+        })
+        login(request, user)
+        return Response({'token': token.key}, headers=headers)
 
 
 class TeacherRegister(generics.CreateAPIView):
@@ -89,6 +91,17 @@ class TeacherRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.create(serializer.validated_data)
+        token, _ = Token.objects.get_or_create(user=user)
+        headers = dict({
+            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+        })
+        login(request, user)
+        return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
+
 
 class StudentRegister(generics.CreateAPIView):
     """
@@ -103,6 +116,17 @@ class StudentRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.create(serializer.validated_data)
+        token, _ = Token.objects.get_or_create(user=user)
+        headers = dict({
+            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+        })
+        login(request, user)
+        return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
+
 
 class Logout(APIView):
     """
@@ -111,6 +135,7 @@ class Logout(APIView):
     def get(self, request, format=None):
         # simply delete the token to force a login
         request.user.auth_token.delete()
+        request.session.flush()
         resp = dict({
             "message": "Successfully Logout"
         })
@@ -154,7 +179,7 @@ class ProfileImage(APIView):
             else:
                 return Response(dict({"image": ["This field is required!"]}), status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(str(e))
+            logger.exception(e)
             return Response(dict({"image": ["This field is required!"]}), status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -250,6 +275,7 @@ class VerifyOtp(generics.CreateAPIView):
         try:
             user = self.get_user_by_phone(phone_no)
         except User.DoesNotExist:
+            logger.error("Invalid User. Phone no not registered!")
             return Response(dict({"error": "Invalid user"}), status=status.HTTP_401_UNAUTHORIZED)
 
         cached_otp = self.get_otp_from_cache(phone_no)
@@ -258,8 +284,10 @@ class VerifyOtp(generics.CreateAPIView):
 
         if provided_otp == cached_otp:
             token, created = self.authenticate(user)
+            login(request, user)
             return Response(dict({"token": token.key}), status=status.HTTP_200_OK)
         else:
+            logger.error("Invalid OTP!")
             return Response(dict({"error": "Invalid OTP"}), status=status.HTTP_401_UNAUTHORIZED)
     
     @staticmethod
@@ -302,6 +330,7 @@ class TeacherProfileView(APIView):
         try:
             teacher = TeacherProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
         except TeacherProfile.DoesNotExist:
+            logger.error("Teacher profile not created yet!")
             return Response(dict({"error": "Teacher is yet to create the profile"}), status=status.HTTP_400_BAD_REQUEST)
 
         serializer = TeacherProfileSerializer(instance=teacher)
@@ -310,10 +339,9 @@ class TeacherProfileView(APIView):
     def post(self, request):
         try:
             teacher = TeacherProfile.objects.get(user=request.user)
-            if teacher is not None:
-                return Response(dict({
-                    "error": "Teacher profile already created. Hit Put request to update the profile"
-                }), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict({
+                "error": "Teacher profile already created. Hit Put request to update the profile"
+            }), status=status.HTTP_400_BAD_REQUEST)
         except TeacherProfile.DoesNotExist:
             profile_photo = None
             if "profile_image" in request.data.keys():
@@ -325,6 +353,11 @@ class TeacherProfileView(APIView):
                 teacher_profile.profile_image.save(str(teacher_profile.user.first_name) + "_profile_photo." + ext,
                                                    profile_photo, save=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.exception(e)
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request):
         try:
@@ -339,15 +372,30 @@ class TeacherProfileView(APIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except TeacherProfile.DoesNotExist:
+            logger.error("Teacher profile not created yet!")
             return Response(dict({
                 "error": "Teacher profile yet to be created. Hit Post request to create the profile."
+            }), status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+        try:
+            teacher_profile = request.user.teacher_profile_data
+            serializer = TeacherProfileSerializer(teacher_profile, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except TeacherProfile.DoesNotExist:
+            logger.error("Teacher profile not created yet!")
+            return Response(dict({
+                "error": "Teacher profile not updated."
             }), status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         try:
             teacher = request.user.teacher_profile_data
         except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "Teacher is yet to create the profile"}))
+            logger.error("Teacher profile not created yet!")
+            return Response("", status=status.HTTP_204_NO_CONTENT)
 
         teacher.status = ProfileStatuses.DELETED
         teacher.save()
@@ -366,58 +414,108 @@ class SubdomainAvailabilityAPIView(APIView):
         return Response(dict({"msg": "Available"}), status=status.HTTP_200_OK)
 
 
-class TeacherPaymentsAPIView(APIView):
-    """
-    Create or delete the Payment data for the user
-    """
-    def post(self, request):
-        serializer = TeacherPaymentsSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+# class TeacherPaymentsAPIView(APIView):
+#     """
+#     Create or delete the Payment data for the user
+#     """
+#     def post(self, request):
+#         serializer = TeacherPaymentsSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         serializer.save(user=request.user)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#     def delete(self, request):
+#         serializer = TeacherPaymentRemoveSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#
+#         payment_type = serializer.validated_data.get("payment_type")
+#         try:
+#             teacher = TeacherProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
+#         except TeacherProfile.DoesNotExist:
+#             return Response(dict({"error": "No Active Profile Found"}))
+#
+#         try:
+#             payment = TeacherPayments.objects.get(teacher=teacher, payment_type=payment_type)
+#             payment.delete()
+#             return Response("", status=status.HTTP_204_NO_CONTENT)
+#         except TeacherPayments.DoesNotExist:
+#             return Response(dict({"error": "No Payment Found"}))
 
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+# ************************* Student APIs *******************************
+
+class StudentProfileView(APIView):
+    """
+    API to create the additional teacher profile
+    info
+    """
+    @staticmethod
+    def base64_file(data, name=None):
+        _format, _img_str = data.split(';base64,')
+        _name, ext = _format.split('/')
+        if not name:
+            name = _name.split(":")[-1]
+        return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
+
+    def get(self, request):
+        try:
+            student = StudentProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
+        except StudentProfile.DoesNotExist:
+            logger.error("Student profile not created yet!")
+            return Response(dict({"error": "Student is yet to create the profile"}), status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = StudentProfileSerializer(instance=student)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        try:
+            student = StudentProfile.objects.get(user=request.user)
+            return Response(dict({
+                "error": "Teacher profile already created. Hit Put request to update the profile"
+            }), status=status.HTTP_400_BAD_REQUEST)
+        except StudentProfile.DoesNotExist:
+            profile_photo = None
+            if "profile_image" in request.data.keys():
+                profile_photo, ext = self.base64_file(request.data.pop("profile_image"))
+            serializer = StudentProfileSerializer(data=request.data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            student_profile = serializer.save(user=request.user)
+            if profile_photo is not None:
+                student_profile.profile_image.save(str(student_profile.user.first_name) + "_profile_photo." + ext,
+                                                   profile_photo, save=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.exception(e)
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def put(self, request):
+        try:
+            student_profile = request.user.student_profile_data
+            if "profile_image" in request.data.keys():
+                profile_photo, ext = self.base64_file(request.data.pop("profile_image"))
+                student_profile.profile_image.save(str(student_profile.user.first_name) + "_profile_photo."
+                                                   + ext, profile_photo, save=True)
+            serializer = StudentProfileSerializer(student_profile, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except StudentProfile.DoesNotExist:
+            logger.error("Student profile not created yet!")
+            return Response(dict({
+                "error": "Student profile yet to be created. Hit Post request to create the profile."
+            }), status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
-        serializer = TeacherPaymentRemoveSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        payment_type = serializer.validated_data.get("payment_type")
         try:
-            teacher = TeacherProfile.objects.get(user=request.user, status=ProfileStatuses.ACTIVE)
-        except TeacherProfile.DoesNotExist:
-            return Response(dict({"error": "No Active Profile Found"}))
-
-        try:
-            payment = TeacherPayments.objects.get(teacher=teacher, payment_type=payment_type)
-            payment.delete()
+            student = request.user.student_profile_data
+        except StudentProfile.DoesNotExist:
+            logger.error("Student profile not created yet!")
             return Response("", status=status.HTTP_204_NO_CONTENT)
-        except TeacherPayments.DoesNotExist:
-            return Response(dict({"error": "No Payment Found"}))
 
-
-class TeacherProfileViewTemplate(TemplateView):
-    template_name = "test_teacher_profile.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        url = self.request.META['HTTP_HOST']
-        subdomain = url.split('.')[0]
-        teacher = TeacherProfile.objects.get(subdomain=subdomain)
-        serializer = TeacherProfileSerializer(instance=teacher)
-        teacher_info = serializer.data
-        teacher_accounts = {}
-        accounts = teacher_info.pop('accounts')
-        for account in accounts:
-            teacher_accounts[account['account_type']] = account
-        context.update({
-            'subdomain': subdomain,
-            'teacher': teacher_info,
-            'teacher_accounts': teacher_accounts,
-            'redirection_url': url,
-            'zoom': {
-                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
-                'ZOOM_DISCONNECT_URL': '{}/profile/zoom/disconnect'.format(settings.API_BASE_URL, teacher.id),
-                'ZOOM_CONNECT_URL': urllib.parse.quote('{}/profile/zoom/connect'.format(settings.API_BASE_URL))
-            }
-        })
-        return context
+        student.status = ProfileStatuses.DELETED
+        student.save()
+        return Response("", status=status.HTTP_204_NO_CONTENT)

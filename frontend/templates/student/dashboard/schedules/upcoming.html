@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'student/dashboard/modals.html' %}
+<div class="wrapper-main">
+   {% include 'student/dashboard/sidebar.html' with activeSection='upcomingsessions' %}
+   <div class="main">
+      {% include 'student/dashboard/header.html' with user=user %}
+      <div class="main-content">
+         <div class="admin-mid-sec container-fluid">
+            <h2 class="title-2">Upcoming Sessions</h2>
+            <div class="search-row">
+               <div class="searchInp-col">
+                  <img src="{% static 'images/icon-search.svg' %}" alt="" />
+                  <input type="search" class="form-control" placeholder="Search Sessions" />
+               </div>
+               <div class="search-tags">
+                  <a href="#" class="tag-link active">All</a>
+                  <a href="#" class="tag-link">One - on - One</a>
+                  <a href="#" class="tag-link">Group Lesson</a>
+                  <a href="#" class="tag-link">Personal Coaching</a>
+                  <a href="#" class="tag-link">A - Z</a>
+                  <a href="#" class="tag-link">Z - A</a>
+               </div>
+            </div>
+            {% for slot in enrollments %}
+               <div class="searchresult-wrap">
+                  <div class="searchresult-row">
+                     <div class="searchresult-col-left">
+                        <h2 class="lession-title">{{ slot.lesson.name | title }}</h2>
+                        <div class="profimg-name">
+                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                           <div class="prof-name">
+                              <h4>{{user.first_name}} {{user.last_name}}</h4>
+                              <span class="lession-time">{{slot.lesson_from}}</span>
+                           </div>
+                        </div>
+                        <ul class="lessons-steps">
+                           <li>
+                              <i><img src="{% static 'images/time.png' %}" alt="" /></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Time</h4>
+                                 <span>{{ slot.session_time }} IST</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Duration</h4>
+                                 <span>{{ slot.session_duration }}</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Type</h4>
+                                 <span>One - on - One</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/language.png' %}" alt="" /></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Language</h4>
+                                 <span>Hosted in {% for language in slot.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Session Number</h4>
+                                 <span>03 Out of 05</span>
+                              </div>
+                           </li>
+                        </ul>
+                        <div class="linerbtn-row">
+                           <div class="lessonBtnCol">
+                              <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                 <a class="dropdown-item" href="#">Edit Session</a>
+                                 <a class="dropdown-item" href="#">Manage in Zoom</a>
+                              </div>
+                           </div>
+                           <div class="lessonBtnCol">
+                           <a href="#" class="btn-liner" data-toggle="modal" data-target="#newmeeting">Share</a></div>
+                           <a href="{{ slot.lesson.meeting_link }}" target="_blank">
+                              <div class="lessonBtnCol"><a href="{{ slot.lesson.meeting_link }}" target="_blank" class="btn-liner active">Start</a></div>
+                           </a>
+                        </div>
+                     </div>
+                     <div class="searchresult-col-right">
+                        <div class="searchresult-right-top">
+                           <div class="searchresult-right-top-title">
+                              <h3>Lesson Discussion</h3>
+                              <div class="notifications">
+                                 <div class="icon-notification">
+                                    <a href="#">
+                                    <span class="notifaction-badge">4</span>
+                                    <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                           <a href="#">View complete thread</a>
+                        </div>
+                        <div class="discussion-post-box">
+                           <div class="profimg-name">
+                              <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                              <div class="prof-name">
+                                 <h4>with Edwina</h4>
+                                 <span class="lession-time">Monday, 06 Nov 2020</span>
+                              </div>
+                           </div>
+                           <div class="discussion-post-detail">
+                              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna … <a href="#">view more</a>
+                           </div>
+                           <div class="discussion-post-img"><img src="{% static 'images/post-1.png' %}" alt="" /></div>
+                        </div>
+                        <div class="discussion-cmnt-row">
+                           <div class="addNewPost-inp">
+                              <i><img src="{% static 'images/write.svg' %}" alt="" /></i>
+                              <input class="form-control" type="text" placeholder="Add new post...">
+                           </div>
+                           <div class="cmntPost-actions">
+                              <button type="button"><img src="{% static 'images/send.svg' %}" alt="" /></button>
+                              <button type="button"><img src="{% static 'images/image.svg' %}" alt="" /></button>
+                              <button type="button"><img src="{% static 'images/video.svg' %}" alt="" /></button>
+                              <button type="button"><img src="{% static 'images/documents.svg' %}" alt="" /></button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            {% empty %}
+               <a href="{% url 'new-lesson' %}">
+               <button type="button" class="btn-liner active" disabled>No Upcoming Sessions</button>
+            {% endfor %}
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

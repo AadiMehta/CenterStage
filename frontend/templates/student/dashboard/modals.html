@@ -1,0 +1,1184 @@
+{% load static %}
+<!-- Modal -->
+<div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/become-coach-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Become A Personal Coach</h2>
+            <h3>By becoming a personal coach, students can book free or paid consulting sessions with
+                you depending on your office hours
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="continuePersonalCoaching"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">Personal Coaching Session Details</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Duration per Session</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>15 Mins</option>
+                            <option>30 Mins</option>
+                            <option>45 Mins</option>
+                            <option>1 Hour</option>
+                            <option>1.30 Hours</option>
+                            <option>2 Hour</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price per Session</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                             <input type="number" min="0" id="pricePerSessionValue" value="0" />
+                            {% comment %} <select class="form-control">
+                                <option>$50</option>
+                            </select> {% endcomment %}
+                            </div>
+                            <span class="select-session-text">If you set price to zero, student can book for free</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Number of Free Sessions per Student</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/video-graphic.svg' %}" alt="" />
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" id="personalCoachingPublish"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/ready-to-launch-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thanks, You're All Set!</h2>
+            <h3>To start receiving bookings, please schedule your availability 
+                on your calendar
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Go To Calendar</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Share</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting8" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">New Meeting</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Topic</label>
+                    <div class="liner-inp"> 
+                        <input type="text" class="form-control" placeholder="Enter Meeting Topic" >
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="addmore-fields">
+                        <label>Add Invitee Email Address</label>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="loremipsum1598745@email.com">
+                        </div>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="Add an email address">
+                            <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt=""></button>
+                        </div>
+                        <span class="addmore-text">Press enter to add more</span>
+                    </div>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-theme">Create Meeting</button>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting4" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3>New Meeting!</h3>
+                <h4>Thank you! Your meeting invites will be sent shortly</h4>
+                <div class="sharecopy-link">
+                    <h2>Meeting Link</h2>
+                    <div class="sharecopy-inp">
+                        <input type="text" class="form-control" placeholder="https://www.zoom.com/xyzjava/1548fghgytuj" />
+                        <button type="button" class="btn-theme">Copy</button>
+                    </div>
+                </div>
+                <div class="share-to">
+                    <h5>Share to</h5>
+                    <div class="social-icons">
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                    </div>
+                </div>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <button type="button" class="btn btn-theme">Start Meeting</button>
+                </div>
+                </div>
+                <div class="share-graphics">
+                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/become-coach-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Become A Personal Coach</h2>
+            <h3>By becoming a personal coach, students can book free or paid consulting sessions with
+                you depending on your office hours
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#pcoatching2"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">Personal Coaching Session Details</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Duration per Session</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>30 Min</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price per Session</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                            <span class="select-session-text">If you set price to zero, student can book for free</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Number of Free Sessions per Student</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/video-graphic.svg' %}" alt="" />
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish2"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/ready-to-launch-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thanks, You're All Set!</h2>
+            <h3>To start receiving bookings, please schedule your availability 
+                on your calendar
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Go To Calendar</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Share</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting5" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">New Meeting</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Topic</label>
+                    <div class="liner-inp"> 
+                        <input type="text" class="form-control" placeholder="Enter Meeting Topic" >
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="addmore-fields">
+                        <label>Add Invitee Email Address</label>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="loremipsum1598745@email.com">
+                        </div>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="Add an email address">
+                            <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt=""></button>
+                        </div>
+                        <span class="addmore-text">Press enter to add more</span>
+                    </div>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-theme">Create Meeting</button>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting6" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3>New Meeting!</h3>
+                <h4>Thank you! Your meeting invites will be sent shortly</h4>
+                <div class="sharecopy-link">
+                    <h2>Meeting Link</h2>
+                    <div class="sharecopy-inp">
+                        <input type="text" class="form-control" placeholder="https://www.zoom.com/xyzjava/1548fghgytuj" />
+                        <button type="button" class="btn-theme">Copy</button>
+                    </div>
+                </div>
+                <div class="share-to">
+                    <h5>Share to</h5>
+                    <div class="social-icons">
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                    </div>
+                </div>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <button type="button" class="btn btn-theme">Start Meeting</button>
+                </div>
+                </div>
+                <div class="share-graphics">
+                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade modal-disconnect" id="disconnect" tabindex="-1" aria-labelledby="disconnectLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/disconnect.svg' %}" alt="" />
+            </div>
+            <h2>Disconnect!</h2>
+            <h3>Are you sure you want disconnect Stripe Payment Method?</h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#share">Yes</button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner" data-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-bankac" id="bank" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2>Link Bank Account!</h2>
+            <div class="note-text">Note: For non-Indian account, please email us at <a href="mailto:support@centrestage.live">support@centrestage.live</a></div>
+            <div class="bank-form mt-5">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Your Name <span class="required">*</span></label>
+                        <div class="liner-inp"> 
+                            <input type="text" class="form-control" placeholder="Name" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <div class="liner-inp"> 
+                            <input type="text" class="form-control" placeholder="Email address" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Account Number <span class="required">*</span></label>
+                        <div class="liner-inp"> 
+                            <input type="text" class="form-control" placeholder="Account Number" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>IFSC Code <span class="required">*</span></label>
+                        <div class="liner-inp"> 
+                            <input type="text" class="form-control" placeholder="IFSC Code" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Beneficiary Name <span class="required">*</span></label>
+                        <div class="liner-inp"> 
+                            <input type="text" class="form-control" placeholder="Beneficiary Name" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label>Business Name <span class="required">*</span></label>
+                        <div class="liner-inp"> 
+                            <input type="text" class="form-control" placeholder="Business Name" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label>Account Type <span class="required">*</span></label>
+                        <div class="liner-inp">
+                            <select class="form-control">
+                            <option>Savings</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="bankbottom">
+                <div class="bankbottom-left">
+                <div class="checkbox-wrap checkbox">
+                    <input type="checkbox" id="check">
+                    <label for="check">By acknowledging and adding my bank account, <br /> I hereby agree to the <a href="#">Terms &amp; Conditions</a></label>
+                </div>
+                <button type="button" class="btn btn-primary btn-lg btn-theme">Add Account</button>
+                </div>
+                <div class="bank-graphic"><img src="{% static 'images/banking-graphics.svg' %}" alt="" /></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/become-coach-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Become A Personal Coach</h2>
+            <h3>By becoming a personal coach, students can book free or paid consulting sessions with
+                you depending on your office hours
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#pcoatching2"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">Personal Coaching Session Details</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Duration per Session</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>30 Min</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price per Session</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                            <span class="select-session-text">If you set price to zero, student can book for free</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Number of Free Sessions per Student</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/video-graphic.svg' %}" alt="" />
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish2"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/ready-to-launch-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thanks, You're All Set!</h2>
+            <h3>To start receiving bookings, please schedule your availability 
+                on your calendar
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Go To Calendar</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Share</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-paidmeeting" id="paidMeeting" tabindex="-1" aria-labelledby="paidMeeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">New Meeting</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Topic</label>
+                    <div class="liner-inp"> 
+                        <input id="topic" type="text" class="form-control" placeholder="Enter Meeting Topic" >
+                        <p id="topicError" style="color:red;"></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                                <select id="pricePerSessionCurrency" class="form-control" name="price_per_session_currency" id="pricePerSessionCurrency" >
+                                    <option value="DOLLARS">$ US Dollar</option>
+                                    <option value="RUPEES">₹ Indian Rupees</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp form-control">
+                                <input id="pricePerSession" type="number" min="0" placeholder="Enter Price" max="100000" />
+                            </div>
+                        </div>
+                    </div>
+                    <p id="pricePerSessionError" style="margin-left:16px; color:red;"></p>
+                </div>
+                <div class="form-group">
+                    <div class="addmore-fields">
+                        <label>Add Invitee Email Address</label>
+                        <input  id="invitees" name="invitees" style="display: none"/>
+                        <div class="liner-inp mb-2" id="lastInviteeInput"> 
+                            <input type="text" class="form-control invitee-input" placeholder="Add an email address" data-invitee-index="0">
+                            <button id="addMoreInviteeButton" class="btn-addmore add-invitee-button" type="button"><img src="{% static 'images/add-icon.svg' %}" alt=""></button>
+                        </div>
+                        <div class="liner-inp mb-2" id="referenceInviteeInput" style="display:none" data-index="1"> 
+                            <input type="text" class="form-control" placeholder="Add an email address">
+                        </div>
+                        <span class="addmore-text">Press enter to add more</span>
+                    </div>
+                    <p id="inviteesError" style="color:red;"></p>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+            <button type="button" id="createPaidMeeting" class="btn btn-primary btn-lg btn-theme">Create Meeting</button>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeetingsuccess" id="newmeetingsuccess" tabindex="-1" aria-labelledby="newmeetingsuccess" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3>New Meeting!</h3>
+                <h4>Thank you! Your meeting invites will be sent shortly</h4>
+                <div class="sharecopy-link">
+                    <h2>Meeting Link</h2>
+                    <div class="sharecopy-inp">
+                        <input type="text" class="form-control" placeholder="" id="newmeetingsuccesslink" disabled />
+                        <button id="newmeetingsuccesslinkcopy" type="button" class="btn-theme">Copy</button>
+                    </div>
+                </div>
+                <div class="share-to">
+                    <h5>Share to</h5>
+                    <div class="social-icons">
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                    </div>
+                </div>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <button type="button" class="btn btn-theme" id="newmeetingstartmeeting">Start Meeting</button>
+                </div>
+                </div>
+                <div class="share-graphics">
+                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade modal-zoomnotconnected" id="zoomnotconnected" tabindex="-1" aria-labelledby="zoomnotconnected" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3 style="color:red">Unsuccessful!</h3>
+                <h4>Please link to zoom account</h4>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <button type="button" class="btn btn-theme" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/become-coach-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Become A Personal Coach</h2>
+            <h3>By becoming a personal coach, students can book free or paid consulting sessions with
+                you depending on your office hours
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#pcoatching2"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">Personal Coaching Session Details</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Duration per Session</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>30 Min</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price per Session</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                            <span class="select-session-text">If you set price to zero, student can book for free</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Number of Free Sessions per Student</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/video-graphic.svg' %}" alt="" />
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish2"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/ready-to-launch-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thanks, You're All Set!</h2>
+            <h3>To start receiving bookings, please schedule your availability 
+                on your calendar
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Go To Calendar</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Share</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting1" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">New Meeting</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Topic</label>
+                    <div class="liner-inp"> 
+                        <input type="text" class="form-control" placeholder="Enter Meeting Topic" >
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="addmore-fields">
+                        <label>Add Invitee Email Address</label>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="loremipsum1598745@email.com">
+                        </div>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="Add an email address">
+                            <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt=""></button>
+                        </div>
+                        <span class="addmore-text">Press enter to add more</span>
+                    </div>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-theme">Create Meeting</button>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting2" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                <h3>New Meeting!</h3>
+                <h4>Thank you! Your meeting invites will be sent shortly</h4>
+                <div class="sharecopy-link">
+                    <h2>Meeting Link</h2>
+                    <div class="sharecopy-inp">
+                        <input type="text" class="form-control" placeholder="https://www.zoom.com/xyzjava/1548fghgytuj" />
+                        <button type="button" class="btn-theme">Copy</button>
+                    </div>
+                </div>
+                <div class="share-to">
+                    <h5>Share to</h5>
+                    <div class="social-icons">
+                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                    </div>
+                </div>
+                <div class="btn-area mt-5 twobtn-wrap">
+                    <button type="button" class="btn btn-theme">Start Meeting</button>
+                </div>
+                </div>
+                <div class="share-graphics">
+                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/become-coach-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Become A Personal Coach</h2>
+            <h3>By becoming a personal coach, students can book free or paid consulting sessions with
+                you depending on your office hours
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#pcoatching2"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">Personal Coaching Session Details</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Duration per Session</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>30 Min</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price per Session</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                            <span class="select-session-text">If you set price to zero, student can book for free</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Number of Free Sessions per Student</label>
+                    <div class="liner-inp select-drop">
+                        <select class="form-control">
+                            <option>1</option>
+                        </select>
+                    </div>
+                    <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/video-graphic.svg' %}" alt="" />
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish2"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/ready-to-launch-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thanks, You're All Set!</h2>
+            <h3>To start receiving bookings, please schedule your availability 
+                on your calendar
+            </h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Go To Calendar</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Share</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade modal-newmeeting3" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body">
+            <h2 class="title-2">New Meeting</h2>
+            <div class="pop-inner">
+                <div class="pop-left">
+                <div class="form-group">
+                    <label>Topic</label>
+                    <div class="liner-inp"> 
+                        <input type="text" class="form-control" placeholder="Enter Meeting Topic" >
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-md-12">Price</label>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$ US Dollar</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <div class="liner-inp select-drop">
+                            <select class="form-control">
+                                <option>$50</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="addmore-fields">
+                        <label>Add Invitee Email Address</label>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="loremipsum1598745@email.com">
+                        </div>
+                        <div class="liner-inp mb-2"> 
+                            <input type="text" class="form-control" placeholder="Add an email address">
+                            <button class="btn-addmore" type="button"><img src="{% static 'images/add-icon.svg' %}" alt=""></button>
+                        </div>
+                        <span class="addmore-text">Press enter to add more</span>
+                    </div>
+                </div>
+                </div>
+                <div class="pop-graphics">
+                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-lg btn-theme">Create Meeting</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade modal-logout" id="logoutConfirmation" tabindex="-1" aria-labelledby="logoutConfirmation" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <h2>Are you sure, you want to logout?</h2>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner" data-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="logout"><span>Logout</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade modal-logout" id="deleteConfirmation" tabindex="-1" aria-labelledby="deleteConfirmation" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <h2>Are you sure, you want to delete the account?</h2>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner" data-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Logout</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

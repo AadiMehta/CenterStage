@@ -1,0 +1,37 @@
+{% load static %}
+
+<footer class="footer">
+  <div class="container">
+     <div class="row">
+        <div class="col-md-4">
+           <div class="logo-ftr"><img style='width:15%; min-width: 200px;' src="{% static '/images/CenterStage-WhiteLogo.svg' %}" alt="" /></div>
+           <div class="footer-address">
+              <p>© 2020 Centre Stage<br>
+                 All Rights Reserved
+              </p>
+              <div class="secured"><img src="{% static '/images/lock.svg' %}" alt="" /> <span>Secured with SSL</span></div>
+           </div>
+        </div>
+        <div class="col-md-4">
+           <h2>About</h2>
+           <ul class="ftr-nav">
+              <li><a href="#">Diversity, Equity, and Inclusion</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="{% url 'privacy-policy' %}">Privacy</a></li>
+              <li><a href="{% url 'terms-and-conditions' %}">Terms</a></li>
+              <li><a href="#">Support</a></li>
+           </ul>
+        </div>
+        <div class="col-md-4">
+           <h2>Social</h2>
+           <ul class="ftr-nav">
+              <li><a href="#"><i><img src="{% static '/images/twitter.svg' %}" alt="" /></i><span>Twitter</span></a></li>
+              <li><a href="#"><i><img src="{% static '/images/instagram.svg' %}" alt="" /></i><span>Instagram</span></a></li>
+              <li><a href="#"><i><img src="{% static '/images/facebook.svg' %}" alt="" /></i><span>Facebook</span></a></li>
+              <li><a href="#"><i><img src="{% static '/images/youtube.svg' %}" alt="" /></i><span>Youtube</span></a></li>
+              <li><a href="#"><i><img src="{% static '/images/linkedin.svg' %}" alt="" /></i><span>LinkedIn</span></a></li>
+           </ul>
+        </div>
+     </div>
+  </div>
+</footer>
