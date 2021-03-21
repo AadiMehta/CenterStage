@@ -125,7 +125,7 @@ if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'centerstage',
+            'NAME': 'cstestdb',
             'USER': 'postgres',
             'PASSWORD': 'postgres',
             'HOST': 'localhost',
@@ -286,6 +286,7 @@ ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
 ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
 ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
 
+
 STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 
@@ -366,6 +367,7 @@ else:
             }
         }
     }
+
 
 STREAM_API_KEY = os.environ.get("STREAM_API_KEY")
 STREAM_API_SECRET = os.environ.get("STREAM_API_SECRET")

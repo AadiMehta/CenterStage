@@ -30,6 +30,7 @@ from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile, 
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
+import stripe
 
 import stripe
 
