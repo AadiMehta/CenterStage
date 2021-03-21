@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-{% include 'teacher/dashboard/modals.html' %}
+{% include 'student/dashboard/modals.html' %}
 <div class="wrapper-main">
    {% include 'teacher/dashboard/sidebar.html' with activeSection='messages' %}
    <div class="main">
@@ -20,7 +20,7 @@
             <div class="search-row">
                <div class="searchInp-col">
                   <img src="{% static 'images/icon-search.svg' %}" alt="" />
-                  <input type="search" class="form-control" placeholder="Search Sessions" />
+                  <input type="search" id="search-contact" class="form-control" placeholder="Search Sessions" />
                </div>
                <div class="search-tags">
                   <a href="#" class="tag-link">Today</a>
@@ -32,174 +32,19 @@
             </div>
             <div class="my-messages-wrap">
                <div class="my-messages-left-col rounded-box" id="mC-scroll">
-                  <ul class="msg-list">
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li class="active">
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina <span class="notifaction-badge">4</span></h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                     <li>
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <h4>with Edwina</h4>
-                              <div class="msg-text-time">
-                                 <span class="msg-text">Will join tomorrow.....</span><span class="msg-time">22:34 PM</span>
-                              </div>
-                           </div>
-                        </div>
-                     </li>
-                  </ul>
+                  <ul id="user-list" class="msg-list">
+                  </ul>   
                </div>
                <div class="my-messages-right-col rounded-box">
                   <div class="msg-header">
                      <div class="profimg-name">
-                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                        <div class="profimg-rounded"><img id="chattitle-image" src="{% static 'images/user-img.png' %}" alt=""></div>
                         <div class="prof-name">
-                           <h4>Sunny Thomas</h4>
-                           <span class="desigation">Core Java Student</span>
+                           <h4 id="chattitle-user">Sunny Thomas</h4>
+                           <span class="desigation" id="chattitle-bio">Core Java Student</span>
                         </div>
                      </div>
                      <div class="msg-h-actions">
-                        <div class="msg-h-action-col"><a href="#" class="btn-rounded dropdown-toggle">Request Review</a></div>
                         <div class="msg-h-action-col">
                            <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/zoom-icon.png' %}" alt=""></a>
                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="will-change: transform;">
@@ -217,10 +62,12 @@
                      </div>
                   </div>
                   <div class="chatMsg-wrap" id="mC-scroll2">
-                     <div class="request-action-row">
+                     <ul id="msgs" class="messagewindow">
+                     <!-- <div class="request-action-row">
                         <button type="button" class="request-action-btn accept bg-green"><i><img src="{% static 'images/check-rounded.svg' %}" alt="" /></i> <span>Accept</span></button>
                         <button type="button" class="request-action-btn bg-red"><i><img src="{% static 'images/close-rounded.svg' %}" alt="" /></i> <span>Ignore</span></button>
-                     </div>
+                     </div> -->
+                    <!--  <li>
                      <div class="messages-row">
                         <div class="profimg-name">
                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -237,66 +84,20 @@
                            </div>
                         </div>
                      </div>
-                     <div class="messages-row messages-child">
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <div class="msg-activity-row">
-                                 <h4>You</h4>
-                                 <time>09:33 PM</time>
-                              </div>
-                              <div class="chat-row">
-                                 Hello, Sunny<br />
-                                 Very good evening! Please go ahead.... (Y)
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="messages-row">
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <div class="msg-activity-row">
-                                 <h4>Sunny Thomas</h4>
-                                 <time>09:33 PM</time> <button class="link-reply" type="button"><img src="{% static 'images/reply.svg' %}" alt="" /></button>
-                                 <div class="msg-date">16 Nov 2020</div>
-                              </div>
-                              <div class="chat-row">
-                                 Lorem ipsum doller sit amet!<br />
-                                 Eiusmod tempor incididunt ut labore et dolore magna aliqua.<br />
-                                 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="messages-row messages-child">
-                        <div class="profimg-name">
-                           <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                           <div class="prof-name">
-                              <div class="msg-activity-row">
-                                 <h4>You</h4>
-                                 <time>09:33 PM</time>
-                              </div>
-                              <div class="chat-row">
-                                 Hello, Sunny<br />
-                                 Very good evening! Please go ahead.... (Y)
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="msg-footer">
-                     <div class="addNewPost-inp">
-                        <i><img src="{% static 'images/write.svg' %}" alt=""></i>
-                        <input class="form-control" type="text" placeholder="write message...">
-                     </div>
-                     <div class="cmntPost-actions">
-                        <button type="button"><img src="{% static 'images/send.svg' %}" alt=""></button>
-                        <button type="button"><img src="{% static 'images/image.svg' %}" alt=""></button>
-                        <button type="button"><img src="{% static 'images/documents.svg' %}" alt=""></button>
-                     </div>
-                  </div>
+                     </li> -->
+                 </ul>
                </div>
+               <div class="msg-footer">
+                 <div class="addNewPost-inp">
+                   <i><img src="{% static 'images/write.svg' %}" alt=""></i>
+                   <input id="chat-input" class="form-control" type="text" placeholder="write message...">
+                 </div>
+                 <div class="cmntPost-actions">
+                   <button id="btn-send" type="button"><img src="{% static 'images/send.svg' %}" alt=""></button>
+                   <button type="button"><img src="{% static 'images/image.svg' %}" alt=""></button>
+                   <button type="button"><img src="{% static 'images/documents.svg' %}" alt=""></button>
+                 </div>
+            </div>
             </div>
          </div>
       </div>
@@ -306,6 +107,11 @@
 
 {% block script %}
 <!-- custom scrollbar plugin -->
+<script>
+        let sessionKey = '{{ request.session.session_key }}';
+        let currentUser = '{{ user.get_username }}';
+    </script>
+<script src="{% static 'js/message/message.js' %}"></script>
 <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
 <script>
    (function($){

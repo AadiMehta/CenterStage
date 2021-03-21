@@ -87,6 +87,14 @@ ul.cta-links li span{ width: 100%; font-size: 22px; color: #000; margin-top:10px
 .notifaction-badge{position: absolute; right: -15px; top: -15px; width:30px; height:30px; background: #F56767; border-radius: 100%; color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center;}
 .searchresult-right-top-title .notifications {margin-left: 15px;}
 /*=============Menu CSS==========*/
+
+.uploadDoc-note .file-dropbox{height: 140px; padding: 1rem; text-align: center;}
+.uploadDoc-note .file-dropbox-icon {margin-bottom: 10px;  width:40px; display: inline-block;}
+.uploadDoc-note .filedrop-text{font-weight: 700; width: 100%;}
+.gray-box {background: #EFEFEF; border-radius: 6px; display: flex; align-items: center; justify-content: center; position: relative;}
+.uploadDoc-note .gray-box{height: 140px;}
+.btn-previous i{margin: 0px; margin-right:15px;}
+
 .sidebar-menu{padding:1rem 0px; overflow-y: auto; max-height:700px;}
 .sidebar-menu > ul#accordion > li{margin-bottom: 5px;}
 .sidebar-menu > ul#accordion > li > a {display: flex; align-items: center; width: 100%; text-transform: uppercase; color: #000; font-size:18px; padding: 12px 12px 12px 1rem; font-weight: 500;}
@@ -95,6 +103,10 @@ ul.cta-links li span{ width: 100%; font-size: 22px; color: #000; margin-top:10px
 .sidebar-menu ul#accordion ul.submenu li{margin-bottom: 2px;}
 .sidebar-menu ul#accordion ul.submenu a:hover, .sidebar-menu ul#accordion li.active a{background: #fff;}
 .sidebar-menu ul#accordion li a{position: relative;}
+.note-doc {display: flex; flex-wrap: wrap;  align-items: center;  font-size: 18px;  color: #656565; margin-bottom: 1rem;}
+.note-doc:last-child{margin-bottom: 0px;}
+.note-doc .gray-box {width:54px;  height: 60px;  padding:10px; margin-right:1rem;}
+.icon-remove{width: 20px; height: 20px; margin-left: 10px; top: -4px; position: relative;}
 .badge-small{width: 10px; height: 10px; background: #13A0F0; border-radius: 100%; display: inline-block; position: relative; top: -8px;}
 .sidebar-menu ul#accordion li a.ac-link:after {content: "";position: absolute; right:15px; top:20px; width:20px; height: 20px; background: url(../../images/menu-arrow.svg) left top no-repeat; transform: rotate(90deg); transition: all ease 0.4s;}
 .sidebar-menu ul#accordion li a.ac-link.collapsed:after{transform: rotate(0deg); transition: all ease 0.4s; right: 10px;}
@@ -136,6 +148,14 @@ ul.msg-list li .prof-name h4 .notifaction-badge {position: relative; top: -2px; 
 .mCS-minimal.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {background-color: #e9ecf2 !important;}
 .mCS-minimal.mCSB_scrollTools .mCSB_draggerRail, .mCS-minimal-dark.mCSB_scrollTools .mCSB_draggerRail{background-color: #ECF0FA !important;}
 .chatMsg-wrap {max-height: 535px;}
+.messagewindow {
+    position: relative;
+    padding: 10px 10px 0 10px;
+    margin: 0 0 0 0;
+    max-height: 535px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 .lession-col-right{display: flex;flex-direction: column;flex-basis: 100%;flex: 2; padding-left: 3rem;}
 .lession-col-right .lessons-steps {margin: 0;}
 .lessions-countDetail {display: inline-block; width: 100%; margin-bottom:3rem;}

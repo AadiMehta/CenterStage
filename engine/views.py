@@ -9,13 +9,14 @@ from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.authentication import BearerAuthentication
 from engine.serializers import (
-    LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
+    LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer, NoteCreateSerializer, PostCreateSerializer
 )
 from users.models import AccountTypes
 from zoom.utils import zoomclient
 from notifications.views import send_paid_meeting_invites
 logger = logging.getLogger(__name__)
 
+from notifications.views import add_notification 
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
@@ -57,7 +58,7 @@ class LessonAPIView(APIView):
                 request.user.teacher_profile_data, lesson, start_date, end_date,
                 weekdays, sessions_in_day
             )
-
+            add_notification(lesson.creator.user, 'CenterStage', 'dashboard/lessons', 1)
             return Response({
                 "msg": "Lesson Created",
                 "lesson": serializer.validated_data
@@ -150,3 +151,57 @@ class MeetingAPIView(APIView):
             return Response(dict({
                 "error": str(e)
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class NoteAPIView(APIView):
+    """
+    API to create note
+    """
+    authentication_classes = [BearerAuthentication]
+    permission_classes = []
+
+    @staticmethod
+    def base64_file(data, name=None):
+        _format, _img_str = data.split(';base64,')
+        _name, ext = _format.split('/')
+        if not name:
+            name = _name.split(":")[-1]
+        return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
+
+    def post(self, request):
+
+        try:
+            cover_image = None
+            if "cover_image" in request.data.keys():
+                cover_image, ext = self.base64_file(request.data.pop("cover_image"))
+            serializer = NoteCreateSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            note = serializer.save(creator=request.user.teacher_profile_data)
+            if cover_image is not None:
+                note.cover_image = cover_image
+                note.save()
+            return Response({
+                "msg": "Note Created",
+                "note": serializer.validated_data
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class PostAPIView(APIView):
+    authentication_classes = [BearerAuthentication]
+    permission_classes = []
+
+    def post(self,request):
+        try:
+            serializer = PostCreateSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            return Response({
+                "msg":"Post Created",
+                "post": serializer.validated_data
+                }, status=status.HTTP_201_CREATED)
+        except:
+            print('error in creating post')

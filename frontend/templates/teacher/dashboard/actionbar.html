@@ -69,6 +69,18 @@
                     {% if user.teacher_profile_data.personal_coaching %}<em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em> {% endif %}
                 </i>
                 <span>Personal Coaching</span>
+        <li>
+            <a href="{% url 'new-note' %}">
+              <i class="cta-link-icon"><img src="images/my_notes.svg" alt="" /></i>
+              <span>My Notes</span>
+            </a>
+          </li>
+        <li class="p-coaching">
+            <a href="#" data-toggle="modal" data-target="#pcoatching">
+            <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
+            <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
+            </i>
+            <span>Personal Coaching</span>
             </a>
             {% endif %}
         </li>

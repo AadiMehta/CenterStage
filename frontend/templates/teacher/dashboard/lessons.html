@@ -15,6 +15,30 @@
    {% include 'teacher/dashboard/sidebar.html' with activeSection='lessons' %}
    <div class="main">
       {% include 'teacher/dashboard/header.html' with user=user %}
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+               <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
+               <div class="header-prof-name">
+                  <h3>{{user.get_full_name}}</h3>
+                  <span class="desigation">{{user.teacher_profile_data.description}}</span>
+               </div>
+            </div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span id="notificationCount" class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+            </div>
+         </div>
+      </header>
       <div class="main-content">
          {% include 'teacher/dashboard/actionbar.html' with user=user %}
          <div class="admin-mid-sec container-fluid">
@@ -142,6 +166,7 @@
 <!-- custom scrollbar plugin -->
 <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
+<!-- <script src="{% static 'js/notification_count.js' %}"></script> -->
 <script>
    (function($){
          $(window).on("load",function(){

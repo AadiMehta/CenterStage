@@ -12,6 +12,7 @@ from zoom.utils import zoomclient
 from users.serializers import AccountsSerializer
 from users.authentication import BearerAuthentication, AuthCookieAuthentication
 from users.models import Accounts, AccountTypes
+from django.views.generic import TemplateView
 
 logger = logging.getLogger(__name__)
 
@@ -133,3 +134,14 @@ class ZoomMeetingAPIView(APIView):
             account.info = serializer.validated_data
             account.save()
             return access_info.get('access_token')
+
+
+class ZoomVerifyView(TemplateView):
+    """
+    Onboarding step 3
+    """
+    template_name = "verifyzoom.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

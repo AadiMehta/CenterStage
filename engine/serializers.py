@@ -6,6 +6,7 @@ from users.serializers import TeacherProfileSerializer, StudentProfileSerializer
 from frontend.utils.auth import get_time_duration
 from django.db.models import Q
 
+from engine.models import LessonData, LessonSlots, Meeting, NoteData, Post
 
 # ********* Lessons Serializers **********
 class LessonCreateSerializer(serializers.ModelSerializer):
@@ -238,3 +239,51 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             'session_duration',
             'other_enrollments'
         ]
+
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=True)
+
+    class Meta:
+        model = Post
+        exclude = [
+            'user'
+        ]
+            
+
+class PostSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+            model = Post
+            exclude = [
+                'creator'
+            ]
+
+class NoteCreateSerializer(serializers.ModelSerializer):
+    """
+    Note Create Serializer
+    name -> required
+    """
+    name = serializers.CharField(required=True)
+
+    class Meta:
+        model = NoteData
+        exclude = [
+            'creator'
+        ]
+
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    """
+    Note Serializer
+    """
+
+    class Meta:
+        model = NoteData
+        exclude = [
+            'creator'
+        ]
+
+

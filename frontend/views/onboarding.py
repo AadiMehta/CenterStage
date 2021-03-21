@@ -54,11 +54,17 @@ class OnboardStep2TemplateView(TemplateView):
         context['user'] = self.request.user
         teacher_accounts = {}
         accounts = self.request.user.accounts.all()
+        payment_account = self.request.user.payment_account.all()
+        if payment_account:
+            payment_account = True
+        else:
+            payment_account = False
         for account in accounts:
             teacher_accounts[account.account_type] = account
         context.update({
             'user': self.request.user,
             'teacher_accounts': teacher_accounts,
+            'payment_account': payment_account,
             'zoom': {
                 'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
                 'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)

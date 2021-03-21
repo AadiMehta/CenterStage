@@ -28,6 +28,8 @@ from users.authentication import AuthCookieAuthentication
 
 logger = logging.getLogger(__name__)
 
+from rest_framework.parsers import MultiPartParser
+from notifications.views import add_notification 
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
@@ -92,6 +94,7 @@ class LessonCreateWizard(SessionWizardView):
         return [self.TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
+        print('in done')
         final_data = {}
         for form in form_list:
             final_data.update(form.cleaned_data)

@@ -56,6 +56,17 @@ def get_filtered_lessons(filter_by, lessons):
         return lessons.order_by('-name')
     return lessons
 
+from frontend.utils.auth import get_user_from_token
+from engine.models import LessonData, NoteData, Post
+from engine.serializers import LessonSerializer, NoteSerializer, PostSerializer
+
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import DetailView
+from stream_django.enrich import Enrich
+from stream_django.feed_manager import feed_manager
+from users.models import User
+ 
+enricher = Enrich()
 
 class DashboardAccountAlerts(TemplateView):
     """
@@ -187,6 +198,53 @@ class DashboardLessons(TemplateView):
         return context
 
 
+
+class DashboardPosts(TemplateView):
+
+    model = User
+    template_name = 'dashboard/posts.html'
+    def get_object(self):
+        return self.get_queryset().get(username=self.kwargs['username'])
+    def get_context_data(self, **kwargs):
+        user = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        feeds = feed_manager.get_user_feed(user.id)
+        activities = feeds.get()['results']
+        activities = enricher.enrich_activities(activities)
+        return {
+            'activities': activities,
+            'user': user,
+            'login_user': self.request.user
+        }
+
+    # template_name = "dashboard/posts.html"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     posts = Post.objects.all().order_by('-created_at')
+    #     serializer = PostSerializer(posts, many=True)
+    #     context['posts'] = serializer.data
+    #     if 'auth_token' in self.request.COOKIES:
+    #         context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+    #     return context
+
+
+
+
+class DashboardNotes(TemplateView):
+    """
+    Dashboard Notes
+    """
+    template_name = "dashboard/notes.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        notes = NoteData.objects.all().order_by('-created_at')
+        serializer = NoteSerializer(notes, many=True)
+        context['notes'] = serializer.data
+        if 'auth_token' in self.request.COOKIES:
+            context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
+        return context
+
 class DashboardMessages(TemplateView):
     """
     Dashboard Messages
@@ -204,6 +262,7 @@ class DashboardMessages(TemplateView):
             'currency_options': currency_options
         })
         return context
+
 
 
 class DashboardStatistics(TemplateView):

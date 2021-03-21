@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'teacher/dashboard/modals.html' %}
+<div class="wrapper-main">
+  {% include 'teacher/dashboard/sidebar.html' with activeSection='notes' %} 
+  <div class="main">
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+               <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
+               <div class="header-prof-name">
+                  <h3>{{user.get_full_name}}</h3>
+                  <span class="desigation">{{user.teacher_profile_data.description}}</span>
+               </div>
+            </div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span id="notificationCount" class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+            </div>
+         </div>
+      </header>
+
+    <div class="main-content">
+      {% include 'teacher/dashboard/actionbar.html' %}
+    <div class="admin-mid-sec container-fluid">
+     <div class="title-with-search-row">
+      <h2 class="title-2">My Notes</h2>
+      <div class="searchInp-col">
+        <img src="images/icon-search.svg" alt="" />
+        <input type="search" class="form-control" placeholder="Search Notes or Documents" />
+      </div>
+    </div>
+     {% for note in notes %}
+      <div class="searchresult-wrap lessons-wrap">
+        <h2 class="lession-title">{{ note.name | title }}</h2>
+        <div class="lessions-countDetail">
+            <ul class="lessions-countDetail-list">
+                <li>
+                    <div class="lessions-countDetail-box">
+                        <h4>$0</h4>
+                        <h5>Total Earned</h5>
+                    </div>
+                    <span class="growth-text">Lorem ipsum 25.30% <i><img src="images/arrow-up.png" alt="" /></i> growth this month</span>
+                </li>
+                <li>
+                    <div class="lessions-countDetail-box">
+                        <h4><img src="images/star-w.svg" alt="" />0</h4>
+                        <h5>Total Rating</h5>
+                    </div>
+                </li>
+                <li>
+                    <div class="lessions-countDetail-box">
+                        <h4>0</h4>
+                        <h5>Subscription</h5>
+                    </div>
+                </li>
+            </ul>
+            </div>
+        
+        <div class="searchresult-row">
+            <div class="lession-col-left">
+                <div class="lession-img-col">
+                    <img src={{note.cover_image}} alt="" />
+                </div>
+                <div class="desigation mt-2">{{note.data}}</div>
+            </div>
+          <div class="lession-col-right">
+            <ul class="lessons-steps">
+                <li>
+                    <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                    <div class="lessons-steps-text">
+                      <h4>Reading Duration</h4>
+                      <span>{{note.reading_duration}}</span>
+                    </div>
+                  </li>
+                  <li>
+                    <i><img src="{% static 'images/language.png' %}" alt=""></i>
+                    <div class="lessons-steps-text">
+                      <h4>Reading Language</h4>
+                      <span>{{note.language}}</span>
+                    </div>
+                  </li>
+                <li>
+                  <i><img src="{% static 'images/great-price.png' %}" alt=""></i>
+                  <div class="lessons-steps-text">
+                    <h4>Price</h4>
+                    <span>{{note.price.value}} {{note.price.currency}}</span>
+                  </div>
+                </li>
+               
+                <li>
+                  <i><img src="{% static 'images/time_date.png' %}" alt=""></i>
+                  <div class="lessons-steps-text">
+                    <h4>Subscription</h4>
+                    <span>{{note.subscription_type}}</span>
+                  </div>
+                </li>
+                
+                </ul>
+              <div class="linerbtn-row">
+                <div class="lessonBtnCol"><a href="#" class="btn-liner">Edit</a></div>
+                <div class="lessonBtnCol"><a href="#" class="btn-liner">Share</a></div>
+                <div class="lessonBtnCol"><a href="#" class="btn-liner active">View Note</a></div>
+              </div>
+          </div>
+          
+        </div>
+        
+
+      </div>
+    {% empty %}
+      <h5>No Notes Found</h5>
+    {% endfor %}
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+<!-- Google CDN jQuery with fallback to local -->
+<!-- <script src="{% static 'js/notification_count.js' %}"></script> -->
+
+<!-- custom scrollbar plugin -->
+<script>
+    (function($){
+        $(window).on("load",function(){
+            $("#mC-scroll").mCustomScrollbar({
+                theme:"minimal"
+            });
+            $("#mC-scroll2").mCustomScrollbar({
+              theme:"minimal"
+          });
+          });
+      })(jQuery);
+</script>
+{% endblock %}

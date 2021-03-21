@@ -27,7 +27,9 @@ load_dotenv(dotenv_path=env_path)
 SECRET_KEY = 'z(3*uqch79bmakbwp1g&#k&#ik%!g(r!bzk_6vnooi!#4y-&b8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
+DEBUG = True 
+# if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -46,13 +48,22 @@ INSTALLED_APPS = [
     'drf_yasg',
     'phonenumber_field',
     'corsheaders',
+<<<<<<< HEAD
+=======
+    'django_extensions',
+    'stream_django',
+    'channels',
+>>>>>>> 6f4d724 (messages and payement added)
 
     # project specific apps
+    'chat',
     'frontend',
     'users',
     'engine',
     'notifications',
-    'zoom'
+    'zoom',
+    'payments',
+
 ]
 
 MIDDLEWARE = [
@@ -117,7 +128,7 @@ if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'centerstage',
+            'NAME': 'cstestdb',
             'USER': 'postgres',
             'PASSWORD': 'root12345',
             'HOST': 'localhost',
@@ -128,7 +139,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'centerstage',
+            'NAME': 'cstestdb',
             'USER': os.environ.get("DB_USER"),
             'PASSWORD': os.environ.get("DB_PASSWORD"),
             'HOST': os.environ.get("DB_HOST"),
@@ -203,7 +214,10 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
 }
 
 """
@@ -224,6 +238,24 @@ REDOC_SETTINGS = {
    'LAZY_RENDERING': False,
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgiref.inmemory.ChannelLayer",
+        "ROUTING": "chat.routing.channel_routing",
+    },
+}
+
+ASGI_APPLICATION = 'CenterStage.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+MESSAGES_TO_LOAD = 20
 
 """
 Settings for AWS account
@@ -236,7 +268,7 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_BUCKET_NAME")
 
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
-AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_REGION_NAME = 'ap-south-1'
 
 AWS_DEFAULT_ACL = None
 
@@ -256,6 +288,9 @@ EMAIL_USE_TLS = True
 ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
 ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
 ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51IEW6JAzOQudFZD7sMtOJN5Ch8Dn0E4sVLDwbU1l5NOxY7rKWu4zU6ZBfiEY4w8rhfLDUae8sU8TJky0wXlddWzK00Ys9Ik9iv'
+STRIPE_SECRET_KEY = 'sk_test_51IEW6JAzOQudFZD7M33cYdiLZhsHqdNkDjZhts5DTrdVzIXvXuUTEKVq2bmPeCq7PpxLvykJBoSOKbGOlyS3jsZ30071kVt9i9'
 
 # Temporary storage for the file upload
 if sys.platform == "win32":
@@ -334,3 +369,6 @@ else:
             }
         }
     }
+
+STREAM_API_KEY = '6fsfv5phpxfn'
+STREAM_API_SECRET = 'mmc9sj66h9uxtg3fks3q6sa39pkxgbzb6vb6fsvc6fxta5jdnbkg8xwja8u2efwb'

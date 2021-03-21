@@ -256,11 +256,73 @@ function onProceed2ButtonClicked () {
   }
 }
 
+function addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName) {
+  const token = getCookie('auth_token');
+  $.ajax('/api/payments/add/', {
+    type: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    data: JSON.stringify({
+      "dob": dob,
+      "personalID": personalID,
+      "address": address,
+      "city": city,
+      "postalCode": postalCode,
+      "state": state,
+      "country": country,
+      "bankAccountNo": bankAccountNo,
+      "ifscCode": ifscCode,
+      "accountHolderName": accountHolderName
+    }),
+    success: function (data, status, xhr) {
+      $('#bankingmodal').close();
+      console.log("payment added successfully");
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      // Todo: Show Error Message on UI
+      console.log('Error while creating payment account', errorMessage)
+      // window.location.href = "/onboarding/step2";
+    }});
+}
+
+function onSubmitPaymentClicked () {
+  const dob = $('#dataOfBirth')[0].value;
+  const address = $('#address')[0].value;
+  const city = $('#city')[0].value;
+  const postalCode = $('#postalCode')[0].value;
+  const state = $('#state')[0].value;
+  const country = $('#country')[0].value;
+  const bankAccountNo = $('#bankAccountNumber')[0].value;
+  const ifscCode = $('#ifscCode')[0].value;
+  const accountHolderName = $('#accountHolderName')[0].value;
+  const personalID = $('#personalID')[0].value
+  addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName)
+}
+
 /**
  * On Stage 3, finish button clicked
  * Route to teacher dashboard
  */
 function onFinish3ButtonClicked () {
+    const token = getCookie('auth_token');
+    $.ajax('/api/send_mail/', {
+        type: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        success: function (data, status, xhr) {
+          console.log("Sign up mail sent");
+          // window.location.href = "/onboarding/accounts";
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+          // Todo: Show Error Message on UI
+          console.log('Error while creating teacher profile', errorMessage);
+          // window.location.href = "/onboarding/step2";
+        }
+      });
     window.location.href = "/dashboard/lessons";
 }
 
@@ -279,6 +341,22 @@ function openImageSelector () {
 
 // ****** End of Event Handlers ****** 
 
+function handleDisconnectPayment() {
+  const token = getCookie('auth_token');
+  $.ajax('/api/payments/remove/', {
+    type: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    success: function (data, status, xhr) {
+      location.reload();
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      alert('err')
+    }
+  });
+}
+
 function init() {
   /**
    * Init Function to add event handlers
@@ -290,9 +368,12 @@ function init() {
   $('#onboardingPageName').keyup(debounce(checkSubdomainAvailability, 500));
   $('#profileImageContainer').click(openImageSelector);
   $('#onboardingProceed').click(onProceedButtonClicked);
+
   $('#onboarding2Proceed').click(onProceed2ButtonClicked);
+  $('#submitPayment').click(onSubmitPaymentClicked);
   $('#onboarding3Finish').click(onFinish3ButtonClicked);
   $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
+  $('#disconnectPayment').click(handleDisconnectPayment);
   $('#connectZoomAccount').click(handleZoomConnectAccount);
 }
 
