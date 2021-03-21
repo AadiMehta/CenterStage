@@ -128,9 +128,9 @@ class LessonCreateWizard(SessionWizardView):
             start_time = timezone.now().isoformat()
             duration = form_data.get('duration', '30')
 
-            # meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
-            # form_data['meeting_link'] = meeting.get('join_url')
-            # form_data['meeting_info'] = meeting
+            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            form_data['meeting_link'] = meeting.get('join_url')
+            form_data['meeting_info'] = meeting
 
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
