@@ -172,9 +172,11 @@ function handleDeleteAccount (event) {
 function init() {
   $('#logoutButton').click(() => showModal('logoutConfirmation'));
   $('#logout').click(() => logout());
-  $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
+  $('#disconnectZoomAccount').click(() => showModal('disconnectZoomConfirmation'));
+  $('#zoomDisconnectConfirmed').click(handleZoomDisconnectAccount);
+  $('#disconnectGoogleAccount').click(() => showModal('disconnectCalendarConfirmation'));
+  $('#calendarDisconnectConfirmed').click(handleGoogleDisconnectAccount);
   $('#connectZoomAccount').click(handleZoomConnectAccount);
-  $('#disconnectGoogleAccount').click(handleGoogleDisconnectAccount);
   $('#connectGoogleAccount').click(handleGoogleConnectAccount);
   $('#deleteAccount').click(handleDeleteAccount);
 }

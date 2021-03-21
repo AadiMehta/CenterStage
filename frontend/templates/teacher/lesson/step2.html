@@ -309,8 +309,9 @@
                               <div class="row">
                                  <div class="col-lg-5 liner-select-drop">
                                     <select class="form-control" id="pricePerSessionCurrency" >
-                                       <option value="DOLLARS">$ US Dollar</option>
-                                       <option value="RUPEES">₹ Indian Rupees</option>
+                                       {% for currency in currency_options %}
+                                          <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                       {% endfor %}
                                     </select>
                                  </div>
                                  <div class="col-lg-7 liner-select-drop">
@@ -343,8 +344,9 @@
                               <div class="row">
                                  <div class="col-lg-5 liner-select-drop">
                                     <select class="form-control" id="weeklyPriceCurrency" disabled >
-                                       <option value="DOLLARS">$ US Dollar</option>
-                                       <option value="RUPEES">₹ Indian Rupees</option>
+                                       {% for currency in currency_options %}
+                                          <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                       {% endfor %}
                                     </select>
                                  </div>
                                  <div class="col-lg-7 liner-select-drop">
@@ -377,8 +379,9 @@
                               <div class="row">
                                  <div class="col-lg-5 liner-select-drop">
                                     <select class="form-control" id="monthlyPriceCurrency" disabled >
-                                       <option value="DOLLARS">$ US Dollar</option>
-                                       <option value="RUPEES">₹ Indian Rupees</option>
+                                       {% for currency in currency_options %}
+                                          <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                       {% endfor %}
                                     </select>
                                  </div>
                                  <div class="col-lg-7 liner-select-drop">

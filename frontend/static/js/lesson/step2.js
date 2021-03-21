@@ -150,6 +150,7 @@ function init() {
 
   var array = ["2021-01-15", "2021-01-16", "2021-01-17"];
   $( "#startDatepicker" ).datepicker({
+    minDate: 0,
     beforeShowDay: function(date){
       var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
       return [ array.indexOf(string) == -1 ]
@@ -159,6 +160,7 @@ function init() {
     }
   });
   $( "#endDatepicker" ).datepicker({
+    minDate: 0,
     beforeShowDay: function(date){
       var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
       return [ array.indexOf(string) == -1 ]
@@ -167,7 +169,13 @@ function init() {
       calculateNumberOfSessions();
     }
   });
-  $('.timepicker').timepicker({ 'timeFormat': 'h:i A' });
+  $('.timepicker').timepicker({
+    'timeFormat': 'h:i A',
+    'scrollDefault': 'now',
+    'step': function(i) {
+      return (i%2) ? 15 : 45;
+    }
+  });
 
   $('#pricePerSessionCheck').change(function() {
     if(this.checked) {

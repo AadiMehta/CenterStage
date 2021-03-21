@@ -18,6 +18,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from zoom.utils import zoomclient
 from frontend.constants import languages as language_options
+from frontend.constants import currencies as currency_options
 from frontend.constants import timezones as timezone_options
 from frontend.utils.google_calendar import GoogleCalendar
 from users.models import Accounts, AccountTypes
@@ -58,7 +59,7 @@ class LessonCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        ("step1", LessonCreateFormStep1),
+        # ("step1", LessonCreateFormStep1),
         ("step2", LessonCreateFormStep2),
         ("step3", LessonCreateFormStep3),
         ("step4", LessonCreateFormStep4),
@@ -68,6 +69,7 @@ class LessonCreateWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
         context['language_options'] = language_options
+        context['currency_options'] = currency_options
         context['timezone_options'] = timezone_options
         data = self.get_all_cleaned_data()
         data['goals'] = json.loads(data.get('goals')) if data.get('goals') else []
@@ -126,9 +128,9 @@ class LessonCreateWizard(SessionWizardView):
             start_time = timezone.now().isoformat()
             duration = form_data.get('duration', '30')
 
-            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
-            form_data['meeting_link'] = meeting.get('join_url')
-            form_data['meeting_info'] = meeting
+            # meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            # form_data['meeting_link'] = meeting.get('join_url')
+            # form_data['meeting_info'] = meeting
 
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
