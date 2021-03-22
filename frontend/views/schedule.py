@@ -17,6 +17,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from zoom.utils import zoomclient
 from frontend.constants import languages as language_options
+from frontend.constants import currencies as currency_options
 from frontend.constants import timezones as timezone_options
 from frontend.utils.google_calendar import GoogleCalendar
 from users.models import Accounts, AccountTypes
@@ -63,6 +64,7 @@ class ScheduleCreateWizard(SessionWizardView):
     def get_context_data(self, form, **kwargs):
         context = super(ScheduleCreateWizard, self).get_context_data(form=form, **kwargs)
         context['language_options'] = language_options
+        context['currency_options'] = currency_options
         context['timezone_options'] = timezone_options
         if self.steps.current == 'preview':
             data = self.get_all_cleaned_data()

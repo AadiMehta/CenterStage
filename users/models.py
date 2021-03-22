@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -114,6 +115,15 @@ class ProfileStatuses(models.TextChoices):
     REMOVED = 'REMOVED', _('REMOVED')
 
 
+class RecommendationChoices(models.TextChoices):
+    LESSON_QUALITY = 'LESSON_QUALITY', _('LESSON_QUALITY')
+    LESSON_CONTENT = 'LESSON_CONTENT', _('LESSON_CONTENT')
+    LESSON_STRUCTURE = 'LESSON_STRUCTURE', _('LESSON_STRUCTURE')
+    TEACHER_HELPFULNESS = 'TEACHER_HELPFULNESS', _('TEACHER_HELPFULNESS')
+    TEACHER_COMMUNICATION = 'TEACHER_COMMUNICATION', _('TEACHER_COMMUNICATION')
+    TEACHER_KNOWLEDGE = 'TEACHER_KNOWLEDGE', _('TEACHER_KNOWLEDGE')
+
+
 class TeacherProfile(models.Model):
     """
     Additional data associated with the teacher user
@@ -127,6 +137,7 @@ class TeacherProfile(models.Model):
     profession = models.CharField(_("Profession"), max_length=64, validators=[MinLengthValidator(4)])
     bio = models.TextField(_('Bio for Teacher'), null=True, blank=True)
     intro_video = models.URLField(max_length=200, null=True, blank=True)
+    verified = models.BooleanField(_('Teacher Verified'), default=False)
     status = models.CharField(_("Teacher Status"), null=True, choices=ProfileStatuses.choices, max_length=7,
                               help_text="Teacher Profile status", default=ProfileStatuses.ACTIVE)
 
@@ -193,13 +204,33 @@ class TeacherPageVisits(models.Model):
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
     visits = models.PositiveBigIntegerField()
-    visit_date = models.DateField(default=timezone.now().date)
+    visit_date = models.DateField(default=datetime.date.today)
 
     class Meta:
         verbose_name = _('Page Visit')
         verbose_name_plural = _('Page Visits')
         unique_together = ('teacher', 'visit_date')
 
+
+class TeacherRating(models.Model):
+    """
+    Teacher Rating Model
+    """
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="ratings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated")
+    rate = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5.0)],)
+    review = models.CharField(_("Review"), max_length=256)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class TeacherRecommendations(models.Model):
+    """
+    Teacher Recommendations Model
+    """
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommendations")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommended")
+    recommendation_type = models.CharField(_("Type of Recommendation"), choices=RecommendationChoices.choices, max_length=30)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 # ***************** Student Models ******************
 

@@ -23,7 +23,11 @@
                     <i class="camera"><img src="{% static 'images/camera.png' %}" alt="" /></i>
                     </div>
                     <div class="profile-info-name">
-                    <h3>{{teacher.user.first_name}} {{teacher.user.last_name}} <i><img src="{% static 'images/done_blue.svg' %}" alt="" /></i></h3>
+                    <h3>{{teacher.user.first_name}} {{teacher.user.last_name}} 
+                    {% if teacher.verified %}
+                        <i><img src="{% static 'images/done_blue.svg' %}" alt="" /></i>
+                    {% endif %}
+                    </h3>
                     <span class="desigation">{{teacher.profession}}</span>
                     <div class="cocial-icons-row">
                         <a href="#"><img src="{% static 'images/fb-liner.svg' %}" alt="" /></a>
@@ -67,32 +71,16 @@
                 </div>
             {% endif %}
             <div class="video-wrapper video-slide">
-                <div class="owl-carousel owl-theme">
-                    <div class="item">
-                    <div class="vide-slide-img">
-                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
+                {% if teacher.intro_video %}
+                    <div class="owl-carousel owl-theme">
+                        <div class="item">
+                            <div class="vide-slide-img">
+                                <iframe width="560" height="315" src="{{teacher.intro_video}}" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <h5>Lorem ipsum video title here</h5>
+                        </div>
                     </div>
-                    <h5>Lorem ipsum video title here</h5>
-                    </div>
-                    <div class="item">
-                    <div class="vide-slide-img">
-                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
-                    </div>
-                    <h5>Lorem ipsum video title here</h5>
-                    </div>
-                    <div class="item">
-                    <div class="vide-slide-img">
-                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
-                    </div>
-                    <h5>Lorem ipsum video title here</h5>
-                    </div>
-                    <div class="item">
-                    <div class="vide-slide-img">
-                        <video src="{% static 'video/video-1.mp4' %}" autoplay muted></video>
-                    </div>
-                    <h5>Lorem ipsum video title here</h5>
-                    </div>
-                </div>
+                {% endif %}
                 <div class="slide-btm-area">
                     <button type="button" class="btn btn-theme">Consult Thomas</button>
                     <span class="italic-text d-block w-100 text-gray">Click here to take a One on One<br /> live session</span>
@@ -100,12 +88,12 @@
             </div>
             <div class="section-all-lessions mt-5">
                 <h2 class="title-2">All Lessons</h2>
-                <div class="search-row">
+                {% comment %} <div class="search-row">
                     <div class="searchInp-col">
                     <img src="{% static 'images/icon-search.svg' %}" alt="">
                     <input type="search" class="form-control" placeholder="Search Lessons">
                     </div>
-                </div>
+                </div> {% endcomment %}
                 <div class="lessions-slide-sec">
                     <div class="lessions-slide-wrap">
                         <div class="owl-carousel owl-theme">
