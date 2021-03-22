@@ -275,7 +275,7 @@ input.file-drop-inp {position: absolute;  left: 0;  top: 0;  width: 100%;  heigh
 .path-text{color: #656565; display: block;}
 .listStyle li{position: relative; padding-left:32px; margin-bottom: 1rem; display: block; color: #656565;}
 .listStyle li:last-child{margin-bottom: 0px;}
-.listStyle li:before{position: absolute; left: 0px; top:3px; width:20px; height: 20px; content: ""; background: url(../images/arrow-bullet.svg) left top no-repeat; background-size: 100%;}
+.listStyle li:before{position: absolute; left: 0px; top:3px; width:20px; height: 20px; content: ""; background: url(../../images/arrow-bullet.svg) left top no-repeat; background-size: 100%;}
 .modal-body {padding: 3rem;}
 .finish-graphics {display: inline-block;  margin-bottom: 3rem;  width: 100%;}
 .modal-body h2 {color: #0093E9;  font-size: 28px;  font-weight: 500;  margin-bottom: 1rem;}

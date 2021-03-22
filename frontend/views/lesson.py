@@ -59,7 +59,7 @@ class LessonCreateWizard(SessionWizardView):
     }
 
     FORMS = [
-        # ("step1", LessonCreateFormStep1),
+        ("step1", LessonCreateFormStep1),
         ("step2", LessonCreateFormStep2),
         ("step3", LessonCreateFormStep3),
         ("step4", LessonCreateFormStep4),
@@ -93,7 +93,8 @@ class LessonCreateWizard(SessionWizardView):
         for form in form_list:
             final_data.update(form.cleaned_data)
         final_data['goals'] = json.loads(final_data.get('goals')) if final_data.get('goals') else []
-        final_data['requirements'] = json.loads(final_data.get('requirements', '')) if final_data.get('requirements') else []
+        final_data['requirements'] = json.loads(final_data.get('requirements', '')) if final_data.get('requirements') \
+            else []
         final_data['language'] = json.loads(final_data.get('language', '')) if final_data.get('language') else []
         final_data['files'] = json.loads(final_data.get('files', '')) if final_data.get('files') else []
         final_data['price'] = {
@@ -137,7 +138,8 @@ class LessonCreateWizard(SessionWizardView):
             lesson = serializer.save(creator=user.teacher_profile_data)
 
             # Uncomment below lines once bucket gets created on s3
-            # On Jan 29 - An error occurred (NoSuchBucket) when calling the PutObject operation: The specified bucket does not exist
+            # On Jan 29 - An error occurred (NoSuchBucket) when calling the PutObject operation:
+            # The specified bucket does not exist
             # if cover_image:
             #     lesson.cover_image = cover_image
             #     lesson.save()
