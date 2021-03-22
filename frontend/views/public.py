@@ -21,6 +21,7 @@ class TeacherPageView(TemplateView):
             status=LessonStatuses.ACTIVE,
             is_private=False
         )
+        context['BASE_URL'] = settings.BASE_URL
         context['all_lessons'] = lessons.order_by('-created_at')
         ratings = TeacherRating.objects.filter(creator=teacher).aggregate(Avg('rate'))
         context['avg_rating'] = round(ratings.get('rate__avg') or 0, 1)
