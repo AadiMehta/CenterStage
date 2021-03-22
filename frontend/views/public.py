@@ -3,11 +3,10 @@ from django.shortcuts import redirect
 from django.db.models import Avg, Count
 from rest_framework import status
 from rest_framework import generics
-
-
+from django.conf import settings
 from users.models import TeacherProfile
 from engine.models import LessonData, LessonStatuses, LessonTypes
-from users.models import TeacherRating, TeacherRating, TeacherRecommendations
+from users.models import TeacherRating, TeacherRecommendations
 
 
 class TeacherPageView(TemplateView):
@@ -24,15 +23,13 @@ class TeacherPageView(TemplateView):
             is_private=False
         )
         context['all_lessons'] = lessons
-        context['avg_rating'] = TeacherRating.objects.filter(
-                creator=teacher
-            ).aggregate(Avg('rate'))
+        context['avg_rating'] = TeacherRating.objects.filter(creator=teacher).aggregate(Avg('rate'))
         context['years_of_exp'] = teacher.year_of_experience
         student_count = 0
         for lesson in lessons:
             student_count += lesson.enrollments.count()
         context['student_count'] = student_count
-        context['sharing_link'] = 'http://{}.'.format(teacher.subdomain, settings.SITE_URL)
+        context['sharing_link'] = '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL)
         context['most_popular_lessons'] = lessons.annotate(count=Count('enrollments')).order_by('count')
         context['one_on_one_lessons'] = lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE)
         context['group_lessons'] = lessons.filter(lesson_type=LessonTypes.GROUP)
