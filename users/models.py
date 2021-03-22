@@ -227,7 +227,7 @@ class TeacherRecommendations(models.Model):
     """
     Teacher Recommendations Model
     """
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommendations")
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="recommendations")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommended")
     recommendation_type = models.CharField(_("Type of Recommendation"), choices=RecommendationChoices.choices, max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)

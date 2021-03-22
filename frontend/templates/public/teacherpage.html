@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block style %}
 <link href="{% static '/css/public/style.css' %}" rel="stylesheet">
@@ -30,10 +31,10 @@
                     </h3>
                     <span class="desigation">{{teacher.profession}}</span>
                     <div class="cocial-icons-row">
-                        <a href="#"><img src="{% static 'images/fb-liner.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/twitt-liner.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/linkedin-liner.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/insta-liner.svg' %}" alt="" /></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{sharing_link}}" target="_blank"><img src="{% static 'images/fb-liner.svg' %}" alt="" /></a>
+                        <a href="http://twitter.com/share?text={{teacher.first_name}}&url={{sharing_link}}" target="_blank"><img src="{% static 'images/twitt-liner.svg' %}" alt="" /></a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{sharing_link}}" target="_blank"><img src="{% static 'images/linkedin-liner.svg' %}" alt="" /></a>
+                        {% comment %} Instagram do not allow sharing <a href="#" target="_blank"><img src="{% static 'images/insta-liner.svg' %}" alt="" /></a> {% endcomment %}
                     </div>
                     </div>
                 </div>
@@ -45,15 +46,15 @@
             </div>
             <div class="reating-sec">
                 <div class="reating-col">
-                    <div class="reating-text"><i><img src="{% static 'images/star-fill.svg' %}" alt="" /></i><span>4.8</span></div>
+                    <div class="reating-text"><i><img src="{% static 'images/star-fill.svg' %}" alt="" /></i><span>{{ avg_rating }}</span></div>
                     <div class="reating-text2">Rating</div>
                 </div>
                 <div class="reating-col">
-                    <div class="reating-text">07</div>
+                    <div class="reating-text">{{ years_of_exp }}</div>
                     <div class="reating-text2">Years Experience</div>
                 </div>
                 <div class="reating-col">
-                    <div class="reating-text">153</div>
+                    <div class="reating-text">{{ student_count }}</div>
                     <div class="reating-text2">Total Students</div>
                 </div>
                 <div class="reating-col">
@@ -77,7 +78,7 @@
                             <div class="vide-slide-img">
                                 <iframe width="560" height="315" src="{{teacher.intro_video}}" frameborder="0" allowfullscreen></iframe>
                             </div>
-                            <h5>Lorem ipsum video title here</h5>
+                            {% comment %} <h5>Lorem ipsum video title here</h5> {% endcomment %}
                         </div>
                     </div>
                 {% endif %}
@@ -97,7 +98,7 @@
                 <div class="lessions-slide-sec">
                     <div class="lessions-slide-wrap">
                         <div class="owl-carousel owl-theme">
-                            {% for lesson in lessons %}
+                            {% for lesson in all_lessons %}
                             <div class="item">
                                 <div class="lessions-box-slide">
                                     <div class="slide-inner-top">
@@ -177,7 +178,7 @@
                     <h2 class="title-2">Most Popular</h2>
                     <div class="lessions-slide-wrap">
                     <div class="owl-carousel owl-theme">
-                        {% for lesson in lessons %}
+                        {% for lesson in most_popular_lessons %}
                             <div class="item">
                                 <div class="lessions-box-slide">
                                     <div class="slide-inner-top">
@@ -255,7 +256,7 @@
                     <h2 class="title-2">One On One</h2>
                     <div class="lessions-slide-wrap">
                     <div class="owl-carousel owl-theme">
-                        {% for lesson in lessons %}
+                        {% for lesson in one_on_one_lessons %}
                             <div class="item">
                                 <div class="lessions-box-slide">
                                     <div class="slide-inner-top">
@@ -333,7 +334,7 @@
                     <h2 class="title-2">Group Lessons</h2>
                     <div class="lessions-slide-wrap">
                     <div class="owl-carousel owl-theme">
-                        {% for lesson in lessons %}
+                        {% for lesson in group_lessons %}
                             <div class="item">
                                 <div class="lessions-box-slide">
                                     <div class="slide-inner-top">
@@ -610,48 +611,20 @@
                 <h2 class="title-2">Reviews</h2>
                 <div class="btn-write-review"><a href="#" class="btn btn-liner"><i><img src="{% static 'images/edit-bold.svg' %}" alt="" /></i> <span>Write Reviews</span></a></div>
                 <div class="reviewbox-wrap">
+                    {% for review in reviews|slice:"0:3" %}
                     <div class="reviewbox">
-                    <div class="review-msg">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                        laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                    <div class="profimg-name">
-                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                        <div class="prof-name">
-                            <h4>Manjula Wijemanna</h4>
-                            <span class="lession-time">2 Weeks Ago</span>
+                        <div class="review-msg">
+                            {{review.review}}
+                        </div>
+                        <div class="profimg-name">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="prof-name">
+                                <h4>{{review.user.first_name}} {{review.user.last_name}} </h4>
+                                <span class="lession-time">{{ review.created_at|naturaltime }}</span>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="reviewbox">
-                    <div class="review-msg">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                        laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                    <div class="profimg-name">
-                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                        <div class="prof-name">
-                            <h4>by Thomas Edward</h4>
-                            <span class="lession-time">Monday, 06 Nov 2020</span>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="reviewbox">
-                    <div class="review-msg">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                        laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                    <div class="profimg-name">
-                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                        <div class="prof-name">
-                            <h4>by Thomas Edward</h4>
-                            <span class="lession-time">Monday, 06 Nov 2020</span>
-                        </div>
-                    </div>
-                    </div>
+                    {% endfor %}
                 </div>
                 <div class="showall-btn"><a href="#" class="btn btn-liner">View All Reviews (32)</a></div>
             </div>
@@ -668,7 +641,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong>({{recommendations.LESSON_QUALITY|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/content.svg' %}" alt="" /></i> <span>Lesson Content</span></div>
@@ -680,7 +653,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong>({{recommendations.LESSON_CONTENT|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/organization.svg' %}" alt="" /></i> <span>Lesson Structure</span></div>
@@ -692,7 +665,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong>({{recommendations.LESSON_STRUCTURE|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/explain.svg' %}" alt="" /></i> <span>Teacher Helpfulness</span></div>
@@ -704,7 +677,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong>({{recommendations.TEACHER_HELPFULNESS|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/communication.svg' %}" alt="" /></i> <span>Teacher Communication</span></div>
@@ -716,7 +689,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong>({{recommendations.TEACHER_COMMUNICATION|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/knowledge.svg' %}" alt="" /></i> <span>Teacher Knowledge</span></div>
@@ -728,7 +701,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>(32 Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong>({{recommendations.TEACHER_KNOWLEDGE|length}} Recommendations)</strong></div>
                     </div>
                 </div>
             </div>
