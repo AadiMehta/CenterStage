@@ -1,9 +1,10 @@
 import uuid
 from django.db import models
-from users.models import TeacherProfile, StudentProfile
+from users.models import TeacherProfile, StudentProfile, User
 from users.s3_storage import S3_LessonCoverImage_Storage
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
+
 
 
 class SessionTypes(models.TextChoices):
@@ -115,7 +116,6 @@ class Rating(models.Model):
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="ratings")
     rate = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5.0)],)
     review = models.CharField(_("Review"), max_length=256)
-    endorsements = models.JSONField(default=list, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -126,3 +126,4 @@ class Likes(models.Model):
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="likes")
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="likes")
     created_at = models.DateTimeField(auto_now_add=True)
+

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'phonenumber_field',
     'corsheaders',
+    'django_extensions',
 
     # project specific apps
     'frontend',
