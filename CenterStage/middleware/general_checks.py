@@ -5,8 +5,9 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponseRedirect
 from engine.models import LessonData, LessonStatuses, LessonTypes
-from users.models import TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations
-from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH
+from users.models import TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations, RecommendationChoices
+from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH, \
+    LESSON_PAGES_PATH
 from django.template.response import TemplateResponse
 
 logger = logging.getLogger(__name__)
@@ -55,20 +56,38 @@ class CheckOnboarding(object):
                     student_count += lesson.enrollments.count()
 
                 try:
-                    ratings = teacher.ratings
+                    ratings = teacher.ratings.all()
                 except TeacherRating.DoesNotExist:
                     ratings = "-"
 
                 try:
-                    recommendations = teacher.recommendations
+                    all_rec = teacher.recommendations.all()
+                    recommendations = {
+                        'LESSON_QUALITY': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_QUALITY),
+                        'LESSON_CONTENT': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_CONTENT),
+                        'LESSON_STRUCTURE': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_STRUCTURE),
+                        'TEACHER_HELPFULNESS': all_rec.filter(recommendation_type=RecommendationChoices.TEACHER_HELPFULNESS),
+                        'TEACHER_COMMUNICATION': all_rec.filter(recommendation_type=RecommendationChoices.TEACHER_COMMUNICATION),
+                        'TEACHER_KNOWLEDGE': all_rec.filter(recommendation_type=RecommendationChoices.TEACHER_KNOWLEDGE),
+                    }
+
                 except TeacherRecommendations.DoesNotExist:
-                    recommendations = "-"
+                    none_obj = TeacherRecommendations.objects.none()
+                    recommendations = {
+                        'LESSON_QUALITY': none_obj,
+                        'LESSON_CONTENT': none_obj,
+                        'LESSON_STRUCTURE': none_obj,
+                        'TEACHER_HELPFULNESS': none_obj,
+                        'TEACHER_COMMUNICATION': none_obj,
+                        'TEACHER_KNOWLEDGE': none_obj
+                    }
 
                 context = dict({
                     "teacher": teacher,
                     "lessons": teacher.lessons.filter(is_private=False),
                     "all_lessons": lessons,
-                    "avg_rating": TeacherRating.objects.filter(creator=teacher).aggregate(Avg('rate')),
+                    "avg_rating": round(TeacherRating.objects.filter(creator=teacher).aggregate(
+                        Avg('rate')).get('rate__avg') or 0, 1),
                     "years_of_exp": "N/A" if teacher.year_of_experience is None else teacher.year_of_experience,
                     "student_count": student_count,
                     "sharing_link": '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL),
@@ -137,7 +156,7 @@ class CheckOnboarding(object):
                     response = self.get_response(request)
         else:
             # user not logged in
-            if request.path.startswith(CENTERSTAGE_STATIC_PATH):
+            if request.path.startswith(CENTERSTAGE_STATIC_PATH) or request.path.startswith(LESSON_PAGES_PATH):
                 response = self.get_response(request)
             elif request.path != "/":
                 return HttpResponseRedirect(reverse('homepage'))

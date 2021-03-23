@@ -73,6 +73,7 @@ ROOT_URLCONF = 'CenterStage.urls'
 
 API_URL = '/api'
 TEACHER_TEMPLATES_PATH = '/teacher'
+LESSON_PAGES_PATH = "/lesson"
 STUDENT_TEMPLATES_PATH = '/student'
 CENTERSTAGE_STATIC_PATH = "/centrestage"
 
