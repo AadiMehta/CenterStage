@@ -1,12 +1,15 @@
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from django.db.models import Avg, Count
+from rest_framework.response import Response
+
 from rest_framework import status
 from rest_framework import generics
 from django.conf import settings
 from engine.models import LessonData, LessonStatuses, LessonTypes
 from users.models import TeacherProfile, RecommendationChoices, TeacherRating, TeacherRecommendations
 
+from users.authentication import AuthCookieAuthentication
 
 class TeacherPageView(TemplateView):
     template_name = "public/teacherpage.html"
@@ -100,16 +103,17 @@ class SubmitTeacherReview(generics.CreateAPIView):
     """
     Submit Review For Teacher
     """
-    authentication_classes = []
+    authentication_classes = [AuthCookieAuthentication]    
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        user = self.request.user
+        user = request.user
         data = request.data
         review = data.get('review')
         rate = data.get('rate')
         recommendations = data.get('recommendations')
-        teacher = TeacherProfile.objects.get(subdomain=teacher_subdomain)
+        teacher_id = data.get('teacher_id')
+        teacher = TeacherProfile.objects.get(pk=teacher_id)
 
         rating, created = TeacherRating.objects.update_or_create(
             creator=teacher,
@@ -117,20 +121,17 @@ class SubmitTeacherReview(generics.CreateAPIView):
             rate=rate,
             review=review
         )
+        TeacherRecommendations.objects.filter(
+            creator=teacher,
+            user=user
+        ).delete()
 
         for recommendation_type in recommendations:
-            try:
-                TeacherRecommendations.objects.get(
-                    creator=teacher,
-                    user=user,
-                    recommendation_type=recommendation_type
-                ).delete()
-            except TeacherRecommendations.DoesNotExist:
-                TeacherRecommendations.objects.filter(
-                    creator=teacher,
-                    user=user,
-                    recommendation_type=recommendation_type
-                ).save()
+            TeacherRecommendations(
+                creator=teacher,
+                user=user,
+                recommendation_type=recommendation_type
+            ).save()
 
         if created:
             return Response(dict({'msg': 'Rating Submitted Successfull'}), status=status.HTTP_201_CREATED)

@@ -171,11 +171,11 @@
                         <div class="share-to">
                             <h5>How was your overall booking process experience?</h5>
                             <div class="rating-row">
-                                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt=""></a>
-                                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt=""></a>
-                                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt=""></a>
-                                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt=""></a>
-                                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt=""></a>
+                                <img id="lessonstar1" src="{% static 'images/rating-blank.svg' %}" alt="">
+                                <img id="lessonstar2" src="{% static 'images/rating-blank.svg' %}" alt="">
+                                <img id="lessonstar3" src="{% static 'images/rating-blank.svg' %}" alt="">
+                                <img id="lessonstar4" src="{% static 'images/rating-blank.svg' %}" alt="">
+                                <img id="lessonstar5" src="{% static 'images/rating-blank.svg' %}" alt="">
                             </div>
                         </div>
                         <div class="btn-area mt-5 twobtn-wrap">
@@ -201,49 +201,54 @@
                 <h2>Write a review for</h2>
                 <div class="review-modal-top">
                     <div class="profimg-rounded"><img src="{% static 'images/user-img' %}.png" alt=""></div>
-                    <div class="d-block writer-name mt-2"><a href="#">Thomas Edward</a></div>
-                    <div class="rating-row">
-                        <a href="#"><img src="{% static 'images/rating-fill' %}.svg" alt=""></a>
-                        <a href="#"><img src="{% static 'images/rating-fill' %}.svg" alt=""></a>
-                        <a href="#"><img src="{% static 'images/rating-fill' %}.svg" alt=""></a>
-                        <a href="#"><img src="{% static 'images/rating-blank' %}.svg" alt=""></a>
-                        <a href="#"><img src="{% static 'images/rating-blank' %}.svg" alt=""></a>
+                    <div class="d-block writer-name mt-2">
+                        <h3>{{teacher.user.first_name}} {{teacher.user.last_name}} 
                     </div>
+                    <input id="rating" type="hidden" style="display:none">
+                    <div class="rating-row">
+                        <img id="teacherstar1" src="{% static 'images/rating-blank.svg' %}" alt="">
+                        <img id="teacherstar2" src="{% static 'images/rating-blank.svg' %}" alt="">
+                        <img id="teacherstar3" src="{% static 'images/rating-blank.svg' %}" alt="">
+                        <img id="teacherstar4" src="{% static 'images/rating-blank.svg' %}" alt="">
+                        <img id="teacherstar5" src="{% static 'images/rating-blank.svg' %}" alt="">
+                    </div>
+                    <p id="ratingError" style="margin-left:16px; color:red;display:none;"></p>
                 </div>
                 <div class="liner-inp">
-                    <input type="text" class="form-control" placeholder="Write your Review">
+                    <input type="text" id="review" class="form-control" placeholder="Write your Review">
+                    <p id="reviewError" style="margin-left:16px; color:red;display:none;"></p>
                 </div>
                 <div class="endorse-sec">
                     <h4>Endorse your teacher for</h4>
                     <div class="endorse-wrap">
                         <div class="checkbox">
-                            <input type="checkbox" id="check">
-                            <label for="check">Lesson Quality</label>
+                            <input id="lessonQuality" type="checkbox">
+                            <label for="lessonQuality">Lesson Quality</label>
                         </div>
                         <div class="checkbox">
-                            <input type="checkbox" id="check2">
-                            <label for="check2">Lesson Content</label>
+                            <input id="lessonContent" type="checkbox">
+                            <label for="lessonContent">Lesson Content</label>
                         </div>
                         <div class="checkbox">
-                            <input type="checkbox" id="check3">
-                            <label for="check3">Lesson Structure</label>
+                            <input id="lessonStructure" type="checkbox">
+                            <label for="lessonStructure">Lesson Structure</label>
                         </div>
                         <div class="checkbox">
-                            <input type="checkbox" id="check0">
-                            <label for="check0">Teacher Helpfulness</label>
+                            <input id="teacherHelpfulness" type="checkbox">
+                            <label for="teacherHelpfulness">Teacher Helpfulness</label>
                         </div>
                         <div class="checkbox">
-                            <input type="checkbox" id="check02">
-                            <label for="check02">Teacher Communication</label>
+                            <input id="teacherCommunication" type="checkbox">
+                            <label for="teacherCommunication">Teacher Communication</label>
                         </div>
                         <div class="checkbox">
-                            <input type="checkbox" id="check03">
-                            <label for="check03">Teacher Knowledge</label>
+                            <input id="teacherKnowledge" type="checkbox">
+                            <label for="teacherKnowledge">Teacher Knowledge</label>
                         </div>
                     </div>
                 </div>
                 <div class="btn-center">
-                    <button type="button" class="btn btn-theme"><span>Submit</span> <i><img src="{% static 'images/next.svg' %}" alt=""></i></button>
+                    <button type="button" class="btn btn-theme" id="submitReview" ><span>Submit</span> <i><img src="{% static 'images/next.svg' %}" alt=""></i></button>
                 </div>
             </div>
         </div>
