@@ -1,12 +1,11 @@
 import logging
-
 from django.db.models import Count, Avg
 from django.urls import reverse
 from django.conf import settings
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponseRedirect
 from engine.models import LessonData, LessonStatuses, LessonTypes
-from users.models import TeacherProfile, StudentProfile, TeacherRating
+from users.models import TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations
 from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH
 from django.template.response import TemplateResponse
 
@@ -55,19 +54,29 @@ class CheckOnboarding(object):
                 for lesson in lessons:
                     student_count += lesson.enrollments.count()
 
+                try:
+                    ratings = teacher.ratings
+                except TeacherRating.DoesNotExist:
+                    ratings = "-"
+
+                try:
+                    recommendations = teacher.recommendations
+                except TeacherRecommendations.DoesNotExist:
+                    recommendations = "-"
+
                 context = dict({
                     "teacher": teacher,
                     "lessons": teacher.lessons.filter(is_private=False),
                     "all_lessons": lessons,
                     "avg_rating": TeacherRating.objects.filter(creator=teacher).aggregate(Avg('rate')),
-                    "years_of_exp": teacher.year_of_experience,
+                    "years_of_exp": "N/A" if teacher.year_of_experience is None else teacher.year_of_experience,
                     "student_count": student_count,
                     "sharing_link": '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL),
                     "most_popular_lessons": lessons.annotate(count=Count('enrollments')).order_by('count'),
                     "one_on_one_lessons": lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE),
                     "group_lessons": lessons.filter(lesson_type=LessonTypes.GROUP),
-                    "reviews": lessons.ratings,
-                    "recommendations": lessons.recommendations
+                    "reviews": ratings,
+                    "recommendations": recommendations
                 })
 
                 return TemplateResponse(request, 'public/teacherpage.html', context).render()
