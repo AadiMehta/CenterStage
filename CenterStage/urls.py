@@ -53,7 +53,7 @@ from frontend.views.studentdashboard import (
     StudentDashboardSchedulesPastSessions, StudentDashboardSchedulesUpcomingSessions
 )
 from engine.views import LessonAPIView, MeetingAPIView
-from frontend.views.public import TeacherPageView
+from frontend.views.public import TeacherPageView, SubmitTeacherReview
 
 
 schema_view = get_schema_view(
@@ -117,6 +117,9 @@ urlpatterns = [
 
     # Meeting APIs
     path('api/meeting/', MeetingAPIView.as_view()),
+
+    # Teacher Page API
+    path('api/teacher/review/', SubmitTeacherReview.as_view()),
 
     # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),

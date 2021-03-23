@@ -630,7 +630,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="showall-btn"><a href="#" class="btn btn-liner">View All Reviews (32)</a></div>
+                <div class="showall-btn"><a href="#" class="btn btn-liner">View All Reviews ({{reviews|length}})</a></div>
             </div>
             <div class="recommendations-section">
                 <h2 class="title-2">Recommendations</h2>
@@ -715,6 +715,11 @@
 {% endblock %}
 
 {% block script %}
+<script>
+    var teacherId = "{{ teacher.id }}"
+    var ratingFilled = "{% static 'images/rating-fill.svg' %}"
+    var ratingBlank = "{% static 'images/rating-blank.svg' %}"
+</script>
 <!-- custom scrollbar plugin -->
 <script src="{% static 'js/public/custom.js' %}"></script>
 {% endblock %}
