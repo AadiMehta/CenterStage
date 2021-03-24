@@ -53,7 +53,10 @@ from frontend.views.studentdashboard import (
     StudentDashboardSchedulesPastSessions, StudentDashboardSchedulesUpcomingSessions
 )
 from engine.views import LessonAPIView, MeetingAPIView
-from frontend.views.public import TeacherPageView, SubmitTeacherReview
+from frontend.views.public import (
+    TeacherPageView, SubmitTeacherReview, RecommendTeacherAPIView,
+    FollowTeacherAPIView, LikeTeacherAPIView
+)
 
 
 schema_view = get_schema_view(
@@ -120,6 +123,9 @@ urlpatterns = [
 
     # Teacher Page API
     path('api/teacher/review/', SubmitTeacherReview.as_view()),
+    path('api/teacher/recommend/', RecommendTeacherAPIView.as_view()),
+    path('api/teacher/follow/', FollowTeacherAPIView.as_view()),
+    path('api/teacher/like/', LikeTeacherAPIView.as_view()),
 
     # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
