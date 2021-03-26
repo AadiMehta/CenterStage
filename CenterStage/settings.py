@@ -99,7 +99,7 @@ WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
 SCHEME = 'https'
 SITE_URL = 'centrestage.live'
-BASE_URL = '{}://www.{}'.format(SCHEME, SITE_URL)
+BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

@@ -66,11 +66,13 @@ class CheckOnboarding(object):
                         'LESSON_QUALITY': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_QUALITY),
                         'LESSON_CONTENT': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_CONTENT),
                         'LESSON_STRUCTURE': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_STRUCTURE),
-                        'TEACHER_HELPFULNESS': all_rec.filter(recommendation_type=RecommendationChoices.TEACHER_HELPFULNESS),
-                        'TEACHER_COMMUNICATION': all_rec.filter(recommendation_type=RecommendationChoices.TEACHER_COMMUNICATION),
-                        'TEACHER_KNOWLEDGE': all_rec.filter(recommendation_type=RecommendationChoices.TEACHER_KNOWLEDGE),
+                        'TEACHER_HELPFULNESS': all_rec.filter(
+                            recommendation_type=RecommendationChoices.TEACHER_HELPFULNESS),
+                        'TEACHER_COMMUNICATION': all_rec.filter(
+                            recommendation_type=RecommendationChoices.TEACHER_COMMUNICATION),
+                        'TEACHER_KNOWLEDGE': all_rec.filter(
+                            recommendation_type=RecommendationChoices.TEACHER_KNOWLEDGE),
                     }
-
                 except TeacherRecommendations.DoesNotExist:
                     none_obj = TeacherRecommendations.objects.none()
                     recommendations = {
