@@ -39,9 +39,9 @@
                     </div>
                 </div>
                 <div class="share-btn-col">
-                    <button type="button" class="btn btn-heart"><img src="{% static 'images/heart.png' %}"></button>
+                    <button type="button" class="btn btn-heart" id="likeTeacher"><span id="likeTeacherTempText">{% if like %}Liked{% else %}Like{% endif %}</span><img src="{% static 'images/heart.png' %}"></button>
                     <button type="button" class="btn btn-theme btn-theme-liner">Share</button>
-                    <button type="button" class="btn btn-theme">Follow</button>
+                    <button type="button" class="btn btn-theme" id="followTeacher">{% if followed %}Followed{% else %}Follow{% endif %}</button>
                 </div>
             </div>
             <div class="reating-sec">
@@ -613,7 +613,9 @@
             </div>
             <div class="form-group write-reviews-section">
                 <h2 class="title-2">Reviews</h2>
-                <div class="btn-write-review"><a href="#" class="btn btn-liner"><i><img src="{% static 'images/edit-bold.svg' %}" alt="" /></i> <span>Write Reviews</span></a></div>
+                <div class="btn-write-review">
+                    <button type="button" class="btn btn-liner" data-toggle="modal" data-target="#writeReview"><i><img src="{% static 'images/edit-bold.svg' %}" alt="" /></i> <span>Write Reviews</span></button>
+                </div>
                 <div class="reviewbox-wrap">
                     {% for review in reviews|slice:"0:3" %}
                     <div class="reviewbox">
@@ -629,15 +631,31 @@
                         </div>
                     </div>
                     {% endfor %}
+                    {% for review in reviews|slice:"3:" %}
+                    <div class="reviewbox view-all-reviews" style="display:none">
+                        <div class="review-msg">
+                            {{review.review}}
+                        </div>
+                        <div class="profimg-name">
+                            <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
+                            <div class="prof-name">
+                                <h4>{{review.user.first_name}} {{review.user.last_name}} </h4>
+                                <span class="lession-time">{{ review.created_at|naturaltime }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="showall-btn"><a href="#" class="btn btn-liner">View All Reviews ({{reviews|length}})</a></div>
+                <div class="showall-btn">
+                    <button class="btn btn-liner" id="viewAllReviews" data-shown="false">View All Reviews ({{reviews|length}})</button>
+                </div>
             </div>
             <div class="recommendations-section">
                 <h2 class="title-2">Recommendations</h2>
                 <div class="recommendations-wrap">
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/quality.svg' %}" alt="" /></i> <span>Lesson Quality</span></div>
-                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col"><button type="button" class="recommend-teacher btn btn-rounded pl-5 pr-5" data-recom-type="LESSON_QUALITY">{% if 'LESSON_QUALITY' in user_recommended %}Recommended{% else %}Recommend{% endif %}</button></div>
                     <div class="recommendations-col">
                         <div class="profimg-col">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -645,11 +663,11 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>({{recommendations.LESSON_QUALITY|length}} Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong id="LESSON_QUALITY_COUNT" data-recom-count="{{recommendations.LESSON_QUALITY|length}}">({{recommendations.LESSON_QUALITY|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/content.svg' %}" alt="" /></i> <span>Lesson Content</span></div>
-                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col"><button type="button" class="recommend-teacher btn btn-rounded pl-5 pr-5" data-recom-type="LESSON_CONTENT">{% if 'LESSON_CONTENT' in user_recommended %}Recommended{% else %}Recommend{% endif %}</button></div>
                     <div class="recommendations-col">
                         <div class="profimg-col">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -657,11 +675,11 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>({{recommendations.LESSON_CONTENT|length}} Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong id="LESSON_CONTENT_COUNT" data-recom-count="{{recommendations.LESSON_CONTENT|length}}">({{recommendations.LESSON_CONTENT|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/organization.svg' %}" alt="" /></i> <span>Lesson Structure</span></div>
-                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col"><button type="button" class="recommend-teacher btn btn-rounded pl-5 pr-5" data-recom-type="LESSON_STRUCTURE">{% if 'LESSON_STRUCTURE' in user_recommended %}Recommended{% else %}Recommend{% endif %}</button></div>
                     <div class="recommendations-col">
                         <div class="profimg-col">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -669,11 +687,11 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>({{recommendations.LESSON_STRUCTURE|length}} Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong id="LESSON_STRUCTURE_COUNT" data-recom-count="{{recommendations.LESSON_STRUCTURE|length}}">({{recommendations.LESSON_STRUCTURE|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/explain.svg' %}" alt="" /></i> <span>Teacher Helpfulness</span></div>
-                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col"><button type="button" class="recommend-teacher btn btn-rounded pl-5 pr-5" data-recom-type="TEACHER_HELPFULNESS">{% if 'TEACHER_HELPFULNESS' in user_recommended %}Recommended{% else %}Recommend{% endif %}</button></div>
                     <div class="recommendations-col">
                         <div class="profimg-col">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -681,11 +699,11 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>({{recommendations.TEACHER_HELPFULNESS|length}} Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong id="TEACHER_HELPFULNESS_COUNT" data-recom-count="{{recommendations.TEACHER_HELPFULNESS|length}}">({{recommendations.TEACHER_HELPFULNESS|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/communication.svg' %}" alt="" /></i> <span>Teacher Communication</span></div>
-                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col"><button type="button" class="recommend-teacher btn btn-rounded pl-5 pr-5" data-recom-type="TEACHER_COMMUNICATION">{% if 'TEACHER_COMMUNICATION' in user_recommended %}Recommended{% else %}Recommend{% endif %}</button></div>
                     <div class="recommendations-col">
                         <div class="profimg-col">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -693,11 +711,11 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>({{recommendations.TEACHER_COMMUNICATION|length}} Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong id="TEACHER_COMMUNICATION_COUNT" data-recom-count="{{recommendations.TEACHER_COMMUNICATION|length}}">({{recommendations.TEACHER_COMMUNICATION|length}} Recommendations)</strong></div>
                     </div>
                     <div class="recommendations-row">
                     <div class="recommendations-col"><i><img src="{% static 'images/knowledge.svg' %}" alt="" /></i> <span>Teacher Knowledge</span></div>
-                    <div class="recommendations-col"><button type="button" class="btn btn-rounded pl-5 pr-5">Recommend</button></div>
+                    <div class="recommendations-col"><button type="button" class="recommend-teacher btn btn-rounded pl-5 pr-5" data-recom-type="TEACHER_KNOWLEDGE">{% if 'TEACHER_KNOWLEDGE' in user_recommended %}Recommended{% else %}Recommend{% endif %}</button></div>
                     <div class="recommendations-col">
                         <div class="profimg-col">
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -705,7 +723,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                         </div>
                     </div>
-                    <div class="recommendations-col rec-text"><strong>({{recommendations.TEACHER_KNOWLEDGE|length}} Recommendations)</strong></div>
+                    <div class="recommendations-col rec-text"><strong id="TEACHER_KNOWLEDGE_COUNT" data-recom-count="{{recommendations.TEACHER_KNOWLEDGE|length}}">({{recommendations.TEACHER_KNOWLEDGE|length}} Recommendations)</strong></div>
                     </div>
                 </div>
             </div>

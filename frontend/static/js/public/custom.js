@@ -162,7 +162,8 @@ function submitTeacherReview(review, rate, recommendations) {
             "teacher_id": teacherId,
         }),
         success: function (data, status, xhr) {
-            closeModal('writeReview');
+            hideModal('writeReview');
+            window.location.reload();
         },
         error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI
@@ -171,6 +172,91 @@ function submitTeacherReview(review, rate, recommendations) {
     });
 }
 
+
+function recommendTeacher(event) {
+    const {recomType} = event.target.dataset;
+    const recomTypeCountEl = $(`#${recomType}_COUNT`);
+    let {recomCount} = recomTypeCountEl[0].dataset;
+    recomCount = Number(recomCount || 0);
+    const token = getCookie('auth_token');
+    $.ajax('/api/teacher/recommend/', {
+        type: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            "teacher_id": teacherId,
+            "recommendation_type": recomType
+        }),
+        success: function (data, status, xhr) {
+            if (data.action === 'removed') {
+                event.target.innerText = 'Recommend'
+                recomCount -= 1;
+            } else {
+                event.target.innerText = 'Recommended'
+                recomCount += 1;
+            }
+            recomTypeCountEl.attr(`data-recom-count`, recomCount);
+            recomTypeCountEl.text(`(${recomCount} Recommendations)`);
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+            // Todo: Show Error Message on UI
+            console.log('Error while submitting recommendation', errorMessage)
+        }
+    });
+}
+
+function handleFollowTeacher(event) {
+    const token = getCookie('auth_token');
+    $.ajax('/api/teacher/follow/', {
+        type: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            "teacher_id": teacherId,
+        }),
+        success: function (data, status, xhr) {
+            if (data.action === 'removed') {
+                event.target.innerText = 'Follow'
+            } else {
+                event.target.innerText = 'Followed'
+            }
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+            // Todo: Show Error Message on UI
+            console.log('Error while follow api', errorMessage)
+        }
+    });
+}
+
+function handleLikeTeacher(event) {
+    const token = getCookie('auth_token');
+    $.ajax('/api/teacher/like/', {
+        type: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            "teacher_id": teacherId,
+        }),
+        success: function (data, status, xhr) {
+            console.log(event.target)
+            if (data.action === 'removed') {
+                $('#likeTeacherTempText').text('Like');
+            } else {
+                $('#likeTeacherTempText').text('Liked');
+            }
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+            // Todo: Show Error Message on UI
+            console.log('Error while like api', errorMessage)
+        }
+    });
+}
 
 /**
  * On Proceed Clicked,
@@ -217,12 +303,27 @@ function handleReviewSubmit() {
     }
 }
 
+function handleViewAllReviews(event) {
+    const {shown} = event.target.dataset;
+    const isShown = shown === 'true';
+    if (isShown) {
+        $('.view-all-reviews').hide();
+        $('#viewAllReviews').attr("data-shown","false");
+    } else {
+        $('.view-all-reviews').show();
+        $('#viewAllReviews').attr("data-shown","true");
+    }
+}
 
 
 function init() {
     initializeCommon();
     initializeTeacherRating();
     $('#submitReview').click(handleReviewSubmit)
+    $('.recommend-teacher').click(recommendTeacher)
+    $('#viewAllReviews').click(handleViewAllReviews)
+    $('#followTeacher').click(handleFollowTeacher)
+    $('#likeTeacher').click(handleLikeTeacher)
 }
   
 init();

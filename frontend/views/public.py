@@ -7,7 +7,10 @@ from rest_framework import status
 from rest_framework import generics
 from django.conf import settings
 from engine.models import LessonData, LessonStatuses, LessonTypes
-from users.models import TeacherProfile, RecommendationChoices, TeacherRating, TeacherRecommendations
+from users.models import (
+    TeacherProfile, RecommendationChoices, TeacherRating,
+    TeacherRecommendations, TeacherFollow, TeacherLike
+)
 
 from users.authentication import AuthCookieAuthentication
 
@@ -16,8 +19,10 @@ class TeacherPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        user = self.request.user
         teacher = self.request.user.teacher_profile_data
+
+        context['user'] = user
         context['teacher'] = teacher
         lessons = LessonData.objects.filter(
             creator=teacher,
@@ -39,8 +44,17 @@ class TeacherPageView(TemplateView):
         context['group_lessons'] = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
         context['reviews'] = teacher.ratings.all()
 
+        context['liked'] = TeacherLike.objects.filter(
+            user=user,
+            creator=teacher
+        ).exists()
+        context['followed'] = TeacherFollow.objects.filter(
+            user=user,
+            creator=teacher
+        ).exists()
+
         recommendations = teacher.recommendations.all()
-        context['recommendations'] = {
+        total_recommendations = {
             'LESSON_QUALITY': recommendations.filter(recommendation_type=RecommendationChoices.LESSON_QUALITY),
             'LESSON_CONTENT': recommendations.filter(recommendation_type=RecommendationChoices.LESSON_CONTENT),
             'LESSON_STRUCTURE': recommendations.filter(recommendation_type=RecommendationChoices.LESSON_STRUCTURE),
@@ -48,6 +62,15 @@ class TeacherPageView(TemplateView):
             'TEACHER_COMMUNICATION': recommendations.filter(recommendation_type=RecommendationChoices.TEACHER_COMMUNICATION),
             'TEACHER_KNOWLEDGE': recommendations.filter(recommendation_type=RecommendationChoices.TEACHER_KNOWLEDGE),
         }
+        context['recommendations'] = total_recommendations
+        user_recommended = []
+        for recommendation_type in total_recommendations:
+            recommended = TeacherRecommendations.objects.filter(
+                user=user, creator=teacher, recommendation_type=recommendation_type
+            ).exists()
+            if recommended:
+                user_recommended.append(recommendation_type)
+        context['user_recommended'] = user_recommended
         return context
     
     def dispatch(self, request, *args, **kwargs):
@@ -71,31 +94,93 @@ class RecommendTeacherAPIView(generics.CreateAPIView):
     """
     Recommend with single recommendation type
     """
-    authentication_classes = []
+    authentication_classes = [AuthCookieAuthentication]    
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
-        user = self.request.user
+        user = request.user
         data = request.data
-        teacher_subdomain = data.get('teacher_subdomain')
+        teacher_id = data.get('teacher_id')
+        teacher = TeacherProfile.objects.get(pk=teacher_id)
+        
         recommendation_type = data.get('recommendation_type')
-
-        teacher = TeacherProfile.objects.get(subdomain=teacher_subdomain)
         try:
             TeacherRecommendations.objects.get(
                 creator=teacher,
                 user=user,
                 recommendation_type=recommendation_type
             ).delete()
-            action = 'Recommendation Removal Successful'
+            msg = 'Recommendation Removal Successful'
+            action = 'removed'
         except TeacherRecommendations.DoesNotExist:
-            TeacherRecommendations.objects.filter(
+            TeacherRecommendations(
                 creator=teacher,
                 user=user,
                 recommendation_type=recommendation_type
             ).save()
-            action = 'Recommendation Successful'
-        return Response(dict({"msg": action}), status=status.HTTP_200_OK)
+            msg = 'Recommendation Successful'
+            action = 'added'
+        return Response(dict({"msg": msg, "action": action}), status=status.HTTP_200_OK)
+
+
+class FollowTeacherAPIView(generics.CreateAPIView):
+    """
+    Follow Teacher
+    """
+    authentication_classes = [AuthCookieAuthentication]    
+    permission_classes = []
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        teacher_id = data.get('teacher_id')
+        teacher = TeacherProfile.objects.get(pk=teacher_id)
+        
+        try:
+            TeacherFollow.objects.get(
+                creator=teacher,
+                user=user
+            ).delete()
+            msg = 'Follower Removal Successful'
+            action = 'removed'
+        except TeacherFollow.DoesNotExist:
+            TeacherFollow(
+                creator=teacher,
+                user=user
+            ).save()
+            msg = 'Followed Successful'
+            action = 'added'
+        return Response(dict({"msg": msg, "action": action}), status=status.HTTP_200_OK)
+
+
+class LikeTeacherAPIView(generics.CreateAPIView):
+    """
+    Like Teacher
+    """
+    authentication_classes = [AuthCookieAuthentication]    
+    permission_classes = []
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        teacher_id = data.get('teacher_id')
+        teacher = TeacherProfile.objects.get(pk=teacher_id)
+        
+        try:
+            TeacherLike.objects.get(
+                creator=teacher,
+                user=user
+            ).delete()
+            msg = 'Like Removal Successful'
+            action = 'removed'
+        except TeacherLike.DoesNotExist:
+            TeacherLike(
+                creator=teacher,
+                user=user
+            ).save()
+            msg = 'Liked Successful'
+            action = 'added'
+        return Response(dict({"msg": msg, "action": action}), status=status.HTTP_200_OK)
 
 
 

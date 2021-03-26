@@ -1,7 +1,11 @@
+from django.utils import timezone
+
 from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
 from users.serializers import TeacherProfileSerializer, StudentProfileSerializer
 from frontend.utils.auth import get_time_duration
+from django.db.models import Q
+
 
 
 # ********* Lessons Serializers **********
@@ -81,6 +85,23 @@ class LessonSlotSerializer(serializers.ModelSerializer):
             'created_at',
             'session_time',
             'session_duration'
+        ]
+
+class LessonTeacherPageSerializer(serializers.ModelSerializer):
+    """
+    Lesson Teacher Page Serializer
+    """
+    upcoming_slot = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_upcoming_slot(instance):
+        slots = LessonSlots.objects.filter(Q(lesson_from__gt=timezone.now()), lesson=instance)
+        return LessonSlotSerializer(slots.first())
+
+    class Meta:
+        model = LessonData
+        exclude = [
+            'creator'
         ]
 
 

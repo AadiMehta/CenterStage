@@ -232,6 +232,25 @@ class TeacherRecommendations(models.Model):
     recommendation_type = models.CharField(_("Type of Recommendation"), choices=RecommendationChoices.choices, max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class TeacherFollow(models.Model):
+    """
+    Teacher Follow Model
+    """
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="followers")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class TeacherLike(models.Model):
+    """
+    Teacher Like Model
+    """
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liked")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 # ***************** Student Models ******************
 
 
