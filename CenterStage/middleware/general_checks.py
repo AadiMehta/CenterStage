@@ -158,7 +158,7 @@ class CheckOnboarding(object):
                     response = self.get_response(request)
         else:
             # user not logged in
-            if request.path.startswith(CENTERSTAGE_STATIC_PATH) or request.path.startswith(LESSON_PAGES_PATH):
+            if request.path.startswith(CENTERSTAGE_STATIC_PATH):
                 response = self.get_response(request)
             elif request.path != "/":
                 return HttpResponseRedirect(reverse('homepage'))

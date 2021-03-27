@@ -110,6 +110,46 @@ function verifyOtpAPI(userType, phoneNumber, otp) {
     });
 }
 
+
+/**
+ * Enter key on password field to log in
+ * This if for sign in page
+ */
+document.getElementById("loginPassword")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("signInButton").click();
+    }
+});
+
+
+/**
+ * Enter key on password field to sign up
+ * This if for sign up page
+ */
+document.getElementById("signUpPassword")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("signUpButton").click();
+    }
+});
+
+
+
+/**
+ * Enter key on get otp field to get otp
+ * This if for sign in page
+ */
+document.getElementById("loginPhoneNumber")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("getOTPButton").click();
+    }
+});
+
 /**
  * Signup API for new User
  * @param {String} firstName 
@@ -136,7 +176,15 @@ function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
         }
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        $(getClassName(userType, 'SignUpButtonError')).text("Email/Phone no already registered!")
+        if (jqXhr["responseJSON"]["email"] != null) {
+            $(getClassName(userType, 'SignUpButtonError')).text(jqXhr["responseJSON"]["email"][0])
+        }
+        else if (jqXhr["responseJSON"]["phone_no"] != null) {
+            $(getClassName(userType, 'SignUpButtonError')).text(jqXhr["responseJSON"]["phone_no"][0])
+        }
+        else {
+            $(getClassName(userType, 'SignUpButtonError')).text("Email/Phone no already registered!")
+        }
         $(getClassName(userType, 'SignUpButtonError')).show()
         console.log('Error while signup: ', jqXhr)
         // hideModal('modalSignup');

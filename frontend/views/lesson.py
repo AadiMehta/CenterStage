@@ -182,10 +182,14 @@ class LessonCreateWizard(SessionWizardView):
         start_date = timezone.datetime.strptime(start_date, '%m/%d/%Y')
         end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
         creator = user.teacher_profile_data
-        google_calendar_account = Accounts.objects.get(
-            user=user,
-            account_type=AccountTypes.GOOGLE_CALENDAR
-        )
+        try:
+            google_calendar_account = Accounts.objects.get(
+                user=user,
+                account_type=AccountTypes.GOOGLE_CALENDAR
+            )
+        except Accounts.DoesNotExist:
+            google_calendar_account = False
+
         calendar_service = None
         if google_calendar_account:
             calendar_service = GoogleCalendar(google_calendar_account.info)
