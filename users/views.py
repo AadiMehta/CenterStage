@@ -24,7 +24,8 @@ from users.serializers import (
     StudentProfileSerializer
 )
 from django.contrib.auth import login
-from users.models import User, TeacherProfile, ProfileStatuses, PaymentAccounts, StudentProfile
+from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile
+from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
@@ -72,7 +73,7 @@ class ObtainAuthToken(APIView):
         user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
         token, created = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })
         login(request, user)
         return Response({'token': token.key}, headers=headers)

@@ -101,6 +101,8 @@ SCHEME = 'https'
 SITE_URL = 'centrestage.live'
 BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
 
+SESSION_COOKIE_DOMAIN = SITE_URL
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
