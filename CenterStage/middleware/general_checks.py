@@ -118,6 +118,7 @@ class CheckOnboarding(object):
                     "teacher": teacher,
                     "user": request.user,
                     "BASE_URL": settings.BASE_URL,
+                    "SESSION_COOKIE_DOMAIN": settings.SESSION_COOKIE_DOMAIN,
                     "lessons": teacher.lessons.filter(is_private=False),
                     "all_lessons": lessons,
                     "avg_rating": round(TeacherRating.objects.filter(creator=teacher).aggregate(
