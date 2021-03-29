@@ -483,6 +483,7 @@ function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
       },
       success: function (data, status, xhr) {
         setCookie("auth_token", data.token, 1);
+        hideModal('modalSignupTeacherPage');
         onLoginRoute();
       },
       error: function (jqXhr, textStatus, errorMessage) {
