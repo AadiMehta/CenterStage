@@ -5,7 +5,12 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponseRedirect
 from engine.models import LessonData, LessonStatuses, LessonTypes
-from users.models import TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations, RecommendationChoices
+from users.models import (
+    TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations,
+    RecommendationChoices, TeacherLike, TeacherFollow
+)
+from engine.serializers import LessonTeacherPageSerializer
+
 from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH, \
     LESSON_PAGES_PATH
 from django.template.response import TemplateResponse
@@ -55,15 +60,6 @@ class CheckOnboarding(object):
                 one_on_one_lessons = lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE).order_by('-created_at')
                 group_lessons = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
 
-                liked = TeacherLike.objects.filter(
-                    user=user,
-                    creator=teacher
-                ).exists()
-                followed = TeacherFollow.objects.filter(
-                    user=user,
-                    creator=teacher
-                ).exists()
-
                 # TODO improve this logic using SUM
                 student_count = 0
                 for lesson in lessons:
@@ -98,13 +94,25 @@ class CheckOnboarding(object):
                         'TEACHER_KNOWLEDGE': none_obj
                     }
 
+                liked = False
+                followed = False
                 user_recommended = []
-                for recommendation_type in recommendations:
-                    recommended = TeacherRecommendations.objects.filter(
-                        user=user, creator=teacher, recommendation_type=recommendation_type
+                if not request.user.is_anonymous:
+                    liked = TeacherLike.objects.filter(
+                        user=request.user,
+                        creator=teacher
                     ).exists()
-                    if recommended:
-                        user_recommended.append(recommendation_type)
+                    followed = TeacherFollow.objects.filter(
+                        user=request.user,
+                        creator=teacher
+                    ).exists()
+
+                    for recommendation_type in recommendations:
+                        recommended = TeacherRecommendations.objects.filter(
+                            user=request.user, creator=teacher, recommendation_type=recommendation_type
+                        ).exists()
+                        if recommended:
+                            user_recommended.append(recommendation_type)
 
                 context = dict({
                     "teacher": teacher,

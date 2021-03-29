@@ -197,7 +197,7 @@ function submitTeacherReview(review, rate, recommendations) {
         return;
     }
     const token = getCookie('auth_token');
-    $.ajax('/api/teacher/review/', {
+    $.ajax(`${baseUrl}/api/teacher/review/`, {
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -231,7 +231,7 @@ function recommendTeacher(event) {
     let {recomCount} = recomTypeCountEl[0].dataset;
     recomCount = Number(recomCount || 0);
     const token = getCookie('auth_token');
-    $.ajax('/api/teacher/recommend/', {
+    $.ajax(`${baseUrl}/api/teacher/recommend/`, {
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -265,7 +265,7 @@ function handleFollowTeacher(event) {
         return;
     }
     const token = getCookie('auth_token');
-    $.ajax('/api/teacher/follow/', {
+    $.ajax(`${baseUrl}/api/teacher/follow/`, {
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -294,7 +294,7 @@ function handleLikeTeacher(event) {
         return;
     }
     const token = getCookie('auth_token');
-    $.ajax('/api/teacher/like/', {
+    $.ajax(`${baseUrl}/api/teacher/like/`, {
         type: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -402,7 +402,7 @@ function getClassName(userType, className) {
  */
 function sendOtpAPI(userType, phoneNumber) {
     window.sentOTPtoPhoneNumber = phoneNumber; 
-    $.ajax('/api/otp/send/', {
+    $.ajax(`${baseUrl}/api/otp/send/`, {
       type: 'POST',
       data: {
           "phone_no": phoneNumber
@@ -424,7 +424,7 @@ function sendOtpAPI(userType, phoneNumber) {
  * @param {String, Number} otp 
  */
 function verifyOtpAPI(userType, phoneNumber, otp) {
-    $.ajax('/api/otp/verify/', {
+    $.ajax(`${baseUrl}/api/otp/verify/`, {
       type: 'POST',
       data: {
         "phone_no": phoneNumber,
@@ -452,7 +452,7 @@ function verifyOtpAPI(userType, phoneNumber, otp) {
  * @param {String} password 
  */
 function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
-    $.ajax(`/api/${userType}/register/`, {
+    $.ajax(`${baseUrl}/api/${userType}/register/`, {
       type: 'POST',
       data: {
         "email": emailId,
@@ -506,7 +506,7 @@ function timer(remaining) {
  * @param {String} password 
  */
 function loginAPI(userType, emailId, password) {
-    $.ajax('/api/login/', {
+    $.ajax(`${baseUrl}/api/login/`, {
       type: 'POST',
       data: {
         "user_type": userType,
