@@ -470,6 +470,7 @@ class StudentProfileView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        redirect_url = request.GET.get('rurl')
         try:
             student = StudentProfile.objects.get(user=request.user)
             return Response(dict({

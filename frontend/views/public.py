@@ -9,8 +9,10 @@ from django.conf import settings
 from engine.models import LessonData, LessonStatuses, LessonTypes
 from users.models import (
     TeacherProfile, RecommendationChoices, TeacherRating,
-    TeacherRecommendations, TeacherFollow, TeacherLike
+    TeacherRecommendations, TeacherFollow, TeacherLike,
+    User
 )
+from engine.serializers import LessonTeacherPageSerializer
 
 from users.authentication import AuthCookieAuthentication
 
@@ -19,8 +21,8 @@ class TeacherPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        teacher = self.request.user.teacher_profile_data
+        user = User.objects.get(pk=85)        
+        teacher = user.teacher_profile_data
 
         context['user'] = user
         context['teacher'] = teacher
@@ -30,7 +32,8 @@ class TeacherPageView(TemplateView):
             is_private=False
         )
         context['BASE_URL'] = settings.BASE_URL
-        context['all_lessons'] = lessons.order_by('-created_at')
+        all_lessons = lessons.order_by('-created_at')
+        context['all_lessons'] = LessonTeacherPageSerializer(all_lessons, many=True).data
         ratings = TeacherRating.objects.filter(creator=teacher).aggregate(Avg('rate'))
         context['avg_rating'] = round(ratings.get('rate__avg') or 0, 1)
         context['years_of_exp'] = teacher.year_of_experience
@@ -39,9 +42,12 @@ class TeacherPageView(TemplateView):
             student_count += lesson.enrollments.count()
         context['student_count'] = student_count
         context['sharing_link'] = '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL)
-        context['most_popular_lessons'] = lessons.annotate(count=Count('enrollments')).order_by('count')
-        context['one_on_one_lessons'] = lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE).order_by('-created_at')
-        context['group_lessons'] = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
+        most_popular_lessons = lessons.annotate(count=Count('enrollments')).order_by('count')
+        context['most_popular_lessons'] = LessonTeacherPageSerializer(most_popular_lessons, many=True).data
+        one_on_one_lessons = lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE).order_by('-created_at')
+        context['one_on_one_lessons'] = LessonTeacherPageSerializer(one_on_one_lessons, many=True).data
+        group_lessons = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
+        context['group_lessons'] = LessonTeacherPageSerializer(group_lessons, many=True).data
         context['reviews'] = teacher.ratings.all()
 
         context['liked'] = TeacherLike.objects.filter(
@@ -74,9 +80,8 @@ class TeacherPageView(TemplateView):
         return context
     
     def dispatch(self, request, *args, **kwargs):
-        teacher = TeacherProfile.objects.filter(user=self.request.user).first()
-        if not teacher:
-            return redirect('homepage')
+        user = User.objects.get(pk=85)
+        teacher = TeacherProfile.objects.filter(user=user).first()
         return super(TeacherPageView, self).dispatch(request, *args, **kwargs)
 
 

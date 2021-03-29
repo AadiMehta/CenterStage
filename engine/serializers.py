@@ -91,17 +91,31 @@ class LessonTeacherPageSerializer(serializers.ModelSerializer):
     """
     Lesson Teacher Page Serializer
     """
+    creator = TeacherProfileSerializer(read_only=True)
     upcoming_slot = serializers.SerializerMethodField()
 
     @staticmethod
     def get_upcoming_slot(instance):
         slots = LessonSlots.objects.filter(Q(lesson_from__gt=timezone.now()), lesson=instance)
-        return LessonSlotSerializer(slots.first())
+        return LessonSlotSerializer(slots.first()).data
 
     class Meta:
         model = LessonData
-        exclude = [
-            'creator'
+        fields = [
+            'creator',
+            'name',
+            'description',
+            'no_of_participants',
+            'no_of_sessions',
+            'language',
+            'lesson_type',
+            'session_type',
+            'meeting_type',
+            'meeting_link',
+            'lesson_uuid',
+            'cover_image',
+            'status',
+            'upcoming_slot'
         ]
 
 
