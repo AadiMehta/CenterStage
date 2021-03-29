@@ -50,14 +50,26 @@ class TeacherPageView(TemplateView):
         context['group_lessons'] = LessonTeacherPageSerializer(group_lessons, many=True).data
         context['reviews'] = teacher.ratings.all()
 
-        context['liked'] = TeacherLike.objects.filter(
-            user=user,
-            creator=teacher
-        ).exists()
-        context['followed'] = TeacherFollow.objects.filter(
-            user=user,
-            creator=teacher
-        ).exists()
+        liked = False
+        followed = False
+        user_recommended = []
+
+        if not self.request.user.is_anonymous:
+            liked = TeacherLike.objects.filter(
+                user=request.user,
+                creator=teacher
+            ).exists()
+            followed = TeacherFollow.objects.filter(
+                user=request.user,
+                creator=teacher
+            ).exists()
+
+            for recommendation_type in recommendations:
+                recommended = TeacherRecommendations.objects.filter(
+                    user=request.user, creator=teacher, recommendation_type=recommendation_type
+                ).exists()
+                if recommended:
+                    user_recommended.append(recommendation_type)
 
         recommendations = teacher.recommendations.all()
         total_recommendations = {
@@ -69,14 +81,6 @@ class TeacherPageView(TemplateView):
             'TEACHER_KNOWLEDGE': recommendations.filter(recommendation_type=RecommendationChoices.TEACHER_KNOWLEDGE),
         }
         context['recommendations'] = total_recommendations
-        user_recommended = []
-        for recommendation_type in total_recommendations:
-            recommended = TeacherRecommendations.objects.filter(
-                user=user, creator=teacher, recommendation_type=recommendation_type
-            ).exists()
-            if recommended:
-                user_recommended.append(recommendation_type)
-        context['user_recommended'] = user_recommended
         return context
     
     def dispatch(self, request, *args, **kwargs):

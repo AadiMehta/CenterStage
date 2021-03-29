@@ -34,6 +34,15 @@ function onLoginRoute() {
     if (window.lessonUrl) {
         window.location.href = window.lessonUrl + '?rurl=' + window.lessonUrl;
         window.lessonUrl = null;
+    } else if (window.callbackFunction && window.callbackParams) {
+        if (window.callbackFunction.name === 'submitTeacherReview') {
+            const {review, rate, recommendations} = window.callbackParams;
+            window.callbackFunction(review, rate, recommendations);
+        } else {
+            window.callbackFunction(window.callbackParams.event);
+        }
+        window.callbackFunction = null;
+        window.callbackParams = null;
     } else {
         window.location.href = window.location.href + '?rurl=' + window.location.href;
     }
@@ -193,6 +202,8 @@ function initializeTeacherRating() {
  */
 function submitTeacherReview(review, rate, recommendations) {
     if (!isUserLoggedIn()) {
+        window.callbackParams = {review, rate, recommendations};
+        window.callbackFunction = submitTeacherReview;
         showModal('modalLoginTeacherPage');
         return;
     }
@@ -223,6 +234,8 @@ function submitTeacherReview(review, rate, recommendations) {
 
 function recommendTeacher(event) {
     if (!isUserLoggedIn()) {
+        window.callbackParams = {event};
+        window.callbackFunction = recommendTeacher;
         showModal('modalLoginTeacherPage');
         return;
     }
@@ -261,6 +274,8 @@ function recommendTeacher(event) {
 
 function handleFollowTeacher(event) {
     if (!isUserLoggedIn()) {
+        window.callbackParams = {event};
+        window.callbackFunction = handleFollowTeacher;
         showModal('modalLoginTeacherPage');
         return;
     }
@@ -290,6 +305,8 @@ function handleFollowTeacher(event) {
 
 function handleLikeTeacher(event) {
     if (!isUserLoggedIn()) {
+        window.callbackParams = {event};
+        window.callbackFunction = handleLikeTeacher;
         showModal('modalLoginTeacherPage');
         return;
     }
@@ -322,8 +339,10 @@ function handleLikeTeacher(event) {
  * On Proceed Clicked,
  * Validate Input and Go to Step 2
  */
-function handleReviewSubmit() {
+function handleReviewSubmit(event) {
     if (!isUserLoggedIn()) {
+        window.callbackParams = {event};
+        window.callbackFunction = handleReviewSubmit;
         showModal('modalLoginTeacherPage');
         return;
     }
@@ -408,6 +427,7 @@ function sendOtpAPI(userType, phoneNumber) {
           "phone_no": phoneNumber
       },
       success: function (data, status, xhr) {
+        hideAll();
         showModal('modalOTPTeacherPage', true);
       },
       error: function (jqXhr, textStatus, errorMessage) {
@@ -593,10 +613,7 @@ function onVerifyOTPClicked (event) {
  */
 function onSignUpClicked (event) {
     let isValid = true;
-    let { userType } = event.target.dataset;
-    if (!userType) {
-      userType = 'student'
-    }
+    let userType = 'student';
 
     console.log(userType);
     $(getClassName(userType, 'signUpFirstNameError')).hide()
@@ -655,10 +672,7 @@ function onSignUpClicked (event) {
  */
 function onSignInClicked (event) {
     let isValid = true;
-    let { userType } = event.target.dataset;
-    if (!userType) {
-      userType = 'student'
-    }
+    let userType = 'student';
 
     $(getClassName(userType, 'loginEmailError')).hide()
     $(getClassName(userType, 'loginPasswordError')).hide()
@@ -744,7 +758,6 @@ function init() {
     $('#followTeacher').click(handleFollowTeacher)
     $('#likeTeacher').click(handleLikeTeacher)
     $('.book-lesson').click(handleBookLesson)
-
 
     $('#openSignUpButton').click(openSignupModal);
     $('#openSignInButton').click(openSignInModal);
