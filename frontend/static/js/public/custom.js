@@ -451,7 +451,6 @@ function verifyOtpAPI(userType, phoneNumber, otp) {
         "otp": otp
       },
       success: function (data, status, xhr) {
-        setCookie("auth_token", data.token, 1);
         hideModal('modalOTPTeacherPage');
         hideModal('modalLoginTeacherPage');
         onLoginRoute();
@@ -482,7 +481,6 @@ function signUpAPI(userType, firstName, lastName, phoneNo, emailId, password) {
         "phone_no": phoneNo
       },
       success: function (data, status, xhr) {
-        setCookie("auth_token", data.token, 1);
         hideModal('modalSignupTeacherPage');
         onLoginRoute();
       },
@@ -535,7 +533,6 @@ function loginAPI(userType, emailId, password) {
         "password": password
       },
       success: function (data, status, xhr) {
-        setCookie("auth_token", data.token, 1);
         hideModal('modalOTPTeacherPage');
         hideModal('modalLoginTeacherPage');
         onLoginRoute();
@@ -771,3 +768,41 @@ function init() {
 }
   
 init();
+
+/**
+ * Enter key on password field to log in
+ * This if for sign in page
+ */
+document.getElementById("loginPassword")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("signInButton").click();
+    }
+});
+
+
+/**
+ * Enter key on password field to sign up
+ * This if for sign up page
+ */
+document.getElementById("signUpPassword")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("signUpButton").click();
+    }
+});
+
+
+/**
+ * Enter key on get otp field to get otp
+ * This if for sign in page
+ */
+document.getElementById("loginPhoneNumber")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("getOTPButton").click();
+    }
+});

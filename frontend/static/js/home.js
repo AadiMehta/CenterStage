@@ -232,7 +232,6 @@ function loginAPI(userType, emailId, password) {
         "password": password
       },
       success: function (data, status, xhr) {
-//        setCookie("auth_token", data.token, 1);
         hideModal('modalOTP');
         hideModal('modalLogin');
         location.reload();
