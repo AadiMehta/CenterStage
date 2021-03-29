@@ -5,6 +5,7 @@
 {% block style %}
 <link href="{% static '/css/public/style.css' %}" rel="stylesheet">
 <link href="{% static '/css/public/media.css' %}" rel="stylesheet">
+<link href="{% static '/css/home.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -122,20 +123,24 @@
                                     </div>
                                     <div class="group-row">
                                         <ul class="lessons-steps">
-                                            <li>
-                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Number</h4>
-                                                    <a href="#">03</a> <span>Out of 05</span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Duration</h4>
-                                                    <span>{{ slot.session_duration }}</span>
-                                                </div>
-                                            </li>
+                                            {% if lesson.upcoming_slot.session_no %}
+                                                <li>
+                                                    <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Number</h4>
+                                                        <a href="javascrip:void(0)">{{lesson.upcoming_slot.session_no}}</a> <span>Out of {{lesson.no_of_sessions}}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                            {% if lesson.upcoming_slot.session_duration %}
+                                                <li>
+                                                    <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Duration</h4>
+                                                        <span>{{ lesson.upcoming_slot.session_duration }}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
                                             <li>
                                                 <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
                                                 <div class="lessons-steps-text">
@@ -158,10 +163,7 @@
                                         </ul>
                                     </div>
                                     <div class="slide-inner-bottom">
-                                    <a href="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" target="_blank">
-                                        {% comment %} <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button> {% endcomment %}
-                                        <button type="button" class="btn btn-theme">Book Now</button>
-                                    </a>
+                                    <button type="button" class="btn btn-theme book-lesson" data-lesson-url="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" >Book Now</button>
                                     <div class="seats-col">
                                         <div class="seats-circle">04<span>/15</span></div>
                                         <div class="remaining-sts">Seats<br />
@@ -201,20 +203,24 @@
                                     </div>
                                     <div class="group-row">
                                         <ul class="lessons-steps">
-                                            <li>
-                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Number</h4>
-                                                    <a href="#">03</a> <span>Out of 05</span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Duration</h4>
-                                                    <span>{{ slot.session_duration }}</span>
-                                                </div>
-                                            </li>
+                                            {% if lesson.upcoming_slot.session_no %}
+                                                <li>
+                                                    <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Number</h4>
+                                                        <a href="javascrip:void(0)">{{lesson.upcoming_slot.session_no}}</a> <span>Out of {{lesson.no_of_sessions}}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                            {% if lesson.upcoming_slot.session_duration %}
+                                                <li>
+                                                    <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Duration</h4>
+                                                        <span>{{ lesson.upcoming_slot.session_duration }}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
                                             <li>
                                                 <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
                                                 <div class="lessons-steps-text">
@@ -237,10 +243,7 @@
                                         </ul>
                                     </div>
                                     <div class="slide-inner-bottom">
-                                    <a href="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" target="_blank">
-                                        {% comment %} <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button> {% endcomment %}
-                                        <button type="button" class="btn btn-theme">Book Now</button>
-                                    </a>
+                                    <button type="button" class="btn btn-theme book-lesson" data-lesson-url="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" >Book Now</button>
                                     <div class="seats-col">
                                         <div class="seats-circle">04<span>/15</span></div>
                                         <div class="remaining-sts">Seats<br />
@@ -280,20 +283,24 @@
                                     </div>
                                     <div class="group-row">
                                         <ul class="lessons-steps">
-                                            <li>
-                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Number</h4>
-                                                    <a href="#">03</a> <span>Out of 05</span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Duration</h4>
-                                                    <span>{{ slot.session_duration }}</span>
-                                                </div>
-                                            </li>
+                                            {% if lesson.upcoming_slot.session_no %}
+                                                <li>
+                                                    <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Number</h4>
+                                                        <a href="javascrip:void(0)">{{lesson.upcoming_slot.session_no}}</a> <span>Out of {{lesson.no_of_sessions}}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                            {% if lesson.upcoming_slot.session_duration %}
+                                                <li>
+                                                    <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Duration</h4>
+                                                        <span>{{ lesson.upcoming_slot.session_duration }}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
                                             <li>
                                                 <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
                                                 <div class="lessons-steps-text">
@@ -316,10 +323,7 @@
                                         </ul>
                                     </div>
                                     <div class="slide-inner-bottom">
-                                    <a href="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" target="_blank">
-                                        {% comment %} <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button> {% endcomment %}
-                                        <button type="button" class="btn btn-theme">Book Now</button>
-                                    </a>
+                                    <button type="button" class="btn btn-theme book-lesson" data-lesson-url="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" >Book Now</button>
                                     <div class="seats-col">
                                         <div class="seats-circle">04<span>/15</span></div>
                                         <div class="remaining-sts">Seats<br />
@@ -359,20 +363,24 @@
                                     </div>
                                     <div class="group-row">
                                         <ul class="lessons-steps">
-                                            <li>
-                                                <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Number</h4>
-                                                    <a href="#">03</a> <span>Out of 05</span>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
-                                                <div class="lessons-steps-text">
-                                                    <h4>Session Duration</h4>
-                                                    <span>{{ slot.session_duration }}</span>
-                                                </div>
-                                            </li>
+                                            {% if lesson.upcoming_slot.session_no %}
+                                                <li>
+                                                    <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Number</h4>
+                                                        <a href="javascrip:void(0)">{{lesson.upcoming_slot.session_no}}</a> <span>Out of {{lesson.no_of_sessions}}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
+                                            {% if lesson.upcoming_slot.session_duration %}
+                                                <li>
+                                                    <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
+                                                    <div class="lessons-steps-text">
+                                                        <h4>Session Duration</h4>
+                                                        <span>{{ lesson.upcoming_slot.session_duration }}</span>
+                                                    </div>
+                                                </li>
+                                            {% endif %}
                                             <li>
                                                 <i><img src="{% static 'images/webinar.png' %}" alt=""></i>
                                                 <div class="lessons-steps-text">
@@ -395,10 +403,7 @@
                                         </ul>
                                     </div>
                                     <div class="slide-inner-bottom">
-                                    <a href="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" target="_blank">
-                                        {% comment %} <button type="button" class="btn btn-theme" data-toggle="modal" data-target="#modal10">Book Now</button> {% endcomment %}
-                                        <button type="button" class="btn btn-theme">Book Now</button>
-                                    </a>
+                                    <button type="button" class="btn btn-theme book-lesson" data-lesson-url="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" >Book Now</button>
                                     <div class="seats-col">
                                         <div class="seats-circle">04<span>/15</span></div>
                                         <div class="remaining-sts">Seats<br />

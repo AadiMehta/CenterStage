@@ -40,8 +40,10 @@ function showSelectedSlots() {
   const setToAllSessions = $('#check')[0].checked;
   const sessions = [];
   const timeSlots = lessonTimeSlots.replaceAll("'", '"');
+  const parsedTimeSlots = JSON.parse(timeSlots);
   if (timeSlots && setToAllSessions) {
-    for (var slot of JSON.parse(timeSlots)) {
+    $('#sessionWrapper').empty()
+    for (var slot of parsedTimeSlots) {
       $('#sessionWrapper').append(`<div class="next-session-row">
       <button type="button" class="edit-btn"><img src="images/edit.png" alt="" /></button>
       <h5>Session ${slot[2]}</h5>
@@ -68,6 +70,34 @@ function showSelectedSlots() {
       </div>
   </div>`);
     }
+  } else if (timeSlot) {
+    $('#sessionWrapper').empty()
+    const slot = parsedTimeSlots[Number(timeSlot) - 1];
+    $('#sessionWrapper').append(`<div class="next-session-row">
+      <button type="button" class="edit-btn"><img src="images/edit.png" alt="" /></button>
+      <h5>Session No ${slot[2]}</h5>
+      <div class="sessionDayDate">
+          <i><img src="images/time_date.png" alt="" /></i> ${slot[3]}
+      </div>
+      <div class="row">
+          <div class="col-md-6">
+              <div class="form-group">
+                  <label>Start Time</label>
+                  <div class="content-area">
+                      ${slot[0]}
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-6">
+              <div class="form-group">
+                  <label>End Time</label>
+                  <div class="content-area">
+                      ${slot[1]}
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>`); 
   }
 }
 

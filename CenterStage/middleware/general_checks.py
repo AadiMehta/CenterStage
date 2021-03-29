@@ -48,7 +48,21 @@ class CheckOnboarding(object):
             teacher_subdomain = request.META['HTTP_HOST'].split(".centrestage.live")[0]
             try:
                 teacher = TeacherProfile.objects.get(subdomain=teacher_subdomain)
-                lessons = LessonData.objects.filter(creator=teacher, status=LessonStatuses.ACTIVE, is_private=False)
+                lessons = LessonData.objects.filter(
+                                creator=teacher, status=LessonStatuses.ACTIVE, is_private=False
+                            ).order_by('-created_at')
+                most_popular_lessons = lessons.annotate(count=Count('enrollments')).order_by('count')
+                one_on_one_lessons = lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE).order_by('-created_at')
+                group_lessons = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
+
+                liked = TeacherLike.objects.filter(
+                    user=user,
+                    creator=teacher
+                ).exists()
+                followed = TeacherFollow.objects.filter(
+                    user=user,
+                    creator=teacher
+                ).exists()
 
                 # TODO improve this logic using SUM
                 student_count = 0
@@ -82,8 +96,18 @@ class CheckOnboarding(object):
                         'TEACHER_KNOWLEDGE': none_obj
                     }
 
+                user_recommended = []
+                for recommendation_type in recommendations:
+                    recommended = TeacherRecommendations.objects.filter(
+                        user=user, creator=teacher, recommendation_type=recommendation_type
+                    ).exists()
+                    if recommended:
+                        user_recommended.append(recommendation_type)
+
                 context = dict({
                     "teacher": teacher,
+                    "user": request.user,
+                    "BASE_URL": settings.BASE_URL,
                     "lessons": teacher.lessons.filter(is_private=False),
                     "all_lessons": lessons,
                     "avg_rating": round(TeacherRating.objects.filter(creator=teacher).aggregate(
@@ -91,11 +115,15 @@ class CheckOnboarding(object):
                     "years_of_exp": "N/A" if teacher.year_of_experience is None else teacher.year_of_experience,
                     "student_count": student_count,
                     "sharing_link": '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL),
-                    "most_popular_lessons": lessons.annotate(count=Count('enrollments')).order_by('count'),
-                    "one_on_one_lessons": lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE),
-                    "group_lessons": lessons.filter(lesson_type=LessonTypes.GROUP),
-                    "reviews": ratings,
-                    "recommendations": recommendations
+                    "all_lessons": LessonTeacherPageSerializer(lessons, many=True).data,
+                    "most_popular_lessons": LessonTeacherPageSerializer(most_popular_lessons, many=True).data,
+                    "one_on_one_lessons": LessonTeacherPageSerializer(one_on_one_lessons, many=True).data,
+                    "group_lessons": LessonTeacherPageSerializer(group_lessons, many=True).data,
+                    "reviews": teacher.ratings.all(),
+                    "recommendations": recommendations,
+                    "user_recommended": user_recommended,
+                    "liked": liked,
+                    "followed": followed
                 })
 
                 return TemplateResponse(request, 'public/teacherpage.html', context).render()
@@ -122,6 +150,7 @@ class CheckOnboarding(object):
                 return HttpResponseRedirect(reverse('homepage'))
 
             status, user_type = check_onboarding(request.user)
+            redirect_url = request.GET.get('rurl')
             # if onboarded, don't route to onboarding
             if status:
                 if user_type == "CR":
@@ -151,6 +180,8 @@ class CheckOnboarding(object):
                     if request.path == reverse('student-onboarding-step-1'):
                         response = self.get_response(request)
                     else:
+                        if redirect_url:
+                            return HttpResponseRedirect(reverse('student-onboarding-step-1') + '?rurl' + redirect_url)
                         return HttpResponseRedirect(reverse('student-onboarding-step-1'))
                 else:
                     response = self.get_response(request)

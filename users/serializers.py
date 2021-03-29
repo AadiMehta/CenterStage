@@ -60,12 +60,14 @@ class TeacherPaymentsSerializer(serializers.ModelSerializer):
 
 
 class TeacherProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     accounts = AccountsSerializer(many=True, read_only=True)
     payments = TeacherPaymentsSerializer(many=True, read_only=True)
 
     class Meta:
         model = TeacherProfile
         fields = (
+            'user',
             'profession',
             'profile_image',
             'year_of_experience',
