@@ -123,6 +123,18 @@ document.getElementById("loginPassword")
     }
 });
 
+/***************************** Enter key login/signup **************************/
+/**
+ * Enter key on password field to log in
+ * This if for sign in page
+ */
+document.getElementById("studentloginPassword")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("studentSignInButton").click();
+    }
+});
 
 /**
  * Enter key on password field to sign up
@@ -136,7 +148,17 @@ document.getElementById("signUpPassword")
     }
 });
 
-
+/**
+ * Enter key on password field to sign up
+ * This if for sign up page
+ */
+document.getElementById("studentsignUpPassword")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("studentSignUpButton").click();
+    }
+});
 
 /**
  * Enter key on get otp field to get otp
@@ -147,6 +169,18 @@ document.getElementById("loginPhoneNumber")
     event.preventDefault();
     if (event.keyCode === 13) {
         document.getElementById("getOTPButton").click();
+    }
+});
+
+/**
+ * Enter key on get otp field to get otp
+ * This if for sign in page
+ */
+document.getElementById("studentloginPhoneNumber")
+    .addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("studentGetOTPButton").click();
     }
 });
 

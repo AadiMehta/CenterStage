@@ -66,11 +66,6 @@ class CheckOnboarding(object):
                     student_count += lesson.enrollments.count()
 
                 try:
-                    ratings = teacher.ratings.all()
-                except TeacherRating.DoesNotExist:
-                    ratings = "-"
-
-                try:
                     all_rec = teacher.recommendations.all()
                     recommendations = {
                         'LESSON_QUALITY': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_QUALITY),
@@ -120,7 +115,6 @@ class CheckOnboarding(object):
                     "BASE_URL": settings.BASE_URL,
                     "SESSION_COOKIE_DOMAIN": settings.SESSION_COOKIE_DOMAIN,
                     "lessons": teacher.lessons.filter(is_private=False),
-                    "all_lessons": lessons,
                     "avg_rating": round(TeacherRating.objects.filter(creator=teacher).aggregate(
                         Avg('rate')).get('rate__avg') or 0, 1),
                     "years_of_exp": "N/A" if teacher.year_of_experience is None else teacher.year_of_experience,

@@ -172,7 +172,7 @@ urlpatterns = [
     path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
     path('dashboard/my-students', DashboardStudents.as_view(), name="dashboard-students"),
 
-    path('teacherpagetest', TeacherPageView.as_view(), name="teacher-page"),
+    path('centrestage/teacherpagetest', TeacherPageView.as_view(), name="teacher-page"),
 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),

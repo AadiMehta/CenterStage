@@ -97,9 +97,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
-SCHEME = 'https'
-SITE_URL = 'centrestage.live'
-BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
+if sys.platform == "win32":
+    SCHEME = 'http'
+    SITE_URL = 'localhost'
+    BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
+else:
+    SCHEME = 'https'
+    SITE_URL = 'centrestage.live'
+    BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
 
 SESSION_COOKIE_DOMAIN = SITE_URL
 
@@ -175,7 +180,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False # Temporary Set to False on Jan 26 for ZoomMeetingAPIView
+USE_TZ = False  # Temporary Set to False on Jan 26 for ZoomMeetingAPIView
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -257,70 +262,72 @@ else:
 
 os.makedirs(TEMP_DIR, exist_ok=True)
 
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+if sys.platform == "win32":
+    pass
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S'
+            },
+            'simple': {
+                'format': '%(asctime)s - %(levelname)s - %(name)s : %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S'
+            },
         },
-        'simple': {
-            'format': '%(asctime)s - %(levelname)s - %(name)s : %(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple',
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+            },
+            'CenterStageLogs': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'maxBytes': 1024*1024*5,  # 5 MB
+                'backupCount': 5,
+                'formatter': 'simple',
+                'filename': os.path.join(BASE_DIR, 'logs', 'error.log'),
+                'level': 'ERROR',
+            }
         },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-        },
-        'CenterStageLogs': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*1024*5,  # 5 MB
-            'backupCount': 5,
-            'formatter': 'simple',
-            'filename': os.path.join(BASE_DIR, 'logs', 'error.log'),
-            'level': 'ERROR',
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'engine': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'frontend': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'notifications': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'payments': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'users': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'zoom': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
+        'loggers': {
+            'django': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'engine': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'frontend': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'notifications': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'payments': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'users': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'zoom': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            }
         }
     }
-}
