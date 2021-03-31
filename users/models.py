@@ -1,4 +1,4 @@
-import datetime
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -145,6 +145,9 @@ class TeacherProfile(models.Model):
         self.subdomain = self.subdomain.lower()
         super(TeacherProfile, self).save(*args, **kwargs)
 
+    def get_teacher_full_url(self):
+        return "{0}://{1}.{2}".format(settings.SCHEME, self.subdomain, settings.SITE_URL)
+
     class Meta:
         verbose_name = _('Teacher Profile')
         verbose_name_plural = _('Teacher Profiles')
@@ -164,6 +167,8 @@ class Accounts(models.Model):
     account_type = models.CharField(_("account type"), choices=AccountTypes.choices, max_length=30,
                                     help_text="Type of account")
     info = models.JSONField(null=True)
+    token_updated_on = models.DateTimeField(auto_now=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
 
 class PaymentTypes(models.TextChoices):
@@ -180,6 +185,7 @@ class PaymentAccounts(models.Model):
     payment_type = models.CharField(_("payment type"), choices=PaymentTypes.choices, max_length=10,
                                     help_text="Type of payment account")
     info = models.JSONField(null=False, blank=False)
+    added_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ['payment_type', 'user']
@@ -191,7 +197,7 @@ class TeacherEarnings(models.Model):
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="earnings")
     amount = models.DecimalField(null=False, blank=False, decimal_places=2, max_digits=10)
-    added_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('Earning Data')
@@ -201,15 +207,27 @@ class TeacherEarnings(models.Model):
 class TeacherPageVisits(models.Model):
     """
     Teacher earnings data
+
+    TODO need to partition data based on month and year
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
     visits = models.PositiveBigIntegerField()
-    visit_date = models.DateField(default=datetime.date.today)
+    visit_date = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('Page Visit')
         verbose_name_plural = _('Page Visits')
         unique_together = ('teacher', 'visit_date')
+
+    @staticmethod
+    def update_teacher_visit(teacher):
+        # TODO move this to redis + cron to
+        tpv, created = TeacherPageVisits.objects.get_or_create(teacher=teacher, visit_date=timezone.now().date())
+        if created:
+            tpv.visits = 1
+        else:
+            tpv.visits = tpv.visits + 1
+        tpv.save()
 
 
 class TeacherRating(models.Model):
@@ -220,7 +238,7 @@ class TeacherRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated")
     rate = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5.0)],)
     review = models.CharField(_("Review"), max_length=256)
-    created_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
 
 class TeacherRecommendations(models.Model):
@@ -230,7 +248,7 @@ class TeacherRecommendations(models.Model):
     creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="recommendations")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommended")
     recommendation_type = models.CharField(_("Type of Recommendation"), choices=RecommendationChoices.choices, max_length=30)
-    created_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
 
 class TeacherFollow(models.Model):
@@ -239,7 +257,7 @@ class TeacherFollow(models.Model):
     """
     creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="followers")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed")
-    created_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
 
 class TeacherLike(models.Model):
@@ -248,7 +266,7 @@ class TeacherLike(models.Model):
     """
     creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="likes")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liked")
-    created_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
 
 # ***************** Student Models ******************

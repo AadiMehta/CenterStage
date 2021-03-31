@@ -6,7 +6,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 
 
-
 class SessionTypes(models.TextChoices):
     SINGLE_SESSION = 'SINGLE', _('Single Session')
     MULTI_SESSION = 'MULTI', _('Multi Session')

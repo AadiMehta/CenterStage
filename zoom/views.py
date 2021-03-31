@@ -81,9 +81,7 @@ class ZoomMeetingAPIView(APIView):
         Create New Zoom Meeting link
         """
         try:
-            account = request.user.accounts.get(
-                            account_type=AccountTypes.ZOOM_VIDEO
-                        )
+            account = request.user.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
             access_token = self.get_access_token(account)
             if not access_token:
                 return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
@@ -103,9 +101,7 @@ class ZoomMeetingAPIView(APIView):
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
-        account = request.user.accounts.get(
-                        account_type=AccountTypes.ZOOM_VIDEO
-                    )
+        account = request.user.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
         access_token = self.get_access_token(account)
         if not access_token:
             logger.error("Zoom Auth connection error")
@@ -116,7 +112,7 @@ class ZoomMeetingAPIView(APIView):
 
     @staticmethod
     def get_access_token(account):
-        expire_time = account.info.get('expire_time')
+        expire_time = account.info.get('expires_time')
         if expire_time:
             expire_time = datetime.strptime(expire_time, '%Y-%m-%dT%H:%M:%S')
             if expire_time > timezone.now():

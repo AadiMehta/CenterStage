@@ -1,8 +1,6 @@
 from django.views.generic import TemplateView
-from django.shortcuts import redirect
 from django.db.models import Avg, Count
 from rest_framework.response import Response
-
 from rest_framework import status
 from rest_framework import generics
 from django.conf import settings
@@ -13,8 +11,8 @@ from users.models import (
     User
 )
 from engine.serializers import LessonTeacherPageSerializer
-
 from users.authentication import AuthCookieAuthentication
+
 
 class TeacherPageView(TemplateView):
     template_name = "public/teacherpage.html"
@@ -56,17 +54,17 @@ class TeacherPageView(TemplateView):
 
         if not self.request.user.is_anonymous:
             liked = TeacherLike.objects.filter(
-                user=request.user,
+                user=self.request.user,
                 creator=teacher
             ).exists()
             followed = TeacherFollow.objects.filter(
-                user=request.user,
+                user=self.request.user,
                 creator=teacher
             ).exists()
 
             for recommendation_type in recommendations:
                 recommended = TeacherRecommendations.objects.filter(
-                    user=request.user, creator=teacher, recommendation_type=recommendation_type
+                    user=self.request.user, creator=teacher, recommendation_type=recommendation_type
                 ).exists()
                 if recommended:
                     user_recommended.append(recommendation_type)
@@ -87,7 +85,6 @@ class TeacherPageView(TemplateView):
         user = User.objects.get(pk=85)
         teacher = TeacherProfile.objects.filter(user=user).first()
         return super(TeacherPageView, self).dispatch(request, *args, **kwargs)
-
 
 
 class LessonPageView(TemplateView):
@@ -192,7 +189,6 @@ class LikeTeacherAPIView(generics.CreateAPIView):
         return Response(dict({"msg": msg, "action": action}), status=status.HTTP_200_OK)
 
 
-
 class SubmitTeacherReview(generics.CreateAPIView):
     """
     Submit Review For Teacher
@@ -228,5 +224,5 @@ class SubmitTeacherReview(generics.CreateAPIView):
             ).save()
 
         if created:
-            return Response(dict({'msg': 'Rating Submitted Successfull'}), status=status.HTTP_201_CREATED)
-        return Response(dict({'msg': 'Rating Updated Successfull'}), status=status.HTTP_200_OK)
+            return Response(dict({'msg': 'Rating Submitted Successful'}), status=status.HTTP_201_CREATED)
+        return Response(dict({'msg': 'Rating Updated Successful'}), status=status.HTTP_200_OK)

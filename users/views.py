@@ -72,6 +72,22 @@ class ObtainAuthToken(APIView):
         user.save()
         user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
         token, created = Token.objects.get_or_create(user=user)
+
+        # clear existing sessions if any.
+        # this happens if there are multiple login calls
+        if "sessionid" in request.COOKIES or "auth_token" in request.COOKIES:
+            try:
+                # delete the auth_token
+                request.user.auth_token.delete()
+            except Exception as e:
+                pass
+
+            try:
+                # delete the sessionid
+                request.session.flush()
+            except Exception as e:
+                pass
+
         headers = dict({
             "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })

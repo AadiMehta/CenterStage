@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+{% include 'modals.html' %}
 <div class="wrapper inner-page">
   {% include 'plain_header.html' with user=user %}
   <div class="mid-sec">
@@ -86,3 +87,6 @@
 {% include 'footer.html' %}
 {% endblock %}
 
+{% block script %}
+<script src="{% static '/js/home.js' %}" type="text/javascript"></script>
+{% endblock %}
