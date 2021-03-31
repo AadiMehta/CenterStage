@@ -211,7 +211,7 @@ class TeacherPageVisits(models.Model):
     TODO need to partition data based on month and year
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
-    visits = models.PositiveBigIntegerField()
+    visits = models.PositiveBigIntegerField(default=1)
     visit_date = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -221,13 +221,11 @@ class TeacherPageVisits(models.Model):
 
     @staticmethod
     def update_teacher_visit(teacher):
-        # TODO move this to redis + cron to
+        # TODO move this to redis + cron to improve performance
         tpv, created = TeacherPageVisits.objects.get_or_create(teacher=teacher, visit_date=timezone.now().date())
-        if created:
-            tpv.visits = 1
-        else:
+        if not created:
             tpv.visits = tpv.visits + 1
-        tpv.save()
+            tpv.save()
 
 
 class TeacherRating(models.Model):

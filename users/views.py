@@ -156,7 +156,9 @@ class Logout(APIView):
         resp = dict({
             "message": "Successfully Logout"
         })
-        return Response(resp, status=status.HTTP_200_OK)
+        resp = Response(resp, status=status.HTTP_200_OK)
+        resp.delete_cookie('auth_token')
+        return resp
 
 
 class Profile(generics.RetrieveUpdateAPIView):

@@ -107,6 +107,7 @@ else:
     BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
 
 SESSION_COOKIE_DOMAIN = SITE_URL
+SESSION_COOKIE_SECURE = True
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

@@ -1,4 +1,5 @@
 import logging
+import _thread
 from django.db.models import Count, Avg
 from django.urls import reverse
 from django.conf import settings
@@ -7,7 +8,7 @@ from django.shortcuts import HttpResponseRedirect
 from engine.models import LessonData, LessonStatuses, LessonTypes
 from users.models import (
     TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations,
-    RecommendationChoices, TeacherLike, TeacherFollow
+    RecommendationChoices, TeacherLike, TeacherFollow, TeacherPageVisits
 )
 from engine.serializers import LessonTeacherPageSerializer
 
@@ -53,6 +54,7 @@ class CheckOnboarding(object):
             teacher_subdomain = request.META['HTTP_HOST'].split(".centrestage.live")[0]
             try:
                 teacher = TeacherProfile.objects.get(subdomain=teacher_subdomain)
+                _thread.start_new_thread(TeacherPageVisits.update_teacher_visit, (teacher, ))
                 lessons = LessonData.objects.filter(
                                 creator=teacher, status=LessonStatuses.ACTIVE, is_private=False
                             ).order_by('-created_at')
