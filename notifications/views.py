@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from rest_framework.response import Response
@@ -20,7 +21,20 @@ def send_signup_email(user):
     """
     message = render_to_string('signup_email.html', {'user': user.get_full_name()})
     message_plain = "Hello {0},\n\nThank you for signing up on CenterStage.".format(user.get_full_name())
-    send_mail('Welcome to CenterStage!', message_plain, 'no-reply@center-stage.online', [user.email],
+    send_mail('Welcome to CenterStage!', message_plain, 'no-reply@{}'.format(settings.SITE_URL), [user.email],
+              fail_silently=False, html_message=message)
+    return
+
+
+def send_paid_meeting_invites(users, teacher_name, meeting_link):
+    """
+    Send paid meeting invites to all users
+    from the input list
+    """
+    message = render_to_string('send_paid_meeting_invite.html', {'teacher_name': teacher_name,
+                                                                 'meeting_link': meeting_link})
+    message_plain = "Hello,\n\nYou have been invited by {} for a meeting.\nThanks".format(teacher_name)
+    send_mail('Meeting Invite!', message_plain, 'meetings@{}'.format(settings.SITE_URL), users,
               fail_silently=False, html_message=message)
     return
 

@@ -1,5 +1,6 @@
 import base64
 import logging
+import _thread
 from rest_framework import status
 from django.utils import timezone
 from django.shortcuts import redirect
@@ -12,7 +13,7 @@ from engine.serializers import (
 )
 from users.models import AccountTypes
 from zoom.utils import zoomclient
-
+from notifications.views import send_paid_meeting_invites
 logger = logging.getLogger(__name__)
 
 
@@ -136,6 +137,10 @@ class MeetingAPIView(APIView):
             serializer = MeetingCreateSerializer(data=request_data)
             serializer.is_valid(raise_exception=True)
             serializer.save(creator=request.user.teacher_profile_data)
+
+            _thread.start_new_thread(send_paid_meeting_invites, (request_data.get("invitees", []),
+                                                                 request.user.get_full_name(),
+                                                                 request_data['meeting_link'], ))
             return Response({
                 "msg": "Meeting Created",
                 "meeting": serializer.validated_data

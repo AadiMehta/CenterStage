@@ -247,12 +247,12 @@
                      </div> {% endcomment %}
                      <div class="prof-action-btn">
                         <button id="logoutButton" type="button" class="btn-theme btn-theme-liner"><i><img src="{% static 'images/logout.svg' %}" alt="" /></i> <span>Logout</span></button><br>
-                        <button type="button" class="btn-theme btn-bgred" id="deleteAccount">
+                        {% comment %}<button type="button" class="btn-theme btn-bgred" id="deleteAccount">
                            <i>
                               <img src="{% static 'images/delete.svg' %}" alt="" />
                            </i>
                            <span>Delete Account</span>
-                        </button>
+                        </button>{% endcomment %}
                      </div>
                   </div>
                </div>
@@ -264,6 +264,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static '/js/account/info.js' %}" type="text/javascript"></script> 
+   <script src="{% static 'js/account/info.js' %}" type="text/javascript"></script>
    <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}
