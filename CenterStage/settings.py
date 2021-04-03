@@ -97,10 +97,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
-if sys.platform == "win32":
+if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     SCHEME = 'http'
-    SITE_URL = 'localhost'
+    SITE_URL = 'localhost:8000'
     BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
+    SESSION_COOKIE_DOMAIN = 'localhost'
 else:
     SCHEME = 'https'
     SITE_URL = 'centrestage.live'

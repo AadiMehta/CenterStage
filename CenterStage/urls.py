@@ -38,7 +38,7 @@ from frontend.views.onboarding import (
     StudentOnboardStep1TemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
     OnboardStep3TemplateView, AccountConnectedTemplate
 )
-from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI
+from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI, LikeLessonAPIView
 from frontend.views.schedule import ScheduleCreateWizard
 from frontend.views.booking import BookLessonWizard
 
@@ -117,6 +117,7 @@ urlpatterns = [
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
     path('api/lesson/upload/', AcceptFileAPI.as_view()),
+    path('api/teacher/like/', LikeLessonAPIView.as_view()),
 
     # Meeting APIs
     path('api/meeting/', MeetingAPIView.as_view()),

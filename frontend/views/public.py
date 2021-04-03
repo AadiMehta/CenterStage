@@ -46,6 +46,8 @@ class TeacherPageView(TemplateView):
         context['one_on_one_lessons'] = LessonTeacherPageSerializer(one_on_one_lessons, many=True).data
         group_lessons = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
         context['group_lessons'] = LessonTeacherPageSerializer(group_lessons, many=True).data
+        ratings = TeacherRating.objects.filter(creator=teacher).aggregate(Avg('rate'))
+        context['avg_rating'] = round(ratings.get('rate__avg') or 0, 1)
         context['reviews'] = teacher.ratings.all()
 
         liked = False

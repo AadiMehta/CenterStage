@@ -2,8 +2,8 @@ from django import forms
 
 
 class BookLessonForm1(forms.Form):
-    date_slot = forms.CharField(max_length=100)
-    time_slot = forms.CharField(max_length=100)
+    date_slot = forms.CharField(max_length=100, required=False)
+    time_slot = forms.CharField(max_length=100, required=False)
     set_to_all_sessions = forms.CharField(max_length=100, required=False)
 
 

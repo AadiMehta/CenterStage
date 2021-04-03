@@ -33,6 +33,7 @@
                 </div>
                 <div class="yourac-wrap payment-actions-wrap">
                   <h3>Payment Method</h3>
+                <p id="paymentMethodError" style="color:red;"></p>
                   <input id="paymentType" name="payment-payment_type" type="text" style="display:none">
                   <div class="ac-veryfy-row">
                       <a href="#" class="ac-veryfy-left">
@@ -155,9 +156,10 @@
                       </div>
                   </div>
                 </div>
+                <p id="paymentMethod2Error" style="color:red;"></p>
                 <div class="yourac-wrap">
                   <div class="card-total">
-                      Total = <span> $150 ($USD)</span>
+                      Total = <span> {{currency_info.symbol}}{{total_price}} ({{currency_info.label}})</span>
                   </div>
                   <div class="btn-with-condations">
                       <button type="button" class="btn btn-theme" id="confirmPayment">Confirm Payment</button>
@@ -177,27 +179,27 @@
                       <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                       <div class="prof-name">
                         <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
-                        <span class="desigation">{{lesson.creator.description}}</span>
+                        <span class="desigation">{{lesson.creator.bio}}</span>
                       </div>
                   </div>
                   <div class="card-total mb-0">
-                      Total = <span> {% if lesson.price.currency == 'DOLLARS' %}${% else %}₹{% endif %} {{lesson.price.value}} ({% if lesson.price.currency == 'DOLLARS' %}$USD{% else %}₹INR{% endif %})</span>
+                      Total = <span> {{currency_info.symbol}}{{total_price}} ({{currency_info.label}})</span>
                   </div>
                 </div>
                 <div class="group-row">
                   <ul class="lessons-steps">
-                      <li>
+                      {% comment %} <li>
                         <i><img src="{% static 'images/session-number2.png' %}" alt=""></i>
                         <div class="lessons-steps-text">
                             <h4>Session Number</h4>
-                            <a href="#">{{ slot.session_no }}</a> <span>Out of {{ no_of_slots }}</span>
+                            <a href="#">{{ lesson.upcoming_slot.session_no }}</a> <span>Out of {{ lesson.no_of_slots }}</span>
                         </div>
-                      </li>
+                      </li> {% endcomment %}
                       <li>
                         <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
                         <div class="lessons-steps-text">
                             <h4>Session Duration</h4>
-                            <span>{{ slot.session_duration }}</span>
+                            <span>{{ lesson.upcoming_slot.session_duration }}</span>
                         </div>
                       </li>
                       <li>
@@ -221,7 +223,7 @@
                   </ul>
                 </div>
                 <div class="group-row">
-                  {% for slot in lesson_time_slots %}
+                  {% for slot in selected_time_slots %}
                   <div class="next-session-row">
                       <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
                       <h5>Session {{forloop.counter}}</h5>

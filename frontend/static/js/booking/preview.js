@@ -101,6 +101,7 @@ function showSelectedSlots() {
   }
 }
 
+
 function handleProceedBooking() {
   let isValid = true;
   $('#dateSlotError').hide();
@@ -119,7 +120,10 @@ function handleProceedBooking() {
   }
   if (isValid) {
     showSelectedSlots();
-    showModal('modal2');
+    hideModal('modal1');
+    $('#modal1').on('hidden.bs.modal', function () {
+      showModal('modal2');
+    });
   }
 }
 
@@ -137,7 +141,58 @@ function handlePaymentTypeSelection(event) {
   $('#paymentType')[0].value = paymentType;
 }
 
+function handleLikeLesson(event) {
+  const {lessonUuid} = event.target.dataset;
+  const token = getCookie('auth_token');
+  $.ajax(`${baseUrl}/api/lesson/like/`, {
+      type: 'POST',
+      headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+      },
+      data: JSON.stringify({
+          "lesson_uuid": lessonUuid,
+      }),
+      success: function (data, status, xhr) {
+          console.log(event.target)
+          if (data.action === 'removed') {
+              $('#likeLessonTempText').text('Like');
+          } else {
+              $('#likeLessonTempText').text('Liked');
+          }
+      },
+      error: function (jqXhr, textStatus, errorMessage) {
+          // Todo: Show Error Message on UI
+          console.log('Error while like api', errorMessage)
+      }
+  });
+}
+
+function bookLesson(event) {
+  const {lessonUuid, sessionType} = event.target.dataset;
+  if (sessionType === 'ONGOING') {
+    showModal('modal1')
+  } else {
+    $('#check')[0].checked = true;
+    showSelectedSlots();
+    showModal('modal2')
+  }
+}
+
+
 // ****** Event Handlers ****** 
+
+function handleViewAllReviews(event) {
+  const {shown} = event.target.dataset;
+  const isShown = shown === 'true';
+  if (isShown) {
+      $('.view-all-reviews').hide();
+      $('#viewAllReviews').attr("data-shown","false");
+  } else {
+      $('.view-all-reviews').show();
+      $('#viewAllReviews').attr("data-shown","true");
+  }
+}
 
 
 // ****** End of Event Handlers ****** 
@@ -160,7 +215,9 @@ function init() {
   $('#comfirmBooking').click(handleConfirmBooking);
   $('#comfirmPayment').click(handleConfirmPayment);
   $('.payment-type').change(handlePaymentTypeSelection);
-
+  $('#likeLesson').click(handleLikeLesson);
+  $('.book-this-lesson').click(bookLesson);
+  $('#viewAllReviews').click(handleViewAllReviews);
 }
 
 init();

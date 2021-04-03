@@ -93,11 +93,17 @@ class LessonTeacherPageSerializer(serializers.ModelSerializer):
     """
     creator = TeacherProfileSerializer(read_only=True)
     upcoming_slot = serializers.SerializerMethodField()
+    no_of_slots = serializers.SerializerMethodField()
 
     @staticmethod
     def get_upcoming_slot(instance):
         slots = LessonSlots.objects.filter(Q(lesson_from__gt=timezone.now()), lesson=instance)
         return LessonSlotSerializer(slots.first()).data
+
+    @staticmethod
+    def get_no_of_slots(instance):
+        slots = LessonSlots.objects.filter(lesson=instance)
+        return slots.count()
 
     class Meta:
         model = LessonData
@@ -114,8 +120,12 @@ class LessonTeacherPageSerializer(serializers.ModelSerializer):
             'meeting_link',
             'lesson_uuid',
             'cover_image',
+            'learnings',
+            'requirements',
             'status',
-            'upcoming_slot'
+            'price',
+            'upcoming_slot',
+            'no_of_slots'
         ]
 
 
