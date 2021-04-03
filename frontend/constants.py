@@ -35,3 +35,11 @@ currencies = [
     )
     for code in currency_data
 ]
+
+currency_labels = {}
+for code in currency_data:
+    currency_labels[code] = dict(
+        label=format_currency(currency_data[code]),
+        symbol=currency_data[code]['symbol_native'],
+        value=code
+    )

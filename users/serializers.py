@@ -1,9 +1,10 @@
 import re
 import _thread
+from django.db.models import Avg, Count
 from notifications.views import send_signup_email
 from rest_framework import serializers
 from users.constants import RESTRICTED_SUBDOMAINS
-from users.models import User, TeacherProfile, Accounts, PaymentAccounts, StudentProfile
+from users.models import User, TeacherProfile, Accounts, PaymentAccounts, StudentProfile, TeacherRating
 from django.db import IntegrityError
 from phonenumber_field.serializerfields import PhoneNumberField
 
@@ -16,6 +17,11 @@ class LoginResponseSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
+    created_at = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_created_at(instance):
+        return instance.date_joined.strftime('%A, %d %b %Y')
     class Meta:
         model = User
         exclude = (
@@ -36,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined',
             'last_login',
             'user_subscription',
+            'created_at'
         )
 
 
@@ -63,6 +70,12 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     accounts = AccountsSerializer(many=True, read_only=True)
     payments = TeacherPaymentsSerializer(many=True, read_only=True)
+    avg_rating = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_avg_rating(instance):
+        ratings = TeacherRating.objects.filter(creator=instance).aggregate(Avg('rate'))
+        return round(ratings.get('rate__avg') or 0, 1)
 
     class Meta:
         model = TeacherProfile
@@ -74,6 +87,7 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
             'subdomain',
             'bio',
             'intro_video',
+            'avg_rating',
             'accounts',
             'payments',
         )

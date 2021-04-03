@@ -107,22 +107,22 @@ class Enrollment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Rating(models.Model):
+class LessonRating(models.Model):
     """
     Rating Model
     """
-    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="ratings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ratings")
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="ratings")
     rate = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5.0)],)
     review = models.CharField(_("Review"), max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Likes(models.Model):
+class LessonLikes(models.Model):
     """
     Likes Model
     """
-    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="likes")
     lesson = models.ForeignKey(LessonData, on_delete=models.CASCADE, related_name="likes")
     created_at = models.DateTimeField(auto_now_add=True)
 

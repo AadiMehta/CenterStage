@@ -7,9 +7,10 @@ from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
 from rest_framework.response import Response
+from rest_framework import generics
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
     LessonCreateFormStep4, LessonCreateFormPreview
-from engine.models import MeetingTypes
+from engine.models import MeetingTypes, LessonLikes, LessonData
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
@@ -22,6 +23,7 @@ from frontend.constants import currencies as currency_options
 from frontend.constants import timezones as timezone_options
 from frontend.utils.google_calendar import GoogleCalendar
 from users.models import Accounts, AccountTypes
+from users.authentication import AuthCookieAuthentication
 
 logger = logging.getLogger(__name__)
 
@@ -113,12 +115,12 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.request.user
-            account = user.accounts.get(
-                account_type=AccountTypes.ZOOM_VIDEO
-            )
-            access_token = account.info.get('access_token')
-            if not access_token:
-                return redirect('new-lesson')
+            # account = user.accounts.get(
+            #     account_type=AccountTypes.ZOOM_VIDEO
+            # )
+            # access_token = account.info.get('access_token')
+            # if not access_token:
+            #     return redirect('new-lesson')
 
             cover_image = form_data.pop("cover_image")
             if cover_image:
@@ -129,9 +131,11 @@ class LessonCreateWizard(SessionWizardView):
             start_time = timezone.now().isoformat()
             duration = form_data.get('duration', '30')
 
-            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
-            form_data['meeting_link'] = meeting.get('join_url')
-            form_data['meeting_info'] = meeting
+            # meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            # form_data['meeting_link'] = meeting.get('join_url')
+            # form_data['meeting_info'] = meeting
+            form_data['meeting_link'] = 'https://google.com'
+            form_data['meeting_info'] = {'meeting_link': 'asdasd'}
 
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
@@ -223,3 +227,33 @@ class LessonCreateWizard(SessionWizardView):
                     )
                     session.save()
                 session_no += 1
+
+
+class LikeLessonAPIView(generics.CreateAPIView):
+    """
+    Like Teacher
+    """
+    authentication_classes = [AuthCookieAuthentication]
+    permission_classes = []
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        lesson_uuid = data.get('lesson_uuid')
+        lesson = LessonData.objects.get(lesson_uuid=lesson_uuid)
+
+        try:
+            LessonLikes.objects.get(
+                lesson=lesson,
+                user=user
+            ).delete()
+            msg = 'Like Removal Successful'
+            action = 'removed'
+        except Like.DoesNotExist:
+            LessonLikes(
+                lesson=lesson,
+                user=user
+            ).save()
+            msg = 'Liked Successful'
+            action = 'added'
+        return Response(dict({"msg": msg, "action": action}), status=status.HTTP_200_OK)
