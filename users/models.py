@@ -153,6 +153,16 @@ class TeacherProfile(models.Model):
         verbose_name_plural = _('Teacher Profiles')
 
 
+class PersonalCoachingEnabled(models.Model):
+    """
+    Check if personal coaching is enabled
+    """
+    teacher = models.OneToOneField(TeacherProfile, on_delete=models.CASCADE, related_name="personal_coaching")
+    duration = models.CharField(max_length=64)
+    price_per_session = models.IntegerField()
+    free_sessions = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(50)])
+
+
 class AccountTypes(models.TextChoices):
     ZOOM_VIDEO = 'ZOOM', _('Zoom Video')
     GOOGLE_CALENDAR = 'GOOGLE_CALENDAR', _('GOOGLE_CALENDAR')

@@ -27,7 +27,7 @@
         <li class="p-coaching" id="personalCoaching">
             <a href="javascript:void(0)">
                 <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
-                <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
+                {% if user.teacher_profile_data.personal_coaching %}<em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em> {% endif %}
                 </i>
                 <span>Personal Coaching</span>
             </a>

@@ -12,14 +12,11 @@
    <div class="main">
       <header class="header">
          <div class="container-fluid">
-            <button type="button" class="toggle-menu sidebar-toggle">
-            <img src="{% static 'images/menu-icon.svg' %}" alt="" />
-            </button>
-            <div class="header-prof-col"></div>
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+            </div>
             <div class="header-actions-col">
-               <div class="header-actions-icon">
-                  <img src="{% static 'images/icon-switch-account.svg' %}" alt="" />
-               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
                <div class="header-actions-icon notifications">
                   <div class="icon-notification">
                      <a href="#">
@@ -28,8 +25,16 @@
                      </a>
                   </div>
                </div>
-               <div class="header-actions-icon">
-                  <img src="{% static 'images/icon-doted.svg' %}" alt="" />
+               <div class="header-actions-icon main-profile-menu dropdown">
+                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <ul>
+                        <li><a href="{{ user.teacher_profile_data.get_teacher_full_url }}" target="_blank"><i><img src="{% static 'images/dashboard-gray.svg' %}" alt=""></i><span>View My Page</span></a></li>
+                        <li><a href="mailto:help@centrestage.live"><i><img src="{% static 'images/email-gray.svg' %}" alt=""></i><span>Contact us</span></a></li>
+                        <li><a href="{% url 'faqs' %}"><i><img src="{% static 'images/FAQ-gray.svg' %}" alt=""></i><span>FAQ</span></a></li>
+                        <li><a href="#"><i><img src="{% static 'images/logout-gray.svg' %}" alt=""></i><span>Logout</span></a></li>
+                     </ul>
+                  </div>
                </div>
             </div>
          </div>

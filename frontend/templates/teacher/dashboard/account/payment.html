@@ -76,7 +76,7 @@
                               <button type="button" class="btn-liner" data-toggle="modal" data-target="#disconnect">Disconnect</button>
                            </div>
                         </div>
-                        <div class="ac-veryfy-row">
+                        {% comment %}<div class="ac-veryfy-row">
                            <a href="#" class="ac-veryfy-left">
                               <i><img src="{% static 'images/paypal.png' %}" alt="" /></i>
                               <div class="col-text">
@@ -109,7 +109,7 @@
                               </div>
                               <button type="button" class="btn-liner" data-toggle="modal" data-target="#bank">Connect</button>
                            </div>
-                        </div>
+                        </div>{% endcomment %}
                      </div>
                      <div class="tansc-text">
                         View our <a href="{% url 'privacy-policy' %}">Privacy Policy</a>, <a href="{% url 'terms-and-conditions' %}">Terms &amp; Conditions</a> or <a href="{% url 'faqs' %}">FAQ</a>

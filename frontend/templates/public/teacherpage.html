@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="share-btn-col">
-                    <button type="button" class="btn btn-heart" id="likeTeacher"><span id="likeTeacherTempText">{% if like %}Liked{% else %}Like{% endif %}</span><img src="{% static 'images/heart.png' %}"></button>
+                    {% comment %}<button type="button" class="btn btn-heart" id="likeTeacher"><span id="likeTeacherTempText">{% if like %}Liked{% else %}Like{% endif %}</span><img src="{% static 'images/heart.png' %}"></button>{% endcomment %}
                     <button type="button" class="btn btn-theme btn-theme-liner">Share</button>
                     <button type="button" class="btn btn-theme" id="followTeacher">{% if followed %}Followed{% else %}Follow{% endif %}</button>
                 </div>
@@ -59,11 +59,11 @@
                     <div class="reating-text2">Total Students</div>
                 </div>
                 <div class="reating-col">
-                    <div class="reating-text">1028</div>
+                    <div class="reating-text">N/A</div>
                     <div class="reating-text2">Teaching Minutes</div>
                 </div>
                 <div class="reating-col">
-                    <div class="reating-text">05</div>
+                    <div class="reating-text">N/A</div>
                     <div class="reating-text2">Countries Taught In</div>
                 </div>
             </div>
