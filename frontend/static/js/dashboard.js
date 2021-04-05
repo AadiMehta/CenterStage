@@ -182,6 +182,28 @@ function addMoreInvitee() {
     }
 }
 
+/**
+ * Remove auth_token from cookies and route to main page
+ */
+function logout() {
+  const token = getCookie('auth_token');
+  $.ajax('/api/logout/', {
+    type: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    success: function (data, status, xhr) {
+      setCookie('auth_token', '', 0);
+      setCookie('sessionid', '', 0);
+      document.location.href = '/';
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      alert('err');
+    }
+  });
+}
+
+
 // ****** End of Event Handlers ****** 
 
 function init() {
@@ -216,6 +238,10 @@ function init() {
     const meetingLink = $('#newmeetingsuccesslink')[0].placeholder;
     window.open(meetingLink, "_blank");
   })
+  $('#openLogoutPopup').click(() => {
+    showModal('logoutConfirmation');
+  })
+  $('#logout').click(logout);
 }
 
 init();

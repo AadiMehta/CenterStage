@@ -50,12 +50,12 @@ function logout() {
       'Authorization': `Bearer ${token}`
     },
     success: function (data, status, xhr) {
-      setCookie('auth_token', '', 0)
-      setCookie('sessionid', '', 0)
+      setCookie('auth_token', '', 0);
+      setCookie('sessionid', '', 0);
       document.location.href = '/';
     },
     error: function (jqXhr, textStatus, errorMessage) {
-      alert('err')
+      alert('err');
     }
   });
 }

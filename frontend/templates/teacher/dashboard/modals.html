@@ -62,7 +62,7 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <div class="liner-inp select-drop">
-                             <input type="number" min="0" id="pricePerSessionValue" value="0" />
+                             <input class="form-control" type="number" min="0" max="100000" id="pricePerSessionValue" value="0" />
                             {% comment %} <select class="form-control">
                                 <option>$50</option>
                             </select> {% endcomment %}
@@ -74,9 +74,7 @@
                 <div class="form-group">
                     <label>Number of Free Sessions per Student</label>
                     <div class="liner-inp select-drop">
-                        <select class="form-control">
-                            <option>1</option>
-                        </select>
+                        <input class="form-control" type="number" min="0" max="50" id="numberFreeSessions" value="0" />
                     </div>
                     <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
                 </div>
@@ -681,8 +679,8 @@
                     </div>
                     <div class="col-md-8">
                         <div class="form-group">
-                            <div class="liner-inp form-control">
-                                <input id="pricePerSession" type="number" min="0" placeholder="Enter Price" max="100000" />
+                            <div class="liner-inp">
+                                <input class="form-control" id="pricePerSession" type="number" min="0" placeholder="Enter Price" max="50" />
                             </div>
                         </div>
                     </div>

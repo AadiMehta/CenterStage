@@ -42,10 +42,10 @@
             <div class="boarding-wrap">
                 <div class="title-row"><h2>Meeting Info</h2></div>
                 <div class="boarding-row">
-                    <form id="step1" action="" method="post">
-                        {% csrf_token %}
-                        {{ wizard.management_form }}
-                        <div class="boarding-left">
+                    <div class="boarding-left">
+                        <form id="step1" action="" method="post">
+                            {% csrf_token %}
+                            {{ wizard.management_form }}
                             <div class="form-group">
                                 <div class="input-area">
                                     <label>Topic</label>
@@ -76,12 +76,10 @@
                                 <p id="sessionTypeError" style="color: red;"></p>
                                 <div class="selectct-sessionsNom" id="sessionType">
                                     <div class="select-sessions-col">
-                                        <button
-                                            id="singleSession"
-                                            type="button"
-                                            class="btn-select-session {% if wizard.form.session_type.value == None or wizard.form.session_type.value == 'SINGLE' %}selected{% endif %}"
-                                            data-lesson-type="SINGLE"
-                                        >
+                                        <button id="singleSession"
+                                                type="button"
+                                                class="btn-select-session {% if wizard.form.session_type.value == None or wizard.form.session_type.value == 'SINGLE' %}selected{% endif %}"
+                                                data-lesson-type="SINGLE">
                                             Single Session
                                         </button>
                                         <span class="select-session-text">This is a one time class</span>
@@ -101,11 +99,12 @@
                                     <span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i>
                                 </button>
                             </div>
-                            <div class="boarding-right">
-                                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+
+                    <div class="boarding-right">
+                        <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                    </div>
                 </div>
             </div>
         </div>
