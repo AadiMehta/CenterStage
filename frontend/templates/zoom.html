@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<link href="{% static '/css/web/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/web/media.css' %}" rel="stylesheet">
+<style>
+   ul {
+    list-style: inherit;
+    margin: 10px;
+    padding: 15px;
+   }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper inner-page">
+    {% include 'plain_header.html' with user=user %}
+    <div class="mid-sec">
+        <div class="container">
+            <h4>Connecting Zoom with Centrestage</h4>
+            <ul>
+                1. Create a new Centrestage account<br>
+                2. During the sign up process, you will be asked to Connect your Zoom account. Click 'Connect Zoom'<br>
+                3. Please enter your existing Zoom credentials and click Confirm<br><br>
+            </ul>
+            <h4>Disconnecting Zoom from Centrestage</h4>
+
+            <ul>
+            1. Login to your Centrestage Account using your credentials<br>
+            2. Go to My Account -> Info<br>
+            3. Click Disconnect on Zoom<br>
+            4. Click Confirm<br>
+            </ul>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}
+

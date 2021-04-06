@@ -44,6 +44,19 @@ class PrivacyPolicyView(TemplateView):
         return context
 
 
+class ZoomPolicyView(TemplateView):
+    """
+    Privacy Policy
+    """
+    template_name = "zoom.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['user'] = self.request.user
+        return context
+
+
 class Faqs(TemplateView):
     """
     Faqs

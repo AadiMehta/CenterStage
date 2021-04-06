@@ -14,7 +14,6 @@ Including another URL conf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.conf.urls import url
 from rest_framework import permissions
@@ -29,7 +28,7 @@ from users.views import (
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
-    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs
+    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs, ZoomPolicyView
 )
 from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
@@ -179,6 +178,7 @@ urlpatterns = [
     path('', HomeTemplateView.as_view(), name="homepage"),
     path('centrestage/terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
     path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
+    path('centrestage/zoom-policy', ZoomPolicyView.as_view(), name="privacy-policy"),
     path('centrestage/faqs', Faqs.as_view(), name="faqs"),
 ]
 
