@@ -28,7 +28,7 @@ from users.views import (
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
-    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs, ZoomPolicyView
+    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs, ZoomPolicyView, contact
 )
 from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
@@ -180,6 +180,7 @@ urlpatterns = [
     path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
     path('centrestage/zoom-policy', ZoomPolicyView.as_view(), name="privacy-policy"),
     path('centrestage/faqs', Faqs.as_view(), name="faqs"),
+    path('centrestage/support', contact, name="support"),
 ]
 
 if settings.DEBUG:
