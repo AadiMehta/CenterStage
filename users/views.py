@@ -5,6 +5,7 @@ import random
 import logging
 from django.core.cache import cache
 from django.core.files.base import ContentFile
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -114,7 +115,7 @@ class TeacherRegister(generics.CreateAPIView):
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -139,7 +140,7 @@ class StudentRegister(generics.CreateAPIView):
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -304,7 +305,10 @@ class VerifyOtp(generics.CreateAPIView):
         if provided_otp == cached_otp:
             token, created = self.authenticate(user)
             login(request, user)
-            return Response(dict({"token": token.key}), status=status.HTTP_200_OK)
+            headers = dict({
+                "Set-Cookie": "auth_token={}; domain={}; Path=/".format(token.key, settings.SITE_URL)
+            })
+            return Response(dict({"token": token.key}), headers=headers, status=status.HTTP_200_OK)
         else:
             logger.error("Invalid OTP!")
             return Response(dict({"error": "Invalid OTP"}), status=status.HTTP_401_UNAUTHORIZED)

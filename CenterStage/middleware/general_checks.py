@@ -140,6 +140,9 @@ class CheckOnboarding(object):
         if request.path.startswith(API_URL) or request.path.startswith(CENTERSTAGE_STATIC_PATH):
             return self.get_response(request)
 
+        if request.path in [reverse('signup'), reverse('login')]:
+            return self.get_response(request)
+
         if request.user.is_authenticated:
             if "sessionid" not in request.COOKIES or "auth_token" not in request.COOKIES:
                 # log out user

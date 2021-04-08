@@ -33,6 +33,9 @@ from frontend.views.main import (
 from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
 )
+from frontend.views.auth import (
+    SignupTemplateView, LoginTemplateView
+)
 from frontend.views.onboarding import (
     StudentOnboardStep1TemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
     OnboardStep3TemplateView, AccountConnectedTemplate
@@ -176,6 +179,8 @@ urlpatterns = [
 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
+    path('signup', SignupTemplateView.as_view(), name="signup"),
+    path('login', LoginTemplateView.as_view(), name="login"),
     path('centrestage/terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
     path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
     path('centrestage/zoom-policy', ZoomPolicyView.as_view(), name="privacy-policy"),
