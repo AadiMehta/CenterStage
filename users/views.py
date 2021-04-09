@@ -5,7 +5,6 @@ import random
 import logging
 from django.core.cache import cache
 from django.core.files.base import ContentFile
-from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -24,7 +23,7 @@ from users.serializers import (
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, StudentUserCreateSerializer,
     StudentProfileSerializer
 )
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile
 from django.conf import settings
 logger = logging.getLogger(__name__)
@@ -90,7 +89,7 @@ class ObtainAuthToken(APIView):
                 pass
 
         headers = dict({
-            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
+            "Set-Cookie": "auth_token={}; domain=.{}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })
         login(request, user)
         return Response({'token': token.key}, headers=headers)
@@ -109,13 +108,13 @@ class TeacherRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
+            "Set-Cookie": "auth_token={}; domain=.{}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -134,13 +133,13 @@ class StudentRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SITE_URL))
+            "Set-Cookie": "auth_token={}; domain=.{}; Path=/".format(str(token.key), str(settings.SITE_URL))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -153,7 +152,7 @@ class Logout(APIView):
     def get(self, request, format=None):
         # simply delete the token to force a login
         request.user.auth_token.delete()
-        request.session.flush()
+        logout(request.user)
         resp = dict({
             "message": "Successfully Logout"
         })
