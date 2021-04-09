@@ -89,7 +89,7 @@ class ObtainAuthToken(APIView):
                 pass
 
         headers = dict({
-            "Set-Cookie": "auth_token={}; domain=.{}; Path=/".format(str(token.key), str(settings.SITE_URL))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
         return Response({'token': token.key}, headers=headers)
@@ -114,7 +114,7 @@ class TeacherRegister(generics.CreateAPIView):
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; domain=.{}; Path=/".format(str(token.key), str(settings.SITE_URL))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -139,7 +139,7 @@ class StudentRegister(generics.CreateAPIView):
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; domain=.{}; Path=/".format(str(token.key), str(settings.SITE_URL))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -151,8 +151,7 @@ class Logout(APIView):
     """
     def get(self, request, format=None):
         # simply delete the token to force a login
-        request.user.auth_token.delete()
-        logout(request.user)
+        logout(request)
         resp = dict({
             "message": "Successfully Logout"
         })
