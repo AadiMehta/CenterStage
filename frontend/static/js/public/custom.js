@@ -32,7 +32,7 @@ function hideAll() {
 
 function routeToLoginIfNotLoggedIn() {
     if (!isUserLoggedIn()) {
-        window.location.href = `/login?redirect_url=${window.location.href}&utype=ST`
+        window.location.href = `${baseUrl}/login?redirect_url=${window.location.href}&utype=ST`
     }
 }
 
