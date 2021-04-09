@@ -269,7 +269,7 @@ function recommendTeacher(event) {
 }
 
 function handleFollowTeacher(event) {
-    restrictWithoutLogin()
+    routeToLoginIfNotLoggedIn()
     const token = getCookie('auth_token');
     $.ajax(`${baseUrl}/api/teacher/follow/`, {
         type: 'POST',
