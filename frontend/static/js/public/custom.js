@@ -30,6 +30,12 @@ function hideAll() {
     })
 }
 
+function routeToLoginIfNotLoggedIn() {
+    if (!isUserLoggedIn()) {
+        window.location.href = `/login?redirect_url=${window.location.href}&utype=ST`
+    }
+}
+
 function onLoginRoute() {
     if (window.lessonUrl) {
         window.location.href = window.lessonUrl + '?rurl=' + window.lessonUrl;
@@ -201,12 +207,7 @@ function initializeTeacherRating() {
  * @param {*} recommendations 
  */
 function submitTeacherReview(review, rate, recommendations) {
-    if (!isUserLoggedIn()) {
-        window.callbackParams = {review, rate, recommendations};
-        window.callbackFunction = submitTeacherReview;
-        showModal('modalLoginTeacherPage');
-        return;
-    }
+    routeToLoginIfNotLoggedIn();
     const token = getCookie('auth_token');
     $.ajax(`${baseUrl}/api/teacher/review/`, {
         type: 'POST',
@@ -233,12 +234,7 @@ function submitTeacherReview(review, rate, recommendations) {
 
 
 function recommendTeacher(event) {
-    if (!isUserLoggedIn()) {
-        window.callbackParams = {event};
-        window.callbackFunction = recommendTeacher;
-        showModal('modalLoginTeacherPage');
-        return;
-    }
+    routeToLoginIfNotLoggedIn();
     const {recomType} = event.target.dataset;
     const recomTypeCountEl = $(`#${recomType}_COUNT`);
     let {recomCount} = recomTypeCountEl[0].dataset;
@@ -273,12 +269,7 @@ function recommendTeacher(event) {
 }
 
 function handleFollowTeacher(event) {
-    if (!isUserLoggedIn()) {
-        window.callbackParams = {event};
-        window.callbackFunction = handleFollowTeacher;
-        showModal('modalLoginTeacherPage');
-        return;
-    }
+    restrictWithoutLogin()
     const token = getCookie('auth_token');
     $.ajax(`${baseUrl}/api/teacher/follow/`, {
         type: 'POST',
@@ -304,12 +295,7 @@ function handleFollowTeacher(event) {
 }
 
 function handleLikeTeacher(event) {
-    if (!isUserLoggedIn()) {
-        window.callbackParams = {event};
-        window.callbackFunction = handleLikeTeacher;
-        showModal('modalLoginTeacherPage');
-        return;
-    }
+    routeToLoginIfNotLoggedIn();
     const token = getCookie('auth_token');
     $.ajax(`${baseUrl}/api/teacher/like/`, {
         type: 'POST',
@@ -340,12 +326,7 @@ function handleLikeTeacher(event) {
  * Validate Input and Go to Step 2
  */
 function handleReviewSubmit(event) {
-    if (!isUserLoggedIn()) {
-        window.callbackParams = {event};
-        window.callbackFunction = handleReviewSubmit;
-        showModal('modalLoginTeacherPage');
-        return;
-    }
+    routeToLoginIfNotLoggedIn();
     let isValid = true;
     $('#ratingError').hide();
     $('#reviewError').hide();
@@ -400,11 +381,7 @@ function handleViewAllReviews(event) {
 
 function handleBookLesson(event) {
     const {lessonUrl} = event.target.dataset;
-    if (!isUserLoggedIn()) {
-        window.lessonUrl = lessonUrl;
-        showModal('modalLoginTeacherPage');
-        return;
-    }
+    routeToLoginIfNotLoggedIn()
     openInNewTab(lessonUrl);
 }
 
