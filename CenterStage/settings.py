@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'CenterStage.middleware.general_checks.CheckOnboarding',
 ]
 
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'CenterStage.urls'
@@ -106,8 +107,8 @@ else:
     SCHEME = 'https'
     SITE_URL = 'centrestage.live'
     BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
+    SESSION_COOKIE_DOMAIN = SITE_URL
 
-SESSION_COOKIE_DOMAIN = SITE_URL
 SESSION_COOKIE_SECURE = True
 
 # Database
