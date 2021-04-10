@@ -293,6 +293,3 @@ class StudentProfile(models.Model):
     class Meta:
         verbose_name = _('Student Profile')
         verbose_name_plural = _('Student Profiles')
-
-
-

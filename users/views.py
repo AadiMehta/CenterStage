@@ -65,14 +65,6 @@ class ObtainAuthToken(APIView):
 
     @swagger_auto_schema(request_body=AuthTokenSerializer, responses={200: LoginResponseSerializer})
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        user.last_login = timezone.now()
-        user.save()
-        user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
-        token, created = Token.objects.get_or_create(user=user)
-
         # clear existing sessions if any.
         # this happens if there are multiple login calls
         if "sessionid" in request.COOKIES or "auth_token" in request.COOKIES:
@@ -87,6 +79,14 @@ class ObtainAuthToken(APIView):
                 request.session.flush()
             except Exception as e:
                 pass
+
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        user.last_login = timezone.now()
+        user.save()
+        user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
+        token, created = Token.objects.get_or_create(user=user)
 
         headers = dict({
             "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
@@ -284,6 +284,21 @@ class VerifyOtp(generics.CreateAPIView):
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
+        # clear existing sessions if any.
+        # this happens if there are multiple login calls
+        if "sessionid" in request.COOKIES or "auth_token" in request.COOKIES:
+            try:
+                # delete the auth_token
+                request.user.auth_token.delete()
+            except Exception as e:
+                pass
+
+            try:
+                # delete the sessionid
+                request.session.flush()
+            except Exception as e:
+                pass
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -494,7 +509,7 @@ class StudentProfileView(APIView):
         try:
             student = StudentProfile.objects.get(user=request.user)
             return Response(dict({
-                "error": "Teacher profile already created. Hit Put request to update the profile"
+                "error": "Student profile already created. Hit Put request to update the profile"
             }), status=status.HTTP_400_BAD_REQUEST)
         except StudentProfile.DoesNotExist:
             profile_photo = None

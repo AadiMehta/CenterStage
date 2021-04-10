@@ -7,7 +7,7 @@ from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, status
 from frontend.forms.lesson import LessonCreateFormStep1, LessonCreateFormStep2, LessonCreateFormStep3, \
     LessonCreateFormStep4, LessonCreateFormPreview
 from engine.models import MeetingTypes, LessonLikes, LessonData
@@ -115,12 +115,12 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.request.user
-            # account = user.accounts.get(
-            #     account_type=AccountTypes.ZOOM_VIDEO
-            # )
-            # access_token = account.info.get('access_token')
-            # if not access_token:
-            #     return redirect('new-lesson')
+            account = user.accounts.get(
+                account_type=AccountTypes.ZOOM_VIDEO
+            )
+            access_token = account.info.get('access_token')
+            if not access_token:
+                return redirect('new-lesson')
 
             cover_image = form_data.pop("cover_image")
             if cover_image:
@@ -131,11 +131,11 @@ class LessonCreateWizard(SessionWizardView):
             start_time = timezone.now().isoformat()
             duration = form_data.get('duration', '30')
 
-            # meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
-            # form_data['meeting_link'] = meeting.get('join_url')
-            # form_data['meeting_info'] = meeting
-            form_data['meeting_link'] = 'https://google.com'
-            form_data['meeting_info'] = {'meeting_link': 'asdasd'}
+            meeting = zoomclient.create_meeting(access_token, topic, meeting_type, start_time, duration)
+            form_data['meeting_link'] = meeting.get('join_url')
+            form_data['meeting_info'] = meeting
+            # form_data['meeting_link'] = 'https://google.com'
+            # form_data['meeting_info'] = {'meeting_link': 'asdasd'}
 
             serializer = LessonCreateSerializer(data=form_data)
             serializer.is_valid(raise_exception=True)
