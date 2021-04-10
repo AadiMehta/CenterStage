@@ -151,7 +151,7 @@ class BookLessonWizard(SessionWizardView):
                                             status=EnrollmentChoices.ACTIVE)
                     enrollment.save()
             return render(self.request, 'booking/done.html', {
-                'enrollment': enrollment
+                'lesson': lesson
             })
         except Exception as e:
             logger.exception(e)
