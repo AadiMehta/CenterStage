@@ -34,7 +34,7 @@ def send_paid_meeting_invites(users, teacher_name, meeting_link):
     message = render_to_string('send_paid_meeting_invite.html', {'teacher_name': teacher_name,
                                                                  'meeting_link': meeting_link})
     message_plain = "Hello,\n\nYou have been invited by {} for a meeting.\nThanks".format(teacher_name)
-    send_mail('Meeting Invite!', message_plain, 'no-reply@{}'.format(settings.SITE_URL), users,
+    send_mail('Meeting Invite!', message_plain, 'support@{}'.format(settings.SITE_URL), users,
               fail_silently=False, html_message=message)
     return
 
