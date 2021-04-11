@@ -59,37 +59,57 @@
                         </button>
                     {% endif %}
                 </div>
-                <div class="cards-wrap">
-                    <p>Connect Your Preferred Payment Method To<br> Start Earning From Your Lessons</p>
-                    <div class="cards-row">
-                        <div class="card-btn-col">
-                            <button type="button" class="btn-large"><img src="{% static '/images/stripe.svg' %}" alt="" /></button>
-                            <span class="card-name">Stripe</span>
+                <div class="boarding-row">
+                    <div class="boarding-left">
+                        <div class="host-zoom">
+                            <p>Connect Your Zoom Account To<br /> Start Hosting Live Lessons</p>
+                            {% if 'ZOOM' in teacher_accounts %}
+                            <button id="disconnectZoomAccount" type="button" class="btn-large">
+                                <i>
+                                    <img src="{% static '/images/zoom-icon.svg' %}" alt="" />
+                                </i>
+                                <span>Disconnect Zoom</span>
+                            </button>
+                            {% else %}
+                            <button id="connectZoomAccount" data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" type="button" class="btn-large">
+                                <i data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">
+                                    <img data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" src="{% static '/images/zoom-icon.svg' %}" alt="" />
+                                </i>
+                                <span data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">Connect to Zoom</span>
+                            </button>
+                            {% endif %}
                         </div>
-                        <div class="card-btn-col">
-                            <button type="button" class="btn-large"><img src="{% static '/images/paypal.svg' %}" alt="" /></button>
-                            <span class="card-name">PayPal</span>
+                        <div class="cards-wrap">
+                            <p>Connect Your Preferred Payment Method To<br> Start Earning From Your Lessons</p>
+                            <div class="cards-row">
+                                <div class="card-btn-col">
+                                    <button type="button" class="btn-large"><img src="{% static '/images/stripe.svg' %}" alt="" /></button>
+                                    <span class="card-name">Stripe</span>
+                                </div>
+                                <div class="card-btn-col">
+                                    <button type="button" class="btn-large"><img src="{% static '/images/paypal.svg' %}" alt="" /></button>
+                                    <span class="card-name">PayPal</span>
+                                </div>
+                                <div class="card-btn-col">
+                                    <button type="button" class="btn-large"><img src="{% static '/images/master.svg' %}" alt="" /></button>
+                                    <span class="card-name">NEFT</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-btn-col">
-                            <button type="button" class="btn-large"><img src="{% static '/images/master.svg' %}" alt="" /></button>
-                            <span class="card-name">NEFT</span>
+                        <div class="btn-area">
+                            <button id="onboarding2Proceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Start Your First Session</span> <i><img src="{% static '/images/arrow-w.svg' %}" alt="" /></i></button>
                         </div>
                     </div>
+                    <div class="boarding-right boarding-graphics">
+                        <img src="{% static '/images/board-2.svg' %}" alt="" />
+                    </div>
                 </div>
-                <div class="btn-area"> 
-                    <button id="onboarding2Proceed" type="button" class="btn btn-primary btn-lg btn-theme"><span>Start Your First Session</span> <i><img src="{% static '/images/arrow-w.svg' %}" alt="" /></i></button>
-                </div>
-            </div>
-            <div class="boarding-right boarding-graphics">
-                <img src="{% static '/images/board-2.svg' %}" alt="" />
             </div>
         </div>
     </div>
-    </div>
-  </div>
-  {% include 'footer.html' %}
+    {% include 'footer.html' %}
 
-  </div>
+</div>
 
 {% endblock %}
 

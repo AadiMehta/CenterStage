@@ -128,7 +128,7 @@ class LessonCreateWizard(SessionWizardView):
                 cover_image, _ = self.base64_file(cover_image)
 
             topic = form_data.get('name', 'Free Meeting')
-            meeting_type = form_data.get('type', '2')
+            meeting_type = form_data.get('type', '3')
             start_time = timezone.now().isoformat()
             duration = form_data.get('duration', '30')
 
@@ -312,7 +312,7 @@ class LikeLessonAPIView(generics.CreateAPIView):
             ).delete()
             msg = 'Like Removal Successful'
             action = 'removed'
-        except Like.DoesNotExist:
+        except LessonLikes.DoesNotExist:
             LessonLikes(
                 lesson=lesson,
                 user=user

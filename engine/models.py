@@ -25,8 +25,8 @@ class SessionTypes(models.TextChoices):
 
 
 class LessonTypes(models.TextChoices):
-    ONE_ON_ONE = 'ONE_ON_ONE', _('One on One Lession Type')
-    GROUP = 'GROUP', _('Group Lession')
+    ONE_ON_ONE = 'ONE_ON_ONE', _('One on One Lesson Type')
+    GROUP = 'GROUP', _('Group Lesson')
 
 
 class MeetingTypes(models.TextChoices):

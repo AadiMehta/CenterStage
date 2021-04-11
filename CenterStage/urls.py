@@ -184,7 +184,7 @@ urlpatterns = [
     path('login', LoginTemplateView.as_view(), name="login"),
     path('centrestage/terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
     path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
-    path('centrestage/zoom-policy', ZoomPolicyView.as_view(), name="privacy-policy"),
+    path('centrestage/zoom-policy', ZoomPolicyView.as_view(), name="zoom-policy"),
     path('centrestage/faqs', Faqs.as_view(), name="faqs"),
     path('centrestage/support', contact, name="support"),
 ]
