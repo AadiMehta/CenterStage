@@ -1,6 +1,8 @@
 import pytz
 import currency
 
+end_date_timedelta = 90 # In Days
+
 languages = [{'label': 'English', 'value': 'English'},
  {'label': 'Mandarin', 'value': 'Mandarin'},
  {'label': 'Hindi', 'value': 'Hindi'},
@@ -31,6 +33,7 @@ format_currency = lambda currency: '{} {}'.format(currency['symbol_native'], cur
 currencies = [
     dict(
         label=format_currency(currency_data[code]),
+        symbol=currency_data[code]['symbol_native'],
         value=code
     )
     for code in currency_data

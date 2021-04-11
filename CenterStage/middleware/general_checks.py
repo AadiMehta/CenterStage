@@ -48,6 +48,8 @@ class CheckOnboarding(object):
 
         # check if its a teacher page
         # its a subdomain
+        # if True:
+        #     return self.get_response(request) 
         if "localhost" in request.META['HTTP_HOST']:
             pass
         elif request.META['HTTP_HOST'] not in ["centrestage.live", "www.centrestage.live"]:

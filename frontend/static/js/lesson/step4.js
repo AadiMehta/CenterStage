@@ -172,7 +172,6 @@ function addMoreRequirement() {
 
 
 function addMoreFile(fileName) {
-  console.log(fileName);
   const newUploadedFile = $('#referenceUploadedFile').clone();
   const { index } = newUploadedFile.data();
   if (index === 5) {

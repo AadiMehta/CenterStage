@@ -178,49 +178,6 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade modal-newmeeting4" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="{% static 'images/close.svg' %}" alt="" />
-        </button>
-        <div class="modal-body">
-            <div class="share-modal-wrap">
-                <div class="share-modal-left">
-                <h3>New Meeting!</h3>
-                <h4>Thank you! Your meeting invites will be sent shortly</h4>
-                <div class="sharecopy-link">
-                    <h2>Meeting Link</h2>
-                    <div class="sharecopy-inp">
-                        <input type="text" class="form-control" placeholder="https://www.zoom.com/xyzjava/1548fghgytuj" />
-                        <button type="button" class="btn-theme">Copy</button>
-                    </div>
-                </div>
-                <div class="share-to">
-                    <h5>Share to</h5>
-                    <div class="social-icons">
-                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
-                    </div>
-                </div>
-                <div class="btn-area mt-5 twobtn-wrap">
-                    <button type="button" class="btn btn-theme">Start Meeting</button>
-                </div>
-                </div>
-                <div class="share-graphics">
-                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
-
-<!-- Modal -->
 <div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -671,9 +628,12 @@
                         <div class="form-group">
                             <div class="liner-inp select-drop">
                                 <select id="pricePerSessionCurrency" class="form-control" name="price_per_session_currency" id="pricePerSessionCurrency" >
-                                    <option value="DOLLARS">$ US Dollar</option>
-                                    <option value="RUPEES">₹ Indian Rupees</option>
+                                    {% for currency in currency_options %}
+                                        <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                    {% endfor %}
                                 </select>
+
+
                             </div>
                         </div>
                     </div>

@@ -104,6 +104,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Returns the type of the user"""
         return self.get_user_type_display()
 
+    @property
+    def is_zoom_linked(self):
+        """Returns boolean if user has connected zoom"""
+        return self.accounts.filter(account_type=AccountTypes.ZOOM_VIDEO).exists()
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)

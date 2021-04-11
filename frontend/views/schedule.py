@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from formtools.wizard.views import SessionWizardView
 from rest_framework.response import Response
 from frontend.forms.schedule import ScheduleCreateFormStep1, ScheduleCreateFormStep2, ScheduleCreateFormPreview
-from engine.models import MeetingTypes
+from engine.models import MeetingTypes, SessionTypes
 from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer
 from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
@@ -66,10 +66,9 @@ class ScheduleCreateWizard(SessionWizardView):
         context['language_options'] = language_options
         context['currency_options'] = currency_options
         context['timezone_options'] = timezone_options
-        if self.steps.current == 'preview':
-            data = self.get_all_cleaned_data()
-            data['invitees'] = json.loads(data.get('invitees')) if data.get('invitees') else []
-            context.update({'form_data': data})
+        data = self.get_all_cleaned_data()
+        data['invitees'] = json.loads(data.get('invitees')) if data.get('invitees') else []
+        context.update({'form_data': data})
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -116,17 +115,7 @@ class ScheduleCreateWizard(SessionWizardView):
             serializer.is_valid(raise_exception=True)
             lesson = serializer.save(creator=user.teacher_profile_data)
 
-            now = timezone.now()
-            thirty_months = now + timezone.timedelta(days=90)
-            start_date = form_data.get('start_date') or now.strftime('%m/%d/%Y')
-            end_date = form_data.get('end_date') or thirty_months.strftime('%m/%d/%Y')
-            weekdays = form_data.get('weekdays')
-
-            session_tz = form_data.get('timezone')
-            self.add_available_slots(
-                user, lesson, form_data, start_date, end_date,
-                weekdays, session_tz
-            )
+            self.add_available_slots(user, lesson, form_data)
 
             return render(self.request, 'teacher/lesson/done.html', {
                 'lesson': lesson,
@@ -144,31 +133,40 @@ class ScheduleCreateWizard(SessionWizardView):
         return ContentFile(base64.b64decode(_img_str), name='{}.{}'.format(name, ext)), ext
 
     @staticmethod
-    def add_available_slots(user, lesson, form_data, start_date, end_date, weekdays, session_tz):
+    def add_available_slots(user, lesson, form_data):
         """
         Add Slots for lessons provided by creator
         using date range between start_date and
         end_date with weekdays filter and appending
         start_time and end_time with timezone
         """
-        start_date = timezone.datetime.strptime(start_date, '%m/%d/%Y')
-        end_date = timezone.datetime.strptime(end_date, '%m/%d/%Y')
+        session_type = form_data.get('session_type')
+        session_tz = form_data.get('timezone')
         creator = user.teacher_profile_data
-        google_calendar_account = Accounts.objects.get(
-            user=user,
-            account_type=AccountTypes.GOOGLE_CALENDAR
-        )
+        try:
+            google_calendar_account = Accounts.objects.get(
+                user=user,
+                account_type=AccountTypes.GOOGLE_CALENDAR
+            )
+        except Accounts.DoesNotExist:
+            google_calendar_account = False
+
         calendar_service = None
         if google_calendar_account:
             calendar_service = GoogleCalendar(google_calendar_account.info)
-        session_no = 1
-        for date in daterange(start_date, end_date):
-            day = date.strftime('%a')
-            if day in weekdays:
+
+        if session_type == SessionTypes.ONGOING_SESSION:
+            session_start_date = form_data.get('session_date')
+            start_date = timezone.datetime.strptime(session_start_date, '%m/%d/%Y')
+            session_end_date = start_date + timezone.timedelta(days=end_date_timedelta)
+            end_date = session_end_date
+
+            session_no = 1
+            for date in daterange(start_date, end_date):
                 lesson_tz = form_data.get('timezone', 'Asia/Kolkata')
-                start_time = form_data.get('{}_start_time'.format(day.lower()))
+                start_time = form_data.get('session_start_time')
                 session_start_time = timezone.datetime.strptime(start_time, '%H:%M %p').time()
-                end_time = form_data.get('{}_end_time'.format(day.lower()))
+                end_time = form_data.get('session_end_time')
                 session_end_time = timezone.datetime.strptime(end_time, '%H:%M %p').time()
                 lesson_from = timezone.datetime.combine(date, session_start_time)
                 lesson_to = timezone.datetime.combine(date, session_end_time)
@@ -184,9 +182,80 @@ class ScheduleCreateWizard(SessionWizardView):
                 if calendar_service:
                     session.calendar_info = calendar_service.create_calendar_invite(
                         lesson,
-                        lesson_from,
-                        lesson_to,
+                        lesson_from_tz,
+                        lesson_to_tz,
                         session_no,
                         emails=[user.email]
                     )
                     session.save()
+                session_no += 1
+
+        elif session_type == SessionTypes.SINGLE_SESSION:
+            session_start_date = form_data.get('session_date')
+            start_date = timezone.datetime.strptime(session_start_date, '%m/%d/%Y')
+            session_end_date = start_date.replace(hour=23, minute=59, second=59)
+            end_date = session_end_date
+            session_no = 1
+            lesson_tz = form_data.get('timezone', 'Asia/Kolkata')
+            start_time = form_data.get('session_start_time')
+            session_start_time = timezone.datetime.strptime(start_time, '%H:%M %p').time()
+            end_time = form_data.get('session_start_time')
+            session_end_time = timezone.datetime.strptime(end_time, '%H:%M %p').time()
+            lesson_from = timezone.datetime.combine(start_date, session_start_time)
+            lesson_to = timezone.datetime.combine(end_date, session_end_time)
+            lesson_from_tz = lesson_from.astimezone(pytz.timezone(lesson_tz))
+            lesson_to_tz = lesson_to.astimezone(pytz.timezone(lesson_tz))
+            serializer = LessonSlotCreateSerializer(data=dict(
+                lesson_from=lesson_from_tz,
+                lesson_to=lesson_to_tz,
+                session_no=session_no
+            ))
+            serializer.is_valid(raise_exception=True)
+            session = serializer.save(creator=creator, lesson=lesson)
+            if calendar_service:
+                session.calendar_info = calendar_service.create_calendar_invite(
+                    lesson,
+                    lesson_from_tz,
+                    lesson_to_tz,
+                    session_no,
+                    emails=[user.email]
+                )
+                session.save()
+            session_no += 1
+        else:
+            session_start_date = form_data.get('start_date')
+            start_date = timezone.datetime.strptime(session_start_date, '%m/%d/%Y')
+            session_end_date = form_data.get('end_date')
+            end_date = timezone.datetime.strptime(session_end_date, '%m/%d/%Y')
+            weekdays = form_data.get('weekdays')
+            session_no = 1
+            for date in daterange(start_date, end_date):
+                day = date.strftime('%a')
+                if day in weekdays:
+                    lesson_tz = form_data.get('timezone', 'Asia/Kolkata')
+                    start_time = form_data.get('{}_start_time'.format(day.lower()))
+                    session_start_time = timezone.datetime.strptime(start_time, '%H:%M %p').time()
+                    end_time = form_data.get('{}_end_time'.format(day.lower()))
+                    session_end_time = timezone.datetime.strptime(end_time, '%H:%M %p').time()
+                    lesson_from = timezone.datetime.combine(date, session_start_time)
+                    lesson_to = timezone.datetime.combine(date, session_end_time)
+                    lesson_from_tz = lesson_from.astimezone(pytz.timezone(lesson_tz))
+                    lesson_to_tz = lesson_to.astimezone(pytz.timezone(lesson_tz))
+                    serializer = LessonSlotCreateSerializer(data=dict(
+                        lesson_from=lesson_from_tz,
+                        lesson_to=lesson_to_tz,
+                        session_no=session_no
+                    ))
+                    serializer.is_valid(raise_exception=True)
+                    session = serializer.save(creator=creator, lesson=lesson)
+                    if calendar_service:
+                        session.calendar_info = calendar_service.create_calendar_invite(
+                            lesson,
+                            lesson_from_tz,
+                            lesson_to_tz,
+                            session_no,
+                            emails=[user.email]
+                        )
+                        session.save()
+                    session_no += 1
+

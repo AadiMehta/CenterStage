@@ -53,7 +53,6 @@ class BookLessonWizard(SessionWizardView):
             ])
         context['lesson_date_slots'] = lesson_date_slots
         context['lesson_time_slots'] = lesson_time_slots
-        context['no_of_slots'] = lesson.slots.count()
 
         selected_slots = []
         if data:

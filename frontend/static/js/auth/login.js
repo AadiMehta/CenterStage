@@ -292,7 +292,6 @@ function openSignInModal (event) {
 function initOTPInput() {
     $(".otp-input").keydown(function () {
         let value = $(this).val();
-        console.log('keydown', value.length > 1)
         if (value.length > 1) {
             $(this).val(value[0]);
         }
