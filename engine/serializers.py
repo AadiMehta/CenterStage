@@ -1,11 +1,9 @@
 from django.utils import timezone
-
 from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
 from users.serializers import TeacherProfileSerializer, StudentProfileSerializer
 from frontend.utils.auth import get_time_duration
 from django.db.models import Q
-
 
 
 # ********* Lessons Serializers **********
