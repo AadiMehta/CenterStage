@@ -184,7 +184,7 @@
                                     <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
                                     <div class="lessons-steps-text">
                                         <h4>Session Number</h4>
-                                        <a href="#">{{ lesson.upcoming_slot.session_no }}</a> <span>Out of {{ no_of_slots }}</span>
+                                        <a href="#">{{ lesson.upcoming_slot.session_no }}</a> <span>Out of {{ lesson.no_of_slots }}</span>
                                     </div>
                                 </li>
                                 <li>
@@ -215,21 +215,24 @@
                                 </li>
                             </ul>
 
-                            <div class="profimg-name">
-                                <div class="profimg-col">
-                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
-                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
-                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+
+                            {% if enrollments|length > 0 %}
+                                <div class="profimg-name">
+                                    <div class="profimg-col">
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                        <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
+                                    </div>
+                                    <div class="prof-name">
+                                        <h4>
+                                            <a href="#">
+                                                With {{enrollments.0.student.user.first_name}}, {{enrollments.1.student.user.first_name}}, {{enrollments.2.student.user.first_name}}<br />
+                                                + {{enrollments|slice:"3:"|length}} other students
+                                            </a>
+                                        </h4>
+                                    </div>
                                 </div>
-                                <div class="prof-name">
-                                    <h4>
-                                        <a href="#">
-                                            With {{enrollments.0.student.user.first_name}}, {{enrollments.1.student.user.first_name}}, {{enrollments.2.student.user.first_name}}<br />
-                                            + {{enrollments|slice:"3:"|length}} other students
-                                        </a>
-                                    </h4>
-                                </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -403,10 +406,29 @@
                 </div>
             </div>
             <div class="page-right-area">
-                <div class="default-box-style">
-                    <h2>{{currency_info.symbol}}{{total_lesson_price}}/person</h2>
-                    <h3>for {{no_of_slots}} sessions</h3>
-                </div>
+                {% if lesson.session_type in 'ONGOING,SINGLE' %}
+                    {% if lesson.price.type == 'pricePerSession' %}
+                        <div class="default-box-style">
+                            <h2>{{currency_info.symbol}}{{lesson.price.value}}/person</h2>
+                            <h3>per session</h3>
+                        </div>
+                    {% elif lesson.price.type == 'weeklyPrice' %}
+                        <div class="default-box-style">
+                            <h2>{{currency_info.symbol}}{{lesson.price.value}}/person</h2>
+                            <h3>per week</h3>
+                        </div>
+                    {% elif lesson.price.type == 'monthlyPrice' %}
+                        <div class="default-box-style">
+                            <h2>{{currency_info.symbol}}{{lesson.price.value}}/person</h2>
+                            <h3>per month</h3>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="default-box-style">
+                        <h2>{{currency_info.symbol}}{{total_lesson_price}}/person</h2>
+                        <h3>for {{lesson.no_of_slots}} sessions</h3>
+                    </div>
+                {% endif %}
                 {% if user.user_type == 'ST' %}
                     <button type="button" class="btn btn-theme w-100 mb-4 book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">Book Now</button>
                 {% endif %}

@@ -136,7 +136,6 @@ function handleConfirmPayment() {
 }
 
 function handlePaymentTypeSelection(event) {
-  console.log(event);
   const {paymentType} = event.target.dataset;
   $('#paymentType')[0].value = paymentType;
 }
@@ -154,7 +153,6 @@ function handleLikeLesson(event) {
           "lesson_uuid": lessonUuid,
       }),
       success: function (data, status, xhr) {
-          console.log(event.target)
           if (data.action === 'removed') {
               $('#likeLessonTempText').text('Like');
           } else {

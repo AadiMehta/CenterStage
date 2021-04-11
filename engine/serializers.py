@@ -1,3 +1,4 @@
+import pytz
 from django.utils import timezone
 from rest_framework import serializers
 from engine.models import LessonData, LessonSlots, Meeting
@@ -43,7 +44,6 @@ class LessonSlotCreateSerializer(serializers.ModelSerializer):
             'creator',
             'lesson'
         ]
-
 
 class LessonSlotSerializer(serializers.ModelSerializer):
     """
@@ -92,17 +92,25 @@ class LessonTeacherPageSerializer(serializers.ModelSerializer):
     creator = TeacherProfileSerializer(read_only=True)
     upcoming_slot = serializers.SerializerMethodField()
     no_of_slots = serializers.SerializerMethodField()
+    completed_sessions_count = serializers.SerializerMethodField()
 
     @staticmethod
     def get_upcoming_slot(instance):
-        slots = LessonSlots.objects.filter(Q(lesson_from__gt=timezone.now()), lesson=instance)
-        return LessonSlotSerializer(slots.first()).data
+        upcoming_slots = instance.slots.filter(lesson_from__gt=timezone.now()).order_by('created_at')
+        return LessonSlotSerializer(upcoming_slots.first()).data
 
     @staticmethod
     def get_no_of_slots(instance):
-        slots = LessonSlots.objects.filter(lesson=instance)
-        return slots.count()
-
+        return instance.slots.count()
+    
+    @staticmethod
+    def get_completed_sessions_count(instance):
+        tz_now = timezone.now().astimezone(pytz.UTC)
+        lesson_slots = instance.slots.filter(
+            lesson_to__lte=tz_now
+        )
+        return lesson_slots.count()
+    
     class Meta:
         model = LessonData
         fields = [
@@ -110,7 +118,6 @@ class LessonTeacherPageSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'no_of_participants',
-            'no_of_sessions',
             'language',
             'lesson_type',
             'session_type',
@@ -123,20 +130,79 @@ class LessonTeacherPageSerializer(serializers.ModelSerializer):
             'status',
             'price',
             'upcoming_slot',
-            'no_of_slots'
+            'no_of_slots',
+            'completed_sessions_count',
+            'permalink'
         ]
+
+# ********* Meetings Serializers **********
+class MeetingCreateSerializer(serializers.ModelSerializer):
+    """
+    Meeting Create Serializer
+    name -> required
+    """
+    topic = serializers.CharField(required=True)
+
+    class Meta:
+        model = Meeting
+        exclude = [
+            'creator'
+        ]
+
+
+class SlotSerializer(serializers.ModelSerializer):
+    """
+    Lesson Slot Serializer
+    """
+    lesson = LessonTeacherPageSerializer(read_only=True)
+    creator = TeacherProfileSerializer(read_only=True)
+    lesson_from = serializers.SerializerMethodField()
+    lesson_to = serializers.SerializerMethodField()
+    session_time = serializers.SerializerMethodField()
+    session_duration = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_lesson_from(instance):
+        return instance.lesson_from.strftime('%A, %d %b %Y')
+
+    @staticmethod
+    def get_lesson_to(instance):
+        return instance.lesson_to.strftime('%A, %d %b %Y')
+
+    @staticmethod
+    def get_session_time(instance):
+        return instance.lesson_from.strftime('%I:%M %p')
+
+    @staticmethod
+    def get_session_duration(instance):
+        return get_time_duration(instance.lesson_to - instance.lesson_from, formatted=True)
+
+    class Meta:
+        model = LessonSlots
+        fields = [
+            'creator',
+            'lesson',
+            'lesson_from',
+            'session_no',
+            'lesson_to',
+            'created_at',
+            'session_time',
+            'session_duration'
+        ]
+
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
     """
     Enrollment Serializer
     """
-    lesson = LessonSerializer(read_only=True)
+    lesson = LessonTeacherPageSerializer(read_only=True)
     student = StudentProfileSerializer(read_only=True)
     lesson_from = serializers.SerializerMethodField()
     lesson_to = serializers.SerializerMethodField()
     session_time = serializers.SerializerMethodField()
     session_duration = serializers.SerializerMethodField()
+    other_enrollments = serializers.SerializerMethodField()
 
     @staticmethod
     def get_lesson_from(instance):
@@ -154,6 +220,11 @@ class EnrollmentSerializer(serializers.ModelSerializer):
     def get_session_duration(instance):
         return get_time_duration(instance.lessonslot.lesson_to - instance.lessonslot.lesson_from, formatted=True)
 
+
+    @staticmethod
+    def get_other_enrollments(instance):
+        return instance.lessonslot.lesson.enrollments.all()
+
     class Meta:
         model = LessonSlots
         fields = [
@@ -164,20 +235,6 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             'lesson_to',
             'created_at',
             'session_time',
-            'session_duration'
-        ]
-
-
-# ********* Meetings Serializers **********
-class MeetingCreateSerializer(serializers.ModelSerializer):
-    """
-    Meeting Create Serializer
-    name -> required
-    """
-    topic = serializers.CharField(required=True)
-
-    class Meta:
-        model = Meeting
-        exclude = [
-            'creator'
+            'session_duration',
+            'other_enrollments'
         ]

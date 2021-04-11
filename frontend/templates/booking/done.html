@@ -22,22 +22,22 @@
                       meeting details
                   </h4>
                   <div class="sharecopy-link">
-                    <h2>{{lesson.name}}</h2>
+                    <h2>{{enrollment.lesson.name}}</h2>
                     <div class="sharecopy-inp">
-                        <input type="text" class="form-control" placeholder="{{lesson.meeting_link}}" disabled />
-                        <button type="button" class="btn-theme" onclick="copyToClipboard('{{lesson.meeting_link}}')">Copy</button>
+                        <input type="text" class="form-control" placeholder="{{enrollment.lesson.permalink}}" disabled />
+                        <button type="button" class="btn-theme" onclick="copyToClipboard('{{enrollment.lesson.permalink}}')">Copy</button>
                     </div>
                   </div>
                   <div class="share-to">
                       <h5>Share to</h5>
                       <div class="social-icons">
-                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
-                      </div>
+                        <a href="https://api.whatsapp.com/send?text={{enrollment.lesson.permalink}}" target="_blank"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                        <a href="https://telegram.me/share/url?url={{enrollment.lesson.permalink}}&text={{enrollment.lesson.name}}"  target="_blank"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{enrollment.lesson.permalink}}" target="_blank"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{enrollment.lesson.permalink}}" target="_blank"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                        <a href="http://twitter.com/share?text={{enrollment.lesson.name}}&url={{enrollment.lesson.permalink}}" target="_blank"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
+                        <a href="mailto:?subject={{enrollment.lesson.name}}&amp;body=Check out Center Stage lesson {{enrollment.lesson.permalink}}" target="_blank"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                    </div>
                   </div>
                   <div class="share-to">
                       <h5>How was your overall booking process experience?</h5>

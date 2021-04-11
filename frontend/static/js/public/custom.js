@@ -307,7 +307,6 @@ function handleLikeTeacher(event) {
             "teacher_id": teacherId,
         }),
         success: function (data, status, xhr) {
-            console.log(event.target)
             if (data.action === 'removed') {
                 $('#likeTeacherTempText').text('Like');
             } else {
@@ -590,7 +589,6 @@ function onSignUpClicked (event) {
     let isValid = true;
     let userType = 'student';
 
-    console.log(userType);
     $(getClassName(userType, 'signUpFirstNameError')).hide()
     $(getClassName(userType, 'signUpLastNameError')).hide()
     $(getClassName(userType, 'signUpCountryCodeError')).hide()

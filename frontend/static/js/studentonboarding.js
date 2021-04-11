@@ -90,7 +90,6 @@ function validateSubdomain(subDomain) {
       const token = getCookie('auth_token');
       const urlParams = new URLSearchParams(window.location.search);
       const redirectUrl = urlParams.get('rurl');
-      debugger;
       if (profileUrl == null) {
         $.ajax('/api/student/profile/', {
           type: 'POST',

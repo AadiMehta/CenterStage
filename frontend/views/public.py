@@ -19,7 +19,7 @@ class TeacherPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = User.objects.get(pk=85)        
+        user = User.objects.filter(user_type='CR').first()        
         teacher = user.teacher_profile_data
 
         context['user'] = user
@@ -54,6 +54,7 @@ class TeacherPageView(TemplateView):
         followed = False
         user_recommended = []
 
+        recommendations = teacher.recommendations.all()
         if not self.request.user.is_anonymous:
             liked = TeacherLike.objects.filter(
                 user=self.request.user,
@@ -71,7 +72,6 @@ class TeacherPageView(TemplateView):
                 if recommended:
                     user_recommended.append(recommendation_type)
 
-        recommendations = teacher.recommendations.all()
         total_recommendations = {
             'LESSON_QUALITY': recommendations.filter(recommendation_type=RecommendationChoices.LESSON_QUALITY),
             'LESSON_CONTENT': recommendations.filter(recommendation_type=RecommendationChoices.LESSON_CONTENT),
@@ -84,7 +84,7 @@ class TeacherPageView(TemplateView):
         return context
     
     def dispatch(self, request, *args, **kwargs):
-        user = User.objects.get(pk=85)
+        user = User.objects.filter(user_type='CR').first()    
         teacher = TeacherProfile.objects.filter(user=user).first()
         return super(TeacherPageView, self).dispatch(request, *args, **kwargs)
 

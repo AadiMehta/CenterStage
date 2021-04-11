@@ -1,10 +1,22 @@
 import uuid
 from django.db import models
+from django.conf import settings
 from users.models import TeacherProfile, StudentProfile, User
 from users.s3_storage import S3_LessonCoverImage_Storage
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
+from enum import Enum
 
+
+class LessonFilterType(Enum):
+    ONE_ON_ONE = "ONE_ON_ONE"
+    GROUP = "GROUP"
+    PERSONAL_COACHING = "PERSONAL_COACHING"
+    RECENT = "RECENT"
+    POPULAR = "POPULAR"
+    TOP_RATED = "TOP_RATED"
+    ATOZ = "ATOZ"
+    ZTOA = "ZTOA"
 
 class SessionTypes(models.TextChoices):
     SINGLE_SESSION = 'SINGLE', _('Single Session')
@@ -44,7 +56,6 @@ class LessonData(models.Model):
     name = models.CharField(_("Name of the lesson"), max_length=256)
     description = models.TextField(_("Description of the lesson"), blank=True, null=True)
     no_of_participants = models.IntegerField(_('No of participants'), null=True)
-    no_of_sessions = models.IntegerField(_('No of sessions'), null=True)
     language = models.JSONField(default=list)
     lesson_type = models.CharField(_("Type of lesson"), null=True, choices=LessonTypes.choices, max_length=10)
     session_type = models.CharField(_("Type of lesson"), choices=SessionTypes.choices, max_length=10)
@@ -64,6 +75,11 @@ class LessonData(models.Model):
                               help_text="Lesson status", default=LessonStatuses.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def permalink(self):
+        "Returns permalink for lesson"
+        return '{}/lesson/{}'.format(settings.BASE_URL, self.lesson_uuid)
 
 
 class LessonSlots(models.Model):

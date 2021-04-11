@@ -144,6 +144,7 @@ urlpatterns = [
     path('schedule/new', ScheduleCreateWizard.as_view(ScheduleCreateWizard.FORMS), name="new-schedule"),
 
     # Book Lesson Wizard
+    path('lesson/<uuid:lesson_uuid>', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="lesson-page"),
     path('lesson/<uuid:lesson_uuid>/book', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="book-lesson"),
 
 

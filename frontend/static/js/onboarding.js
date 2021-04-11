@@ -211,9 +211,9 @@ function onProceedButtonClicked () {
     const bio = $('#onboardingBio')[0].value;
     const subDomain = $('#onboardingPageName')[0].value;
     if (profileUrl === 'data:image/jpeg;base64') {
-//      $('#onboardingProfileImageError').text('Please select profile image');
-//      $('#onboardingProfileImageError').show()
-        isProfileUrl = false
+      // $('#onboardingProfileImageError').text('Please select profile image');
+      // $('#onboardingProfileImageError').show()
+      isProfileUrl = false
     }
     if (!profession) {
         $('#onboardingProfessionError').text('Please provide profession name');
@@ -244,7 +244,16 @@ function onProceedButtonClicked () {
  * Route to stage 3
  */
 function onProceed2ButtonClicked () {
+  let isValid = true;
+  $('#onboardingZoomConnectError').hide();
+  if (!isZoomLinked) {
+    $('#onboardingZoomConnectError').text('Please connect zoom account');
+    $('#onboardingZoomConnectError').show()
+    isValid = false;
+  }
+  if (isValid) {
     window.location.href = "/teacher/onboarding/intro-video";
+  }
 }
 
 /**

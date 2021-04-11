@@ -1,13 +1,60 @@
 import urllib
 import pytz
+import operator
+from django.template.defaultfilters import slugify
 from django.db.models import Q, Sum
+from django.db.models import Count, Avg
 from django.utils import timezone
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.db.models.functions import Coalesce
-from engine.models import LessonData, LessonSlots, LessonStatuses, Enrollment
-from engine.serializers import LessonSerializer, LessonSlotSerializer
-from users.models import TeacherPageVisits, TeacherEarnings
+from engine.models import LessonData, LessonSlots, LessonStatuses, Enrollment, LessonTypes, LessonFilterType, LessonRating
+from engine.serializers import LessonTeacherPageSerializer, LessonSerializer, LessonSlotSerializer, SlotSerializer
+from users.models import TeacherPageVisits, TeacherEarnings, AccountTypes
+from frontend.constants import currencies as currency_options
+
+
+def get_filtered_lessons(filter_by, lessons):
+    if not filter_by:
+        return lessons
+    if filter_by == LessonFilterType.ONE_ON_ONE.value:
+        return lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE)
+    if filter_by == LessonFilterType.GROUP.value:
+        return lessons.filter(lesson_type=LessonTypes.GROUP)
+    if filter_by == LessonFilterType.PERSONAL_COACHING:
+        return lessons
+    if filter_by == LessonFilterType.RECENT.value:
+        return lessons.order_by('-created_at')
+    if filter_by == LessonFilterType.POPULAR.value:
+        lessons_enrollments = {}
+        for lesson in lessons:
+            count = lesson.enrollments.count()
+            key = '{}-{}'.format(count, slugify(lesson.name))
+            lessons_enrollments[key] = lesson
+        popular_lessons = dict(sorted(
+                lessons_enrollments.items(),
+                key = operator.itemgetter(0),
+                reverse = True
+            ))
+        return popular_lessons.values()
+    if filter_by == LessonFilterType.TOP_RATED.value:
+        lessons_avg_ratings = {}
+        for lesson in lessons:
+            avg_rating = LessonRating.objects.filter(lesson=lesson).aggregate(
+                    Avg('rate')).get('rate__avg') or 0
+            key = '{}-{}'.format(avg_rating, slugify(lesson.name))
+            lessons_avg_ratings[key] = lesson
+        top_rated_lessons = dict(sorted(
+                lessons_avg_ratings.items(),
+                key = operator.itemgetter(0),
+                reverse = True
+            ))
+        return top_rated_lessons.values()
+    if filter_by == LessonFilterType.ATOZ.value:
+        return lessons.order_by('name')
+    if filter_by == LessonFilterType.ZTOA.value:
+        return lessons.order_by('-name')
+    return lessons
 
 
 class DashboardAccountAlerts(TemplateView):
@@ -45,7 +92,8 @@ class DashboardAccountInfo(TemplateView):
             'zoom': {
                 'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
                 'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
-            }
+            },
+            'currency_options': currency_options
         })
         return context
 
@@ -72,13 +120,20 @@ class DashboardSchedulesPastSessions(TemplateView):
         context = super().get_context_data(**kwargs)
         tz_now = timezone.now().astimezone(pytz.UTC)
         lesson_slots = LessonSlots.objects.filter(
-            Q(lesson_from__lte=tz_now) | Q(lesson_to__lte=tz_now),
+            lesson_to__lte=tz_now,
             lesson__status=LessonStatuses.ACTIVE,
             creator=self.request.user.teacher_profile_data
         ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
-        serializer = LessonSlotSerializer(lesson_slots, many=True)
+        serializer = SlotSerializer(lesson_slots, many=True)
         context['lessons_slots'] = serializer.data
         context['user'] = self.request.user
+        context.update({
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            },
+            'currency_options': currency_options
+        })
         return context
 
 
@@ -96,9 +151,17 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
             lesson__status=LessonStatuses.ACTIVE,
             creator=self.request.user.teacher_profile_data
         ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
-        serializer = LessonSlotSerializer(lesson_slots, many=True)
+        lessons = get_filtered_lessons(self.request.GET.get('filter'), lessons)
+        serializer = SlotSerializer(lesson_slots, many=True)
         context['lessons_slots'] = serializer.data
         context['user'] = self.request.user
+        context.update({
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            },
+            'currency_options': currency_options
+        })
         return context
 
 
@@ -111,11 +174,18 @@ class DashboardLessons(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lessons = LessonData.objects.filter(creator=self.request.user.teacher_profile_data).order_by('-created_at')
-        serializer = LessonSerializer(lessons, many=True)
+        lessons = get_filtered_lessons(self.request.GET.get('filter'), lessons)
+        serializer = LessonTeacherPageSerializer(lessons, many=True)
         context['lessons'] = serializer.data
         context['user'] = self.request.user
+        context.update({
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            },
+            'currency_options': currency_options
+        })
         return context
-
 
 class DashboardMessages(TemplateView):
     """
@@ -126,6 +196,13 @@ class DashboardMessages(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
+        context.update({
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            },
+            'currency_options': currency_options
+        })
         return context
 
 
@@ -224,7 +301,12 @@ class DashboardStatistics(TemplateView):
                 'current_month': students_data_current_month.distinct('student').count(),
                 'current_week': students_data_current_week.distinct('student').count()
             },
-            'my_page': "{0}://{1}.{2}".format(settings.SCHEME, user.teacher_profile_data.subdomain, settings.SITE_URL)
+            'my_page': "{0}://{1}.{2}".format(settings.SCHEME, user.teacher_profile_data.subdomain, settings.SITE_URL),
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            },
+            'currency_options': currency_options
         })
 
         return context
