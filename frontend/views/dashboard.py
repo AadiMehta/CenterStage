@@ -33,8 +33,8 @@ def get_filtered_lessons(filter_by, lessons):
             lessons_enrollments[key] = lesson
         popular_lessons = dict(sorted(
                 lessons_enrollments.items(),
-                key = operator.itemgetter(0),
-                reverse = True
+                key=operator.itemgetter(0),
+                reverse=True
             ))
         return popular_lessons.values()
     if filter_by == LessonFilterType.TOP_RATED.value:
@@ -151,7 +151,6 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
             lesson__status=LessonStatuses.ACTIVE,
             creator=self.request.user.teacher_profile_data
         ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
-        lessons = get_filtered_lessons(self.request.GET.get('filter'), lessons)
         serializer = SlotSerializer(lesson_slots, many=True)
         context['lessons_slots'] = serializer.data
         context['user'] = self.request.user
@@ -186,6 +185,7 @@ class DashboardLessons(TemplateView):
             'currency_options': currency_options
         })
         return context
+
 
 class DashboardMessages(TemplateView):
     """

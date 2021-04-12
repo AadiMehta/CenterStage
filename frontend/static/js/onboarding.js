@@ -247,7 +247,7 @@ function onProceed2ButtonClicked () {
   let isValid = true;
   $('#onboardingZoomConnectError').hide();
   if (!isZoomLinked) {
-    $('#onboardingZoomConnectError').text('Please connect zoom account');
+    $('#onboardingZoomConnectError').text('Please connect zoom account to proceed');
     $('#onboardingZoomConnectError').show()
     isValid = false;
   }
