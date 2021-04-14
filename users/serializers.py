@@ -136,7 +136,7 @@ class TeacherUserCreateSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.create_creator_user(validated_data.pop("email"), validated_data.pop("password"),
                                                     **validated_data)
-            _thread.start_new_thread(send_signup_email, (user,'signup_mail.html'))
+            # _thread.start_new_thread(send_signup_email, (user, 'notifications/signup_mail.html'))
             return user
         except IntegrityError as e:
             error = dict({'error': str(e)})
@@ -209,7 +209,7 @@ class StudentUserCreateSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.create_student_user(validated_data.pop("email"), validated_data.pop("password"),
                                                     **validated_data)
-            _thread.start_new_thread(send_signup_email, (user,))
+            # _thread.start_new_thread(send_signup_email, (user,))
             return user
         except IntegrityError as e:
             error = dict({'error': str(e)})

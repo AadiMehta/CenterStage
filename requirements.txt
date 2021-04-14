@@ -1,3 +1,6 @@
+channels==3.0.3
+channels-redis==3.2.0
+daphne==3.0.1
 Django==3.1.7
 djangorestframework==3.12.2
 drf_yasg==1.20.0
@@ -15,3 +18,5 @@ google-auth-httplib2==0.1.0
 google-auth-oauthlib==0.4.3
 django-extensions==3.1.1
 nh-currency==1.0.1
+stream-django==1.6.2
+stripe==2.56.0

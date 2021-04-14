@@ -196,18 +196,15 @@ class PaymentAccounts(models.Model):
     """
     Data Associated to teacher payment accounts
     """
-    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
-    # payment_type = models.CharField(_("payment type"), choices=PaymentTypes.choices, max_length=10,
-    #                                 help_text="Type of payment account")
-    # info = models.JSONField(null=False, blank=False)
-
-    # class Meta:
-    #     unique_together = ['payment_type', 'user']
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_account")
-    stripe_account_id = models.CharField(_('Stripe Account ID'), null=True, blank=False,max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payment_account')
+    payment_type = models.CharField(_('payment type'), max_length=10, choices=PaymentTypes.choices, default=PaymentTypes.STRIPE, help_text='Type of payment account')
+    account_id = models.CharField(_('account id'), null=True, blank=True, max_length=120, help_text=_('account ID in payment gateway'))
     info = models.JSONField(null=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     class Meta:
-        unique_together = ['stripe_account_id', 'user']
+        unique_together = ['account_id', 'user']
 
 
 class TeacherEarnings(models.Model):
@@ -302,3 +299,19 @@ class StudentProfile(models.Model):
     class Meta:
         verbose_name = _('Student Profile')
         verbose_name_plural = _('Student Profiles')
+
+
+class BillingProfile(models.Model):
+    """
+    Data Associated to student billing accounts
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='billing_profile')
+    payment_type = models.CharField(_('payment type'), max_length=10, choices=PaymentTypes.choices, default=PaymentTypes.STRIPE, help_text='Type of payment account')
+    customer_id = models.CharField(_('customer id'), null=True, blank=True, max_length=120, help_text=_('customer ID in payment gateway'))
+    info = models.JSONField(null=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['customer_id', 'user']

@@ -97,7 +97,7 @@ admin.site.index_title = 'CenterStage Admin Area'               # default: "Site
 admin.site.site_title = 'CenterStage Admin'
 
 urlpatterns = [
-    # path('admin/', admin.site.urls, name="admin"),
+    path('admin/', admin.site.urls, name="admin"),
 
     path('health/check/', health_check, name="health_check"),
     path('api/send_mail/',send_mail_signup, name="send_mail"),

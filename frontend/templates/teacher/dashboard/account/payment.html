@@ -70,10 +70,14 @@
                            </a>
                            <div class="ac-veryfy-right">
                               <div class="custom-radios">
-                                 <input type="radio" id="test1" name="radio-group">
+                                 <input type="radio" id="test1" name="radio-group" {% if payment_account %} checked {% endif %}>
                                  <label for="test1"></label>
                               </div>
-                              <button type="button" class="btn-liner" data-toggle="modal" data-target="#disconnect">Disconnect</button>
+                              {% if payment_account %}
+                                 <button type="button" class="btn-liner" data-toggle="modal" data-target="#disconnect">Disconnect</button>
+                              {% else %}
+                                 <button type="button" class="btn-liner" data-toggle="modal" data-target="#connect">Connect</button>
+                              {% endif%}
                            </div>
                         </div>
                         {% comment %}<div class="ac-veryfy-row">

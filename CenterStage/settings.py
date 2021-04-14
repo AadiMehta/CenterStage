@@ -48,12 +48,9 @@ INSTALLED_APPS = [
     'drf_yasg',
     'phonenumber_field',
     'corsheaders',
-<<<<<<< HEAD
-=======
     'django_extensions',
     'stream_django',
     'channels',
->>>>>>> 6f4d724 (messages and payement added)
 
     # project specific apps
     'chat',
@@ -128,9 +125,9 @@ if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'cstestdb',
+            'NAME': 'centerstage',
             'USER': 'postgres',
-            'PASSWORD': 'root12345',
+            'PASSWORD': 'postgres',
             'HOST': 'localhost',
             'PORT': 5432,
         }
@@ -289,8 +286,8 @@ ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
 ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
 ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51IEW6JAzOQudFZD7sMtOJN5Ch8Dn0E4sVLDwbU1l5NOxY7rKWu4zU6ZBfiEY4w8rhfLDUae8sU8TJky0wXlddWzK00Ys9Ik9iv'
-STRIPE_SECRET_KEY = 'sk_test_51IEW6JAzOQudFZD7M33cYdiLZhsHqdNkDjZhts5DTrdVzIXvXuUTEKVq2bmPeCq7PpxLvykJBoSOKbGOlyS3jsZ30071kVt9i9'
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 
 # Temporary storage for the file upload
 if sys.platform == "win32":
@@ -370,5 +367,5 @@ else:
         }
     }
 
-STREAM_API_KEY = '6fsfv5phpxfn'
-STREAM_API_SECRET = 'mmc9sj66h9uxtg3fks3q6sa39pkxgbzb6vb6fsvc6fxta5jdnbkg8xwja8u2efwb'
+STREAM_API_KEY = os.environ.get("STREAM_API_KEY")
+STREAM_API_SECRET = os.environ.get("STREAM_API_SECRET")

@@ -21,12 +21,16 @@ from django.utils import timezone
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, StudentUserCreateSerializer,
-    StudentProfileSerializer
+    StudentProfileSerializer, TeacherPaymentsSerializer
 )
 from django.contrib.auth import login, logout
 from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile
+from django.contrib.auth import login
+from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile, PaymentAccounts
 from django.conf import settings
+
 logger = logging.getLogger(__name__)
+
 import stripe
 
 
@@ -143,6 +147,7 @@ class StudentRegister(generics.CreateAPIView):
             "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
+        
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
 
 
