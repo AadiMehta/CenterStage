@@ -1,10 +1,11 @@
 import re
 import _thread
-from django.db.models import Avg, Count
+from django.db.models import Avg
 from notifications.views import send_signup_email
 from rest_framework import serializers
 from users.constants import RESTRICTED_SUBDOMAINS
-from users.models import User, TeacherProfile, Accounts, PaymentAccounts, StudentProfile, TeacherRating
+from users.models import User, TeacherProfile, Accounts, PaymentAccounts, StudentProfile, TeacherRating, \
+    PersonalCoachingEnabled
 from django.db import IntegrityError
 from phonenumber_field.serializerfields import PhoneNumberField
 
@@ -176,6 +177,15 @@ class TeacherPaymentRemoveSerializer(serializers.Serializer):
 
 class TeacherAccountRemoveSerializer(serializers.Serializer):
     account_type = serializers.CharField(max_length=10, required=True)
+
+
+class EnablePersonalCoachingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PersonalCoachingEnabled
+        exclude = (
+            'teacher'
+        )
 
 
 # ********* Student Serializers **********

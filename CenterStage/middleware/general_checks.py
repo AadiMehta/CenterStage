@@ -121,7 +121,7 @@ class CheckOnboarding(object):
                     "lessons": teacher.lessons.filter(is_private=False),
                     "avg_rating": round(TeacherRating.objects.filter(creator=teacher).aggregate(
                         Avg('rate')).get('rate__avg') or 0, 1),
-                    "years_of_exp": "N/A" if teacher.year_of_experience is None else teacher.year_of_experience,
+                    "years_of_exp": "0" if teacher.year_of_experience is None else teacher.year_of_experience,
                     "student_count": student_count,
                     "sharing_link": '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL),
                     "all_lessons": LessonTeacherPageSerializer(lessons, many=True).data,

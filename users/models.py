@@ -1,12 +1,18 @@
+from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.mail import send_mail
+from rest_framework import status
+
 from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator, MaxLengthValidator
+
+from zoom.serializer import ZoomAuthResponseSerializer
+from zoom.utils import zoomclient
 
 
 class UserTypes(models.TextChoices):
@@ -107,7 +113,38 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_zoom_linked(self):
         """Returns boolean if user has connected zoom"""
-        return self.accounts.filter(account_type=AccountTypes.ZOOM_VIDEO).exists()
+        try:
+            account = self.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
+            return self.get_access_token(account)
+        except Accounts.DoesNotExist:
+            return False
+
+    @staticmethod
+    def get_access_token(account):
+        expire_time = account.info.get('expires_time')
+        if expire_time:
+            expire_time = datetime.strptime(expire_time, '%Y-%m-%dT%H:%M:%S')
+            if expire_time > timezone.now():
+                # If expire time is greater than current time then return
+                return account.info.get('access_token')
+
+        # If token is expired then refresh token
+        refresh_token = account.info.get('refresh_token')
+        resp = zoomclient.refresh_token(refresh_token)
+        if resp.status_code == status.HTTP_200_OK:
+            access_info = resp.json()
+            serializer = ZoomAuthResponseSerializer(data=access_info)
+            serializer.is_valid(raise_exception=True)
+            expires_in = serializer.validated_data.get('expires_in')
+            expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
+            serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
+
+            account.info = serializer.validated_data
+            account.save()
+            return True
+        else:
+            account.delete()
+            return False
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
@@ -164,7 +201,7 @@ class PersonalCoachingEnabled(models.Model):
     """
     teacher = models.OneToOneField(TeacherProfile, on_delete=models.CASCADE, related_name="personal_coaching")
     duration = models.CharField(max_length=64)
-    price_per_session = models.IntegerField()
+    price_per_session = models.JSONField(null=False)
     free_sessions = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(50)])
 
 
@@ -184,6 +221,9 @@ class Accounts(models.Model):
     info = models.JSONField(null=True)
     token_updated_on = models.DateTimeField(auto_now=True)
     added_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'account_type')
 
 
 class PaymentTypes(models.TextChoices):
