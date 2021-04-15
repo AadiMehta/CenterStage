@@ -8,9 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 from users.authentication import BearerAuthentication
-from engine.serializers import (
-    LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
-)
+from engine.serializers import LessonCreateSerializer, LessonSlotCreateSerializer, MeetingCreateSerializer
 from users.models import AccountTypes
 from zoom.utils import zoomclient
 from notifications.views import send_paid_meeting_invites

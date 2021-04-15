@@ -2,21 +2,15 @@ import json
 import base64
 import logging
 import requests
-import urllib
-
-from datetime import datetime
-
-from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
-
-from rest_framework import status
 
 logger = logging.getLogger(__name__)
 
 NOT_CONFIGURED_MESSAGE = (
     "ZOOM_CLIENT_ID or ZOOM_CLIENT_SECRET missing. Are you sure, you have .env file configured?"
 )
+
 
 class Singleton(type):
     _instances = {}
@@ -94,18 +88,17 @@ class ZoomClient(metaclass=Singleton):
         if resp.status_code == 200:
             return resp.json()
 
-    def create_meeting(self,
-            access_token, topic, meeting_type, 
-            start_time, duration=None
-        ):
+    def create_meeting(self, access_token, topic, meeting_type, start_time, timezone='Asia/Kolkata', duration=None):
         headers = {
             "Authorization": "Bearer {}".format(access_token),
             "Content-Type": "application/json",
         }
         url = "{}/users/me/meetings".format(self.api_base_url)
         data = dict(
-            topic=topic, start_time=start_time,
-            type=meeting_type, timezone="Asia/Kolkata"
+            topic=topic,
+            start_time=start_time,
+            type=meeting_type,
+            timezone=timezone
         )
         if duration:
             data.update(duration=duration)
