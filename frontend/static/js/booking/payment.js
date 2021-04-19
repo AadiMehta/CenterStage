@@ -46,6 +46,10 @@ function handleConfirmPayment() {
   }
 }
 
+function handlePrevStepButton() {
+  // TODO: handle prev step button
+}
+
 function handlePaymentTypeSelection(event) {
   const {paymentType} = event.target.dataset;
   $('#paymentType')[0].value = paymentType;
@@ -62,6 +66,7 @@ function init() {
    */
   $('#confirmPayment').click(handleConfirmPayment);
   $('.payment-type').change(handlePaymentTypeSelection);
+  $('#id_wizard_goto_step').click(handlePrevStepButton);
 }
 
 init();

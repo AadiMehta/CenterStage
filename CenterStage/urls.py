@@ -29,7 +29,10 @@ from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView, SubdomainAvailabilityAPIView,
     TeacherRegister, StudentRegister
 )
-from payments.views import PaymentAccountView, PaymentDisconnectAPIVIew
+from payments.views import (
+    PaymentAccountView, PaymentDisconnectAPIVIew, LessonPaymentView,
+    LessonPaymentWebhookView, LessonPaymentCompleteView
+)
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
     HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs, ZoomPolicyView, contact
@@ -48,7 +51,7 @@ from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI, LikeLessonA
 from frontend.views.post import NewPost
 from frontend.views.note import AcceptNoteFileAPI, NoteCreateWizard
 from frontend.views.schedule import ScheduleCreateWizard
-from frontend.views.booking import BookLessonWizard
+from frontend.views.booking import BookLessonWizard, BookLessonPyament
 
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
@@ -73,7 +76,7 @@ from engine.views import LessonAPIView, MeetingAPIView, PostAPIView
 from chat.api import SendMessageAPI, MessageContacts, MessageModelViewSet, MessageView, GetMessages
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
-from zoom.views import ZoomVerifyView
+# from zoom.views import ZoomVerifyView
 
 router = DefaultRouter()
 router.register(r'message', MessageModelViewSet, basename='message-api')
@@ -115,7 +118,7 @@ urlpatterns = [
     path('api/otp/send/', SendOtp.as_view()),
     path('api/otp/verify/', VerifyOtp.as_view()),
 
-    path('verifyzoom/', ZoomVerifyView.as_view()),
+    # path('verifyzoom/', ZoomVerifyView.as_view()),
 
     # Message APIs
     path('api/message/contacts/', MessageContacts.as_view()),
@@ -182,7 +185,12 @@ urlpatterns = [
     # Book Lesson Wizard
     path('lesson/<uuid:lesson_uuid>', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="lesson-page"),
     path('lesson/<uuid:lesson_uuid>/book', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="book-lesson"),
+    path('lesson/<uuid:lesson_uuid>/payment', BookLessonPyament.as_view(), name="book-lesson-payment"),
 
+    # lesson order
+    path('lesson-order/create-payment-intent', LessonPaymentView.as_view(), name="book-lesson-payment"),
+    path('lesson-order/payment-complete', LessonPaymentCompleteView.as_view(), name="book-lesson-payment-complete"),
+    path('lesson-order/payment-webhook', LessonPaymentWebhookView.as_view(), name="book-lesson-webhook"),
 
     # Dashboard Templates
     path('student/dashboard', StudentDashboardEnrollments.as_view(), name="student-dashboard-main"),

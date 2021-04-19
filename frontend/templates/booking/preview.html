@@ -19,7 +19,7 @@
       {{ wizard.management_form }}
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <img src="images/close.svg" alt="" />
+            <img src="{% static 'images/close.svg' %}" alt="" />
             </button>
             <div class="modal-body">
                 <h2>Pick Date &amp; Time</h2>
@@ -53,7 +53,7 @@
                 </div>
                 </div>
                 <div class="btn-proceed">
-                <button type="button" class="btn btn-primary btn-lg btn-theme" id="proceedBooking"><span>Proceed</span> <i><img src="images/next.svg" alt="" /></i></button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="proceedBooking"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <img src="images/close.svg" alt="" />
+                <img src="{% static 'images/close.svg' %}" alt="" />
             </button>
             <div class="modal-body">
                 <h2>Selected Sessions</h2>
@@ -75,7 +75,7 @@
 
                 <div class="btn-proceed">
                     <button id="comfirmBooking" type="button" class="btn btn-primary btn-lg btn-theme">
-                        <span>Confirm</span> <i><img src="images/next.svg" alt="" /></i>
+                        <span>Confirm</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i>
                     </button>
                 </div>
             </div>
@@ -88,7 +88,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <img src="images/close.svg" alt="" />
+                <img src="{% static 'images/close.svg' %}" alt="" />
             </button>
             <div class="modal-body">
                 <h2>All Sessions</h2>
@@ -96,10 +96,10 @@
                 <div id="allSessionWrapper" class="session-wrapper">
                     {% for slot in lesson_time_slots %}
                         <div class="next-session-row">
-                            <button type="button" class="edit-btn"><img src="images/edit.png" alt="" /></button>
+                            <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
                             <h5>Session No {{slot.2}}</h5>
                             <div class="sessionDayDate">
-                                <i><img src="images/time_date.png" alt="" /></i> {{slot.3}}
+                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{slot.3}}
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -125,7 +125,7 @@
 
                 <div class="btn-proceed">
                     <button type="button" class="btn btn-primary btn-lg btn-theme" data-dismiss="modal" aria-label="Close">
-                        <span>Close</span> <i><img src="images/next.svg" alt="" /></i>
+                        <span>Close</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i>
                     </button>
                 </div>
             </div>
@@ -344,7 +344,11 @@
                             </div>
                         </div>
                         {% if user.user_type == 'ST' %}
-                        <button type="button" class="btn btn-theme book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">Book This Lesson</button>
+                            {% if not is_student_enrolled %} 
+                                <button type="button" class="btn btn-theme book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">Book This Lesson</button>
+                            {% else %}
+                                <a href="{{BASE_URL}}/student/dashboard/enrollments"  role="button" class="btn btn-theme">Already Enrolled, Go to Dashboard</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="form-group">
@@ -391,13 +395,13 @@
                                         </li>
                                     </ul>
                                     <div class="btn-area-2">
+                                    {% if user.user_type == 'ST' %}
                                         <a href="{{BASE_URL}}/lesson/{{mlesson.lesson_uuid}}/book" target="_blank" type="button" class="btn btn-theme">
-                                            {% if user.user_type == 'ST' %}
                                             Book Now
-                                            {% else %}
-                                            Go to lesson
-                                            {% endif %}
                                         </a>
+                                    {% else %}
+                                    Go to lesson
+                                    {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -430,7 +434,12 @@
                     </div>
                 {% endif %}
                 {% if user.user_type == 'ST' %}
-                    <button type="button" class="btn btn-theme w-100 mb-4 book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">Book Now</button>
+                    {% if not is_student_enrolled %} 
+                        <button type="button" class="btn btn-theme w-100 mb-4 book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">
+                            Book Now </button>
+                    {% else %} 
+                        <a href="{{BASE_URL}}/student/dashboard/enrollments"  role="button" class="btn btn-theme">Already Enrolled, Go to Dashboard</a>
+                    {% endif %}
                 {% endif %}
                 {% if lesson.session_type != 'ONGOING' %}
                     <div class="default-box-style">

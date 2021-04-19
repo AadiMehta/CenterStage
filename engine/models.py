@@ -1,5 +1,7 @@
 import uuid
+from django.utils import timezone
 from django.db import models
+from django.db.models import Q
 from django.conf import settings
 from users.models import TeacherProfile, StudentProfile, User
 from users.s3_storage import S3_LessonCoverImage_Storage
@@ -96,6 +98,15 @@ class LessonData(models.Model):
     def permalink(self):
         "Returns permalink for lesson"
         return '{}/lesson/{}'.format(settings.BASE_URL, self.lesson_uuid)
+
+    def upcoming_slots(self):
+        return self.slots.all().filter(Q(lesson_from__gt=timezone.now()))
+
+    def enrollments(self):
+        return self.enrollments.all()
+    
+    def is_student_enrolled(self, student):
+        return self.enrollments.filter(student=student).exists()
 
 
 class LessonSlots(models.Model):

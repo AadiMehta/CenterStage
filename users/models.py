@@ -1,3 +1,4 @@
+import stripe
 from datetime import datetime
 from django.conf import settings
 from django.db import models
@@ -5,6 +6,8 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from rest_framework import status
 
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
@@ -14,6 +17,8 @@ from django.core.validators import MinLengthValidator, MaxValueValidator, MinVal
 from zoom.serializer import ZoomAuthResponseSerializer
 from zoom.utils import zoomclient
 
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class UserTypes(models.TextChoices):
     CREATOR_USER = 'CR', _('Creator User')
@@ -117,6 +122,22 @@ class User(AbstractBaseUser, PermissionsMixin):
             account = self.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
             return self.get_access_token(account)
         except Accounts.DoesNotExist:
+            return False
+    
+    def get_stripe_account(self):
+        """Returns stripe account of teacher"""
+        try:
+            account = self.payment_account.get(payment_type=PaymentTypes.STRIPE, active=True)
+            return account
+        except PaymentAccounts.DoesNotExist:
+            return False
+    
+    def get_stripe_billing_profile(self):
+        """Returns stripe customer account of student"""
+        try:
+            account = BillingProfile.objects.get_or_create(user=self, payment_type=PaymentTypes.STRIPE)
+            return account
+        except Exception as e:
             return False
 
     @staticmethod
@@ -341,6 +362,12 @@ class StudentProfile(models.Model):
         verbose_name_plural = _('Student Profiles')
 
 
+class BillingProfileManager(models.Manager):
+    def new_or_get(self, request, payment_type=PaymentTypes.STRIPE):
+        user = request.user
+        obj, created = self.model.objects.get_or_create(user=user, payment_type=payment_type)
+        return obj, created
+    
 class BillingProfile(models.Model):
     """
     Data Associated to student billing accounts
@@ -353,5 +380,35 @@ class BillingProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = BillingProfileManager()
+
     class Meta:
         unique_together = ['customer_id', 'user']
+
+
+# ***************** Student Models Signals ******************
+# TODO: move signals to signals.py
+
+@receiver(post_save, sender=StudentProfile)
+def student_created_receiver(sender, instance, created, *args, **kwargs):
+    """
+    create billing profile for student
+    """
+    if created and instance.user:
+        BillingProfile.objects.get_or_create(
+            user=instance.user, payment_type=PaymentTypes.STRIPE)
+
+
+@receiver(pre_save, sender=BillingProfile)
+def billing_profile_created_receiver(sender, instance, *args, **kwargs):
+    """
+    create customer id in payment gateway - stripe or braintree
+    """
+    if not instance.customer_id and instance.user:
+        if instance.payment_type == PaymentTypes.STRIPE:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            customer = stripe.Customer.create(
+                email=instance.user.email
+            )
+            instance.customer_id = customer.id
+            instance.info = customer

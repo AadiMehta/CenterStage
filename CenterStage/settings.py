@@ -127,7 +127,7 @@ if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'cstestdb',
             'USER': 'postgres',
-            'PASSWORD': 'postgres',
+            'PASSWORD': 'root12345',
             'HOST': 'localhost',
             'PORT': 5432,
         }
@@ -136,7 +136,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'cstestdb',
+            'NAME': 'centerstage',
             'USER': os.environ.get("DB_USER"),
             'PASSWORD': os.environ.get("DB_PASSWORD"),
             'HOST': os.environ.get("DB_HOST"),

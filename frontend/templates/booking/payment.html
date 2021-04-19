@@ -12,7 +12,9 @@
     <div class="container">
       <div class="top-section">
           <div class="host-header-left">
-            <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+            {% if wizard.steps.prev %}
+                <button class="link-back" id="id_wizard_goto_step" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"><img src="{% static 'images/back.svg' %}" alt="" /></button> 
+            {% endif %}
             {% if lesson.no_of_participants > 1 %}
                 <h2>Book Group Lesson</h2>
             {% else %}
@@ -35,98 +37,7 @@
                   <h3>Payment Method</h3>
                 <p id="paymentMethodError" style="color:red;"></p>
                   <input id="paymentType" name="payment-payment_type" type="text" style="display:none">
-                  <div class="ac-veryfy-row">
-                      <a href="#" class="ac-veryfy-left">
-                        <i><img src="{% static 'images/internet-banking.png' %}" alt="" /></i>
-                        <div class="col-text">
-                            <h4>Internet Banking</h4>
-                        </div>
-                      </a>
-                      <div class="ac-veryfy-right">
-                        <div class="custom-radios">
-                            <input type="radio" id="test1" class="payment-type " name="radio-group" data-payment-type="INTERNET_BANKING">
-                            <label for="test1"></label>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="ac-veryfy-row">
-                      <a href="#" class="ac-veryfy-left">
-                        <i><img src="{% static 'images/card.png' %}" alt="" /></i>
-                        <div class="col-text">
-                            <h4>Debit / Credit Card</h4>
-                        </div>
-                      </a>
-                      <div class="ac-veryfy-right">
-                        <div class="custom-radios">
-                            <input type="radio" class="payment-type" name="radio-group" id="watch-me" data-payment-type="DEBIT_CREDIT_CARD">
-                            <label for="watch-me"></label>
-                        </div>
-                      </div>
-                      <div class="card-details" id='show-me'>
-                        <h5>Saved Cards</h5>
-                        <div class="saved-card-wrap">
-                            <div class="saved-card-row">
-                              <div class="card-type">
-                                  <img src="{% static 'images/visa-icon.svg' %}" alt="" />
-                              </div>
-                              <div class="card-number">1234 XXXX XXXX 1598</div>
-                              <div class="card-cvv">
-                                  <input class="cvv-input" type="text" placeholder="CVV">
-                              </div>
-                            </div>
-                            <div class="saved-card-row">
-                              <div class="card-type">
-                                  <img src="{% static 'images/visa-icon.svg' %}" alt="" />
-                              </div>
-                              <div class="card-number">1234 XXXX XXXX 1598</div>
-                              <div class="card-cvv">
-                                  <input class="cvv-input" type="text" placeholder="CVV">
-                              </div>
-                            </div>
-                        </div>
-                        <h5>Card Details</h5>
-                        <div class="row">
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                  <label>Card Number</label>
-                                  <div class="liner-inp"><input type="text" class="form-control" placeholder="Card Number"></div>
-                              </div>
-                            </div>
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                  <label>Name on Card</label>
-                                  <div class="liner-inp"><input type="text" class="form-control" placeholder="Name"></div>
-                              </div>
-                            </div>
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                  <label>Expiry Date</label>
-                                  <div class="liner-inp"><input type="text" class="form-control" placeholder="-- --  /  -- -- -- --"></div>
-                              </div>
-                            </div>
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                  <label>CVV</label>
-                                  <div class="liner-inp"><input type="password" class="form-control" placeholder="CVV"></div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="ac-veryfy-row">
-                      <a href="#" class="ac-veryfy-left">
-                        <i><img src="{% static 'images/wallet.png' %}" alt="" /></i>
-                        <div class="col-text">
-                            <h4>Payment Wallet</h4>
-                        </div>
-                      </a>
-                      <div class="ac-veryfy-right">
-                        <div class="custom-radios">
-                            <input type="radio" class="payment-type" id="test111" name="radio-group" data-payment-type="PAYMENT_WALLET">
-                            <label for="test111"></label>
-                        </div>
-                      </div>
-                  </div>
+ 
                   <div class="ac-veryfy-row">
                       <a href="#" class="ac-veryfy-left">
                         <i><img src="{% static 'images/stripe.png' %}" alt="" /></i>
@@ -141,20 +52,7 @@
                         </div>
                       </div>
                   </div>
-                  <div class="ac-veryfy-row">
-                      <a href="#" class="ac-veryfy-left">
-                        <i><img src="{% static 'images/paypal.png' %}" alt="" /></i>
-                        <div class="col-text">
-                            <h4>PayPal</h4>
-                        </div>
-                      </a>
-                      <div class="ac-veryfy-right">
-                        <div class="custom-radios">
-                            <input type="radio" class="payment-type" id="test100" name="radio-group" data-payment-type="PAYPAL">
-                            <label for="test100"></label>
-                        </div>
-                      </div>
-                  </div>
+
                 </div>
                 <p id="paymentMethod2Error" style="color:red;"></p>
                 <div class="yourac-wrap">
@@ -225,7 +123,7 @@
                 <div class="group-row">
                   {% for slot in selected_time_slots %}
                   <div class="next-session-row">
-                      <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button>
+                      {% comment %} <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt=""></button> {% endcomment %}
                       <h5>Session {{forloop.counter}}</h5>
                       <div class="sessionDayDate">{{slot.3}}</div>
                       <div class="row">

@@ -2,25 +2,29 @@ import logging
 from django.utils import timezone
 
 from django.conf import settings
-from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Avg, Count
 from formtools.wizard.views import SessionWizardView
-from frontend.forms.booking import BookLessonForm1, BookLessonForm2
+from frontend.forms.booking import BookLessonForm1, BookLessonForm2, BookLessonForm3
 from engine.serializers import LessonSlotSerializer
 from engine.models import LessonData, LessonSlots, EnrollmentChoices, Enrollment, LessonLikes
-from users.models import StudentProfile, UserTypes
+from users.models import StudentProfile, UserTypes, PaymentTypes
 from engine.serializers import LessonTeacherPageSerializer
 from django.db.models import Q
+from django.views import View
+from django.urls import reverse, reverse_lazy
 
+from payments.models import LessonOrder
 from frontend.constants import currency_labels
 
 logger = logging.getLogger(__name__)
 
 
-class BookLessonWizard(SessionWizardView):
+class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
     TEMPLATES = {
         "preview": "booking/preview.html",
-        "payment": "booking/payment.html"
+        "payment": "booking/payment.html",
     }
 
     FORMS = [
@@ -37,6 +41,9 @@ class BookLessonWizard(SessionWizardView):
         lesson_uuid = self.request.resolver_match.kwargs.get('lesson_uuid')
         lesson = LessonData.objects.get(lesson_uuid=lesson_uuid)
         context['lesson'] = LessonTeacherPageSerializer(lesson).data
+        user = self.request.user
+        is_student_enrolled = lesson.is_student_enrolled(user.student_profile_data)
+        context['is_student_enrolled'] = is_student_enrolled
 
         slots = lesson.slots.all()
         upcoming_slots = lesson.slots.all().filter(Q(lesson_from__gt=timezone.now()))
@@ -136,22 +143,67 @@ class BookLessonWizard(SessionWizardView):
         return self.book_lesson(final_data)
 
     def book_lesson(self, form_data):
+        """
+        create new order
+        """
         try:
             user = self.request.user
             lesson_uuid = self.request.resolver_match.kwargs.get('lesson_uuid')
             lesson = LessonData.objects.get(lesson_uuid=lesson_uuid)
             student = form_data.get('student')
             selected_slots = form_data.get('selected_slots')
-
-            for lesson_slot in selected_slots:
-                enrollment = Enrollment.objects.filter(student=student, lesson=lesson, lessonslot=lesson_slot).first()
-                if not enrollment:
-                    enrollment = Enrollment(student=student, lesson=lesson, lessonslot=lesson_slot,
-                                            status=EnrollmentChoices.ACTIVE)
-                    enrollment.save()
-            return render(self.request, 'booking/done.html', {
-                'lesson': lesson
-            })
+            order_data = {
+                "lesson": lesson,
+                "student": user.student_profile_data,
+                "total": len(selected_slots) * int(lesson.price['value'])
+            }
+            order_obj, created = LessonOrder.objects.new_or_get(order_data)
+            # check for old order
+            if order_obj.is_completed:
+                return redirect(reverse('book-lesson'))
+            # set lesson slots
+            order_obj.lesson_slots.set(selected_slots)    
+            order_obj.save()
+            return redirect(reverse('book-lesson-payment', kwargs={'lesson_uuid': lesson.lesson_uuid}))
         except Exception as e:
             logger.exception(e)
-            return redirect('book-lesson')
+            return redirect(reverse('book-lesson'))
+
+
+class BookLessonPyament(LoginRequiredMixin, View):
+    form_class = BookLessonForm3
+
+    def get_lesson(self):
+        return get_object_or_404(
+            LessonData, lesson_uuid=self.kwargs.get("lesson_uuid")
+        )
+
+    def get(self, request, *args, **kwargs):
+        lesson = self.get_lesson()
+        user = self.request.user
+        form = self.form_class()
+
+        order_data = {
+            "lesson": lesson,
+            "student": user.student_profile_data,
+        }
+        order_obj, created = LessonOrder.objects.new_or_get(order_data)
+
+        if order_obj.is_completed:
+            return redirect(reverse('book-lesson'))
+
+        return render(request, "booking/pay_checkout.html", {
+            "order": order_obj,
+            "lesson": lesson,
+            "form": form
+        })
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        lesson = self.get_lesson()
+
+        if form.is_valid():
+            order_id = form.cleaned_data['order_id']
+            order_obj = LessonOrder.objects.get(order_id=order_id)
+            return render(self.request, 'booking/done.html', {'lesson': lesson})
+        return render(self.request, 'booking/done.html', {'lesson': lesson})

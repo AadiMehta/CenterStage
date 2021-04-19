@@ -374,7 +374,7 @@ function init() {
   $('#onboarding3Finish').click(onFinish3ButtonClicked);
   $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
   $('#disconnectPayment').click(handleDisconnectPayment);
-  $('#connectZoomAccount').click(handleZoomConnectAccount);
+  // $('#connectZoomAccount').click(handleZoomConnectAccount);
 }
 
 init();
