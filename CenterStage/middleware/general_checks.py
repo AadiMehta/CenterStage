@@ -1,10 +1,19 @@
 import logging
+import _thread
+from django.db.models import Count, Avg
 from django.urls import reverse
 from django.conf import settings
 from django.shortcuts import redirect
 from django.shortcuts import HttpResponseRedirect
-from users.models import TeacherProfile, StudentProfile
-from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH
+from engine.models import LessonData, LessonStatuses, LessonTypes
+from users.models import (
+    TeacherProfile, StudentProfile, TeacherRating, TeacherRecommendations,
+    RecommendationChoices, TeacherLike, TeacherFollow, TeacherPageVisits
+)
+from engine.serializers import LessonTeacherPageSerializer
+
+from CenterStage.settings import STUDENT_TEMPLATES_PATH, TEACHER_TEMPLATES_PATH, API_URL, CENTERSTAGE_STATIC_PATH, \
+    LESSON_PAGES_PATH
 from django.template.response import TemplateResponse
 
 logger = logging.getLogger(__name__)
@@ -39,21 +48,101 @@ class CheckOnboarding(object):
 
         # check if its a teacher page
         # its a subdomain
+        # if True:
+        #     return self.get_response(request) 
         if "localhost" in request.META['HTTP_HOST']:
             pass
         elif request.META['HTTP_HOST'] not in ["centrestage.live", "www.centrestage.live"]:
             teacher_subdomain = request.META['HTTP_HOST'].split(".centrestage.live")[0]
             try:
                 teacher = TeacherProfile.objects.get(subdomain=teacher_subdomain)
+                _thread.start_new_thread(TeacherPageVisits.update_teacher_visit, (teacher, ))
+                lessons = LessonData.objects.filter(
+                                creator=teacher, status=LessonStatuses.ACTIVE, is_private=False
+                            ).order_by('-created_at')
+                most_popular_lessons = lessons.annotate(count=Count('enrollments')).order_by('count')
+                one_on_one_lessons = lessons.filter(lesson_type=LessonTypes.ONE_ON_ONE).order_by('-created_at')
+                group_lessons = lessons.filter(lesson_type=LessonTypes.GROUP).order_by('-created_at')
+
+                # TODO improve this logic using SUM
+                student_count = 0
+                for lesson in lessons:
+                    student_count += lesson.enrollments.count()
+
+                try:
+                    all_rec = teacher.recommendations.all()
+                    recommendations = {
+                        'LESSON_QUALITY': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_QUALITY),
+                        'LESSON_CONTENT': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_CONTENT),
+                        'LESSON_STRUCTURE': all_rec.filter(recommendation_type=RecommendationChoices.LESSON_STRUCTURE),
+                        'TEACHER_HELPFULNESS': all_rec.filter(
+                            recommendation_type=RecommendationChoices.TEACHER_HELPFULNESS),
+                        'TEACHER_COMMUNICATION': all_rec.filter(
+                            recommendation_type=RecommendationChoices.TEACHER_COMMUNICATION),
+                        'TEACHER_KNOWLEDGE': all_rec.filter(
+                            recommendation_type=RecommendationChoices.TEACHER_KNOWLEDGE),
+                    }
+                except TeacherRecommendations.DoesNotExist:
+                    none_obj = TeacherRecommendations.objects.none()
+                    recommendations = {
+                        'LESSON_QUALITY': none_obj,
+                        'LESSON_CONTENT': none_obj,
+                        'LESSON_STRUCTURE': none_obj,
+                        'TEACHER_HELPFULNESS': none_obj,
+                        'TEACHER_COMMUNICATION': none_obj,
+                        'TEACHER_KNOWLEDGE': none_obj
+                    }
+
+                liked = False
+                followed = False
+                user_recommended = []
+                if not request.user.is_anonymous:
+                    liked = TeacherLike.objects.filter(
+                        user=request.user,
+                        creator=teacher
+                    ).exists()
+                    followed = TeacherFollow.objects.filter(
+                        user=request.user,
+                        creator=teacher
+                    ).exists()
+
+                    for recommendation_type in recommendations:
+                        recommended = TeacherRecommendations.objects.filter(
+                            user=request.user, creator=teacher, recommendation_type=recommendation_type
+                        ).exists()
+                        if recommended:
+                            user_recommended.append(recommendation_type)
+
                 context = dict({
                     "teacher": teacher,
-                    "lessons": teacher.lessons.filter(is_private=False)
+                    "user": request.user,
+                    "BASE_URL": settings.BASE_URL,
+                    "SESSION_COOKIE_DOMAIN": settings.SESSION_COOKIE_DOMAIN,
+                    "lessons": teacher.lessons.filter(is_private=False),
+                    "avg_rating": round(TeacherRating.objects.filter(creator=teacher).aggregate(
+                        Avg('rate')).get('rate__avg') or 0, 1),
+                    "years_of_exp": "0" if teacher.year_of_experience is None else teacher.year_of_experience,
+                    "student_count": student_count,
+                    "sharing_link": '{}://{}.{}'.format(settings.SCHEME, teacher.subdomain, settings.SITE_URL),
+                    "all_lessons": LessonTeacherPageSerializer(lessons, many=True).data,
+                    "most_popular_lessons": LessonTeacherPageSerializer(most_popular_lessons, many=True).data,
+                    "one_on_one_lessons": LessonTeacherPageSerializer(one_on_one_lessons, many=True).data,
+                    "group_lessons": LessonTeacherPageSerializer(group_lessons, many=True).data,
+                    "reviews": teacher.ratings.all(),
+                    "recommendations": recommendations,
+                    "user_recommended": user_recommended,
+                    "liked": liked,
+                    "followed": followed
                 })
+
                 return TemplateResponse(request, 'public/teacherpage.html', context).render()
             except TeacherProfile.DoesNotExist:
                 return redirect(settings.BASE_URL)
 
         if request.path.startswith(API_URL) or request.path.startswith(CENTERSTAGE_STATIC_PATH):
+            return self.get_response(request)
+
+        if request.path in [reverse('signup'), reverse('login')]:
             return self.get_response(request)
 
         if request.user.is_authenticated:
@@ -73,6 +162,7 @@ class CheckOnboarding(object):
                 return HttpResponseRedirect(reverse('homepage'))
 
             status, user_type = check_onboarding(request.user)
+            redirect_url = request.GET.get('rurl')
             # if onboarded, don't route to onboarding
             if status:
                 if user_type == "CR":
@@ -102,6 +192,8 @@ class CheckOnboarding(object):
                     if request.path == reverse('student-onboarding-step-1'):
                         response = self.get_response(request)
                     else:
+                        if redirect_url:
+                            return HttpResponseRedirect(reverse('student-onboarding-step-1') + '?rurl' + redirect_url)
                         return HttpResponseRedirect(reverse('student-onboarding-step-1'))
                 else:
                     response = self.get_response(request)

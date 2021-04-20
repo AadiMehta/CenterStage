@@ -1,9 +1,11 @@
 import re
 import _thread
+from django.db.models import Avg
 from notifications.views import send_signup_email
 from rest_framework import serializers
 from users.constants import RESTRICTED_SUBDOMAINS
-from users.models import User, TeacherProfile, Accounts, PaymentAccounts, StudentProfile
+from users.models import User, TeacherProfile, Accounts, PaymentAccounts, StudentProfile, TeacherRating, \
+    PersonalCoachingEnabled
 from django.db import IntegrityError
 from phonenumber_field.serializerfields import PhoneNumberField
 
@@ -16,6 +18,11 @@ class LoginResponseSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
+    created_at = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_created_at(instance):
+        return instance.date_joined.strftime('%A, %d %b %Y')
     class Meta:
         model = User
         exclude = (
@@ -36,6 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
             'date_joined',
             'last_login',
             'user_subscription',
+            'created_at'
         )
 
 
@@ -54,24 +62,33 @@ class TeacherPaymentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentAccounts
         fields = (
-            'payment_type',
+            'stripe_account_id',
             'info'
         )
 
 
 class TeacherProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     accounts = AccountsSerializer(many=True, read_only=True)
     payments = TeacherPaymentsSerializer(many=True, read_only=True)
+    avg_rating = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_avg_rating(instance):
+        ratings = TeacherRating.objects.filter(creator=instance).aggregate(Avg('rate'))
+        return round(ratings.get('rate__avg') or 0, 1)
 
     class Meta:
         model = TeacherProfile
         fields = (
+            'user',
             'profession',
             'profile_image',
             'year_of_experience',
             'subdomain',
             'bio',
             'intro_video',
+            'avg_rating',
             'accounts',
             'payments',
         )
@@ -120,7 +137,7 @@ class TeacherUserCreateSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.create_creator_user(validated_data.pop("email"), validated_data.pop("password"),
                                                     **validated_data)
-            _thread.start_new_thread(send_signup_email, (user,))
+            # _thread.start_new_thread(send_signup_email, (user, 'notifications/signup_mail.html'))
             return user
         except IntegrityError as e:
             error = dict({'error': str(e)})
@@ -162,6 +179,15 @@ class TeacherAccountRemoveSerializer(serializers.Serializer):
     account_type = serializers.CharField(max_length=10, required=True)
 
 
+class EnablePersonalCoachingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PersonalCoachingEnabled
+        exclude = (
+            'teacher'
+        )
+
+
 # ********* Student Serializers **********
 class StudentUserCreateSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
@@ -193,7 +219,7 @@ class StudentUserCreateSerializer(serializers.ModelSerializer):
         try:
             user = User.objects.create_student_user(validated_data.pop("email"), validated_data.pop("password"),
                                                     **validated_data)
-            _thread.start_new_thread(send_signup_email, (user,))
+            # _thread.start_new_thread(send_signup_email, (user,))
             return user
         except IntegrityError as e:
             error = dict({'error': str(e)})

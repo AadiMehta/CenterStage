@@ -8,12 +8,15 @@
 
 {% block content %}
 {% include 'teacher/dashboard/modals.html' %}
+{% for slot in lessons_slots %}
+   {% include 'teacher/dashboard/allmodals/sharelesson.html' with lesson=slot.lesson %}
+{% endfor %}
 <div class="wrapper-main">
    {% include 'teacher/dashboard/sidebar.html' with activeSection='pastsessions' %}
    <div class="main">
       {% include 'teacher/dashboard/header.html' with user=user %}
       <div class="main-content">
-         {% include 'teacher/dashboard/actionbar.html' %}
+         {% include 'teacher/dashboard/actionbar.html' with user=user %}
          <div class="admin-mid-sec container-fluid">
             <h2 class="title-2">Past Sessions</h2>
             <div class="search-row">
@@ -61,7 +64,11 @@
                               <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Type</h4>
-                                 <span>One - on - One</span>
+                                 {% if slot.lesson.no_of_participants > 1 %}
+                                    <span>Group</span>
+                                 {% else %}
+                                    <span>One - on - One</span>
+                                 {% endif %}
                               </div>
                            </li>
                            <li>
@@ -75,12 +82,26 @@
                               <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Number</h4>
-                                 <span>03 Out of 05</span>
+                                 <a href="javascrip:void(0)">{{slot.session_no}}</a> <span>Out of {{slot.lesson.no_of_slots}}</span>
                               </div>
                            </li>
                         </ul>
+                        <div class="linerbtn-row">
+                           <div class="lessonBtnCol">
+                              <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                 <a class="dropdown-item" href="#">Edit Session</a>
+                                 <a class="dropdown-item" href="#">Manage in Zoom</a>
+                              </div>
+                           </div>
+                           <div class="lessonBtnCol">
+                           <a href="javascript:void(0)" class="btn-liner" data-toggle="modal" data-target="#shareLesson{{slot.lesson.lesson_uuid}}">Share</a></div>
+                           {% comment %} <a href="{{ slot.lesson.meeting_link }}" target="_blank">
+                              <div class="lessonBtnCol"><a href="{{ slot.lesson.meeting_link }}" target="_blank" class="btn-liner active">Start</a></div>
+                           </a> {% endcomment %}
+                        </div>
                      </div>
-                     <div class="searchresult-col-right">
+                     {% comment %}<div class="searchresult-col-right">
                         <div class="searchresult-right-top">
                            <div class="searchresult-right-top-title">
                               <h3>Lesson Discussion</h3>
@@ -120,12 +141,12 @@
                               <button type="button"><img src="{% static 'images/documents.svg' %}" alt="" /></button>
                            </div>
                         </div>
-                     </div>
+                     </div>{% endcomment %}
                   </div>
                </div>
             {% empty %}
                <a href="{% url 'new-lesson' %}">
-               <button type="button" class="btn-liner active">Create New Lesson</button>
+                  <button type="button" class="btn-liner active">Create New Lesson</button></a>
             {% endfor %}
          </div>
       </div>

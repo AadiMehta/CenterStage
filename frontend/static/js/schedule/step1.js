@@ -10,7 +10,7 @@ function handleSchedule1Proceed() {
     $('#inviteesError').hide();
     $('#sessionTypeError').hide();
     const lessonTopic = $('#lessonTopic')[0].value;
-    const sessionType = $('#sessionTypeValue')[0].value;
+    const sessionType = $('#lessonType .selected')[0].dataset.lessonType;    
     const invitees = [];
     $('.invitee-input').map((item, inviteeInput) => {
         if (inviteeInput.value) {
@@ -30,7 +30,7 @@ function handleSchedule1Proceed() {
       $('#invitees')[0].value = JSON.stringify(invitees);
     }
     if (!sessionType) {
-      $('#sessionTypeError').text('Please Select Lesson Type');
+      $('#sessionTypeError').text('Please Select Session Type');
       $('#sessionTypeError').show()
       isValid = false;
     }

@@ -88,6 +88,8 @@ function validateSubdomain(subDomain) {
    */
   function createStudentProfile(bio, profileUrl) {
       const token = getCookie('auth_token');
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('rurl');
       if (profileUrl == null) {
         $.ajax('/api/student/profile/', {
           type: 'POST',
@@ -99,7 +101,11 @@ function validateSubdomain(subDomain) {
             "bio": bio,
           }),
           success: function (data, status, xhr) {
-            window.location.href = "/student/dashboard";
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+            } else {
+              window.location.href = "/student/dashboard";
+            }
           },
           error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI
@@ -118,7 +124,11 @@ function validateSubdomain(subDomain) {
             "bio": bio,
           }),
           success: function (data, status, xhr) {
-            window.location.href = "/student/dashboard";
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+            } else {
+              window.location.href = "/student/dashboard";
+            }
           },
           error: function (jqXhr, textStatus, errorMessage) {
             // Todo: Show Error Message on UI

@@ -1,13 +1,24 @@
-import datetime
+import stripe
+from datetime import datetime
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.mail import send_mail
+from rest_framework import status
+
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from users.s3_storage import S3_ProfileImage_Storage
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.core.validators import MinLengthValidator, MaxValueValidator, MinValueValidator, MaxLengthValidator
 
+from zoom.serializer import ZoomAuthResponseSerializer
+from zoom.utils import zoomclient
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class UserTypes(models.TextChoices):
     CREATOR_USER = 'CR', _('Creator User')
@@ -104,6 +115,58 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Returns the type of the user"""
         return self.get_user_type_display()
 
+    @property
+    def is_zoom_linked(self):
+        """Returns boolean if user has connected zoom"""
+        try:
+            account = self.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
+            return self.get_access_token(account)
+        except Accounts.DoesNotExist:
+            return False
+    
+    def get_stripe_account(self):
+        """Returns stripe account of teacher"""
+        try:
+            account = self.payment_account.get(payment_type=PaymentTypes.STRIPE, active=True)
+            return account
+        except PaymentAccounts.DoesNotExist:
+            return False
+    
+    def get_stripe_billing_profile(self):
+        """Returns stripe customer account of student"""
+        try:
+            account = BillingProfile.objects.get_or_create(user=self, payment_type=PaymentTypes.STRIPE)
+            return account
+        except Exception as e:
+            return False
+
+    @staticmethod
+    def get_access_token(account):
+        expire_time = account.info.get('expires_time')
+        if expire_time:
+            expire_time = datetime.strptime(expire_time, '%Y-%m-%dT%H:%M:%S')
+            if expire_time > timezone.now():
+                # If expire time is greater than current time then return
+                return account.info.get('access_token')
+
+        # If token is expired then refresh token
+        refresh_token = account.info.get('refresh_token')
+        resp = zoomclient.refresh_token(refresh_token)
+        if resp.status_code == status.HTTP_200_OK:
+            access_info = resp.json()
+            serializer = ZoomAuthResponseSerializer(data=access_info)
+            serializer.is_valid(raise_exception=True)
+            expires_in = serializer.validated_data.get('expires_in')
+            expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
+            serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
+
+            account.info = serializer.validated_data
+            account.save()
+            return True
+        else:
+            account.delete()
+            return False
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
@@ -145,9 +208,22 @@ class TeacherProfile(models.Model):
         self.subdomain = self.subdomain.lower()
         super(TeacherProfile, self).save(*args, **kwargs)
 
+    def get_teacher_full_url(self):
+        return "{0}://{1}.{2}".format(settings.SCHEME, self.subdomain, settings.SITE_URL)
+
     class Meta:
         verbose_name = _('Teacher Profile')
         verbose_name_plural = _('Teacher Profiles')
+
+
+class PersonalCoachingEnabled(models.Model):
+    """
+    Check if personal coaching is enabled
+    """
+    teacher = models.OneToOneField(TeacherProfile, on_delete=models.CASCADE, related_name="personal_coaching")
+    duration = models.CharField(max_length=64)
+    price_per_session = models.JSONField(null=False)
+    free_sessions = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(50)])
 
 
 class AccountTypes(models.TextChoices):
@@ -164,6 +240,11 @@ class Accounts(models.Model):
     account_type = models.CharField(_("account type"), choices=AccountTypes.choices, max_length=30,
                                     help_text="Type of account")
     info = models.JSONField(null=True)
+    token_updated_on = models.DateTimeField(auto_now=True)
+    added_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'account_type')
 
 
 class PaymentTypes(models.TextChoices):
@@ -176,13 +257,15 @@ class PaymentAccounts(models.Model):
     """
     Data Associated to teacher payment accounts
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payments")
-    payment_type = models.CharField(_("payment type"), choices=PaymentTypes.choices, max_length=10,
-                                    help_text="Type of payment account")
-    info = models.JSONField(null=False, blank=False)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payment_account')
+    payment_type = models.CharField(_('payment type'), max_length=10, choices=PaymentTypes.choices, default=PaymentTypes.STRIPE, help_text='Type of payment account')
+    account_id = models.CharField(_('account id'), null=True, blank=True, max_length=120, help_text=_('account ID in payment gateway'))
+    info = models.JSONField(null=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     class Meta:
-        unique_together = ['payment_type', 'user']
+        unique_together = ['account_id', 'user']
 
 
 class TeacherEarnings(models.Model):
@@ -191,7 +274,7 @@ class TeacherEarnings(models.Model):
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="earnings")
     amount = models.DecimalField(null=False, blank=False, decimal_places=2, max_digits=10)
-    added_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('Earning Data')
@@ -201,15 +284,25 @@ class TeacherEarnings(models.Model):
 class TeacherPageVisits(models.Model):
     """
     Teacher earnings data
+
+    TODO need to partition data based on month and year
     """
     teacher = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="page_visits")
-    visits = models.PositiveBigIntegerField()
-    visit_date = models.DateField(default=datetime.date.today)
+    visits = models.PositiveBigIntegerField(default=1)
+    visit_date = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name = _('Page Visit')
         verbose_name_plural = _('Page Visits')
         unique_together = ('teacher', 'visit_date')
+
+    @staticmethod
+    def update_teacher_visit(teacher):
+        # TODO move this to redis + cron to improve performance
+        tpv, created = TeacherPageVisits.objects.get_or_create(teacher=teacher, visit_date=timezone.now().date())
+        if not created:
+            tpv.visits = tpv.visits + 1
+            tpv.save()
 
 
 class TeacherRating(models.Model):
@@ -220,17 +313,36 @@ class TeacherRating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rated")
     rate = models.FloatField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5.0)],)
     review = models.CharField(_("Review"), max_length=256)
-    created_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
 
 
 class TeacherRecommendations(models.Model):
     """
     Teacher Recommendations Model
     """
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommendations")
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="recommendations")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recommended")
     recommendation_type = models.CharField(_("Type of Recommendation"), choices=RecommendationChoices.choices, max_length=30)
-    created_at = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now_add=True)
+
+
+class TeacherFollow(models.Model):
+    """
+    Teacher Follow Model
+    """
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="followers")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followed")
+    added_on = models.DateTimeField(auto_now_add=True)
+
+
+class TeacherLike(models.Model):
+    """
+    Teacher Like Model
+    """
+    creator = models.ForeignKey(TeacherProfile, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="liked")
+    added_on = models.DateTimeField(auto_now_add=True)
+
 
 # ***************** Student Models ******************
 
@@ -250,4 +362,53 @@ class StudentProfile(models.Model):
         verbose_name_plural = _('Student Profiles')
 
 
+class BillingProfileManager(models.Manager):
+    def new_or_get(self, request, payment_type=PaymentTypes.STRIPE):
+        user = request.user
+        obj, created = self.model.objects.get_or_create(user=user, payment_type=payment_type)
+        return obj, created
+    
+class BillingProfile(models.Model):
+    """
+    Data Associated to student billing accounts
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='billing_profile')
+    payment_type = models.CharField(_('payment type'), max_length=10, choices=PaymentTypes.choices, default=PaymentTypes.STRIPE, help_text='Type of payment account')
+    customer_id = models.CharField(_('customer id'), null=True, blank=True, max_length=120, help_text=_('customer ID in payment gateway'))
+    info = models.JSONField(null=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    objects = BillingProfileManager()
+
+    class Meta:
+        unique_together = ['customer_id', 'user']
+
+
+# ***************** Student Models Signals ******************
+# TODO: move signals to signals.py
+
+@receiver(post_save, sender=StudentProfile)
+def student_created_receiver(sender, instance, created, *args, **kwargs):
+    """
+    create billing profile for student
+    """
+    if created and instance.user:
+        BillingProfile.objects.get_or_create(
+            user=instance.user, payment_type=PaymentTypes.STRIPE)
+
+
+@receiver(pre_save, sender=BillingProfile)
+def billing_profile_created_receiver(sender, instance, *args, **kwargs):
+    """
+    create customer id in payment gateway - stripe or braintree
+    """
+    if not instance.customer_id and instance.user:
+        if instance.payment_type == PaymentTypes.STRIPE:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            customer = stripe.Customer.create(
+                email=instance.user.email
+            )
+            instance.customer_id = customer.id
+            instance.info = customer

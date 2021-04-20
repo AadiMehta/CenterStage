@@ -21,11 +21,18 @@ from django.utils import timezone
 from users.serializers import (
     UserSerializer, TeacherUserCreateSerializer, LoginResponseSerializer, TeacherProfileSerializer,
     SendOTPSerializer, VerifyOTPSerializer, SubdomainCheckSerializer, StudentUserCreateSerializer,
-    StudentProfileSerializer
+    StudentProfileSerializer, TeacherPaymentsSerializer
 )
+from django.contrib.auth import login, logout
+from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile
 from django.contrib.auth import login
-from users.models import User, TeacherProfile, ProfileStatuses, PaymentAccounts, StudentProfile
+from users.models import User, TeacherProfile, ProfileStatuses, StudentProfile, PaymentAccounts
+from django.conf import settings
+
 logger = logging.getLogger(__name__)
+import stripe
+
+import stripe
 
 
 class ObtainAuthToken(APIView):
@@ -64,6 +71,21 @@ class ObtainAuthToken(APIView):
 
     @swagger_auto_schema(request_body=AuthTokenSerializer, responses={200: LoginResponseSerializer})
     def post(self, request, *args, **kwargs):
+        # clear existing sessions if any.
+        # this happens if there are multiple login calls
+        if "sessionid" in request.COOKIES or "auth_token" in request.COOKIES:
+            try:
+                # delete the auth_token
+                request.user.auth_token.delete()
+            except Exception as e:
+                pass
+
+            try:
+                # delete the sessionid
+                request.session.flush()
+            except Exception as e:
+                pass
+
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
@@ -71,8 +93,9 @@ class ObtainAuthToken(APIView):
         user.save()
         user.last_login_ip = request.headers.get("X-forwarded-for", "127.0.0.1")
         token, created = Token.objects.get_or_create(user=user)
+
         headers = dict({
-            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
         return Response({'token': token.key}, headers=headers)
@@ -91,13 +114,13 @@ class TeacherRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
@@ -116,15 +139,16 @@ class StudentRegister(generics.CreateAPIView):
     authentication_classes = []
     permission_classes = []
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create(serializer.validated_data)
         token, _ = Token.objects.get_or_create(user=user)
         headers = dict({
-            "Set-Cookie": "auth_token={}; Path=/".format(str(token.key))
+            "Set-Cookie": "auth_token={}; domain={}; Path=/".format(str(token.key), str(settings.SESSION_COOKIE_DOMAIN))
         })
         login(request, user)
+        
         return Response(dict({'token': token.key}), headers=headers, status=status.HTTP_201_CREATED)
 
 
@@ -134,12 +158,13 @@ class Logout(APIView):
     """
     def get(self, request, format=None):
         # simply delete the token to force a login
-        request.user.auth_token.delete()
-        request.session.flush()
+        logout(request)
         resp = dict({
             "message": "Successfully Logout"
         })
-        return Response(resp, status=status.HTTP_200_OK)
+        resp = Response(resp, status=status.HTTP_200_OK)
+        resp.delete_cookie('auth_token')
+        return resp
 
 
 class Profile(generics.RetrieveUpdateAPIView):
@@ -266,6 +291,21 @@ class VerifyOtp(generics.CreateAPIView):
     permission_classes = []
 
     def create(self, request, *args, **kwargs):
+        # clear existing sessions if any.
+        # this happens if there are multiple login calls
+        if "sessionid" in request.COOKIES or "auth_token" in request.COOKIES:
+            try:
+                # delete the auth_token
+                request.user.auth_token.delete()
+            except Exception as e:
+                pass
+
+            try:
+                # delete the sessionid
+                request.session.flush()
+            except Exception as e:
+                pass
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -285,7 +325,10 @@ class VerifyOtp(generics.CreateAPIView):
         if provided_otp == cached_otp:
             token, created = self.authenticate(user)
             login(request, user)
-            return Response(dict({"token": token.key}), status=status.HTTP_200_OK)
+            headers = dict({
+                "Set-Cookie": "auth_token={}; domain={}; Path=/".format(token.key, settings.SITE_URL)
+            })
+            return Response(dict({"token": token.key}), headers=headers, status=status.HTTP_200_OK)
         else:
             logger.error("Invalid OTP!")
             return Response(dict({"error": "Invalid OTP"}), status=status.HTTP_401_UNAUTHORIZED)
@@ -311,6 +354,91 @@ class VerifyOtp(generics.CreateAPIView):
         # Validate phone_no
         pattern = re.compile("[1-9][0-9]{9}")
         return pattern.match(phone_no)
+
+class TeacherPaymentsView(APIView):
+
+    def CreateStripAccount(self, request):
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        dob = request.data['dob'].split('/')
+        account = stripe.Account.create(
+        country=request.data['country'][0:2].upper(),
+        type='custom',
+        business_type='individual',
+        email=request.user.email,
+        individual={
+        'dob': {
+            'day':dob[0],
+            'month':dob[1],
+            'year':dob[2],
+            },
+        'email': request.user.email,
+        'first_name':request.user.first_name,
+        'last_name':request.user.last_name,
+        'id_number':request.data['personalID'],
+        'address':{
+            'line1':request.data['address'],
+            'line2':request.data['address'],
+            'city':request.data['city'],
+            'state':'RJ',
+            'country':request.data['country'][0:2].upper(),
+            'postal_code':request.data['postalCode'],
+
+            }
+        },
+        capabilities={
+        'transfers': {
+          'requested': True,
+        },
+        'card_payments':{
+        'requested': True,
+        }
+      },
+      tos_acceptance={
+        'service_agreement': 'full',
+        'date': '1547923073',
+        'ip':'127.0.0.1',
+      },)
+
+        # print (account)
+        stripe.Account.create_external_account(
+            account['id'],external_account={
+            'object':'bank_account',
+            'country':'IN',
+            'currency':'INR',
+            'account_holder_name':request.data['accountHolderName'],
+            'routing_number':request.data['ifscCode'],
+            'account_number':request.data['bankAccountNo']
+            }
+            )
+        acc_details = stripe.Account.list_external_accounts(account['id'],object="bank_account",limit=3,)
+        print (acc_details)
+        print (account['id'])
+        return account['id']
+    
+    def post(self, request):
+        
+        teacher_profile = TeacherProfile.objects.get(user=request.user)
+        try:
+            teacher_payment = PaymentAccounts.objects.get(user=request.user)
+            return Response(dict({
+                "error": "Teacher profile already created. Hit Put request to update the profile"
+            }), status=status.HTTP_400_BAD_REQUEST)
+        except PaymentAccounts.DoesNotExist:
+            data = request.data
+            data['stripe_account_id'] = self.CreateStripAccount(request)
+            data['info'] = {}
+            serializer = TeacherPaymentsSerializer(data=data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            teacher_payments = serializer.save(teacher=teacher_profile)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(str(e))
+            return Response(dict({
+                "error": str(e)
+            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
 
 
 class TeacherProfileView(APIView):
@@ -469,10 +597,11 @@ class StudentProfileView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
+        redirect_url = request.GET.get('rurl')
         try:
             student = StudentProfile.objects.get(user=request.user)
             return Response(dict({
-                "error": "Teacher profile already created. Hit Put request to update the profile"
+                "error": "Student profile already created. Hit Put request to update the profile"
             }), status=status.HTTP_400_BAD_REQUEST)
         except StudentProfile.DoesNotExist:
             profile_photo = None

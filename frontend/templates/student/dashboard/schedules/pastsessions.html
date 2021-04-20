@@ -8,6 +8,9 @@
 
 {% block content %}
 {% include 'student/dashboard/modals.html' %}
+{% for enrollment in enrollments %}
+   {% include 'student/dashboard/allmodals/sharelesson.html' with lesson=enrollment.lesson %}
+{% endfor %}
 <div class="wrapper-main">
    {% include 'student/dashboard/sidebar.html' with activeSection='pastsessions' %}
    <div class="main">
@@ -60,7 +63,11 @@
                               <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Type</h4>
-                                 <span>One - on - One</span>
+                                 {% if slot.lesson.no_of_participants > 1 %}
+                                    <span>Group</span>
+                                 {% else %}
+                                    <span>One - on - One</span>
+                                 {% endif %}
                               </div>
                            </li>
                            <li>
@@ -74,12 +81,26 @@
                               <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Number</h4>
-                                 <span>03 Out of 05</span>
+                                 <a href="javascrip:void(0)">{{slot.session_no}}</a> <span>Out of {{slot.lesson.no_of_slots}}</span>
                               </div>
                            </li>
                         </ul>
+                        <div class="linerbtn-row">
+                           <div class="lessonBtnCol">
+                              <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                 <a class="dropdown-item" href="#">Edit Session</a>
+                                 <a class="dropdown-item" href="#">Manage in Zoom</a>
+                              </div>
+                           </div>
+                           <div class="lessonBtnCol">
+                           <a href="#" class="btn-liner"  data-toggle="modal" data-target="#shareLesson{{slot.lesson.lesson_uuid}}">Share</a></div>
+                           {% comment %} <a href="{{ slot.lesson.meeting_link }}" target="_blank">
+                              <div class="lessonBtnCol"><a href="{{ slot.lesson.meeting_link }}" target="_blank" class="btn-liner active">Start</a></div>
+                           </a> {% endcomment %}
+                        </div>
                      </div>
-                     <div class="searchresult-col-right">
+                     {% comment %}<div class="searchresult-col-right">
                         <div class="searchresult-right-top">
                            <div class="searchresult-right-top-title">
                               <h3>Lesson Discussion</h3>
@@ -119,7 +140,7 @@
                               <button type="button"><img src="{% static 'images/documents.svg' %}" alt="" /></button>
                            </div>
                         </div>
-                     </div>
+                     </div>{% endcomment %}
                   </div>
                </div>
             {% empty %}

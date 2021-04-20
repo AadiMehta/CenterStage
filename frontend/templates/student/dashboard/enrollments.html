@@ -8,13 +8,16 @@
 
 {% block content %}
 {% include 'student/dashboard/modals.html' %}
+{% for enrollment in enrollments %}
+   {% include 'student/dashboard/allmodals/sharelesson.html' with lesson=enrollment.lesson %}
+{% endfor %}
 <div class="wrapper-main">
    {% include 'student/dashboard/sidebar.html' with activeSection='lessons' %}
    <div class="main">
       {% include 'student/dashboard/header.html' with user=user %}
       <div class="main-content">
          <div class="admin-mid-sec container-fluid">
-            <h2 class="title-2">My Enrollments</h2>
+            <h2 class="title-2">My Enrolled Lessons</h2>
             <div class="search-row">
                <div class="searchInp-col">
                   <img src="{% static 'images/icon-search.svg' %}" alt="" />
@@ -55,7 +58,7 @@
                            <ul class="lessions-countDetail-list">
                               <li>
                                  <div class="lessions-countDetail-box">
-                                       <h4>{{enrollment.lesson_slot.session_no}} out of 05</h4>
+                                       <h4>{{enrollment.lesson.completed_sessions_count}} out of 05</h4>
                                        <h5>Sessions Completed</h5>
                                  </div>
                               </li>
@@ -67,23 +70,23 @@
                               </li>
                            </ul>
                      </div>
-                     <div class="col-right">
-                           <div class="profimg-name">
-                              <div class="profimg-col">
+                     {% if enrollment.other_enrollments|length > 0 %}
+                        <div class="profimg-name">
+                           <div class="profimg-col">
                                  <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                                  <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                                  <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
-                              </div>
-                              <div class="prof-name">
-                                 <h4>
-                                       <a href="#">
-                                          With Edwina, abc, xyz<br />
-                                          + 5 other students
-                                       </a>
-                                 </h4>
-                              </div>
                            </div>
-                     </div>
+                           <div class="prof-name">
+                                 <h4>
+                                    <a href="#">
+                                       With {{enrollment.other_enrollments.0.student.user.first_name}}, {{enrollment.other_enrollments.1.student.user.first_name}}, {{enrollment.other_enrollments.2.student.user.first_name}}<br />
+                                       + {{enrollment.other_enrollments|slice:"3:"|length}} other students
+                                    </a>
+                                 </h4>
+                           </div>
+                        </div>
+                     {% endif %}
                   </div>
 
                   <div class="searchresult-row">
@@ -103,41 +106,48 @@
                                  <i><img src="{% static 'images/hour-glass.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Duration</h4>
-                                       <span>{{ slot.session_duration }}</span>
+                                       <span>{{ enrollment.session_duration }}</span>
                                  </div>
                               </li>
                               <li>
                                  <i><img src="{% static 'images/webinar.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Type</h4>
-                                       <span>One - on - One</span>
+                                       {% if enrollment.lesson.no_of_participants > 1 %}
+                                          <span>Group</span>
+                                       {% else %}
+                                          <span>One - on - One</span>
+                                       {% endif %}
                                  </div>
                               </li>
                               <li>
                                  <i><img src="{% static 'images/language.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
                                        <h4>Session Language</h4>
-                                       <span>Hosted in {% for language in slot.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                       <span>Hosted in {% for language in enrollment.lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                                  </div>
                               </li>
                               <li>
                                  <i><img src="{% static 'images/session-number2.png' %}" alt="" /></i>
                                  <div class="lessons-steps-text">
-                                       <h4>Session Number</h4>
-                                       <a href="#">03</a> <span>Out of 05</span>
+                                    <h4>Session Number</h4>
+                                    <a href="javascrip:void(0)">{{enrollment.session_no}}</a> <span>Out of {{enrollment.lesson.no_of_slots}}</span>
                                  </div>
                               </li>
-                              <li>
-                                 <i><img src="{% static 'images/documents.png' %}" alt="" /></i>
-                                 <div class="lessons-steps-text">
-                                       <h4>Lesson Documents</h4>
-                                       <a href="#">View Documents</a>
-                                 </div>
-                              </li>
-                           </ul>
+                              {% if enrollment.lesson.notes %}
+                                 <li>
+                                    <i><img src="{% static 'images/documents.png' %}" alt="" /></i>
+                                    <div class="lessons-steps-text">
+                                          <h4>Lesson Documents</h4>
+                                          <a href="#">View Documents</a>
+                                    </div>
+                                 </li>
+                              {% endif %}
+                              </ul>
+                           
                            <div class="linerbtn-row">
                               <div class="lessonBtnCol"><a href="#" class="btn-liner">Edit</a></div>
-                              <div class="lessonBtnCol"><a href="#" class="btn-liner">Share</a></div>
+                              <div class="lessonBtnCol"><a href="javascript:void(0)" class="btn-liner" data-toggle="modal" data-target="#shareLesson{{enrollment.lesson.lesson_uuid}}">Share</a></div>
                               <div class="lessonBtnCol"><a href="#" class="btn-liner active">Book Next Session</a></div>
                            </div>
                      </div>

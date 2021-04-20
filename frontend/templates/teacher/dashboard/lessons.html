@@ -8,29 +8,56 @@
 
 {% block content %}
 {% include 'teacher/dashboard/modals.html' %}
+{% for lesson in lessons %}
+   {% include 'teacher/dashboard/allmodals/sharelesson.html' with lesson=lesson %}
+{% endfor %}
 <div class="wrapper-main">
    {% include 'teacher/dashboard/sidebar.html' with activeSection='lessons' %}
    <div class="main">
       {% include 'teacher/dashboard/header.html' with user=user %}
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+               <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
+               <div class="header-prof-name">
+                  <h3>{{user.get_full_name}}</h3>
+                  <span class="desigation">{{user.teacher_profile_data.description}}</span>
+               </div>
+            </div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span id="notificationCount" class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+            </div>
+         </div>
+      </header>
       <div class="main-content">
-         {% include 'teacher/dashboard/actionbar.html' %}
+         {% include 'teacher/dashboard/actionbar.html' with user=user %}
          <div class="admin-mid-sec container-fluid">
             <h2 class="title-2">My Lessons</h2>
             <div class="search-row">
                <div class="searchInp-col">
                   <img src="{% static 'images/icon-search.svg' %}" alt="" />
-                  <input type="search" class="form-control" placeholder="Search Sessions" />
+                  <input type="search" class="form-control" placeholder="Search Lessons" />
                </div>
                <div class="search-tags">
-                  <a href="#" class="tag-link active">All</a>
-                  <a href="#" class="tag-link">One - on - One</a>
-                  <a href="#" class="tag-link">Group Lesson</a>
-                  <a href="#" class="tag-link">Personal Coaching</a>
-                  <a href="#" class="tag-link">Recent</a>
-                  <a href="#" class="tag-link">Popular</a>
-                  <a href="#" class="tag-link">Top Rated</a>
-                  <a href="#" class="tag-link">A - Z</a>
-                  <a href="#" class="tag-link">Z - A</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}`;" class="tag-link active">All</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=ONE_ON_ONE`;" class="tag-link">One - on - One</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=GROUP`;" class="tag-link">Group Lesson</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=PERSONAL_COACHING`;" class="tag-link">Personal Coaching</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=RECENT" class="tag-link">Recent</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=POPULAR`;" class="tag-link">Popular</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=TOP_RATED`;" class="tag-link">Top Rated</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=ATOZ`;" class="tag-link">A - Z</a>
+                  <a href="javascript:void(0)" onclick="window.location.href = `${window.location.origin}${window.location.pathname}?filter=ZTOA`;" class="tag-link">Z - A</a>
                </div>
             </div>
             {% for lesson in lessons %}
@@ -82,7 +109,7 @@
                               <i><img src="{% static 'images/live.png' %}" alt=""></i>
                               <div class="lessons-steps-text">
                                  <h4>Total Sessions</h4>
-                                 <span>{{lesson.no_of_sessions}} Sessions </span>
+                                 <span>{{lesson.no_of_slots}} Sessions </span>
                               </div>
                            </li>
                            <li>
@@ -120,7 +147,7 @@
                               </div>
                            </div>
                            <div class="lessonBtnCol">
-                              <button class="btn-liner active" data-toggle="modal" data-target="#shareModal">Share</button>
+                              <button class="btn-liner active" data-toggle="modal" data-target="#shareLesson{{lesson.lesson_uuid}}">Share</button>
                            </div>
                         </div>
                      </div>
@@ -139,6 +166,7 @@
 <!-- custom scrollbar plugin -->
 <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
+<!-- <script src="{% static 'js/notification_count.js' %}"></script> -->
 <script>
    (function($){
          $(window).on("load",function(){

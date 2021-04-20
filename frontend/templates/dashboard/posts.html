@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% load activity_tags %}
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% include 'teacher/dashboard/modals.html' %}
+<div class="wrapper-main">
+  {% include 'teacher/dashboard/sidebar.html' with activeSection='notes' %} 
+  <div class="main">
+      <header class="header">
+         <div class="container-fluid">
+            <button type="button" class="toggle-menu sidebar-toggle"><img src="{% static 'images/menu-icon.svg' %}" alt="" /></button>
+            <div class="header-prof-col">
+               <figure class="header-prof-img"><img src="{% static 'images/user-img.png' %}" alt="" /></figure>
+               <div class="header-prof-name">
+                  <h3>{{user.get_full_name}}</h3>
+                  <span class="desigation">{{user.teacher_profile_data.description}}</span>
+               </div>
+            </div>
+            <div class="header-actions-col">
+               <div class="header-actions-icon"><img src="{% static 'images/icon-switch-account.svg' %}" alt="" /></div>
+               <div class="header-actions-icon notifications">
+                  <div class="icon-notification">
+                     <a href="#">
+                     <span id="notificationCount" class="notifaction-badge">4</span>
+                     <img src="{% static 'images/icon-notification.svg' %}" alt="">
+                     </a>
+                  </div>
+               </div>
+               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+            </div>
+         </div>
+      </header>
+
+    <div class="main-content">
+      {% include 'teacher/dashboard/actionbar.html' %}
+    <div class="admin-mid-sec container-fluid">
+     <div class="title-with-search-row">
+      <h2 class="title-2">My Notes</h2>
+      <div class="searchInp-col">
+        <img src="images/icon-search.svg" alt="" />
+        <input type="search" class="form-control" placeholder="Search Notes or Documents" />
+      </div>
+    </div>
+     {% for activity in activities %}
+      {% render_activity activity %}
+     {% endfor %}
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+<!-- Google CDN jQuery with fallback to local -->
+<!-- <script src="{% static 'js/notification_count.js' %}"></script> -->
+
+<!-- custom scrollbar plugin -->
+<script>
+    (function($){
+        $(window).on("load",function(){
+            $("#mC-scroll").mCustomScrollbar({
+                theme:"minimal"
+            });
+            $("#mC-scroll2").mCustomScrollbar({
+              theme:"minimal"
+          });
+          });
+      })(jQuery);
+</script>
+{% endblock %}

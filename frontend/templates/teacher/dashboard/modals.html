@@ -1,5 +1,5 @@
 {% load static %}
-<!-- Modal -->
+<!-- Personal Coach Modal -->
 <div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -21,7 +21,8 @@
     </div>
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Personal Coaching Session Details Modal -->
 <div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -40,8 +41,10 @@
                             <option>30 Mins</option>
                             <option>45 Mins</option>
                             <option>1 Hour</option>
-                            <option>1.30 Hours</option>
-                            <option>2 Hour</option>
+                            <option>1 Hour 15 Mins</option>
+                            <option>1 Hour 30 Mins</option>
+                            <option>1 Hour 45 Mins</option>
+                            <option>2 Hours</option>
                         </select>
                     </div>
                 </div>
@@ -51,7 +54,9 @@
                         <div class="form-group">
                             <div class="liner-inp select-drop">
                             <select class="form-control">
-                                <option>$ US Dollar</option>
+                                {% for currency in currency_options %}
+                                    <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                {% endfor %}
                             </select>
                             </div>
                         </div>
@@ -59,7 +64,7 @@
                     <div class="col-md-8">
                         <div class="form-group">
                             <div class="liner-inp select-drop">
-                             <input type="number" min="0" id="pricePerSessionValue" value="0" />
+                             <input class="form-control" type="number" min="0" max="100000" id="pricePerSessionValue" value="0" />
                             {% comment %} <select class="form-control">
                                 <option>$50</option>
                             </select> {% endcomment %}
@@ -71,9 +76,7 @@
                 <div class="form-group">
                     <label>Number of Free Sessions per Student</label>
                     <div class="liner-inp select-drop">
-                        <select class="form-control">
-                            <option>1</option>
-                        </select>
+                        <input class="form-control" type="number" min="0" max="50" id="numberFreeSessions" value="0" />
                     </div>
                     <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
                 </div>
@@ -89,7 +92,8 @@
     </div>
     </div>
 </div>
-<!-- Modal -->
+
+<!-- Personal Coaching Session Booked Modal -->
 <div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -112,6 +116,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeeting8" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -173,155 +178,7 @@
     </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade modal-newmeeting4" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="{% static 'images/close.svg' %}" alt="" />
-        </button>
-        <div class="modal-body">
-            <div class="share-modal-wrap">
-                <div class="share-modal-left">
-                <h3>New Meeting!</h3>
-                <h4>Thank you! Your meeting invites will be sent shortly</h4>
-                <div class="sharecopy-link">
-                    <h2>Meeting Link</h2>
-                    <div class="sharecopy-inp">
-                        <input type="text" class="form-control" placeholder="https://www.zoom.com/xyzjava/1548fghgytuj" />
-                        <button type="button" class="btn-theme">Copy</button>
-                    </div>
-                </div>
-                <div class="share-to">
-                    <h5>Share to</h5>
-                    <div class="social-icons">
-                        <a href="#"><img src="{% static 'images/whatsapp-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/telegram-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/facebook-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/linkedin-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/twitter-icon.svg' %}" alt="" /></a>
-                        <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
-                    </div>
-                </div>
-                <div class="btn-area mt-5 twobtn-wrap">
-                    <button type="button" class="btn btn-theme">Start Meeting</button>
-                </div>
-                </div>
-                <div class="share-graphics">
-                <img src="{% static 'images/share-graphics.svg' %}" alt="" />
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade modal-finish" id="pcoatching" tabindex="-1" aria-labelledby="pcoatching" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="{% static 'images/close.svg' %}" alt="" />
-        </button>
-        <div class="modal-body text-center">
-            <div class="finish-graphics">
-                <img src="{% static 'images/become-coach-graphics.svg' %}" alt="" />
-            </div>
-            <h2>Become A Personal Coach</h2>
-            <h3>By becoming a personal coach, students can book free or paid consulting sessions with
-                you depending on your office hours
-            </h3>
-            <div class="finish-btn-area">
-                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#pcoatching2"><span>Continue</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="{% static 'images/close.svg' %}" alt="" />
-        </button>
-        <div class="modal-body">
-            <h2 class="title-2">Personal Coaching Session Details</h2>
-            <div class="pop-inner">
-                <div class="pop-left">
-                <div class="form-group">
-                    <label>Duration per Session</label>
-                    <div class="liner-inp select-drop">
-                        <select class="form-control">
-                            <option>30 Min</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <label class="col-md-12">Price per Session</label>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <div class="liner-inp select-drop">
-                            <select class="form-control">
-                                <option>$ US Dollar</option>
-                            </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <div class="liner-inp select-drop">
-                            <select class="form-control">
-                                <option>$50</option>
-                            </select>
-                            </div>
-                            <span class="select-session-text">If you set price to zero, student can book for free</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Number of Free Sessions per Student</label>
-                    <div class="liner-inp select-drop">
-                        <select class="form-control">
-                            <option>1</option>
-                        </select>
-                    </div>
-                    <span class="select-session-text">After free sessions, students will be charged when they try to book.</span>
-                </div>
-                </div>
-                <div class="pop-graphics">
-                <img src="{% static 'images/video-graphic.svg' %}" alt="" />
-                </div>
-            </div>
-            <div class="finish-btn-area">
-                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish2"><span>Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <img src="{% static 'images/close.svg' %}" alt="" />
-        </button>
-        <div class="modal-body text-center">
-            <div class="finish-graphics">
-                <img src="{% static 'images/ready-to-launch-graphics.svg' %}" alt="" />
-            </div>
-            <h2>Thanks, You're All Set!</h2>
-            <h3>To start receiving bookings, please schedule your availability 
-                on your calendar
-            </h3>
-            <div class="finish-btn-area">
-                <button type="button" class="btn btn-primary btn-lg btn-theme"><span>Go To Calendar</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
-                <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Share</button>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeeting5" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -383,6 +240,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeeting6" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -447,6 +305,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-bankac" id="bank" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -556,6 +415,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
     <div class="modal-dialog">
@@ -618,6 +478,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
     <div class="modal-dialog">
@@ -641,6 +502,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-paidmeeting" id="paidMeeting" tabindex="-1" aria-labelledby="paidMeeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -665,16 +527,19 @@
                         <div class="form-group">
                             <div class="liner-inp select-drop">
                                 <select id="pricePerSessionCurrency" class="form-control" name="price_per_session_currency" id="pricePerSessionCurrency" >
-                                    <option value="DOLLARS">$ US Dollar</option>
-                                    <option value="RUPEES">₹ Indian Rupees</option>
+                                    {% for currency in currency_options %}
+                                        <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                    {% endfor %}
                                 </select>
+
+
                             </div>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="form-group">
-                            <div class="liner-inp form-control">
-                                <input id="pricePerSession" type="number" min="0" placeholder="Enter Price" max="100000" />
+                            <div class="liner-inp">
+                                <input class="form-control" id="pricePerSession" type="number" min="0" placeholder="Enter Price" max="50" />
                             </div>
                         </div>
                     </div>
@@ -705,6 +570,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeetingsuccess" id="newmeetingsuccess" tabindex="-1" aria-labelledby="newmeetingsuccess" aria-hidden="true">
     <div class="modal-dialog">
@@ -791,6 +657,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
     <div class="modal-dialog">
@@ -853,6 +720,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
     <div class="modal-dialog">
@@ -876,6 +744,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeeting1" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -937,6 +806,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeeting2" id="newmeeting" tabindex="-1" aria-labelledby="newmeeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -1002,6 +872,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-pcoatching" id="pcoatching2" tabindex="-1" aria-labelledby="pcoatching2" aria-hidden="true">
     <div class="modal-dialog">
@@ -1064,6 +935,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-finish" id="Publish2" tabindex="-1" aria-labelledby="Publish2" aria-hidden="true">
     <div class="modal-dialog">
@@ -1087,6 +959,7 @@
     </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade modal-newmeeting3" id="meeting" tabindex="-1" aria-labelledby="meeting" aria-hidden="true">
     <div class="modal-dialog">
@@ -1149,7 +1022,6 @@
     </div>
 </div>
 
-
 <div class="modal fade modal-disconnect" id="disconnectZoomConfirmation" tabindex="-1" aria-labelledby="disconnectLabel" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -1191,7 +1063,6 @@
     </div>
     </div>
 </div>
-
 
 <div class="modal fade modal-logout" id="logoutConfirmation" tabindex="-1" aria-labelledby="logoutConfirmation" aria-hidden="true">
     <div class="modal-dialog">

@@ -52,6 +52,10 @@
 	.hasDatepicker, .timepicker{font-size:16px;}
     .notifaction-content {max-height:450px;}
     .profile-image-area {top: -40px;}
+    .feedfooter-btnarea .btn-liner {font-size: 16px; padding: 6px 20px;}
+    .newfeed-actions .btn {font-size: 14px; padding-left: 15px; padding-right: 15px; height: 44px;}
+    .btn-followus {font-size: 12px;}
+
 }
 
 @media only screen and (max-width:1400px) {
@@ -107,6 +111,10 @@
     .yourtchr-dtl-col i {margin-right: 12px; display: inline-block; width: 35px; vertical-align: top;}
     .yourtchr-dtl, .lession-title2, .recommendations-col, .slide-inner-top .reating-text, .card-number, .card-cvv, .cvv-input {font-size:18px;}
     .notification-slide{top: 100px;}
+    .post-actions a {font-size: 16px;}
+    .recmond-col h4 {font-size: 20px;}
+    .header-search-row .searchInp-col {width:400px;}
+    
 }
 
 @media only screen and (max-width:1279px) {
@@ -159,6 +167,18 @@
     .reating-col {padding: 10px 1rem;}
     .lessions-slide-sec {margin-bottom: 3rem;}
     .write-reviews-section {padding-bottom: 3rem;}
+    .newfeed-actions {width: 100%; margin: 1rem 0;}
+    .feedfooter-btnarea .btn-liner {font-size: 14px;padding: 6px 15px;}
+    .newsFeed-left {padding:0 0 2rem 0; width: 100%;}
+    .newsFeed-right {width: 100%;}
+    .newsFeed-wrap, .recmond-wrap {flex-wrap: wrap;}
+    .recmond-col h4 {font-size: 18px;}
+    .cross-btn {width: 30px !important;}
+    .recmond-col{margin-bottom: 1rem;}
+    .header-search-row .searchInp-col {width:320px;}
+    .header .recent-user-img, .header .recent-user-img img {width:40px; height:40px;}
+    .header .recent-list li h4 {font-size: 13px;}
+    
 }
 
 @media only screen and (max-width:991px) {
@@ -251,6 +271,10 @@
     .month-hour-text {padding-top: 10px;}
     .card-number, .card-cvv, .cvv-input {font-size:18px;}
     .notification-slide {top: 72px;}
+    .newfeed-actions {padding-right:25px;}
+    .newfeed-actions .btn-doted-menu{position: absolute; right: 0px; top: 0px;}
+    .newfeed-actions .btn {font-size: 14px; padding-left: 10px;  padding-right: 10px;}
+    .newfeed-actions .btn-theme i {margin: 0 8px 0 0; width: 20px;}
 }
 
 @media only screen and (max-width:767px) {
@@ -332,7 +356,11 @@
     .share-btn-col .btn{margin:5px;}
     .cocial-icons-row a {width: 30px; margin-right: 3px;}
     .title-with-button h2{width: 100%;}
-    
+    .feedfooter-btnarea, .useful-text-list{flex-wrap: wrap;}
+    .feedfooter-btnarea .btn-liner {padding: 6px 10px;  text-align: center;  width: 100%; margin:0 0 10px 0;}
+    .useful-text-list li {width: 100%; margin: 0 0 15px 0;}
+    .imp-add-btn {padding: 2rem 0 0 0; width: 100%;}
+    .cmntpost-area .cmntPost-actions {position: relative; top: 0; right: 0; margin-top: 1rem;}
 }
 
 @media only screen and (max-width:640px) {
@@ -340,4 +368,6 @@
     .card-type, .card-number, .card-cvv {width: 100%;}
     .card-number{padding-left: 0px;}
     .share-btn-col {flex-wrap: wrap; justify-content: center;}
+    .header-search-row .searchInp-col {width: 160px;}
+    .header-actions-icon {width: 26px;}
 }

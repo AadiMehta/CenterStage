@@ -26,7 +26,17 @@
                      </a>
                   </div>
                </div>
-               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+               <div class="header-actions-icon main-profile-menu dropdown">
+                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <ul>
+                        <li><a href="{{ user.teacher_profile_data.get_teacher_full_url }}" target="_blank"><i><img src="{% static 'images/dashboard-gray.svg' %}" alt=""></i><span>View My Page</span></a></li>
+                        <li><a href="mailto:help@centrestage.live"><i><img src="{% static 'images/email-gray.svg' %}" alt=""></i><span>Contact us</span></a></li>
+                        <li><a href="{% url 'faqs' %}"><i><img src="{% static 'images/FAQ-gray.svg' %}" alt=""></i><span>FAQ</span></a></li>
+                        <li><a href="javascript:void(0);" id="openLogoutPopup"><i><img src="{% static 'images/logout-gray.svg' %}" alt=""></i><span>Logout</span></a></li>
+                     </ul>
+                  </div>
+               </div>
             </div>
          </div>
       </header>
@@ -95,9 +105,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test01" name="radio-group" {% if 'ZOOM' in teacher_accounts %}checked{% endif %} disabled>
-                                 <label for="test01"></label>
+                              <div class="check-uncheck-img {% if 'ZOOM' in teacher_accounts %}active{% endif %}">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               {% if 'ZOOM' in teacher_accounts %}
                                  <button id="disconnectZoomAccount" type="button" class="btn-liner">Disconnect</button>
@@ -118,9 +128,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test02" name="radio-group">
-                                 <label for="test02"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Disconnect</button>
                            </div>
@@ -133,9 +143,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test03" name="radio-group">
-                                 <label for="test03"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Connect</button>
                            </div>
@@ -151,9 +161,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test04" name="radio-group" {% if 'GOOGLE_CALENDAR' in teacher_accounts %}checked{% endif %} disabled>
-                                 <label for="test04"></label>
+                              <div class="check-uncheck-img {% if 'GOOGLE_CALENDAR' in teacher_accounts %}active{% endif %}">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               {% if 'GOOGLE_CALENDAR' in teacher_accounts %}
                                  <button id="disconnectGoogleAccount" type="button" class="btn-liner">Disconnect</button>
@@ -177,9 +187,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test1" name="radio-group">
-                                 <label for="test1"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Disconnect</button>
                            </div>
@@ -192,9 +202,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test2" name="radio-group">
-                                 <label for="test2"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Disconnect</button>
                            </div>
@@ -207,9 +217,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test3" name="radio-group">
-                                 <label for="test3"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Disconnect</button>
                            </div>
@@ -222,9 +232,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test4" name="radio-group">
-                                 <label for="test4"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Disconnect</button>
                            </div>
@@ -237,9 +247,9 @@
                               </div>
                            </div>
                            <div class="ac-veryfy-right">
-                              <div class="custom-radios">
-                                 <input type="radio" id="test5" name="radio-group">
-                                 <label for="test5"></label>
+                              <div class="check-uncheck-img active">
+                                  <img class="check-img" src="{% static 'images/done-green.svg' %}" alt="" />
+                                  <img class="uncheck-img" src="{% static 'images/uncheck.svg' %}" alt="" />
                               </div>
                               <button type="button" class="btn-liner">Disconnect</button>
                            </div>
@@ -262,12 +272,12 @@
                      </div>
                      <div class="prof-action-btn">
                         <button id="logoutButton" type="button" class="btn-theme btn-theme-liner"><i><img src="{% static 'images/logout.svg' %}" alt="" /></i> <span>Logout</span></button><br>
-                        <button type="button" class="btn-theme btn-bgred" id="deleteAccount">
+                        {% comment %}<button type="button" class="btn-theme btn-bgred" id="deleteAccount">
                            <i>
                               <img src="{% static 'images/delete.svg' %}" alt="" />
                            </i>
                            <span>Delete Account</span>
-                        </button>
+                        </button>{% endcomment %}
                      </div>
                   </div>
                </div>
@@ -279,6 +289,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static '/js/account/info.js' %}" type="text/javascript"></script> 
-   <script src="{% static 'js/dashboard.js' %}"></script>
+   <script src="{% static 'js/account/info.js' %}" type="text/javascript"></script>
+   <script src="{% static 'js/dashboard.js' %}" type="text/javascript"></script>
 {% endblock %}

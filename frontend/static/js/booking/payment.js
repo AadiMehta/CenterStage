@@ -35,11 +35,22 @@ function hideAll() {
 // ****** End of API Handlers ****** 
 
 function handleConfirmPayment() {
-  $("#payment").submit();
+  const paymentType = $('#paymentType')[0].value;
+  if (paymentType) {
+    $("#payment").submit();
+  } else {
+    $('#paymentMethodError').text('Please select payment method');
+    $('#paymentMethodError').show()
+    $('#paymentMethod2Error').text('Please select payment method');
+    $('#paymentMethod2Error').show()
+  }
+}
+
+function handlePrevStepButton() {
+  // TODO: handle prev step button
 }
 
 function handlePaymentTypeSelection(event) {
-  console.log(event);
   const {paymentType} = event.target.dataset;
   $('#paymentType')[0].value = paymentType;
 }
@@ -55,6 +66,7 @@ function init() {
    */
   $('#confirmPayment').click(handleConfirmPayment);
   $('.payment-type').change(handlePaymentTypeSelection);
+  $('#id_wizard_goto_step').click(handlePrevStepButton);
 }
 
 init();

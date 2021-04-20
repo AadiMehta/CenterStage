@@ -29,6 +29,16 @@ function hideAll() {
 }
 
 /**
+ * Set Cookie in the browser
+ */
+function setCookie(cname, cvalue, exMins) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exMins*60*1000));
+  var expires = "expires="+d.toUTCString();  
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+/**
  * Get Cookie by Name
  * @param {String} cname 
  */
@@ -54,6 +64,18 @@ function openInNewTab(url) {
     var win = window.open(url, '_blank');
     win.focus();
 }
+
+/**
+ * Opens Popup window as the current window as parent
+ */
+function openWindow(url, winName, w, h, scroll){
+  LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+  TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+  settings =
+      'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
+  window.open(url, winName, settings)
+}    
+
 // ****** End of Utilities ******
 
 // ****** API Handlers ******
@@ -81,7 +103,6 @@ function createPaidMeeting(topic, pricePerSessionCurrency, pricePerSession, invi
         "meeting_type": "PAID"
       }),
       success: function (data, status, xhr) {
-        console.log('newmeetingsuccess', data);
         $('#newmeetingsuccesslink')[0].placeholder = data.meeting.meeting_link;
         showModal('newmeetingsuccess', true);
       },
@@ -119,16 +140,34 @@ function getNewZoomLinkAndRoute() {
 // ****** Event Handlers ****** 
 
 /**
+ * Connect Zoom Account Handler
+ */
+function handleZoomConnectAccount (event) {
+  const {redirectUri} = event.target.dataset;
+  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=mAkYlnKISSCqOgSJPIxCCA&redirect_uri=${redirectUri}`;
+  openWindow(url, 'Authorize Zoom', 600, 700, 1);
+}
+
+
+
+/**
  * On Create Paid Meeting Clicked,
  */
 function handleCreateFreeMeeting() {
-    getNewZoomLinkAndRoute()
+  if (!isZoomLinked) {
+    handleZoomConnectAccount(event);
+    return;
+  }
+  getNewZoomLinkAndRoute()
 }
 
 /**
  * On Create Paid Meeting Clicked,
  */
 function handleCreatePaidMeeting() {
+    if (!isZoomLinked) {
+      alert('asdasd');
+    }
     let isValid = true;
     $('#topicError').hide();
     $('#pricePerSessionError').hide();
@@ -182,6 +221,35 @@ function addMoreInvitee() {
     }
 }
 
+/**
+ * Remove auth_token from cookies and route to main page
+ */
+function logout() {
+  const token = getCookie('auth_token');
+  $.ajax('/api/logout/', {
+    type: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    success: function (data, status, xhr) {
+      setCookie('auth_token', '', 0);
+      setCookie('sessionid', '', 0);
+      document.location.href = '/';
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      alert('err');
+    }
+  });
+}
+
+function handleOpenPaidMeeting(event) {
+  if (!isZoomLinked) {
+    handleZoomConnectAccount(event);
+    return;
+  }
+  showModal('paidMeeting')
+}
+
 // ****** End of Event Handlers ****** 
 
 function init() {
@@ -197,6 +265,8 @@ function init() {
     }
   });
 
+  $('.open-zoom-connect').click(handleZoomConnectAccount);
+  $('#openPaidMeetingModal').click(handleOpenPaidMeeting);
   $('#createPaidMeeting').click(handleCreatePaidMeeting);
   $('#createFreeMeeting').click(handleCreateFreeMeeting);
   $('#personalCoaching').click(() => {
@@ -216,6 +286,10 @@ function init() {
     const meetingLink = $('#newmeetingsuccesslink')[0].placeholder;
     window.open(meetingLink, "_blank");
   })
+  $('#openLogoutPopup').click(() => {
+    showModal('logoutConfirmation');
+  })
+  $('#logout').click(() => logout());
 }
 
 init();

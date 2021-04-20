@@ -26,7 +26,16 @@
                      </a>
                   </div>
                </div>
-               <div class="header-actions-icon"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></div>
+               <div class="header-actions-icon main-profile-menu dropdown">
+                  <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static 'images/icon-doted.svg' %}" alt="" /></a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                     <ul>
+                        <li><a href="mailto:help@centrestage.live"><i><img src="{% static 'images/email-gray.svg' %}" alt=""></i><span>Contact us</span></a></li>
+                        <li><a href="{% url 'faqs' %}"><i><img src="{% static 'images/FAQ-gray.svg' %}" alt=""></i><span>FAQ</span></a></li>
+                        <li><a href="javascript:void(0);" id="openLogoutPopup"><i><img src="{% static 'images/logout-gray.svg' %}" alt=""></i><span>Logout</span></a></li>
+                     </ul>
+                  </div>
+               </div>
             </div>
          </div>
       </header>
@@ -247,12 +256,12 @@
                      </div> {% endcomment %}
                      <div class="prof-action-btn">
                         <button id="logoutButton" type="button" class="btn-theme btn-theme-liner"><i><img src="{% static 'images/logout.svg' %}" alt="" /></i> <span>Logout</span></button><br>
-                        <button type="button" class="btn-theme btn-bgred" id="deleteAccount">
+                        {% comment %}<button type="button" class="btn-theme btn-bgred" id="deleteAccount">
                            <i>
                               <img src="{% static 'images/delete.svg' %}" alt="" />
                            </i>
                            <span>Delete Account</span>
-                        </button>
+                        </button>{% endcomment %}
                      </div>
                   </div>
                </div>
@@ -264,6 +273,6 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static '/js/account/info.js' %}" type="text/javascript"></script> 
+   <script src="{% static 'js/account/info.js' %}" type="text/javascript"></script>
    <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

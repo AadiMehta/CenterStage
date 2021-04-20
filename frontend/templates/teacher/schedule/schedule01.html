@@ -42,10 +42,10 @@
             <div class="boarding-wrap">
                 <div class="title-row"><h2>Meeting Info</h2></div>
                 <div class="boarding-row">
-                    <form id="step1" action="" method="post">
-                        {% csrf_token %}
-                        {{ wizard.management_form }}
-                        <div class="boarding-left">
+                    <div class="boarding-left">
+                        <form id="step1" action="" method="post">
+                            {% csrf_token %}
+                            {{ wizard.management_form }}
                             <div class="form-group">
                                 <div class="input-area">
                                     <label>Topic</label>
@@ -72,27 +72,20 @@
                             </div>
                             <div class="form-group">
                                 <label>Number of Sessions in Lesson <span>*</span></label>
-                                <input id="sessionTypeValue" type="hidden" name="step1-session_type" value="SINGLE" />
-                                <p id="sessionTypeError" style="color: red;"></p>
-                                <div class="selectct-sessionsNom" id="sessionType">
+                                <input id="no_of_sessions" type="hidden" name="step1-session_type" value="{{wizard.form.session_type.value|default_if_none:'SINGLE'}}">
+                                <p id="lessonTypeError" style="color:red;"></p>
+                                <div class="selectct-sessionsNom" id="lessonType" >
                                     <div class="select-sessions-col">
-                                        <button
-                                            id="singleSession"
-                                            type="button"
-                                            class="btn-select-session {% if wizard.form.session_type.value == None or wizard.form.session_type.value == 'SINGLE' %}selected{% endif %}"
-                                            data-lesson-type="SINGLE"
-                                        >
-                                            Single Session
-                                        </button>
-                                        <span class="select-session-text">This is a one time class</span>
+                                    <button id="singleSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == None or wizard.form.session_type.value == 'SINGLE' %}selected{% endif %}" data-lesson-type="SINGLE">Single Session</button>
+                                    <span class="select-session-text">This is a one time class</span>
                                     </div>
                                     <div class="select-sessions-col">
-                                        <button id="multiSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'MULTI' %}selected{% endif %}" data-lesson-type="MULTI">Multi Sessions</button>
-                                        <span class="select-session-text">This lesson will have a fixed start and end date</span>
+                                    <button id="multiSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'MULTI' %}selected{% endif %}" data-lesson-type="MULTI">Multi Sessions</button>
+                                    <span class="select-session-text">This lesson will have a fixed start and end date</span>
                                     </div>
                                     <div class="select-sessions-col">
-                                        <button id="ongoingSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'ONGOING' %}selected{% endif %}" data-lesson-type="ONGOING">Ongoing</button>
-                                        <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
+                                    <button id="ongoingSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'ONGOING' %}selected{% endif %}" data-lesson-type="ONGOING">Ongoing</button>
+                                    <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
                                     </div>
                                 </div>
                             </div>
@@ -101,11 +94,12 @@
                                     <span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i>
                                 </button>
                             </div>
-                            <div class="boarding-right">
-                                <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+
+                    <div class="boarding-right">
+                        <img src="{% static 'images/new-meeting-graphics.svg' %}" alt="" />
+                    </div>
                 </div>
             </div>
         </div>

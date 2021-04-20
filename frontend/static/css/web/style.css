@@ -141,6 +141,7 @@ header.header.sticky .top-navigation {padding-top:15px;}
 #accordion .card .card-body {font-size: 20px; font-weight: 300; padding: 0 1.25rem 1.25rem 2rem;}
 .faqs-wrap h4 {font-size: 26px; margin:40px 0px 15px 0px;}
 .text-link{ color: #13A0F0; display: inline-block; text-decoration: underline !important;}
+.text-link-centrestage{ color: #FFFFFF; display: inline-block; text-decoration: underline !important;}
 #accordion .card .card-header .btn:after{content: ""; position: absolute; right: 0px; top:15px; background: url(../../images/arrow.svg) left top no-repeat; width: 22px; height: 22px;}
 #accordion .card .card-header .btn.btn-link:after{transform: rotate(90deg); right:10px;}
 #accordion .card .card-header .btn.btn-link.collapsed:after{transform: rotate(0deg); right:0px;}

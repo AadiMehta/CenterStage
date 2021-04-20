@@ -19,7 +19,7 @@ class StudentDashboardEnrollments(TemplateView):
         context = super().get_context_data(**kwargs)
         enrollments = Enrollment.objects.filter(
             student=user.student_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
+        ).order_by('lesson_id', 'created_at').distinct('lesson_id', 'created_at')
         serializer = EnrollmentSerializer(enrollments, many=True)
         context['enrollments'] = serializer.data
         context['user'] = user
@@ -74,7 +74,7 @@ class StudentDashboardSchedulesPastSessions(TemplateView):
             Q(lessonslot__lesson_from__lte=tz_now) | Q(lessonslot__lesson_to__lte=tz_now),
             lesson__status=LessonStatuses.ACTIVE,
             student=user.student_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
+        ).order_by('lesson_id', 'created_at').distinct('lesson_id', 'created_at')
         serializer = EnrollmentSerializer(enrollments, many=True)
         context['enrollments'] = serializer.data
         context['user'] = self.request.user

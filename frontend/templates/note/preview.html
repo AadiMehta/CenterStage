@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<!-- Modal -->
+<div class="modal fade modal-finish" id="PublishLessonModal" tabindex="-1" aria-labelledby="PublishLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/finish-graphics.svg' %}" alt="" />
+            </div>
+            <h2>Thank you for completing your lesson</h2>
+            <h3>How was your overall experience?</h3>
+            <div class="rating-row">
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-fill.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt="" /></a>
+                <a href="#"><img src="{% static 'images/rating-blank.svg' %}" alt="" /></a>
+            </div>
+            <div class="form-group">
+                <div class="liner-inp"> 
+                <input type="text" class="form-control" placeholder="Your Feedback">
+                </div>
+            </div>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#share"><span>Finish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                {% comment %} <button type="button" class="btn btn-primary btn-lg btn-theme-liner">Report Issue</button> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="modal fade modal-share" id="share" tabindex="-1" aria-labelledby="shareLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <img src="{% static 'images/close.svg' %}" alt="" />
+          </button>
+        <div class="modal-body">
+            <div class="share-modal-wrap">
+                <div class="share-modal-left">
+                    <h3>Congratulations!</h3>
+                    <h4>You have successfully created your note / document</h4>
+
+                    <div class="sharecopy-link">
+                        <h2>Core JAVA Development</h2>
+                        <div class="sharecopy-inp">
+                            <input type="text" class="form-control" placeholder="https://www.centerstage.live/xyzjava/1548fghgytuj" />
+                            <button type="button" class="btn-theme">Copy</button>
+                        </div>
+                    </div>
+
+                        <div class="share-to"> 
+                            <h5>Share to</h5>
+                            <p>Share this lesson with your students now</p>
+                            <div class="social-icons">
+                                <a href="#"><img src="{%static 'images/whatsapp-icon.svg' %}" alt="" /></a>
+                                <a href="#"><img src="{%static 'images/telegram-icon.svg' %}" alt="" /></a>
+                                <a href="#"><img src="{%static 'images/facebook-icon.svg' %}" alt="" /></a>
+                                <a href="#"><img src="{%static 'images/linkedin-icon.svg' %}" alt="" /></a>
+                                <a href="#"><img src="{%static 'images/twitter-icon.svg' %}" alt="" /></a>
+                                <a href="#"><img src="{% static 'images/email-icon.svg' %}" alt="" /></a>
+                            </div>
+                        </div>
+
+                        <div class="btn-area mt-5 twobtn-wrap">
+                            <button type="button" id="startNow" class="btn btn-theme">Start Now</button>
+                        </div>
+                        
+                    
+                </div>
+                <div class="share-graphics">
+                    <img src="{% static 'images/share-graphics.svg' %}" alt="" />
+                </div>
+            </div>
+           
+           
+        </div>
+      </div>
+    </div>
+  </div> 
+
+<div class="boarding-sec">
+<div class="host-header">
+    <div class="host-header-left">
+        <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> <h2>Publish a note or Document</h2>
+    </div>
+</div>
+
+<div class="boarding-area">
+     <form action="" method="post">
+      {% csrf_token %}
+      {{ wizard.management_form }}
+    <div class="container">
+       <div class="boarding-wrap">
+        <div class="title-row"><h2>Note Preview</h2></div>
+        <div class="boarding-row">
+            <div class="boarding-left">
+                <div class="form-group">
+                    <label>Note or Document Name</label>
+                    <div class="content-area">
+                        {{form_data.name}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Note/Document Description</label>
+                    <div class="content-area">
+                       {{form_data.description}}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>{{form_data.language}}</label>
+                    <div class="content-area">
+                        <div class="search-tags">
+                            <a href="#" class="tag-link">English</a>
+                            <a href="#" class="tag-link">Spanish</a>
+                            <a href="#" class="tag-link">Hindi</a>
+                          </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Subscription Format</label>
+                    <div class="content-area">
+                        {{form_data.subscription_type}}
+                    </div>
+                </div>
+               
+                <div class="form-group">
+                    <label>Lesson Availability</label>
+                    <div class="content-area">
+                       {{form_data.is_private}}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Note/Document</label>
+                    {% for file in form_data.files %}
+                    <div class="note-doc">
+                       <div class="gray-box"><img src="{% static 'images/notes-gray.svg' %}" alt="" /></div>
+                       <span>documentname.ppt</span> <a href="#" class="icon-remove"><img src="{% static 'images/remove-icon.svg' %}" alt="" /></a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label>Drive Link</label>
+                    <div class="content-area italic-text">
+                       <a href="https://www.centrestage.live/drive1594878/docsghyft1548">{{form_data.drive_url}}</a>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Price</label>
+                    <div class="content-area">
+                        {% if form_data.price_currency == 'DOLLARS' %}${% endif %}{{form_data.price_value}} per Month
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Reading Time</label>
+                    <div class="content-area">
+                        {{form_data.reading_duration}} Hours
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Note Image</label>
+                            <div class="lession-img-video">
+                                <img src="{{form_data.cover_image}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>What Your Students Will Learn</label>
+                    <div class="content-area">
+                        <ul class="listStyle">
+                            {% for goal in form_data.goals %}
+                              <li>{{goal}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="btn-area"> 
+                    <button type="submit" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish"><span>Save &amp; Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                </div>
+
+                </div>
+
+            <div class="boarding-right">
+                <img src="{% static 'images/review-note.svg' %}" alt="" />
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}

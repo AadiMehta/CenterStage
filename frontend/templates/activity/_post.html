@@ -1,0 +1,32 @@
+<!-- 
+<div class="activity">
+  <div class="row">
+    <div class="activity-text col-xs-10">
+      {% autoescape off %}
+        {{ post.text }}
+      {% endautoescape %}
+    </div>
+  </div>
+</div> -->
+{% load static %}
+<head>
+<link href="{% static '/css/post/fb.css' %}" rel="stylesheet">
+</head>
+
+<div class="f-card">
+  <div class="reference">
+    <img class="reference-thumb" src="http://placehold.it/476x249" />
+    <div class="reference-content">
+      <div class="reference-title">{{post.title}}</div>
+      <div class="reference-subtitle">{{post.text}}</div>
+      <div class="reference-font">placeholder.it</div>
+    </div>
+  </div>
+  <div class="social">
+    <div class="social-content"></div>
+    <div class="social-buttons">
+      <span><i class="fa fa-thumbs-up"></i>Like</span>
+      <span><i class="fa fa-comment"></i>Comment</span>
+      <span><i class="fa fa-share"></i>Share</span></div>
+  </div>
+</div>

@@ -3,6 +3,9 @@
 function handleLCS2Proceed() {
   let isValid = true;
   $('#startDatePickerError').hide();
+  $('#sessionDatePickerError').hide();
+  $('#sessionStartTimePickerError').hide();
+  $('#sessionEndTimePickerError').hide();
   $('#endDatePickerError').hide();
   $('#MonStartTimeError').hide();
   $('#MonEndTimeError').hide();
@@ -22,48 +25,75 @@ function handleLCS2Proceed() {
   $('#pricePerSessionError').hide();
   $('#weeklyPriceError').hide();
   $('#monthlyPriceError').hide();
-  const startDate = $('#startDatepicker')[0].value;
-  const endDate = $('#endDatepicker')[0].value;
-  const timezone = $('#timezoneSelect')[0].value;
-  const $weekdaysInput = $('#weekdaysInput');
-  let weekDayList = $weekdaysInput[0].value ? $weekdaysInput[0].value.split(',') : [];
-
-  weekDayList.map((day) => {
-    console.log(day)
-    if (!$(`#${day}StartTime`)[0].value) {
-      $(`#${day}StartTimeError`).text('Please Provide Start Time');
-      $(`#${day}StartTimeError`).show()
-      isValid = false;      
+  if (sessionType === 'MULTI') {
+    let startDate, endDate, $weekdaysInput, weekDayList, timezone;
+    startDate = $('#startDatepicker')[0].value;
+    endDate = $('#endDatepicker')[0].value;
+    timezone = $('#timezoneSelect')[0].value;
+    $weekdaysInput = $('#weekdaysInput');
+    weekDayList = $weekdaysInput[0].value ? $weekdaysInput[0].value.split(',') : [];
+    weekDayList.map((day) => {
+      if (!$(`#${day}StartTime`)[0].value) {
+        $(`#${day}StartTimeError`).text('Please Provide Start Time');
+        $(`#${day}StartTimeError`).show()
+        isValid = false;      
+      }
+      if (!$(`#${day}EndTime`)[0].value) {
+        $(`#${day}EndTimeError`).text('Please Provide End Time');
+        $(`#${day}EndTimeError`).show()
+        isValid = false;      
+      }
+    })
+    if (!startDate) {
+      $('#startDatePickerError').text('Please Select Start Date');
+      $('#startDatePickerError').show()
+      isValid = false;
+    }  
+    if (!endDate) {
+      $('#endDatePickerError').text('Please Select End Date');
+      $('#endDatePickerError').show()
+      isValid = false;
     }
-    if (!$(`#${day}EndTime`)[0].value) {
-      $(`#${day}EndTimeError`).text('Please Provide End Time');
-      $(`#${day}EndTimeError`).show()
-      isValid = false;      
+    if (timezone === 'none') {
+      $('#timezoneSelectError').text('Please Select Timezone');
+      $('#timezoneSelectError').show()
+      isValid = false;
+    }  
+  } else {
+    let sessionDate, sessionStartTime, sessionEndTime;
+    sessionDate = $('#sessionDatepicker')[0].value;
+    sessionStartTime = $('#sessionStartTimePicker')[0].value;
+    sessionEndTime = $('#sessionEndTimePicker')[0].value;
+    timezone = $('#timezoneSelect')[0].value;
+    if (!sessionDate) {
+      $('#sessionDatePickerError').text('Please Select Session Date');
+      $('#sessionDatePickerError').show()
+      isValid = false;
     }
-  })
-  if (!startDate) {
-    $('#startDatePickerError').text('Please Select Start Date');
-    $('#startDatePickerError').show()
-    isValid = false;
+    if (!sessionStartTime) {
+      $('#sessionStartTimePickerError').text('Please Select Session Start Time');
+      $('#sessionStartTimePickerError').show()
+      isValid = false;
+    }
+    if (!sessionEndTime) {
+      $('#sessionEndTimePickerError').text('Please Select Session End Time');
+      $('#sessionEndTimePickerError').show()
+      isValid = false;
+    }
+    if (timezone === 'none') {
+      $('#timezoneSelectError').text('Please Select Timezone');
+      $('#timezoneSelectError').show()
+      isValid = false;
+    }  
   }
-  if (!endDate) {
-    $('#endDatePickerError').text('Please Select End Date');
-    $('#endDatePickerError').show()
-    isValid = false;
-  }
-  if (timezone === 'none') {
-    $('#timezoneSelectError').text('Please Select Timezone');
-    $('#timezoneSelectError').show()
-    isValid = false;
-  }
-
+  
   const priceType = $('#priceType')[0].value
   const priceCurrency = $(`#${priceType}Currency`)[0].value
   const priceValue = parseInt($(`#${priceType}Value`)[0].value)
   if (!priceCurrency || !priceValue) {
     $(`#${priceType}Error`).text('Please Provide Price');
     $(`#${priceType}Error`).show()
-    isValid = false;  
+    isValid = false;
   } else {
     $('#priceCurrency')[0].value = priceCurrency;
     $('#priceValue')[0].value = priceValue;
@@ -75,6 +105,7 @@ function handleLCS2Proceed() {
 }
 
 function calculateNumberOfSessions() {
+  if (sessionType !== 'MULTI') return;
   const startDate = $('#startDatepicker')[0].value;
   const endDate = $('#endDatepicker')[0].value;
   const $weekdaysInput = $('#weekdaysInput');
@@ -82,7 +113,8 @@ function calculateNumberOfSessions() {
 
   const startDateObj = dateFns.parse(startDate, 'MM/dd/yyyy', new Date());
   const endDateObj = dateFns.parse(endDate, 'MM/dd/yyyy', new Date());
-  const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  endDateObj.setHours(23,59,59,999);
+  const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   var result = dateFns.eachDay(
     startDateObj,
     endDateObj
@@ -128,8 +160,11 @@ function enablePriceCheck(name) {
 
 function disablePriceCheck(name) {
   $(`#${name}Check`)[0].checked = false;
+  $(`#${name}Currency`)[0].value = 'USD';
   $(`#${name}Currency`)[0].disabled = true;
   $(`#${name}Value`)[0].disabled = true;
+  $(`#${name}Value`).val(0);
+  $(`#${name}TotalPrice`).text('');
 }
 
 function handleLessonTimeSlotTypeSelect(event) {
@@ -137,6 +172,59 @@ function handleLessonTimeSlotTypeSelect(event) {
   $("#fixed-time-slot").removeClass('selected');
   $(event.target).addClass('selected');
   $("#slot_type").val(event.currentTarget.dataset.slotType);
+}
+
+function handleMonthlyPriceChange() {
+  const selectedCurrencyEl = $('#monthlyPriceCurrency')[0];
+  const selectedCurrency = selectedCurrencyEl.children[selectedCurrencyEl.selectedIndex]
+  const pricePerSessionValue = $('#monthlyPriceValue')[0].value;
+  const startDate = $('#startDatepicker').val()
+  const endDate = $('#endDatepicker').val()
+  const start = dateFns.parse(startDate, 'dd/MM/yyyy', new Date())
+  const end = dateFns.parse(endDate, 'dd/MM/yyyy', new Date())
+  const daysCount = dateFns.differenceInCalendarDays(end, start)
+  let monthCount = 1;
+  if (daysCount > 1 && daysCount < 31) {
+    monthCount = 1
+  } else if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
+    monthCount = dateFns.differenceInCalendarMonths(end, start)
+  }
+  const totalPrice = pricePerSessionValue * monthCount;
+  const {symbol} = selectedCurrency.dataset;
+  $('#totalPrice')[0].value = totalPrice;
+  $('#monthlyPriceTotalPrice').text(`${symbol} ${totalPrice}`);
+}
+
+function handleWeeklyPriceChange() {
+  const selectedCurrencyEl = $('#weeklyPriceCurrency')[0];
+  const selectedCurrency = selectedCurrencyEl.children[selectedCurrencyEl.selectedIndex]
+  const pricePerSessionValue = $('#weeklyPriceValue')[0].value;
+  const startDate = $('#startDatepicker').val()
+  const endDate = $('#endDatepicker').val()
+  const start = dateFns.parse(startDate, 'dd/MM/yyyy', new Date())
+  const end = dateFns.parse(endDate, 'dd/MM/yyyy', new Date())
+  let weekCount = 1;
+  if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
+    weekCount = dateFns.differenceInCalendarWeeks(end, start)  
+  }
+  const totalPrice = pricePerSessionValue * weekCount;
+  const {symbol} = selectedCurrency.dataset;
+  $('#totalPrice')[0].value = totalPrice;
+  $('#weeklyPriceTotalPrice').text(`${symbol} ${totalPrice}`);
+}
+
+function handlePricePerSessionChange() {
+  const selectedCurrencyEl = $('#pricePerSessionCurrency')[0];
+  const selectedCurrency = selectedCurrencyEl.children[selectedCurrencyEl.selectedIndex]
+  const pricePerSessionValue = $('#pricePerSessionValue')[0].value;
+  let noOfSessions = 1;
+  if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
+    noOfSessions = parseInt($('#noOfSessions')[0].value);
+  }
+  const totalPrice = pricePerSessionValue * noOfSessions;
+  const {symbol} = selectedCurrency.dataset;
+  $('#totalPrice')[0].value = totalPrice;
+  $('#pricePerSessionTotalPrice').text(`${symbol} ${totalPrice}`);
 }
 
 // ****** End of Event Handlers ****** 
@@ -149,6 +237,17 @@ function init() {
   $('.week-days').click(handleSesionDaysSelect);
 
   var array = ["2021-01-15", "2021-01-16", "2021-01-17"];
+  $( "#sessionDatepicker" ).datepicker({
+    minDate: 0,
+    beforeShowDay: function(date){
+      var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+      return [ array.indexOf(string) == -1 ]
+    },
+    onSelect: function() {
+      $('#startDatePickerError').text('');
+      calculateNumberOfSessions();
+    }
+  });
   $( "#startDatepicker" ).datepicker({
     minDate: 0,
     beforeShowDay: function(date){
@@ -156,6 +255,7 @@ function init() {
       return [ array.indexOf(string) == -1 ]
     },
     onSelect: function() {
+      $('#startDatePickerError').text('');
       calculateNumberOfSessions();
     }
   });
@@ -166,15 +266,14 @@ function init() {
       return [ array.indexOf(string) == -1 ]
     },
     onSelect: function() {
+      $('#endDatePickerError').text('');
       calculateNumberOfSessions();
     }
   });
   $('.timepicker').timepicker({
     'timeFormat': 'h:i A',
     'scrollDefault': 'now',
-    'step': function(i) {
-      return (i%2) ? 15 : 45;
-    }
+    'step': 15
   });
 
   $('#pricePerSessionCheck').change(function() {
@@ -245,47 +344,12 @@ function init() {
     }
   });
 
-  $('#pricePerSessionValue').change(function() {
-    const selectedCurrency = $('#pricePerSessionCurrency')[0].value;
-    const pricePerSessionValue = $('#pricePerSessionValue')[0].value;
-    const noOfSessions = parseInt($('#noOfSessions')[0].value);
-    const totalPrice = pricePerSessionValue * noOfSessions;
-    const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
-    $('#totalPrice')[0].value = totalPrice;
-    $('#pricePerSessionTotalPrice').text(`${currency} ${totalPrice}`);
-  })
-
-  $('#weeklyPriceValue').change(function() {
-    const selectedCurrency = $('#monthlyPriceCurrency')[0].value;
-    const pricePerSessionValue = $('#weeklyPriceValue')[0].value;
-    const startDate = $('#startDatepicker').val()
-    const endDate = $('#endDatepicker').val()
-    const start = dateFns.parse(startDate, 'dd/MM/yyyy', new Date())
-    const end = dateFns.parse(endDate, 'dd/MM/yyyy', new Date())
-    const weekCount = dateFns.differenceInCalendarWeeks(end, start)
-    const totalPrice = pricePerSessionValue * weekCount;
-    const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
-    $('#totalPrice')[0].value = totalPrice;
-    $('#weeklyPriceTotalPrice').text(`${currency} ${totalPrice}`);
-  })
-
-  $('#monthlyPriceValue').change(function() {
-    const selectedCurrency = $('#monthlyPriceCurrency')[0].value;
-    const pricePerSessionValue = $('#monthlyPriceValue')[0].value;
-    const startDate = $('#startDatepicker').val()
-    const endDate = $('#endDatepicker').val()
-    const start = dateFns.parse(startDate, 'dd/MM/yyyy', new Date())
-    const end = dateFns.parse(endDate, 'dd/MM/yyyy', new Date())
-    const daysCount = dateFns.differenceInCalendarDays(end, start)
-    let monthCount = dateFns.differenceInCalendarMonths(end, start)
-    if (daysCount < 31 && daysCount > 1) {
-      monthCount = 1
-    }
-    const totalPrice = pricePerSessionValue * monthCount;
-    const currency = selectedCurrency === 'DOLLARS' ? '$' : '₹';
-    $('#totalPrice')[0].value = totalPrice;
-    $('#monthlyPriceTotalPrice').text(`${currency} ${totalPrice}`);
-  })
+  $('#pricePerSessionCurrency').change(handlePricePerSessionChange)
+  $('#pricePerSessionValue').change(handlePricePerSessionChange)
+  $('#weeklyPriceCurrency').change(handleWeeklyPriceChange)
+  $('#weeklyPriceValue').change(handleWeeklyPriceChange)
+  $('#monthlyPriceCurrency').change(handleMonthlyPriceChange)
+  $('#monthlyPriceValue').change(handleMonthlyPriceChange)
 
   $('#lcs2Proceed').click(handleLCS2Proceed);
   /*
@@ -294,6 +358,27 @@ function init() {
   $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
     $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
   }
+
+  $('#timezoneSelect').change((event) => {
+    if (event.target.value !== 'none') {
+      $('#timezoneSelectError').text('');
+    }
+  })
+  $('#pricePerSessionValue').bind('keyup input', function(event){
+    if (event.target.value) {
+      $('#pricePerSessionError').text('');
+    }
+  });
+  $('#weeklyPriceValue').bind('keyup input', function(event){
+    if (event.target.value) {
+      $('#weeklyPriceError').text('');
+    }
+  });
+  $('#monthlyPriceValue').bind('keyup input', function(event){
+    if (event.target.value) {
+      $('#monthlyPriceError').text('');
+    }
+  });
 
 function updateCopySameTime($eventTarget) {
   if ($eventTarget.hasClass('active')) {

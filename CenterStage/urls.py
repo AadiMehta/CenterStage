@@ -14,7 +14,6 @@ Including another URL conf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.conf.urls import url
 from rest_framework import permissions
@@ -23,24 +22,36 @@ from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
 from notifications.views import health_check
+from notifications.views import send_mail_signup, get_notification_count
 from users.views import (
     ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView, SubdomainAvailabilityAPIView,
-    TeacherRegister, StudentRegister, StudentProfileView
+    TeacherRegister, StudentRegister, StudentProfileView,
+    ObtainAuthToken, Logout, Profile, SendOtp, VerifyOtp, TeacherProfileView, SubdomainAvailabilityAPIView,
+    TeacherRegister, StudentRegister
+)
+from payments.views import (
+    PaymentAccountView, PaymentDisconnectAPIVIew, LessonPaymentView,
+    LessonPaymentWebhookView, LessonPaymentCompleteView
 )
 from zoom.views import ZoomConnectAPIView, ZoomDisconnectAPIView, ZoomMeetingAPIView
 from frontend.views.main import (
-    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs
+    HomeTemplateView, TermsAndConditionsView, PrivacyPolicyView, Faqs, ZoomPolicyView, contact
 )
 from frontend.views.calendar import (
     AuthorizeGoogleCalendar, GoogleCalendarCallback, GoogleDisconnectAPIView
+)
+from frontend.views.auth import (
+    SignupTemplateView, LoginTemplateView
 )
 from frontend.views.onboarding import (
     StudentOnboardStep1TemplateView, OnboardStep1TemplateView, OnboardStep2TemplateView,
     OnboardStep3TemplateView, AccountConnectedTemplate
 )
-from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI
+from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI, LikeLessonAPIView
+from frontend.views.post import NewPost
+from frontend.views.note import AcceptNoteFileAPI, NoteCreateWizard
 from frontend.views.schedule import ScheduleCreateWizard
-from frontend.views.booking import BookLessonWizard
+from frontend.views.booking import BookLessonWizard, BookLessonPyament
 
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
@@ -53,7 +64,22 @@ from frontend.views.studentdashboard import (
     StudentDashboardSchedulesPastSessions, StudentDashboardSchedulesUpcomingSessions
 )
 from engine.views import LessonAPIView, MeetingAPIView
-from frontend.views.public import TeacherPageView
+from frontend.views.public import (
+    TeacherPageView, SubmitTeacherReview, RecommendTeacherAPIView,
+    FollowTeacherAPIView, LikeTeacherAPIView
+)
+
+from frontend.views.dashboard import (
+    DashboardSchedulesUpcomingSessions, DashboardStatistics, DashboardNotes, DashboardPosts
+)
+from engine.views import LessonAPIView, MeetingAPIView, PostAPIView
+from chat.api import SendMessageAPI, MessageContacts, MessageModelViewSet, MessageView, GetMessages
+from rest_framework.routers import DefaultRouter
+from django.urls import path, include
+# from zoom.views import ZoomVerifyView
+
+router = DefaultRouter()
+router.register(r'message', MessageModelViewSet, basename='message-api')
 
 
 schema_view = get_schema_view(
@@ -74,9 +100,11 @@ admin.site.index_title = 'CenterStage Admin Area'               # default: "Site
 admin.site.site_title = 'CenterStage Admin'
 
 urlpatterns = [
-    # path('admin/', admin.site.urls, name="admin"),
+    path('admin/', admin.site.urls, name="admin"),
 
     path('health/check/', health_check, name="health_check"),
+    path('api/send_mail/',send_mail_signup, name="send_mail"),
+    path('api/notification_count',get_notification_count, name="get_notification_count"),
 
     # redoc and swagger documents
     url(r'swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
@@ -90,6 +118,16 @@ urlpatterns = [
     path('api/otp/send/', SendOtp.as_view()),
     path('api/otp/verify/', VerifyOtp.as_view()),
 
+    # path('verifyzoom/', ZoomVerifyView.as_view()),
+
+    # Message APIs
+    path('api/message/contacts/', MessageContacts.as_view()),
+    path('api/getmessages/', GetMessages.as_view()),
+    path(r'api/messages/', include(router.urls)),
+    # path('api/message/conversations/', MessageModelViewSet.as_view()),
+    # path('api/message/send/', SendMessageAPI.as_view()),
+    # path('api/message/get/', MessageView.as_view()),
+
     # Teacher APIs
     path('api/teacher/register/', TeacherRegister.as_view()),
     path('api/teacher/profile/', TeacherProfileView.as_view()),
@@ -101,6 +139,10 @@ urlpatterns = [
     # Student APIs
     path('api/student/register/', StudentRegister.as_view()),
     path('api/student/profile/', StudentProfileView.as_view()),
+
+    # payment APIs
+    path('api/payments/add/', PaymentAccountView.as_view()),
+    path('api/payments/remove/', PaymentDisconnectAPIVIew.as_view()),
 
     # zoom APIs
     path('api/profile/zoom/connect', ZoomConnectAPIView.as_view(), name="zoom-connect"),
@@ -114,9 +156,17 @@ urlpatterns = [
     # Lesson APIs
     path('api/lesson/', LessonAPIView.as_view()),
     path('api/lesson/upload/', AcceptFileAPI.as_view()),
+    path('api/teacher/like/', LikeLessonAPIView.as_view()),
+    path('api/note/upload/', AcceptNoteFileAPI.as_view()),
 
     # Meeting APIs
     path('api/meeting/', MeetingAPIView.as_view()),
+
+    # Teacher Page API
+    path('api/teacher/review/', SubmitTeacherReview.as_view()),
+    path('api/teacher/recommend/', RecommendTeacherAPIView.as_view()),
+    path('api/teacher/follow/', FollowTeacherAPIView.as_view()),
+    path('api/teacher/like/', LikeTeacherAPIView.as_view()),
 
     # Onboarding Templates
     path('account/success', AccountConnectedTemplate.as_view(), name="account-connected-success"),
@@ -129,11 +179,18 @@ urlpatterns = [
 
     # Lesson Wizard
     path('lesson/new', LessonCreateWizard.as_view(LessonCreateWizard.FORMS), name="new-lesson"),
+    path('note/new', NoteCreateWizard.as_view(NoteCreateWizard.FORMS), name="new-note"),
     path('schedule/new', ScheduleCreateWizard.as_view(ScheduleCreateWizard.FORMS), name="new-schedule"),
 
     # Book Lesson Wizard
+    path('lesson/<uuid:lesson_uuid>', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="lesson-page"),
     path('lesson/<uuid:lesson_uuid>/book', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="book-lesson"),
+    path('lesson/<uuid:lesson_uuid>/payment', BookLessonPyament.as_view(), name="book-lesson-payment"),
 
+    # lesson order
+    path('lesson-order/create-payment-intent', LessonPaymentView.as_view(), name="book-lesson-payment"),
+    path('lesson-order/payment-complete', LessonPaymentCompleteView.as_view(), name="book-lesson-payment-complete"),
+    path('lesson-order/payment-webhook', LessonPaymentWebhookView.as_view(), name="book-lesson-webhook"),
 
     # Dashboard Templates
     path('student/dashboard', StudentDashboardEnrollments.as_view(), name="student-dashboard-main"),
@@ -152,6 +209,9 @@ urlpatterns = [
     # Dashboard Templates
     path('dashboard', DashboardLessons.as_view(), name="dashboard-main"),
     path('dashboard/lessons', DashboardLessons.as_view(), name="dashboard-lessons"),
+    path('dashboard/notes', DashboardNotes.as_view(), name="dashboard-notes"),
+    path('dashboard/posts', DashboardPosts.as_view(), name="dashboard-posts"),
+    # path('dashboard/feed', DashboardFeed.as_view(), name="dashboard-feed"),
     path('dashboard/account/alerts', DashboardAccountAlerts.as_view(), name="dashboard-account-alerts"),
     path('dashboard/account/info', DashboardAccountInfo.as_view(), name="dashboard-account-info"),
     path('dashboard/account/payment', DashboardAccountPayment.as_view(), name="dashboard-account-payment"),
@@ -163,13 +223,19 @@ urlpatterns = [
     path('dashboard/statistics', DashboardStatistics.as_view(), name="dashboard-statistics"),
     path('dashboard/my-students', DashboardStudents.as_view(), name="dashboard-students"),
 
-    path('teacherpagetest', TeacherPageView.as_view(), name="teacher-page"),
+    path('centrestage/teacherpagetest', TeacherPageView.as_view(), name="teacher-page"),
 
     # Home Page Template
     path('', HomeTemplateView.as_view(), name="homepage"),
+    path('signup', SignupTemplateView.as_view(), name="signup"),
+    path('login', LoginTemplateView.as_view(), name="login"),
     path('centrestage/terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
     path('centrestage/privacy-policy', PrivacyPolicyView.as_view(), name="privacy-policy"),
+    path('centrestage/zoom-policy', ZoomPolicyView.as_view(), name="zoom-policy"),
     path('centrestage/faqs', Faqs.as_view(), name="faqs"),
+    path('centrestage/support', contact, name="support"),
+    path('terms-and-conditions', TermsAndConditionsView.as_view(), name="terms-and-conditions"),
+    path('create-post/',NewPost,name='wall-posts')
 ]
 
 if settings.DEBUG:

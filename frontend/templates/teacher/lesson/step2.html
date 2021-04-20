@@ -49,240 +49,279 @@
                </div>
                <div class="selectdatetile-wrap">
                   <div class="row">
-                     <div class="col-lg-6">
-                        <div class="form-group">
-                           <label>Start Date <span class="required">*</span></label>
-                           <div class="liner-select-drop">
-                              <input type="text" id="startDatepicker" name="step2-start_date">
-                              {% comment %} <select class="form-control" name="step2-start_date" id="datepicker">
-                              </select> {% endcomment %}
+                     {% if form_data.session_type == 'ONGOING' or form_data.session_type == 'SINGLE' %}
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label>Session Date <span class="required">*</span></label>
+                              <div class="liner-select-drop">
+                                 <input type="text" id="sessionDatepicker" name="step2-session_date">
+                                 {% comment %} <select class="form-control" name="step2-start_date" id="datepicker">
+                                 </select> {% endcomment %}
+                              </div>
+                              <p id="sessionDatePickerError" style="color:red;"></p>
                            </div>
-                           <p id="startDatePickerError" style="color:red;"></p>
+                        </div>
+                     {% else %}
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label>Start Date <span class="required">*</span></label>
+                              <div class="liner-select-drop">
+                                 <input type="text" id="startDatepicker" name="step2-start_date">
+                                 {% comment %} <select class="form-control" name="step2-start_date" id="datepicker">
+                                 </select> {% endcomment %}
+                              </div>
+                              <p id="startDatePickerError" style="color:red;"></p>
+                           </div>
+                        </div>
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label>End Date <span class="required">*</span></label>
+                              <div class="liner-select-drop">
+                                 <input type="text" id="endDatepicker" name="step2-end_date">
+                                 {% comment %} 
+                                 <select class="form-control" name="step2-end_date">
+                                    <option>Set End Date</option>
+                                 </select>
+                                 {% endcomment %}
+                              </div>
+                              <p id="endDatePickerError" style="color:red;"></p>
+                           </div>
+                        </div>
+                     {% endif %}
+                  </div>
+                  {% if form_data.session_type in 'SINGLE,ONGOING' %}
+                     <div class="row">
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label>Session Start Time<span class="required"> *</span> </label>
+                              <div class="select-day-cald">
+                                 <input type="text" placeholder="Select Start Time" name="step2-session_start_time" id="sessionStartTimePicker" class="timepicker" />
+                              </div>
+                              <p id="sessionStartTimePickerError" style="color:red;"></p>
+                           </div>
+                        </div>
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label>Session End Time<span class="required"> *</span> </label>
+                              <div class="select-day-cald">
+                                 <input type="text" placeholder="Select End Time" name="step2-session_end_time" id="sessionEndTimePicker" class="timepicker" />
+                              </div>
+                              <p id="sessionEndTimePickerError" style="color:red;"></p>
+                           </div>
                         </div>
                      </div>
-                     <div class="col-lg-6">
-                        <div class="form-group">
-                           <label>End Date <span class="required">*</span></label>
-                           <div class="liner-select-drop">
-                              <input type="text" id="endDatepicker" name="step2-end_date">
-                              {% comment %} 
-                              <select class="form-control" name="step2-end_date">
-                                 <option>Set End Date</option>
-                              </select>
-                              {% endcomment %}
-                           </div>
-                           <p id="endDatePickerError" style="color:red;"></p>
+                  {% else %}
+                     <div class="form-group">
+                        <label>Session Schedule<span class="required"> *</span> </label>
+                        <div class="select-day-cald">
+                           {% comment %} <img src="{% static 'images/Calendar.svg' %}" alt="" /> {% endcomment %}
                         </div>
                      </div>
-                  </div>
-                  <div class="form-group">
-                     <label>Session Schedule<span class="required"> *</span> </label>
-                     <div class="select-day-cald">
-                        {% comment %} <img src="{% static 'images/Calendar.svg' %}" alt="" /> {% endcomment %}
+                     <div class="session-days form-group table-responsive">
+                        <table width="100%">
+                           <tr>
+                           <thead>
+                              <th>Session Days</th>
+                              <th>Start Time <span class="required"> *</span></th>
+                              <th>End Time <span class="required"> *</span></th>
+                           </thead>
+                           <button type="button" class="select-btn2" id="copySameTime" style="width:auto;">Copy Same Time</button>
+                           <input id="weekdaysInput" name="step2-weekdays" style="display:none"/>
+                           <tr>
+                              <td>
+                              <button type="button" class="select-btn2 week-days" data-weekday="Mon">Mon</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-mon_start_time" class="timepicker validatestarttime" id="MonStartTime" data-check="MonEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="MonStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-mon_end_time" class="timepicker validateendtime" id="MonEndTime" data-check="MonStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="MonEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 week-days" data-weekday="Tue">Tue</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-tue_start_time" class="timepicker validatestarttime" id="TueStartTime" data-check="TueEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="TueStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-tue_end_time" class="timepicker validateendtime" id="TueEndTime" data-check="TueStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="TueEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 week-days" data-weekday="Wed">Wed</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-wed_start_time" class="timepicker validatestarttime" id="WedStartTime" data-check="WedEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="WedStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-wed_end_time" class="timepicker validateendtime" id="WedEndTime" data-check="WedStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="WedEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 week-days" data-weekday="Thu">Thu</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-thu_start_time" class="timepicker validatestarttime" id="ThuStartTime" data-check="ThuEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="ThuStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-thu_end_time" class="timepicker validateendtime" id="ThuEndTime" data-check="ThuStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="ThuEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 week-days" data-weekday="Fri">Fri</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-fri_start_time" class="timepicker validatestarttime" id="FriStartTime" data-check="FriEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="FriStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-fri_end_time" class="timepicker validateendtime" id="FriEndTime" data-check="FriStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="FriEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 week-days" data-weekday="Sat">Sat</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-sat_start_time" class="timepicker validatestarttime" id="SatStartTime" data-check="SatEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="SatStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-sat_end_time" class="timepicker validateendtime" id="SatEndTime" data-check="SatStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="SatEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td><button type="button" class="select-btn2 week-days" data-weekday="Sun">Sun</button></td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-sun_start_time" class="timepicker validatestarttime" id="SunStartTime" data-check="SunEndTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="SunStartTimeError" style="color:red;"></p>
+                              </td>
+                              <td>
+                                 <div class="liner-select-drop">
+                                    <input type="text" placeholder="Select Time" name="step2-sun_end_time" class="timepicker validateendtime" id="SunEndTime" data-check="SunStartTime" disabled />
+                                    {% comment %} 
+                                    <select class="form-control">
+                                       <option>Select Time</option>
+                                    </select>
+                                    {% endcomment %}
+                                 </div>
+                                 <p id="SunEndTimeError" style="color:red;"></p>
+                              </td>
+                           </tr>
+                           </tr>
+                        </table>
                      </div>
-                  </div>
-                  <div class="session-days form-group table-responsive">
-                     <table width="100%">
-                        <tr>
-                        <thead>
-                           <th>Session Days</th>
-                           <th>Start Time <span class="required"> *</span></th>
-                           <th>End Time <span class="required"> *</span></th>
-                        </thead>
-                        <button type="button" class="select-btn2" id="copySameTime" style="width:auto;">Copy Same Time</button>
-                        <input id="weekdaysInput" name="step2-weekdays" style="display:none"/>
-                        <tr>
-                           <td>
-                           <button type="button" class="select-btn2 week-days" data-weekday="Mon">Mon</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-mon_start_time" class="timepicker validatestarttime" id="MonStartTime" data-check="MonEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="MonStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-mon_end_time" class="timepicker validateendtime" id="MonEndTime" data-check="MonStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="MonEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Tue">Tue</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-tue_start_time" class="timepicker validatestarttime" id="TueStartTime" data-check="TueEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="TueStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-tue_end_time" class="timepicker validateendtime" id="TueEndTime" data-check="TueStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="TueEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Wed">Wed</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-wed_start_time" class="timepicker validatestarttime" id="WedStartTime" data-check="WedEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="WedStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-wed_end_time" class="timepicker validateendtime" id="WedEndTime" data-check="WedStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="WedEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Thu">Thu</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-thu_start_time" class="timepicker validatestarttime" id="ThuStartTime" data-check="ThuEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="ThuStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-thu_end_time" class="timepicker validateendtime" id="ThuEndTime" data-check="ThuStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="ThuEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Fri">Fri</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-fri_start_time" class="timepicker validatestarttime" id="FriStartTime" data-check="FriEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="FriStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-fri_end_time" class="timepicker validateendtime" id="FriEndTime" data-check="FriStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="FriEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Sat">Sat</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-sat_start_time" class="timepicker validatestarttime" id="SatStartTime" data-check="SatEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="SatStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-sat_end_time" class="timepicker validateendtime" id="SatEndTime" data-check="SatStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="SatEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        <tr>
-                           <td><button type="button" class="select-btn2 week-days" data-weekday="Sun">Sun</button></td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-sun_start_time" class="timepicker validatestarttime" id="SunStartTime" data-check="SunEndTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="SunStartTimeError" style="color:red;"></p>
-                           </td>
-                           <td>
-                              <div class="liner-select-drop">
-                                 <input type="text" placeholder="Select Time" name="step2-sun_end_time" class="timepicker validateendtime" id="SunEndTime" data-check="SunStartTime" disabled />
-                                 {% comment %} 
-                                 <select class="form-control">
-                                    <option>Select Time</option>
-                                 </select>
-                                 {% endcomment %}
-                              </div>
-                              <p id="SunEndTimeError" style="color:red;"></p>
-                           </td>
-                        </tr>
-                        </tr>
-                     </table>
-                  </div>
-                  <div class="form-group">
-                     <label>Number of Sessions</label>
-                     <div class="liner-inp"> 
-                        <input type="text" name="step2-no_of_sessions" id="noOfSessions" class="form-control" placeholder="00">
+                  {% endif %}
+                  {% if form_data.session_type != 'ONGOING' %}
+                     <div class="form-group">
+                        <label>Number of Sessions</label>
+                        <div class="liner-inp"> 
+                           <input type="text" name="step2-no_of_sessions" id="noOfSessions" class="form-control" placeholder="00" value="{% if form_data.session_type in 'SINGLE' %}1{% else %}0{% endif %}" disabled>
+                        </div>
                      </div>
-                  </div>
+                  {% endif %}
                   <div class="form-group">
                      <label>Time Zone <span class="required">*</span></label>
                      <div class="liner-select-drop">
                         <select class="form-control" name="step2-timezone" id="timezoneSelect" >
                            <option value="none">Select Time Zone</option>
                            {% for timezone in timezone_options %}
-                              <option value="{{timezone}}">{{timezone}}</option>
+                              <option value="{{timezone.value}}">{{timezone.label}}</option>
                            {% endfor %}
                         </select>
                      </div>
@@ -310,7 +349,7 @@
                                  <div class="col-lg-5 liner-select-drop">
                                     <select class="form-control" id="pricePerSessionCurrency" >
                                        {% for currency in currency_options %}
-                                          <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                          <option value="{{currency.value}}" data-symbol="{{currency.symbol}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
                                        {% endfor %}
                                     </select>
                                  </div>
@@ -345,7 +384,7 @@
                                  <div class="col-lg-5 liner-select-drop">
                                     <select class="form-control" id="weeklyPriceCurrency" disabled >
                                        {% for currency in currency_options %}
-                                          <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                          <option value="{{currency.value}}" data-symbol="{{currency.symbol}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
                                        {% endfor %}
                                     </select>
                                  </div>
@@ -380,7 +419,7 @@
                                  <div class="col-lg-5 liner-select-drop">
                                     <select class="form-control" id="monthlyPriceCurrency" disabled >
                                        {% for currency in currency_options %}
-                                          <option value="{{currency.value}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
+                                          <option value="{{currency.value}}" data-symbol="{{currency.symbol}}" {% if currency.value == 'USD' %}selected{% endif %}>{{currency.label}}</option>
                                        {% endfor %}
                                     </select>
                                  </div>
@@ -420,6 +459,9 @@
 </div>
 {% endblock %}
 {% block script %}
+   <script>
+      var sessionType = "{{form_data.session_type}}";
+   </script>
    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
    <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>

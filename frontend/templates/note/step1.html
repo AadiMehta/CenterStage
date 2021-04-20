@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link href="{% static '/css/dashboard/style.css' %}" rel="stylesheet">
+<link href="{% static '/css/dashboard/media.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<style>
+.selectct-sessionsNom {display: flex; margin-top:2px; flex-wrap: wrap;}
+.select-sessions-col {display: flex;  flex-wrap: wrap;  width: calc(33.333% - 15px); align-self: flex-start; margin:0 15px 15px 0;}
+.select-sessions-col:last-child{margin-right: 0px;}
+</style>
+
+<div class="boarding-sec">
+<div class="host-header">
+    <div class="host-header-left">
+        <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button> <h2>Publish a note or Document</h2>
+    </div>
+    <div class="board-process">
+        <div class="board-num"><span class="active">01</span>/03</div>
+        <span class="board-process-txt">Note Info</span>
+    </div>
+</div>
+
+<div class="boarding-area">
+    <div class="container">
+       <div class="boarding-wrap">
+        <div class="title-row"><h2>Note Info</h2></div>
+        <div class="boarding-row">
+            <div class="boarding-left">
+                <form id="step1" action="" method="post">
+                  {% csrf_token %}
+                  {{ wizard.management_form }}
+                <div class="form-group">
+                    <div class="input-area">
+                        <label>Title <span>*</span></label>
+                        <div class="liner-inp"> 
+                            <input id="noteName" name="step1-name" type="text" class="form-control" placeholder="Note name" value="{{ wizard.form.name.value|default_if_none:'' }}" />
+                        </div>
+                        <p id="noteNameError" style="color:red;"></p>
+                     </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-area">
+                    <label>Note Description <span>*</span></label>
+                    <div class="liner-inp"> 
+                        <input id="noteDescription" name="step1-description" type="text" class="form-control" placeholder="Description here" value="{{ wizard.form.description.value|default_if_none:'' }}" />
+                    </div>
+                    <p id="noteDescriptionError" style="color:red;"></p>
+                </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-area">
+                        <label>Note Language<span>*</span></label>
+                        <div class="liner-select-drop">
+                           <select id="noteLanguage" name="step1-language" class="form-control">
+                              <option value="none">Set language</option>
+                              <option value="english" {% if wizard.form.language.value == "english" %}selected{% endif %}>English</option>
+                              <option value="hindi" {% if wizard.form.language.value == "hindi" %}selected{% endif %}>Hindi</option>
+                           </select>
+                        </div>
+                        <p id="noteLanguageError" style="color:red;"></p>
+                     </div>
+                </div>           
+                <div class="form-group">
+                    <label>Subscription Format <span>*</span></label>
+                    <input id="subscriptionType" name="step1-subscription_type" type="hidden" value="{{wizard.form.note_type.value|default_if_none:'ONETIME'}}">
+                    <div class="selectct-sessionsNom" id="noteType" >
+                        <div class="select-sessions-col">
+                            <button id="oneTimeSubscription" type="button" class="btn-select-session {% if wizard.form.note_type.value == None or wizard.form.note_type.value == 'ONETIME' %}selected{% endif %}" data-note-type="ONETIME">One Time</button>
+                        </div>
+                        <div class="select-sessions-col">
+                            <button id="weeklySubscription" type="button" class="btn-select-session {% if wizard.form.note_type.value == 'WEEKLY' %}selected{% endif %}" data-note-type="WEEKLY">Weekly</button>
+                        </div>
+                        <div class="select-sessions-col">
+                            <button id="monthlySubscription" type="button" class="btn-select-session {% if wizard.form.note_type.value == 'MONTHLY' %}selected{% endif %}" data-note-type="MONTHLY">Monthly</button>
+                        </div>
+                        <div class="select-sessions-col">
+                            <button id="annualSubscription" type="button" class="btn-select-session {% if wizard.form.note_type.value == 'ANNUAL' %}selected{% endif %}" data-note-type="ANNUAL">Annual</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-area"> 
+                    <button type="button" id="nts1Proceed" class="btn btn-primary btn-lg btn-theme"><span>Proceed</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
+                </div>
+            </form>
+            </div>
+            <div class="boarding-right">
+                <img src="{% static 'images/create-note01.svg' %}" alt="" />
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+{% block script %}
+    <script src="{% static '/js/note/step1.js' %}" type="text/javascript"></script> 
+{% endblock %}

@@ -27,7 +27,9 @@ load_dotenv(dotenv_path=env_path)
 SECRET_KEY = 'z(3*uqch79bmakbwp1g&#k&#ik%!g(r!bzk_6vnooi!#4y-&b8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
+DEBUG = True 
+# if sys.platform == "win32" or os.getenv('DEPLOY_ENV') else False
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,19 +42,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
     'phonenumber_field',
     'corsheaders',
     'django_extensions',
+    'stream_django',
+    'channels',
 
     # project specific apps
+    'chat',
     'frontend',
     'users',
     'engine',
     'notifications',
-    'zoom'
+    'zoom',
+    'payments',
+
 ]
 
 MIDDLEWARE = [
@@ -67,12 +75,14 @@ MIDDLEWARE = [
     'CenterStage.middleware.general_checks.CheckOnboarding',
 ]
 
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'CenterStage.urls'
 
 API_URL = '/api'
 TEACHER_TEMPLATES_PATH = '/teacher'
+LESSON_PAGES_PATH = "/lesson"
 STUDENT_TEMPLATES_PATH = '/student'
 CENTERSTAGE_STATIC_PATH = "/centrestage"
 
@@ -96,9 +106,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CenterStage.wsgi.application'
 
-SCHEME = 'https'
-SITE_URL = 'centrestage.live'
-BASE_URL = '{}://www.{}'.format(SCHEME, SITE_URL)
+if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
+    SCHEME = 'http'
+    SITE_URL = 'localhost'
+    PORT = 8000
+    BASE_URL = '{}://{}:{}'.format(SCHEME, SITE_URL, 8000)
+    SESSION_COOKIE_DOMAIN = 'localhost'
+else:
+    SCHEME = 'https'
+    SITE_URL = 'centrestage.live'
+    BASE_URL = '{}://{}'.format(SCHEME, SITE_URL)
+    SESSION_COOKIE_DOMAIN = ".{}".format(SITE_URL)
+    SESSION_COOKIE_SECURE = True
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -106,7 +125,7 @@ if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'centerstage',
+            'NAME': 'cstestdb',
             'USER': 'postgres',
             'PASSWORD': 'root12345',
             'HOST': 'localhost',
@@ -172,7 +191,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False # Temporary Set to False on Jan 26 for ZoomMeetingAPIView
+USE_TZ = False  # Temporary Set to False on Jan 26 for ZoomMeetingAPIView
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -192,7 +211,10 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
 }
 
 """
@@ -213,6 +235,24 @@ REDOC_SETTINGS = {
    'LAZY_RENDERING': False,
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgiref.inmemory.ChannelLayer",
+        "ROUTING": "chat.routing.channel_routing",
+    },
+}
+
+ASGI_APPLICATION = 'CenterStage.routing.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+MESSAGES_TO_LOAD = 20
 
 """
 Settings for AWS account
@@ -225,7 +265,7 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_BUCKET_NAME")
 
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
-AWS_S3_REGION_NAME = 'us-east-1'
+AWS_S3_REGION_NAME = 'ap-south-1'
 
 AWS_DEFAULT_ACL = None
 
@@ -246,6 +286,10 @@ ZOOM_CLIENT_ID = os.environ.get("ZOOM_CLIENT_ID")
 ZOOM_CLIENT_SECRET = os.environ.get("ZOOM_CLIENT_SECRET")
 ZOOM_REDIRECT_URL = os.environ.get("ZOOM_REDIRECT_URL")
 
+
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+
 # Temporary storage for the file upload
 if sys.platform == "win32":
     TEMP_DIR = Path(BASE_DIR) / "tmp_files"
@@ -254,70 +298,76 @@ else:
 
 os.makedirs(TEMP_DIR, exist_ok=True)
 
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+if sys.platform == "win32":
+    pass
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S'
+            },
+            'simple': {
+                'format': '%(asctime)s - %(levelname)s - %(name)s : %(message)s',
+                'datefmt': '%Y-%m-%d %H:%M:%S'
+            },
         },
-        'simple': {
-            'format': '%(asctime)s - %(levelname)s - %(name)s : %(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple',
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+            },
+            'CenterStageLogs': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'maxBytes': 1024*1024*5,  # 5 MB
+                'backupCount': 5,
+                'formatter': 'simple',
+                'filename': os.path.join(BASE_DIR, 'logs', 'error.log'),
+                'level': 'ERROR',
+            }
         },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-        },
-        'CenterStageLogs': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024*1024*5,  # 5 MB
-            'backupCount': 5,
-            'formatter': 'simple',
-            'filename': os.path.join(BASE_DIR, 'logs', 'error.log'),
-            'level': 'ERROR',
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'engine': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'frontend': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'notifications': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'payments': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'users': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
-        },
-        'zoom': {
-            'handlers': ['console', 'CenterStageLogs'],
-            'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
-            'propagate': True,
+        'loggers': {
+            'django': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'engine': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'frontend': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'notifications': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'payments': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'users': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            },
+            'zoom': {
+                'handlers': ['console', 'CenterStageLogs'],
+                'level': 'ERROR' if str.upper(os.getenv("DEPLOY_ENV", "production")) == 'PRODUCTION' else 'INFO',
+                'propagate': True,
+            }
         }
     }
-}
+
+
+STREAM_API_KEY = os.environ.get("STREAM_API_KEY")
+STREAM_API_SECRET = os.environ.get("STREAM_API_SECRET")

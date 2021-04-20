@@ -12,6 +12,7 @@ from zoom.utils import zoomclient
 from users.serializers import AccountsSerializer
 from users.authentication import BearerAuthentication, AuthCookieAuthentication
 from users.models import Accounts, AccountTypes
+from django.views.generic import TemplateView
 
 logger = logging.getLogger(__name__)
 
@@ -41,10 +42,7 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
             expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
             serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
 
-            serializer = AccountsSerializer(data=dict(
-                                                account_type=AccountTypes.ZOOM_VIDEO,
-                                                info=access_info
-                                            ))
+            serializer = AccountsSerializer(data=dict(account_type=AccountTypes.ZOOM_VIDEO, info=access_info))
             serializer.is_valid(raise_exception=True)
             serializer.save(user=request.user)
             return redirect('account-connected-success')
@@ -81,9 +79,7 @@ class ZoomMeetingAPIView(APIView):
         Create New Zoom Meeting link
         """
         try:
-            account = request.user.accounts.get(
-                            account_type=AccountTypes.ZOOM_VIDEO
-                        )
+            account = request.user.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
             access_token = self.get_access_token(account)
             if not access_token:
                 return Response(dict(msg="Zoom Auth Connection Error"), status=status.HTTP_400_BAD_REQUEST)
@@ -103,9 +99,7 @@ class ZoomMeetingAPIView(APIView):
             }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def get(self, request):
-        account = request.user.accounts.get(
-                        account_type=AccountTypes.ZOOM_VIDEO
-                    )
+        account = request.user.accounts.get(account_type=AccountTypes.ZOOM_VIDEO)
         access_token = self.get_access_token(account)
         if not access_token:
             logger.error("Zoom Auth connection error")
@@ -116,7 +110,7 @@ class ZoomMeetingAPIView(APIView):
 
     @staticmethod
     def get_access_token(account):
-        expire_time = account.info.get('expire_time')
+        expire_time = account.info.get('expires_time')
         if expire_time:
             expire_time = datetime.strptime(expire_time, '%Y-%m-%dT%H:%M:%S')
             if expire_time > timezone.now():
@@ -137,3 +131,14 @@ class ZoomMeetingAPIView(APIView):
             account.info = serializer.validated_data
             account.save()
             return access_info.get('access_token')
+
+
+class ZoomVerifyView(TemplateView):
+    """
+    Onboarding step 3
+    """
+    template_name = "verifyzoom.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

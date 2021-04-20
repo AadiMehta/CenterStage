@@ -14,12 +14,12 @@ function handleLCS1Proceed() {
     const lessonName = $('#lessonName')[0].value;
     const lessonDescription = $('#lessonDescription')[0].value;
     const lessonNoOfParticipants = $('#lessonNoOfParticipants')[0].value;
-    const lessonLanguage = $('#lessonLanguage')[0].value;
+    const lessonLanguage = $('#lessonLanguage')[0];
+    var selectedLanguages = [...lessonLanguage.options]
+                      .filter(option => option.selected)
+                      .map(option => option.value);
     const lessonType = $('#lessonType .selected')[0].dataset.lessonType;
-    // Temporary: till there is UI for selecting multiple languages
-    const languages = lessonLanguage.split();
-    $('#languages').val(JSON.stringify(languages));
-      
+    $('#languages').val(JSON.stringify(selectedLanguages));
     if (!lessonName) {
       $('#lessonNameError').text('Please Provide Lesson Name');
       $('#lessonNameError').show()
