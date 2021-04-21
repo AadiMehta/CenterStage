@@ -37,7 +37,7 @@
       </header>
 
     <div class="main-content">
-      {% include 'teacher/dashboard/actionbar.html' %}
+      {% include 'teacher/dashboard/actionbar.html'  with user=user %}
     <div class="admin-mid-sec container-fluid">
      <div class="title-with-search-row">
       <h2 class="title-2">My Notes</h2>
@@ -137,10 +137,10 @@
 
 <!-- Google CDN jQuery with fallback to local -->
 <!-- <script src="{% static 'js/notification_count.js' %}"></script> -->
-
+<script src="{% static '/js/onboarding.js' %}" type="text/javascript"></script>
 <!-- custom scrollbar plugin -->
 <script>
-    (function($){
+    {% comment %} (function($){
         $(window).on("load",function(){
             $("#mC-scroll").mCustomScrollbar({
                 theme:"minimal"
@@ -149,6 +149,6 @@
               theme:"minimal"
           });
           });
-      })(jQuery);
+      })(jQuery); {% endcomment %}
 </script>
 {% endblock %}

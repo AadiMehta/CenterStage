@@ -243,6 +243,12 @@ class DashboardNotes(TemplateView):
         notes = NoteData.objects.all().order_by('-created_at')
         serializer = NoteSerializer(notes, many=True)
         context['notes'] = serializer.data
+        context.update({
+            'zoom': {
+                'ZOOM_CLIENT_ID': settings.ZOOM_CLIENT_ID,
+                'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
+            }
+        })
         if 'auth_token' in self.request.COOKIES:
             context['user'] = get_user_from_token(self.request.COOKIES.get('auth_token'))
         return context

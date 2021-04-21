@@ -8,6 +8,65 @@
 {% endblock %}
 
 {% block content %}
+<!-- Modal Login-->
+<div class="modal fade login-modal comn-modal" id="bankingmodal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i><img src="{% static '/images/icon-finance.svg' %}" alt="" /></i> Add Payment Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="login-form">
+          <div class="form-group">
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_cake.svg' %}" alt="" /></i><input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_addres.svg' %}" alt="" /></i><input id="address" type="text" class="form-control" placeholder="Address" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_city.svg' %}" alt="" /></i><input id="city" type="text" class="form-control" placeholder="City" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_mailbox.svg' %}" alt="" /></i><input id="postalCode" type="text" class="form-control" placeholder="Postal Code" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_location.svg' %}" alt="" /></i><input id="state" type="text" class="form-control" placeholder="State" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i><input id="country" type="text" class="form-control" placeholder="Country" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i><input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i><input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_bank.svg' %}" alt="" /></i><input id="bankName" type="text" class="form-control" placeholder="Bank Name" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i><input id="ifscCode" type="text" class="form-control" placeholder="IFSC Code" />
+            </div>
+            <div class="inp-col">
+              <i><img src="{% static '/images/icon-user.svg' %}" alt="" /></i><input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Namety" />
+            </div>
+          </div>
+
+            <button id="submitPayment" type="button" class="btn btn-primary btn-full btn-lg">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Login End-->
+
 <div class="wrapper">
     {% include 'header.html' with user=user %}
     <div class="mid-sec pb-100 boarding-sec">
@@ -32,7 +91,7 @@
                                 <span>Disconnect Zoom</span>
                             </button>
                             {% else %}
-                            <button id="connectZoomAccount" data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" type="button" class="btn-large">
+                            <button id="connectZoomAccount" data-account-type="zoom" data-client-id="{{zoom.ZOOM_CLIENT_ID}}" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" type="button" class="btn-large">
                                 <i data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">
                                     <img data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" src="{% static '/images/zoom-icon.svg' %}" alt="" />
                                 </i>
@@ -45,8 +104,9 @@
                             <p>Connect Your Preferred Payment Method To<br> Start Earning From Your Lessons</p>
                             <div class="cards-row">
                                 <div class="card-btn-col">
-                                    <button type="button" class="btn-large"><img src="{% static '/images/stripe.svg' %}" alt="" /></button>
+                                    <button button type="button" class="btn-large" data-toggle="modal" data-target="#bankingmodal"><img src="{% static '/images/stripe.svg' %}" alt="" /></button>
                                     <span class="card-name">Stripe</span>
+                                    <strong id="onboardingStripeError" style="color:red;"></strong>
                                 </div>
                                 {% comment %}<div class="card-btn-col">
                                     <button type="button" class="btn-large"><img src="{% static '/images/paypal.svg' %}" alt="" /></button>

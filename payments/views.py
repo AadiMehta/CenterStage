@@ -112,7 +112,7 @@ class PaymentAccountView(APIView):
             data = request.data
             stripe_account = self.create_stripe_account(request)
             data['account_id'] = stripe_account.get('id')
-            data['info'] = data
+            data['info'] = stripe_account
             data['payment_type'] = PaymentTypes.STRIPE
             serializer = PaymentsSerializer(
                 data=data, context={'request': request})

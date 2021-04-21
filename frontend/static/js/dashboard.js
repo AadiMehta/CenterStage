@@ -143,8 +143,10 @@ function getNewZoomLinkAndRoute() {
  * Connect Zoom Account Handler
  */
 function handleZoomConnectAccount (event) {
-  const {redirectUri} = event.target.dataset;
-  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=mAkYlnKISSCqOgSJPIxCCA&redirect_uri=${redirectUri}`;
+  // const {redirectUri, clientId} = event.target.dataset;
+  const zoomBtn = document.querySelector("#idActionBar");
+  const {redirectUri, clientId} = zoomBtn.dataset;
+  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
   openWindow(url, 'Authorize Zoom', 600, 700, 1);
 }
 

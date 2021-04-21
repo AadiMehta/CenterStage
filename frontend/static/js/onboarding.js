@@ -246,11 +246,11 @@ function onProceedButtonClicked () {
 function onProceed2ButtonClicked () {
   let isValid = true;
   $('#onboardingZoomConnectError').hide();
-  if (!isZoomLinked) {
-    $('#onboardingZoomConnectError').text('Please connect zoom account to proceed');
-    $('#onboardingZoomConnectError').show()
-    isValid = false;
-  }
+  // if (!isZoomLinked) {
+  //   $('#onboardingZoomConnectError').text('Please connect zoom account to proceed');
+  //   $('#onboardingZoomConnectError').show()
+  //   isValid = false;
+  // }
   if (isValid) {
     window.location.href = "/teacher/onboarding/intro-video";
   }
@@ -279,10 +279,14 @@ function addPayment(dob, address, city, postalCode, state, country, personalID, 
     success: function (data, status, xhr) {
       $('#bankingmodal').close();
       console.log("payment added successfully");
+      $('#onboardingZoomConnectError').text('payment added successfully');
+      $('#onboardingStripeError').show();
     },
     error: function (jqXhr, textStatus, errorMessage) {
       // Todo: Show Error Message on UI
       console.log('Error while creating payment account', errorMessage)
+      $('#onboardingZoomConnectError').text('Error while creating payment account');
+      $('#onboardingStripeError').show();
       // window.location.href = "/onboarding/step2";
     }});
 }
@@ -330,8 +334,10 @@ function onFinish3ButtonClicked () {
  * Connect Zoom Account Handler
  */
 function handleZoomConnectAccount (event) {
-  const {redirectUri} = event.target.dataset;
-  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=mAkYlnKISSCqOgSJPIxCCA&redirect_uri=${redirectUri}`;
+  // const {redirectUri} = event.target.dataset;
+  const zoomBtn = document.querySelector("#connectZoomAccount");
+  const {redirectUri, clientId} = zoomBtn.dataset;
+  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
   openWindow(url, 'Authorize Zoom', 600, 700, 1);
 }
 
@@ -374,7 +380,7 @@ function init() {
   $('#onboarding3Finish').click(onFinish3ButtonClicked);
   $('#disconnectZoomAccount').click(handleZoomDisconnectAccount);
   $('#disconnectPayment').click(handleDisconnectPayment);
-  // $('#connectZoomAccount').click(handleZoomConnectAccount);
+  $('#connectZoomAccount').click(handleZoomConnectAccount);
 }
 
 init();
