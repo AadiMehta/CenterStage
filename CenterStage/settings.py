@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'stream_django',
     'channels',
+    'django_countries',
 
     # project specific apps
     'chat',
@@ -99,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'frontend.utils.context_processors.settings_context',
             ],
         },
     },
@@ -121,13 +123,14 @@ else:
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+
 if sys.platform == "win32" or os.environ.get("DEPLOY_ENV", "PROD") == "DEV":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'cstestdb',
+            'NAME': 'centerstage',
             'USER': 'postgres',
-            'PASSWORD': 'root12345',
+            'PASSWORD': 'postgres',
             'HOST': 'localhost',
             'PORT': 5432,
         }
@@ -143,7 +146,6 @@ else:
             'PORT': 5432,
         }
     }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 

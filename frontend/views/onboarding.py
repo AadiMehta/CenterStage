@@ -1,6 +1,7 @@
 import urllib
 from django.conf import settings
 from django.views.generic import TemplateView
+from django_countries import countries
 
 
 class AccountConnectedTemplate(TemplateView):
@@ -65,6 +66,7 @@ class OnboardStep2TemplateView(TemplateView):
             'user': self.request.user,
             'teacher_accounts': teacher_accounts,
             'payment_account': payment_account,
+            'countries_list': list(countries),
             'zoom': {
                 'ZOOM_CLIENT_ID': getattr(settings, 'ZOOM_CLIENT_ID'),
                 'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
