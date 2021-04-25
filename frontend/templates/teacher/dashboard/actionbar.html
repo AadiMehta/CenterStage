@@ -36,9 +36,9 @@
                 <span>Schedule Meeting</span>
             </a>
             {% else %}
-            <a href="javascript:void" class="open-zoom-connect">
-                <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
-                <span>Schedule Meeting</span>
+            <a href="javascript:void" data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">
+                <i class="cta-link-icon" data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
+                <span data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">Schedule Meeting</span>
             </a>
             {% endif %}
         </li>
@@ -49,7 +49,7 @@
                 <span>New Lesson</span>
             </a>
             {% else %}
-            <a href="javascript:void" class="open-zoom-connect">
+            <a href="javascript:void" class="open-zoom-connect" data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">
                 <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
                 <span>New Lesson</span>
             </a>

@@ -144,9 +144,11 @@ function getNewZoomLinkAndRoute() {
  */
 function handleZoomConnectAccount (event) {
   // const {redirectUri, clientId} = event.target.dataset;
-  const zoomBtn = document.querySelector("#idActionBar");
-  const {redirectUri, clientId} = zoomBtn.dataset;
-  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+  // console.log(event.target.dataset);
+  // const zoomBtn = document.querySelector("#idActionBar");
+  // const {redirectUri, clientId} = zoomBtn.dataset;
+  // const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=mAkYlnKISSCqOgSJPIxCCA&redirect_uri=https://centrestage.live/api/profile/zoom/connect`;
   openWindow(url, 'Authorize Zoom', 600, 700, 1);
 }
 
