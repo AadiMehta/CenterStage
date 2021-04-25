@@ -97,9 +97,9 @@ function openWindow(url, winName, w, h, scroll){
 /**
  * Connect Zoom Account Handler
  */
-function handleZoomConnectAccount () {
-  const {redirectUri} = event.target.dataset;
-  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=mAkYlnKISSCqOgSJPIxCCA&redirect_uri=${redirectUri}`;
+function handleZoomConnectAccount (event) {
+  const {redirectUri, clientId} = event.target.dataset;
+  const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
   openWindow(url, 'Authorize Zoom', 600, 700, 1);
 }
 

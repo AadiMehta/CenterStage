@@ -3,6 +3,7 @@ from users.models import User, PaymentAccounts, BillingProfile
 from payments.models import LessonOrder, PaymentIntent 
 from payments.serializers import PaymentsSerializer
 import stripe
+from datetime import datetime
 from django.db.models import Q
 from rest_framework.views import APIView
 from django.conf import settings
@@ -32,6 +33,15 @@ class PaymentDisconnectAPIVIew(APIView):
         if payment_account:
             payment_account.delete()
         return Response(dict(msg="Disconnected Payment Account"), status=status.HTTP_200_OK)
+    
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        payment_type = data.get('payment_type')
+        payment_account = PaymentAccounts.objects.filter(user=request.user, payment_type=payment_type).first()
+        if payment_account:
+            payment_account.delete()
+            return Response({"msg": "Disconnected Payment Account"}, status=status.HTTP_200_OK)
+        return Response({"msg": "account not exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PaymentAccountView(APIView):
@@ -41,6 +51,7 @@ class PaymentAccountView(APIView):
 
     def create_stripe_account(self, request):
         dob = request.data['dob'].split('/')
+        timestamp = int(datetime.now().timestamp())
         account = stripe.Account.create(
             country=request.data['country'][0:2].upper(),
             type='custom',
@@ -60,8 +71,8 @@ class PaymentAccountView(APIView):
                     'line1': request.data['address'],
                     'line2': request.data['address'],
                     'city': request.data['city'],
-                    'state': 'RJ',
-                    'country': request.data['country'][0:2].upper(),
+                    'state': request.data['state'],
+                    'country': request.data['country'],
                     'postal_code': request.data['postalCode'],
 
                 }
@@ -76,7 +87,7 @@ class PaymentAccountView(APIView):
             },
             tos_acceptance={
                 'service_agreement': 'full',
-                'date': '1547923073',
+                'date': timestamp,
                 'ip': '127.0.0.1',
             },)
 
@@ -84,7 +95,7 @@ class PaymentAccountView(APIView):
         stripe.Account.create_external_account(
             account['id'], external_account={
                 'object': 'bank_account',
-                'country': 'IN',
+                'country': request.data['country'],
                 'currency': 'INR',
                 'account_holder_name': request.data['accountHolderName'],
                 'routing_number': request.data['ifscCode'],
@@ -120,34 +131,6 @@ class PaymentAccountView(APIView):
             serializer.save(user=request.user)
             resp = dict({"message": "payment accound added"})
             return Response(resp, status=status.HTTP_200_OK)
-        except Exception as e:
-            logger.error(str(e))
-            return Response(dict({
-                "error": str(e)
-            }), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class StripeCustomerAccountAPIVIew(APIView):
-
-    authentication_classes = [BearerAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        billing_profile = BillingProfile.objects.filter(
-            Q(user=request.user) & Q(
-                payment_type=PaymentTypes.STRIPE) & Q(active=True)
-        ).first()
-
-        if billing_profile:
-            return Response(dict({
-                "error": "Customer Account Already Created"
-            }), status=status.HTTP_400_BAD_REQUEST)
-        try:
-            data = request.data
-            customer = stripe.Customer.create(email=request.user.email)
-            BillingProfile.objects.get_or_create(
-                customer_id=customer, user=request.user, payment_type=PaymentTypes.STRIPE)
-            return Response(dict(msg="created stripe billing profile"), status=status.HTTP_200_OK)
         except Exception as e:
             logger.error(str(e))
             return Response(dict({
@@ -197,17 +180,17 @@ class LessonPaymentCompleteView(APIView):
         return get_object_or_404(LessonData, lesson_uuid=lesson_uuid)
     
     def get_payment_intent(self, stripe_id):
-        return get_object_or_404(LessonData, stripe_id=stripe_id)
+        return get_object_or_404(PaymentIntent, stripe_id=stripe_id)
 
     def post(self, request, *args, **kwargs):
         data = request.data
         order_id = data.get('order_id')
         lesson_id = data.get('lesson_id')
         payment_intent_json = data.get('payment_intent_json')
-        payment_intent_id = payment_intent_json.get('payment_intent_id')
-        status = payment_intent_json.get('status')
+        payment_intent_id = payment_intent_json.get('id')
+        payment_status = payment_intent_json.get('status')
 
-        if status == 'succeeded':
+        if payment_status == 'succeeded':
             order_obj = self.get_order(order_id)
             payment_intent_obj = self.get_payment_intent(payment_intent_id)
             # update enrollments

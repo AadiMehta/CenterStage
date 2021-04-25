@@ -96,7 +96,6 @@
                 <div id="allSessionWrapper" class="session-wrapper">
                     {% for slot in lesson_time_slots %}
                         <div class="next-session-row">
-                            <button type="button" class="edit-btn"><img src="{% static 'images/edit.png' %}" alt="" /></button>
                             <h5>Session No {{slot.2}}</h5>
                             <div class="sessionDayDate">
                                 <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{slot.3}}
@@ -444,7 +443,7 @@
                 {% if lesson.session_type != 'ONGOING' %}
                     <div class="default-box-style">
                         <div class="seat-remaining-title">
-                            <div class="circle-area">04</div>
+                            <div class="circle-area">{{ seats_remaining }}</div>
                             Seats remaining
                         </div>
                         <div class="session-seat-row">

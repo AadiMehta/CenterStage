@@ -87,7 +87,7 @@
                         <li>
                            <div class="lessions-countDetail-box">
                               <div class="crnt-studnt">
-                                 <h4>NA</h4>
+                                 <h4>{{lesson.student_count}}</h4>
                                  <div class="profimg-col">
                                     <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
                                     <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
@@ -165,7 +165,6 @@
 {% block script %}
 <!-- custom scrollbar plugin -->
 <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
-<script src="{% static 'js/dashboard.js' %}"></script>
 <!-- <script src="{% static 'js/notification_count.js' %}"></script> -->
 <script>
    (function($){
@@ -179,4 +178,5 @@
          });
       })(jQuery);
 </script>
+<script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

@@ -99,6 +99,10 @@ class LessonData(models.Model):
         "Returns permalink for lesson"
         return '{}/lesson/{}'.format(settings.BASE_URL, self.lesson_uuid)
 
+    @property
+    def student_count(self):
+        return self.enrollments.distinct('student').count()
+
     def upcoming_slots(self):
         return self.slots.all().filter(Q(lesson_from__gt=timezone.now()))
 
