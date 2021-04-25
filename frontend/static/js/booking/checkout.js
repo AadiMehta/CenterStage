@@ -132,15 +132,14 @@ var pay = function(stripe, card, clientSecret) {
 var orderComplete = function(clientSecret) {
   // Just for the purpose of the sample, show the PaymentIntent response object
   stripe.retrievePaymentIntent(clientSecret).then(function(result) {
-    var paymentIntent = result.paymentIntent;
-    var paymentIntentJson = JSON.stringify(paymentIntent, null, 2);
+    const paymentIntentJson = result.paymentIntent;
     const postData = {
       lesson_id: lessonId,
       order_id: orderId,
       payment_intent_json: paymentIntentJson
     };
 
-    fetch('lesson-order/payment-complete', {
+    fetch('/lesson-order/payment-complete', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

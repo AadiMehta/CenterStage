@@ -19,48 +19,67 @@
         </button>
       </div>
       <div class="modal-body">
+      <form id="paymentAddForm" action="." method="post" autocomplete="off">{% csrf_token %}
+        <p id="paymentAddFormError" style="color:red;"></p>
         <div class="login-form">
           <div class="form-group">
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_cake.svg' %}" alt="" /></i><input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth" />
+              <i><img src="{% static '/images/icon_cake.svg' %}" alt="" /></i>
+              <input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth - dd/mm/yyyy" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_addres.svg' %}" alt="" /></i><input id="address" type="text" class="form-control" placeholder="Address" />
+              <i><img src="{% static '/images/icon_addres.svg' %}" alt="" /></i>
+              <input id="address" type="text" class="form-control" placeholder="Address" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_city.svg' %}" alt="" /></i><input id="city" type="text" class="form-control" placeholder="City" />
+              <i><img src="{% static '/images/icon_city.svg' %}" alt="" /></i>
+              <input id="city" type="text" class="form-control" placeholder="City" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_mailbox.svg' %}" alt="" /></i><input id="postalCode" type="text" class="form-control" placeholder="Postal Code" />
+              <i><img src="{% static '/images/icon_mailbox.svg' %}" alt="" /></i>
+              <input id="postalCode" type="text" class="form-control" placeholder="Postal Code" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_location.svg' %}" alt="" /></i><input id="state" type="text" class="form-control" placeholder="State" />
+              <i><img src="{% static '/images/icon_location.svg' %}" alt="" /></i>
+              <input id="state" type="text" class="form-control" placeholder="State or Union territory Code - e.g. Delhi - DL" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i><input id="country" type="text" class="form-control" placeholder="Country" />
+              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
+              <select name="country" id="country" class="form-control" required>
+                <option value="">Select Country</option>
+                {% for country in countries_list %}
+                    <option value="{{ country.code }}">{{ country.name }}</option>
+                {% endfor %}
+              </select>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i><input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." />
+              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
+              <input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." required/>
             </div>
           </div>
 
           <div class="form-group">
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i><input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" />
+              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
+              <input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_bank.svg' %}" alt="" /></i><input id="bankName" type="text" class="form-control" placeholder="Bank Name" />
+              <i><img src="{% static '/images/icon_bank.svg' %}" alt="" /></i>
+              <input id="bankName" type="text" class="form-control" placeholder="Bank Name" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i><input id="ifscCode" type="text" class="form-control" placeholder="IFSC Code" />
+              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
+              <input id="ifscCode" type="text" class="form-control" placeholder="IFSC Code" required/>
             </div>
             <div class="inp-col">
-              <i><img src="{% static '/images/icon-user.svg' %}" alt="" /></i><input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Namety" />
+              <i><img src="{% static '/images/icon-user.svg' %}" alt="" /></i>
+              <input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Namety" required/>
             </div>
           </div>
 
             <button id="submitPayment" type="button" class="btn btn-primary btn-full btn-lg">Submit</button>
         </div>
+      </form>
       </div>
     </div>
   </div>
@@ -92,10 +111,10 @@
                             </button>
                             {% else %}
                             <button id="connectZoomAccount" data-account-type="zoom" data-client-id="{{zoom.ZOOM_CLIENT_ID}}" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" type="button" class="btn-large">
-                                <i data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">
-                                    <img data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" src="{% static '/images/zoom-icon.svg' %}" alt="" />
+                                <i data-account-type="zoom" data-client-id="{{zoom.ZOOM_CLIENT_ID}}" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">
+                                    <img data-account-type="zoom" data-client-id="{{zoom.ZOOM_CLIENT_ID}}" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}" src="{% static '/images/zoom-icon.svg' %}" alt="" />
                                 </i>
-                                <span data-account-type="zoom" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">Connect to Zoom</span>
+                                <span data-account-type="zoom" data-client-id="{{zoom.ZOOM_CLIENT_ID}}" data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}">Connect to Zoom</span>
                             </button>
                             {% endif %}
                             <strong id="onboardingZoomConnectError" style="color:red;"></strong>
@@ -104,8 +123,8 @@
                             <p>Connect Your Preferred Payment Method To<br> Start Earning From Your Lessons</p>
                             <div class="cards-row">
                                 <div class="card-btn-col">
-                                    <button button type="button" class="btn-large" data-toggle="modal" data-target="#bankingmodal"><img src="{% static '/images/stripe.svg' %}" alt="" /></button>
-                                    <span class="card-name">Stripe</span>
+                                    <button button type="button" class="btn-large" data-toggle="modal" data-target="#bankingmodal" {% if payment_account %}disabled{% endif%}><img src="{% static '/images/stripe.svg' %}" alt="" /></button>
+                                    <span class="card-name">Stripe {% if payment_account %}connected{% endif %}</span>
                                     <strong id="onboardingStripeError" style="color:red;"></strong>
                                 </div>
                                 {% comment %}<div class="card-btn-col">
@@ -137,9 +156,42 @@
 
 {% block script %}
 <script>
-        var teacherAccounts = "{{teacher_accounts | safe}}";
-        teacherAccounts = JSON.parse(teacherAccounts.replaceAll("'", '"'));
-        var isZoomLinked = teacherAccounts.hasOwnProperty('ZOOM');
-    </script>
+  var teacherAccounts = "{{teacher_accounts | safe}}";
+  teacherAccounts = JSON.parse(teacherAccounts.replaceAll("'", '"'));
+  var isZoomLinked = teacherAccounts.hasOwnProperty('ZOOM');
+
+  // TODO: move this to separate js file
+  // birth date mask
+  var dateInputMask = function dateInputMask(elm) {
+    elm.addEventListener('keypress', function(e) {
+      if(e.keyCode < 47 || e.keyCode > 57) {
+        e.preventDefault();
+      }
+      
+      var len = elm.value.length;
+      
+      // If we're at a particular place, let the user type the slash
+      // i.e., 12/12/1212
+      if(len !== 1 || len !== 3) {
+        if(e.keyCode == 47) {
+          e.preventDefault();
+        }
+      }
+      
+      // If they don't add the slash, do it for them...
+      if(len === 2) {
+        elm.value += '/';
+      }
+
+      // If they don't add the slash, do it for them...
+      if(len === 5) {
+        elm.value += '/';
+      }
+    });
+  };
+
+  const dateInput = document.querySelector('#dataOfBirth');
+  dateInputMask(dateInput);
+</script>
 <script src="{% static '/js/onboarding.js' %}" type="text/javascript"></script>
 {% endblock %}

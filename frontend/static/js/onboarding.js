@@ -2,6 +2,29 @@
 // ****** Utilities ******
 
 /**
+ * Show a specific modal using modal id
+ * @param {String} modalName
+ * @param {Boolean} hide
+ */
+ function showModal(modalName, hide) {
+  if (hide) {
+    hideAll();
+  }
+  $(`#${modalName}`).modal("toggle");
+  $(`#${modalName}`).modal("show");
+}
+
+/**
+ * Hide a specific modal using modal id
+ * @param {String} modalName
+ */
+function hideModal(modalName) {
+  $(`#${modalName}`).modal("toggle");
+  $(`#${modalName}`).modal("hide");
+}
+
+
+/**
  * Check if Subdomain starts with alphabet and has no symbols
  * @param {String} subDomain 
  */
@@ -246,15 +269,112 @@ function onProceedButtonClicked () {
 function onProceed2ButtonClicked () {
   let isValid = true;
   $('#onboardingZoomConnectError').hide();
-  // if (!isZoomLinked) {
-  //   $('#onboardingZoomConnectError').text('Please connect zoom account to proceed');
-  //   $('#onboardingZoomConnectError').show()
-  //   isValid = false;
-  // }
+  if (!isZoomLinked) {
+    $('#onboardingZoomConnectError').text('Please connect zoom account to proceed');
+    $('#onboardingZoomConnectError').show()
+    isValid = false;
+  }
   if (isValid) {
     window.location.href = "/teacher/onboarding/intro-video";
   }
 }
+
+function checkPaymentAddFormInputs() {
+  let isValid = true;
+  // trim to remove the whitespaces
+  const dob = document.querySelector("#dataOfBirth");
+  const address = document.querySelector("#address");
+  const city = document.querySelector("#city");
+  const postalCode = document.querySelector("#postalCode");
+  const state = document.querySelector("#state");
+  const country = document.querySelector("#country");
+  const bankAccountNo = document.querySelector("#bankAccountNumber");
+  const ifscCode = document.querySelector("#ifscCode");
+  const accountHolderName = document.querySelector("#accountHolderName");
+  const personalID = document.querySelector("#personalID");
+
+  if (dob.value.trim() === "") {
+    setErrorFor(dob, "Date of Birth can not be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(dob);
+  }
+
+  if (address.value.trim() === "") {
+    setErrorFor(address, "addres cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(address);
+  }
+
+  if (city.value.trim() === "") {
+    setErrorFor(city, "city cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(city);
+  }
+
+  if (postalCode.value.trim() === "") {
+    setErrorFor(postalCode, "postalCode cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(postalCode);
+  }
+
+  if (state.value.trim() === "") {
+    setErrorFor(state, "state cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(state);
+  }
+
+  if (country.value.trim() === "") {
+    setErrorFor(country, "please select country");
+    isValid = false;
+  } else {
+    setSuccessFor(country);
+  }
+
+  if (bankAccountNo.value.trim() === "") {
+    setErrorFor(bankAccountNo, "bankAccountNo cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(bankAccountNo);
+  }
+
+  if (ifscCode.value.trim() === "") {
+    setErrorFor(ifscCode, "ifscCode cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(ifscCode);
+  }
+
+  if (accountHolderName.value.trim() === "") {
+    setErrorFor(accountHolderName, "accountHolderName cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(accountHolderName);
+  }
+
+  if (personalID.value.trim() === "") {
+    setErrorFor(personalID, "personalID cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(personalID);
+  }
+
+  return isValid;
+}
+
+function setErrorFor(input, message) {
+  $("#paymentAddFormError").text("* all fields are required");
+  $("#paymentAddFormError").show();
+}
+
+function setSuccessFor(input) {
+  // todo:
+}
+
 
 function addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName) {
   const token = getCookie('auth_token');
@@ -277,19 +397,22 @@ function addPayment(dob, address, city, postalCode, state, country, personalID, 
       "accountHolderName": accountHolderName
     }),
     success: function (data, status, xhr) {
-      $('#bankingmodal').close();
       console.log("payment added successfully");
+      document.getElementById("paymentAddForm").reset();
+      hideModal("bankingmodal");
       $('#onboardingZoomConnectError').text('payment added successfully');
       $('#onboardingStripeError').show();
     },
     error: function (jqXhr, textStatus, errorMessage) {
       // Todo: Show Error Message on UI
       console.log('Error while creating payment account', errorMessage)
-      $('#onboardingZoomConnectError').text('Error while creating payment account');
-      $('#onboardingStripeError').show();
+      $('#paymentAddFormError').text('Error while adding payment account');
+      $('#paymentAddFormError').show()
       // window.location.href = "/onboarding/step2";
     }});
 }
+
+
 
 function onSubmitPaymentClicked () {
   const dob = $('#dataOfBirth')[0].value;
@@ -302,7 +425,11 @@ function onSubmitPaymentClicked () {
   const ifscCode = $('#ifscCode')[0].value;
   const accountHolderName = $('#accountHolderName')[0].value;
   const personalID = $('#personalID')[0].value
-  addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName)
+  const isFormValid = checkPaymentAddFormInputs();
+  if (isFormValid) {
+    addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName);
+  }
+  
 }
 
 /**

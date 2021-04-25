@@ -48,7 +48,7 @@
     });
   }
 
-  function handleConnectAccount () {
+  function handleConnectAccount (event) {
     /**
      * Connect Zoom Account Handler
      */

@@ -86,6 +86,7 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
 
         context['enrollments'] = lesson.enrollments.all()
         context['reviews'] = lesson.ratings.all()
+        context['seats_remaining'] = lesson.no_of_participants - lesson.student_count
         context['total_price'] = len(selected_slots) * int(lesson.price['value'])
         context['total_lesson_price'] = len(upcoming_slots) * int(lesson.price['value'])
         context['currency_info'] = currency_labels[lesson.price['currency']]
@@ -160,14 +161,14 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
             order_obj, created = LessonOrder.objects.new_or_get(order_data)
             # check for old order
             if order_obj.is_completed:
-                return redirect(reverse('book-lesson'))
+                return redirect(reverse('book-lesson', kwargs={'lesson_uuid': lesson.lesson_uuid}))
             # set lesson slots
             order_obj.lesson_slots.set(selected_slots)    
             order_obj.save()
             return redirect(reverse('book-lesson-payment', kwargs={'lesson_uuid': lesson.lesson_uuid}))
         except Exception as e:
             logger.exception(e)
-            return redirect(reverse('book-lesson'))
+            return redirect(reverse('book-lesson', kwargs={'lesson_uuid': lesson.lesson_uuid}))
 
 
 class BookLessonPyament(LoginRequiredMixin, View):
