@@ -157,7 +157,7 @@ function handleZoomConnectAccount (event) {
 /**
  * On Create Paid Meeting Clicked,
  */
-function handleCreateFreeMeeting() {
+function handleCreateFreeMeeting(event) {
   if (!isZoomLinked) {
     handleZoomConnectAccount(event);
     return;
@@ -251,7 +251,7 @@ function handleOpenPaidMeeting(event) {
     handleZoomConnectAccount(event);
     return;
   }
-  showModal('paidMeeting')
+  showModal('paidMeeting');
 }
 
 // ****** End of Event Handlers ****** 

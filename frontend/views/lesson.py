@@ -3,8 +3,11 @@ import pytz
 import base64
 import logging
 from django.utils import timezone
+from django.contrib import messages
 from django.core.files.base import ContentFile
 from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from formtools.wizard.views import SessionWizardView
 from rest_framework.response import Response
 from rest_framework import generics, status
@@ -23,7 +26,7 @@ from frontend.constants import currencies as currency_options
 from frontend.constants import timezones as timezone_options
 from frontend.constants import end_date_timedelta
 from frontend.utils.google_calendar import GoogleCalendar
-from users.models import Accounts, AccountTypes
+from users.models import Accounts, AccountTypes, PaymentAccounts, PaymentTypes
 from users.authentication import AuthCookieAuthentication
 
 logger = logging.getLogger(__name__)
@@ -73,6 +76,14 @@ class LessonCreateWizard(SessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         context = super(LessonCreateWizard, self).get_context_data(form=form, **kwargs)
+        user = self.request.user
+        account = user.accounts.filter(account_type=AccountTypes.ZOOM_VIDEO).first()
+
+        if account:
+            access_token = account.info.get('access_token')
+            context['zoom_linked'] = True if access_token else False
+        payment_account = user.payment_account.filter(payment_type=PaymentTypes.STRIPE).exists()
+        context['payment_account_linked'] = payment_account
         context['language_options'] = language_options
         context['currency_options'] = currency_options
         context['timezone_options'] = timezone_options
@@ -94,11 +105,10 @@ class LessonCreateWizard(SessionWizardView):
         return [self.TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        print('in done')
         final_data = {}
         for form in form_list:
             final_data.update(form.cleaned_data)
-        final_data['goals'] = json.loads(final_data.get('goals')) if final_data.get('goals') else []
+        final_data['learnings'] = json.loads(final_data.get('goals')) if final_data.get('goals') else []
         final_data['requirements'] = json.loads(final_data.get('requirements', '')) if final_data.get('requirements') \
             else []
         final_data['language'] = json.loads(final_data.get('language', '')) if final_data.get('language') else []
@@ -111,6 +121,15 @@ class LessonCreateWizard(SessionWizardView):
         final_data['meeting_type'] = MeetingTypes.HOST_LESSON
         final_data['notes'] = final_data['files']
         return self.create(final_data)
+    
+    def get_access_token(self, user):
+        account = user.accounts.filter(account_type=AccountTypes.ZOOM_VIDEO).first()
+        if account:
+            access_token = account.info.get('access_token')
+            return access_token
+        messages.add_message(self.request, messages.ERROR, _('Zoom account is not connected, please connect it first.'))
+        return redirect(reverse('new-lesson'))
+
 
     def create(self, form_data):
         """
@@ -119,13 +138,7 @@ class LessonCreateWizard(SessionWizardView):
         """
         try:
             user = self.request.user
-            account = user.accounts.get(
-                account_type=AccountTypes.ZOOM_VIDEO
-            )
-            access_token = account.info.get('access_token')
-            if not access_token:
-                return redirect('new-lesson')
-
+            access_token = self.get_access_token(user)
             cover_image = form_data.pop("cover_image")
             if cover_image:
                 cover_image, _ = self.base64_file(cover_image)
@@ -146,9 +159,9 @@ class LessonCreateWizard(SessionWizardView):
             # Uncomment below lines once bucket gets created on s3
             # On Jan 29 - An error occurred (NoSuchBucket) when calling the PutObject operation:
             # The specified bucket does not exist
-            # if cover_image:
-            #     lesson.cover_image = cover_image
-            #     lesson.save()
+            if cover_image:
+                lesson.cover_image = cover_image
+                lesson.save()
 
             self.add_available_slots(user, lesson, form_data)
 
@@ -157,6 +170,7 @@ class LessonCreateWizard(SessionWizardView):
             })
         except Exception as e:
             logger.exception(e)
+            messages.add_message(self.request, messages.ERROR, _('Error occurred while creating lesson, please try again'))
             return redirect('new-lesson')
 
     @staticmethod

@@ -45,10 +45,9 @@ function showSelectedSlots() {
     $('#sessionWrapper').empty()
     for (var slot of parsedTimeSlots) {
       $('#sessionWrapper').append(`<div class="next-session-row">
-      <button type="button" class="edit-btn"><img src="images/edit.png" alt="" /></button>
       <h5>Session ${slot[2]}</h5>
       <div class="sessionDayDate">
-          <i><img src="images/time_date.png" alt="" /></i> ${slot[3]}
+          <i><img src="/static/images/time_date.png" alt="" /></i> ${slot[3]}
       </div>
       <div class="row">
           <div class="col-md-6">
@@ -74,10 +73,9 @@ function showSelectedSlots() {
     $('#sessionWrapper').empty()
     const slot = parsedTimeSlots[Number(timeSlot) - 1];
     $('#sessionWrapper').append(`<div class="next-session-row">
-      <button type="button" class="edit-btn"><img src="images/edit.png" alt="" /></button>
       <h5>Session No ${slot[2]}</h5>
       <div class="sessionDayDate">
-          <i><img src="images/time_date.png" alt="" /></i> ${slot[3]}
+          <i><img src="/static/images/time_date.png" alt="" /></i> ${slot[3]}
       </div>
       <div class="row">
           <div class="col-md-6">

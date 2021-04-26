@@ -12,6 +12,10 @@ from engine.models import LessonData, LessonSlots, LessonStatuses, Enrollment, L
 from engine.serializers import LessonTeacherPageSerializer, LessonSerializer, LessonSlotSerializer, SlotSerializer
 from users.models import TeacherPageVisits, TeacherEarnings, AccountTypes
 from frontend.constants import currencies as currency_options
+from django_countries import countries
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def get_filtered_lessons(filter_by, lessons):
@@ -120,6 +124,7 @@ class DashboardAccountPayment(TemplateView):
         user = self.request.user
         context['user'] = user
         context['payment_account'] = user.payment_account.first()
+        context['countries_list'] = list(countries)
         return context
 
 
