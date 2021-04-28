@@ -56,6 +56,11 @@ class AccountsSerializer(serializers.ModelSerializer):
             'info'
         )
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        account_obj, created = Accounts.objects.new_or_update(request.user, validated_data)   # noqa
+        return account_obj
+
 
 class TeacherPaymentsSerializer(serializers.ModelSerializer):
 

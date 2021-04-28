@@ -25,11 +25,13 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
     TEMPLATES = {
         "preview": "booking/preview.html",
         "payment": "booking/payment.html",
+        "checkout": "booking/pay_checkout.html",
     }
 
     FORMS = [
         ("preview", BookLessonForm1),
         ("payment", BookLessonForm2),
+        ("checkout", BookLessonForm3),
     ]
 
     def get_context_data(self, form, *args, **kwargs):
@@ -39,11 +41,13 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
         context['BASE_URL'] = settings.BASE_URL
 
         lesson_uuid = self.request.resolver_match.kwargs.get('lesson_uuid')
-        lesson = LessonData.objects.get(lesson_uuid=lesson_uuid)
+        lesson = get_object_or_404(LessonData, lesson_uuid=lesson_uuid)
         context['lesson'] = LessonTeacherPageSerializer(lesson).data
         user = self.request.user
-        is_student_enrolled = lesson.is_student_enrolled(user.student_profile_data)
-        context['is_student_enrolled'] = is_student_enrolled
+
+        if user.user_type == UserTypes.STUDENT_USER:
+            is_student_enrolled = lesson.is_student_enrolled(user.student_profile_data)
+            context['is_student_enrolled'] = is_student_enrolled
 
         slots = lesson.slots.all()
         upcoming_slots = lesson.slots.all().filter(Q(lesson_from__gt=timezone.now()))
@@ -86,7 +90,7 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
 
         context['enrollments'] = lesson.enrollments.all()
         context['reviews'] = lesson.ratings.all()
-        context['seats_remaining'] = lesson.no_of_participants - lesson.student_count
+        context['seats_remaining'] = lesson.seats_remaining()
         context['total_price'] = len(selected_slots) * int(lesson.price['value'])
         context['total_lesson_price'] = len(upcoming_slots) * int(lesson.price['value'])
         context['currency_info'] = currency_labels[lesson.price['currency']]
@@ -119,7 +123,7 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
         try:
             student = StudentProfile.objects.get(user=self.request.user)
         except StudentProfile.DoesNotExist:
-            return redirect('book-lesson')
+            return redirect(reverse('book-lesson', kwargs={'lesson_uuid': lesson.lesson_uuid}))
 
         selected_slots = []
         set_to_all_sessions = final_data.get('set_to_all_sessions')
@@ -152,20 +156,14 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
             lesson_uuid = self.request.resolver_match.kwargs.get('lesson_uuid')
             lesson = LessonData.objects.get(lesson_uuid=lesson_uuid)
             student = form_data.get('student')
-            selected_slots = form_data.get('selected_slots')
-            order_data = {
-                "lesson": lesson,
-                "student": user.student_profile_data,
-                "total": len(selected_slots) * int(lesson.price['value'])
-            }
-            order_obj, created = LessonOrder.objects.new_or_get(order_data)
-            # check for old order
-            if order_obj.is_completed:
-                return redirect(reverse('book-lesson', kwargs={'lesson_uuid': lesson.lesson_uuid}))
-            # set lesson slots
-            order_obj.lesson_slots.set(selected_slots)    
-            order_obj.save()
-            return redirect(reverse('book-lesson-payment', kwargs={'lesson_uuid': lesson.lesson_uuid}))
+            order_id = form_data.get('order_id')
+            order_obj = get_object_or_404(LessonOrder, order_id=order_id)
+
+            # check for order status
+            if not order_obj.is_completed:
+                pass
+
+            return render(self.request, 'booking/done.html', {'lesson': lesson})
         except Exception as e:
             logger.exception(e)
             return redirect(reverse('book-lesson', kwargs={'lesson_uuid': lesson.lesson_uuid}))

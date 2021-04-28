@@ -51,7 +51,7 @@ from frontend.views.lesson import LessonCreateWizard, AcceptFileAPI, LikeLessonA
 from frontend.views.post import NewPost
 from frontend.views.note import AcceptNoteFileAPI, NoteCreateWizard
 from frontend.views.schedule import ScheduleCreateWizard
-from frontend.views.booking import BookLessonWizard, BookLessonPyament
+from frontend.views.booking import BookLessonWizard
 
 from frontend.views.dashboard import (
     DashboardAccountAlerts, DashboardAccountInfo, DashboardAccountPayment,
@@ -185,7 +185,6 @@ urlpatterns = [
     # Book Lesson Wizard
     path('lesson/<uuid:lesson_uuid>', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="lesson-page"),
     path('lesson/<uuid:lesson_uuid>/book', BookLessonWizard.as_view(BookLessonWizard.FORMS), name="book-lesson"),
-    path('lesson/<uuid:lesson_uuid>/payment', BookLessonPyament.as_view(), name="book-lesson-payment"),
 
     # lesson order
     path('lesson-order/create-payment-intent', LessonPaymentView.as_view(), name="book-lesson-payment"),
