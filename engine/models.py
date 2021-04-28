@@ -1,7 +1,7 @@
 import uuid
 from django.utils import timezone
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.conf import settings
 from users.models import TeacherProfile, StudentProfile, User
 from users.s3_storage import S3_LessonCoverImage_Storage
@@ -99,9 +99,10 @@ class LessonData(models.Model):
         "Returns permalink for lesson"
         return '{}/lesson/{}'.format(settings.BASE_URL, self.lesson_uuid)
 
-    @property
-    def student_count(self):
-        return self.enrollments.distinct('student').count()
+    def seats_remaining(self):
+        enrolled_count = self.enrollments.distinct('student').count()
+        seats_remaining = self.no_of_participants - enrolled_count
+        return seats_remaining
 
     def upcoming_slots(self):
         return self.slots.all().filter(Q(lesson_from__gt=timezone.now()))

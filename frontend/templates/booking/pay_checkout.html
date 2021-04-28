@@ -38,16 +38,19 @@
       </div>
     </div>
     <div class="page-right-area">
-      <form id="checkout" action="" method="post" data-lesson-id="{{lesson.lesson_uuid}}">
+      <form
+        id="checkout"
+        action=""
+        method="post"
+        data-lesson-id="{{lesson.lesson_uuid}}"
+        data-time-slot="{{form_data.time_slot}}"
+        data-set-to-all-sessions="{{form_data.set_to_all_sessions}}"
+      >
         {% csrf_token %}
+        {{ wizard.management_form }}
         <div class="page-wrap d-flex mt-4">
-          <input
-            id="id_order_id"
-            name="order_id"
-            type="text"
-            style="display: none"
-            value="{{ order.order_id }}"
-          />
+          <input id="id_order_id" name="checkout-order_id" type="text" style="display: none"/>
+          <input id="payment_type" name="checkout-payment_type" type="text" value="{{form_data.payment_type}}" style="display:none">
         </div>
       </form>
     </div>

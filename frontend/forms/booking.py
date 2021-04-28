@@ -12,3 +12,4 @@ class BookLessonForm2(forms.Form):
 
 class BookLessonForm3(forms.Form):
     order_id = forms.CharField(max_length=120)
+    payment_type = forms.CharField(max_length=100)
