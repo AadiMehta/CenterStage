@@ -86,7 +86,7 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
 
         context['enrollments'] = lesson.enrollments.all()
         context['reviews'] = lesson.ratings.all()
-        context['seats_remaining'] = lesson.no_of_participants - lesson.student_count
+        context['seats_remaining'] = lesson.no_of_participants
         context['total_price'] = len(selected_slots) * int(lesson.price['value'])
         context['total_lesson_price'] = len(upcoming_slots) * int(lesson.price['value'])
         context['currency_info'] = currency_labels[lesson.price['currency']]
