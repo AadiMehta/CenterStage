@@ -614,6 +614,29 @@
     </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade modal-disconnect" id="disconnectedZoomModal" tabindex="-1" aria-labelledby="disconnectedZoomModal" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <img src="{% static 'images/close.svg' %}" alt="" />
+        </button>
+        <div class="modal-body text-center">
+            <div class="finish-graphics">
+                <img src="{% static 'images/disconnect.svg' %}" alt="" />
+            </div>
+            <h2>Zoom Account Disconnected!</h2>
+            <h3>You need to connect zoom account to proceed, do you want connect zoom now?</h3>
+            <div class="finish-btn-area">
+                <button type="button" class="btn btn-primary btn-lg btn-theme" id="btnZoomConnectConfirm">Yes</button>
+                <button type="button" class="btn btn-primary btn-lg btn-theme-liner" data-dismiss="modal" aria-label="Close">No</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
 <div class="modal fade modal-zoomnotconnected" id="zoomnotconnected" tabindex="-1" aria-labelledby="zoomnotconnected" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">

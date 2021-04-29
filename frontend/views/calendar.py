@@ -73,12 +73,17 @@ class GoogleCalendarCallback(generics.RetrieveAPIView):
                 'client_secret': credentials.client_secret,
                 'scopes': credentials.scopes
             }
-            serializer = AccountsSerializer(data=dict(
-                                                account_type=AccountTypes.GOOGLE_CALENDAR,
-                                                info=session_credentials
-                                            ))
-            serializer.is_valid(raise_exception=True)
-            serializer.save(user=request.user)
+            # serializer = AccountsSerializer(data=dict(
+            #                                     account_type=AccountTypes.GOOGLE_CALENDAR,
+            #                                     info=session_credentials
+            #                                 ))
+            # serializer.is_valid(raise_exception=True)
+            # serializer.save(user=request.user)
+            account_data = {
+                'account_type':AccountTypes.GOOGLE_CALENDAR,
+                'info': session_credentials
+            }
+            account_obj, created = Accounts.objects.new_or_update(request.user, account_data)   # noqa
             return redirect('account-connected-success')
         except Exception as e:
             logger.exception(e)
