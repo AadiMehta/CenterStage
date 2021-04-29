@@ -42,9 +42,9 @@ class ZoomConnectAPIView(generics.RetrieveAPIView):
             expire_time = timezone.now() + timezone.timedelta(seconds=expires_in)
             serializer.validated_data['expire_time'] = expire_time.strftime('%Y-%m-%dT%H:%M:%S')
 
-            serializer = AccountsSerializer(data=dict(account_type=AccountTypes.ZOOM_VIDEO, info=access_info))
+            serializer = AccountsSerializer(data=dict(account_type=AccountTypes.ZOOM_VIDEO, info=access_info), context={'request': request})
             serializer.is_valid(raise_exception=True)
-            serializer.save(user=request.user)
+            serializer.save()
             return redirect('account-connected-success')
         except Exception as e:
             logger.exception(e)

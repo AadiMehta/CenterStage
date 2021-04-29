@@ -232,6 +232,29 @@ class AccountTypes(models.TextChoices):
     TEAMS = 'TEAMS', _('Teams')
 
 
+class AccountsManager(models.Manager):
+    def update_obj(self, instance, fields):
+        model_obj = instance
+        for key, value in fields.items():
+            setattr(model_obj, key, value)
+        model_obj.save()
+        return model_obj
+
+    def new_or_update(self, user, fields):
+        created = False
+        qs = self.get_queryset().filter(
+            user=user,
+            account_type=fields.get("account_type")
+        )
+        if qs.exists():
+            instance = qs.first()
+            obj = self.update_obj(instance, fields)
+        else:
+            obj = self.model.objects.create(**fields)
+            created = True
+        return obj, created
+
+
 class Accounts(models.Model):
     """
     Data Associated to Social Accounts
@@ -242,6 +265,8 @@ class Accounts(models.Model):
     info = models.JSONField(null=True)
     token_updated_on = models.DateTimeField(auto_now=True)
     added_on = models.DateTimeField(auto_now_add=True)
+
+    objects = AccountsManager()
 
     class Meta:
         unique_together = ('user', 'account_type')

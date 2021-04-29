@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils import timezone
 from users.models import User, PaymentAccounts, BillingProfile
 from payments.models import LessonOrder, PaymentIntent 
 from payments.serializers import PaymentsSerializer
@@ -142,28 +143,54 @@ class LessonPaymentView(APIView):
 
     authentication_classes = [BearerAuthentication]
     permission_classes = []
-  
+
     def get_order(self, order_id):
         return get_object_or_404(LessonOrder, order_id=order_id)
     
     def get_lesson(self, lesson_uuid):
         return get_object_or_404(LessonData, lesson_uuid=lesson_uuid)
+    
+    def selected_slots(self, lesson, set_to_all_sessions, time_slot):
+        upcoming_slots = lesson.slots.all().filter(Q(lesson_from__gt=timezone.now()))
+        if set_to_all_sessions:
+            return upcoming_slots
+        selected_slots = upcoming_slots.filter(session_no=time_slot)
+        return selected_slots
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        order_id = data.get('order_id')
-        lesson_id = data.get('lesson_id')
-        order_obj = self.get_order(order_id)
+        if not data:
+            return Response({'error': 'please provide data'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if order_obj.is_completed:
-            return Response({'error': 'order already completed'}, status=status.HTTP_400_BAD_REQUEST)
+        lesson_id = data.get('lesson_id')
+        set_to_all_sessions = data.get('set_to_all_sessions')
+        time_slot = data.get('time_slot')
+
+        lesson = self.get_lesson(lesson_id)
+
+        selected_slots = self.selected_slots(lesson, set_to_all_sessions, time_slot)
+        order_data = {
+            "lesson": lesson,
+            "student": request.user.student_profile_data,
+            "total": len(selected_slots) * int(lesson.price['value'])
+        }
+        order_obj, created = LessonOrder.objects.new_or_get(order_data)
+        # set lesson slots
+        order_obj.lesson_slots.set(selected_slots)
+        order_obj.save()
 
         stripe_publishable_key = settings.STRIPE_PUBLISHABLE_KEY
 
         payment_intent, is_created = PaymentIntent.objects.do(request, order_obj)
         if is_created:
             # Send publishable key and PaymentIntent details to client
-            return Response({'publishableKey': stripe_publishable_key, 'clientSecret': payment_intent.client_secret}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    'publishableKey': stripe_publishable_key,
+                    'clientSecret': payment_intent.client_secret,
+                    'orderId': order_obj.order_id
+                },
+                status=status.HTTP_200_OK)
         else:
             return Response({'error': str(payment_intent)}, status=status.HTTP_403_FORBIDDEN)
 
@@ -185,7 +212,6 @@ class LessonPaymentCompleteView(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         order_id = data.get('order_id')
-        lesson_id = data.get('lesson_id')
         payment_intent_json = data.get('payment_intent_json')
         payment_intent_id = payment_intent_json.get('id')
         payment_status = payment_intent_json.get('status')
@@ -195,13 +221,14 @@ class LessonPaymentCompleteView(APIView):
             payment_intent_obj = self.get_payment_intent(payment_intent_id)
             # update enrollments
             order_obj.update_enrollments()
+            # update order status
             order_obj.mark_paid()
             # update payment intent
             payment_intent_obj.info = payment_intent_json
             payment_intent_obj.paid = True
             payment_intent_obj.save()
             return Response({'status': 'succeeded'}, status=status.HTTP_200_OK)
-        return Response({'status': 'failed'}, status=status.HTTP_200_OK)
+        return Response({'status': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 class LessonPaymentWebhookView(APIView):
 
