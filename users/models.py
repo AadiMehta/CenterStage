@@ -250,7 +250,7 @@ class AccountsManager(models.Manager):
             instance = qs.first()
             obj = self.update_obj(instance, fields)
         else:
-            obj = self.model.objects.create(**fields)
+            obj = self.model.objects.create(user=user, **fields)
             created = True
         return obj, created
 

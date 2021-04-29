@@ -6,29 +6,13 @@
             <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="cta-link-icon"><img src="{% static 'images/icon-new-meeting.svg' %}" alt="" /></i>
                 <span>New Meeting</span>
+                <div class="spinner-border" role="status" style="display: none">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {% if user.is_zoom_linked %}
-                <a class="dropdown-item" href="#" id="createFreeMeeting">Free Meeting</a>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#paidMeeting">Paid Meeting</a>
-                {% else %}
-                <a
-                        class="dropdown-item"
-                        href="javascript:void(0);"
-                        id="createFreeMeeting"
-                        data-account-type="zoom"
-                        data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
-                        data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"
-                >Free Meeting</a>
-                <a
-                        class="dropdown-item"
-                        href="#"
-                        id="openPaidMeetingModal"
-                        data-account-type="zoom"
-                        data-client-id="{{zoom.ZOOM_CLIENT_ID}}"
-                        data-redirect-uri="{{zoom.ZOOM_REDIRECT_URL}}"
-                >Paid Meeting</a>
-                {% endif %}
+                <a class="dropdown-item" href="javascript:void(0);" id="createFreeMeeting">Free Meeting</a>
+                <a class="dropdown-item" href="javascript:void(0);" id="openPaidMeetingModal">Paid Meeting</a>
             </div>
         </li>
         <li>
@@ -38,7 +22,7 @@
                 <span>Schedule Meeting</span>
             </a>
             {% else %}
-            <a href="javascript:void(0);" class="open-zoom-connect">
+            <a href="javascript:void(0);" class="check-zoom-connect">
                 <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
                 <span>Schedule Meeting</span>
             </a>
@@ -51,38 +35,9 @@
                 <span>New Lesson</span>
             </a>
             {% else %}
-            <a href="javascript:void(0);" class="open-zoom-connect">
+            <a href="javascript:void(0);" class="check-zoom-connect">
                 <i class="cta-link-icon"><img src="{% static 'images/icon-schedule-meeting.svg' %}" alt="" /></i>
                 <span>New Lesson</span>
-            </a>
-            {% endif %}
-        </li>
-        <li>
-            {% if user.is_zoom_linked %}
-            <a href="javascript:void(0);" class="p-coaching" id="personalCoaching">
-                <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
-                    {% if user.teacher_profile_data.personal_coaching %}<em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em> {% endif %}
-                </i>
-                <span>Personal Coaching</span>
-            </a>
-            {% else %}
-            <a href="javascript:void(0);" class="p-coaching open-zoom-connect">
-                <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
-                    {% if user.teacher_profile_data.personal_coaching %}<em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em> {% endif %}
-                </i>
-                <span>Personal Coaching</span>
-        <li>
-            <a href="{% url 'new-note' %}">
-              <i class="cta-link-icon"><img src="images/my_notes.svg" alt="" /></i>
-              <span>My Notes</span>
-            </a>
-          </li>
-        <li class="p-coaching">
-            <a href="#" data-toggle="modal" data-target="#pcoatching">
-            <i class="cta-link-icon"><img src="{% static 'images/icon-personal-coaching.svg' %}" alt="" />
-            <em class="check-green"><img src="{% static 'images/done.svg' %}" alt="" /></em>
-            </i>
-            <span>Personal Coaching</span>
             </a>
             {% endif %}
         </li>
