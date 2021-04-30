@@ -70,10 +70,20 @@
                      <div class="input-area">
                         <label>Number of Participants <span>*</span></label>
                         <div class="liner-select-drop">
-                           <input placeholder="Enter No. of participants" type="number" id="lessonNoOfParticipants" name="step1-no_of_participants" class="form-control" max="200" min="2"/>
+                           <script>
+                              function change(){
+                                 let inp = document.getElementById("lessonNoOfParticipants").value;
+                                 if(inp<1){
+                                    inp=1;
+                                    document.getElementById("lessonNoOfParticipantsError1").innerHTML = "Number of participants must be greater than 0";
+                                 }
+                              }
+                           </script>
+                           <input placeholder="Enter No. of participants"  onchange="change();" value="1" type="number" id="lessonNoOfParticipants" name="step1-no_of_participants" class="form-control" max="200" min="1"/>
                         </div>
                         <input id="lessonType" type="hidden" name="step1-lesson_type" style="display:none" />
                         <p id="lessonNoOfParticipantsError" style="color:red;"></p>
+                        <p id="lessonNoOfParticipantsError1" style="color:red;"></p>
                      </div>
                   </div>
                   <div class="form-group">
@@ -103,10 +113,6 @@
                         <div class="select-sessions-col">
                            <button id="multiSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'MULTI' %}selected{% endif %}" data-lesson-type="MULTI">Multi Sessions</button>
                            <span class="select-session-text">This lesson will have a fixed start and end date</span>
-                        </div>
-                        <div class="select-sessions-col">
-                           <button id="ongoingSession" type="button" class="btn-select-session {% if wizard.form.session_type.value == 'ONGOING' %}selected{% endif %}" data-lesson-type="ONGOING">Ongoing</button>
-                           <span class="select-session-text">This is a recurring lesson with no end date. Students can drop out or cancel at any time</span>
                         </div>
                      </div>
                   </div>
