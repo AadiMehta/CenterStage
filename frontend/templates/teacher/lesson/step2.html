@@ -33,19 +33,7 @@
                <div class="boarding-left">
                <div class="form-group">
                   <input id="slot_type" name="step2-slot_type" type="text" value="{{wizard.form.slot_type.value|default_if_none:'fixed'}}" style="display:none">
-                  <div class="select-dateTime-row">
-                     {% if form_data.no_of_participants == '1' %}
-                        <div class="select-dateTime-col">
-                           <button id="flexible-time-slot" type="button" class="btn-select-session  {% if wizard.form.slot_type.value == 'flexible' %}selected{% endif %}" data-slot-type="flexible">Flexible Date & Time</button>
-                           <span class="select-session-text">By selecting this option, students can book any time during your office hours. Please select office hours on your calendar to start receiving bookings after creating this lesson</span>
-                        </div>
-                     {% endif %}
-                     <div class="select-dateTime-col">
-                        <button id="fixed-time-slot" type="button" class="btn-select-session {% if wizard.form.slot_type.value == None or wizard.form.slot_type.value == 'fixed' %}selected{% endif %}" data-slot-type="fixed">Select Date & Time</button>
-                        <span class="select-session-text">By selecting this option, students will be
-                        required to follow lesson timings set by you</span>
-                     </div>
-                  </div>
+<hr>
                </div>
                <div class="selectdatetile-wrap">
                   <div class="row">
