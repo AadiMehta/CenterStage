@@ -73,7 +73,7 @@
                            <script>
                               function change(){
                                  let inp = document.getElementById("lessonNoOfParticipants").value;
-                                 if(inp<1){
+                                 if(inp<1 || inp == ""){
                                     inp=1;
                                     document.getElementById("lessonNoOfParticipantsError1").innerHTML = "Number of participants must be greater than 0";
                                  }

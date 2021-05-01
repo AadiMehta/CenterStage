@@ -202,7 +202,7 @@ function handleMonthlyPriceChange() {
   } else if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
     monthCount = dateFns.differenceInCalendarMonths(end, start)
   }
-  const totalPrice = pricePerSessionValue * monthCount;
+  var totalPrice = pricePerSessionValue * monthCount;
   const {symbol} = selectedCurrency.dataset;
   $('#totalPrice')[0].value = totalPrice;
   $('#monthlyPriceTotalPrice').text(`${symbol} ${totalPrice}`);
@@ -220,7 +220,7 @@ function handleWeeklyPriceChange() {
   if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
     weekCount = dateFns.differenceInCalendarWeeks(end, start)  
   }
-  const totalPrice = pricePerSessionValue * weekCount;
+  var totalPrice = pricePerSessionValue * weekCount;
   const {symbol} = selectedCurrency.dataset;
   $('#totalPrice')[0].value = totalPrice;
   $('#weeklyPriceTotalPrice').text(`${symbol} ${totalPrice}`);
@@ -234,7 +234,7 @@ function handlePricePerSessionChange() {
   if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
     noOfSessions = parseInt($('#noOfSessions')[0].value);
   }
-  const totalPrice = pricePerSessionValue;
+  var totalPrice = pricePerSessionValue;
   if(noOfSessions>0){
     totalPrice *= noOfSessions;
   }

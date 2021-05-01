@@ -250,7 +250,7 @@ function init() {
     if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
       noOfSessions = parseInt($('#noOfSessions')[0].value);
     }
-    const totalPrice =  document.getElementById("pricePerSessionValue").value;
+    var totalPrice =  document.getElementById("pricePerSessionValue").value;
     if(noOfSessions>0){
       totalPrice *= noOfSessions;
     }
