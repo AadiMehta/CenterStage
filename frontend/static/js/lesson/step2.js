@@ -43,6 +43,14 @@ function handleLCS2Proceed() {
         $(`#${day}EndTimeError`).show()
         isValid = false;      
       }
+      if ($(`#${day}EndTime`)[0].value <= $(`#${day}StartTime`)[0].value){
+        $(`#${day}EndTimeError2`).text('Please select end time later than start time');
+        $(`#${day}EndTimeError2`).show();
+        //scroll up to show user the error
+        document.body.scrollTop = 650; // For Safari
+        document.documentElement.scrollTop = 650; // For Chrome, Firefox, IE and Opera
+        isValid = false;   
+      }
     })
     if (!startDate) {
       $('#startDatePickerError').text('Please Select Start Date');
@@ -78,6 +86,11 @@ function handleLCS2Proceed() {
     if (!sessionEndTime) {
       $('#sessionEndTimePickerError').text('Please Select Session End Time');
       $('#sessionEndTimePickerError').show()
+      isValid = false;
+    }
+    if(sessionEndTime <= sessionStartTime){
+      $('#sessionEndTimePickerError2').text('Please select end time later than start time');
+      $('#sessionEndTimePickerError2').show();
       isValid = false;
     }
     if (timezone === 'none') {
@@ -189,7 +202,7 @@ function handleMonthlyPriceChange() {
   } else if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
     monthCount = dateFns.differenceInCalendarMonths(end, start)
   }
-  const totalPrice = pricePerSessionValue * monthCount;
+  var totalPrice = pricePerSessionValue * monthCount;
   const {symbol} = selectedCurrency.dataset;
   $('#totalPrice')[0].value = totalPrice;
   $('#monthlyPriceTotalPrice').text(`${symbol} ${totalPrice}`);
@@ -207,7 +220,7 @@ function handleWeeklyPriceChange() {
   if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
     weekCount = dateFns.differenceInCalendarWeeks(end, start)  
   }
-  const totalPrice = pricePerSessionValue * weekCount;
+  var totalPrice = pricePerSessionValue * weekCount;
   const {symbol} = selectedCurrency.dataset;
   $('#totalPrice')[0].value = totalPrice;
   $('#weeklyPriceTotalPrice').text(`${symbol} ${totalPrice}`);
@@ -221,12 +234,19 @@ function handlePricePerSessionChange() {
   if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
     noOfSessions = parseInt($('#noOfSessions')[0].value);
   }
-  const totalPrice = pricePerSessionValue * noOfSessions;
+  var totalPrice = pricePerSessionValue;
+  if(noOfSessions>0){
+    totalPrice *= noOfSessions;
+  }
   const {symbol} = selectedCurrency.dataset;
   $('#totalPrice')[0].value = totalPrice;
   $('#pricePerSessionTotalPrice').text(`${symbol} ${totalPrice}`);
 }
-
+$("#pricePerSessionValue").on('keyup', function (e) {
+  if (e.key === 'Enter' || e.keyCode === 13) {
+      return;
+  }
+});
 // ****** End of Event Handlers ****** 
 
 function init() {
@@ -357,6 +377,20 @@ function init() {
    */
   $('#flexible-time-slot').click(handleLessonTimeSlotTypeSelect);
     $('#fixed-time-slot').click(handleLessonTimeSlotTypeSelect);
+    
+  //sort payments list
+  var my_options = $("#pricePerSessionCurrency option");
+  var selected = $("#pricePerSessionCurrency").val();
+
+  my_options.sort(function(a,b) {
+      if (a.text.toLowerCase() > b.text.toLowerCase()) return 1;
+      if (a.text.toLowerCase() < b.text.toLowerCase()) return -1;
+      return 0
+  })
+
+  $("#pricePerSessionCurrency").empty().append( my_options );
+  $("#pricePerSessionCurrency").val(selected);
+
   }
 
   $('#timezoneSelect').change((event) => {

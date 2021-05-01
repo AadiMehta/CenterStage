@@ -35,6 +35,11 @@ function handleLCS1Proceed() {
       $('#lessonNoOfParticipantsError').show()
       isValid = false;
     }
+    if (lessonNoOfParticipants<1) {
+      $('#lessonNoOfParticipantsError1').text('Number of participants must be greater than zero.');
+      $('#lessonNoOfParticipantsError1').show();
+      isValid = false;
+    }
     if (lessonLanguage === 'none') {
       $('#lessonLanguageError').text('Please Select Lesson Language');
       $('#lessonLanguageError').show()
@@ -108,6 +113,7 @@ function init() {
       $('#lessonType')[0].value = 'GROUP';
     }
   })
+
 }
 
 init();
