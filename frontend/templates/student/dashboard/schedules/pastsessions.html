@@ -81,20 +81,20 @@
                               <i><img src="{% static 'images/session-number.png' %}" alt="" /></i>
                               <div class="lessons-steps-text">
                                  <h4>Session Number</h4>
-                                 <a href="javascrip:void(0)">{{slot.session_no}}</a> <span>Out of {{slot.lesson.no_of_slots}}</span>
+                                 <a href="javascrip:void(0)">{{slot.lessonslot.session_no}}</a> <span>Out of {{slot.lesson.no_of_slots}}</span>
                               </div>
                            </li>
                         </ul>
                         <div class="linerbtn-row">
                            <div class="lessonBtnCol">
-                              <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
+                              {% comment %} <a href="#" class="dropdown-toggle btn-liner" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Edit</a>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                  <a class="dropdown-item" href="#">Edit Session</a>
                                  <a class="dropdown-item" href="#">Manage in Zoom</a>
-                              </div>
+                              </div> {% endcomment %}
                            </div>
                            <div class="lessonBtnCol">
-                           <a href="#" class="btn-liner"  data-toggle="modal" data-target="#shareLesson{{slot.lesson.lesson_uuid}}">Share</a></div>
+                           {% comment %} <a href="#" class="btn-liner"  data-toggle="modal" data-target="#shareLesson{{slot.lesson.lesson_uuid}}">Share</a></div> {% endcomment %}
                            {% comment %} <a href="{{ slot.lesson.meeting_link }}" target="_blank">
                               <div class="lessonBtnCol"><a href="{{ slot.lesson.meeting_link }}" target="_blank" class="btn-liner active">Start</a></div>
                            </a> {% endcomment %}

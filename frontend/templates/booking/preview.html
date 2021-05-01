@@ -137,7 +137,9 @@
 <div class="wrapper-main paddtb-4">
     <div class="container">
         <input type="text" value="{{BASE_URL}}/lesson/{{lesson.lesson_uuid}}/book" id="copyToShare" disabled style="display:none">
-
+        <div class="top-section">
+            {% include '_partials/messages.html' %}
+        </div>
         <div class="top-section">
             <div class="host-header-left">
                 <button type="button" class="link-back"><img src="{% static 'images/back.svg' %}" alt="" /></button>
@@ -158,7 +160,7 @@
                             <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt="" /></div>
                             <div class="prof-name">
                                 <h4>by {{lesson.creator.user.first_name}} {{lesson.creator.user.last_name}}</h4>
-                                <span class="lession-time">{{lesson.creator.user.created_at}}</span>
+                                <span class="lession-time">Published on: {{lesson.created_at}}</span>
                             </div>
                         </div>
                         <div class="dic2">
@@ -175,7 +177,7 @@
 
                     <div class="searchresult-row mb-5">
                         <div class="lession-col-left">
-                            <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                            <img src="{% if lesson.cover_image %} {{ lesson.cover_image}} {% else %}{% static 'images/lession-1.jpg' %} {% endif %}" alt="" />
                         </div>
                         <div class="lession-col-right">
                             <ul class="lessons-steps">
@@ -329,11 +331,11 @@
                                             <i class=""><img src="{% static 'images/rating-fill.svg' %}" alt="" /></i> {{lesson.creator.avg_rating}}
                                         </div>
                                         <div class="yourtchr-dtl-col">
-                                            <i class=""><img src="{% static 'images/Video-Lesson.png' %}" alt="" /></i> 99+ Lessons
+                                            <i class=""><img src="{% static 'images/Video-Lesson.png' %}" alt="" /></i> {{ all_lessons }}+ Lessons
                                         </div>
-                                        <div class="yourtchr-dtl-col">
+                                        {% comment %} <div class="yourtchr-dtl-col">
                                             <i class=""><img src="{% static 'images/View.png' %}" alt="" /></i> 10,998 Minutes Watched
-                                        </div>
+                                        </div> {% endcomment %}
                                     </div>
                                 </div>
                             </div>
@@ -342,11 +344,13 @@
                                 {{lesson.creator.description}}
                             </div>
                         </div>
-                        {% if user.user_type == 'ST' %}
-                            {% if not is_student_enrolled %} 
-                                <button type="button" class="btn btn-theme book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">Book This Lesson</button>
-                            {% else %}
-                                <a href="{{BASE_URL}}/student/dashboard/enrollments"  role="button" class="btn btn-theme">Already Enrolled, Go to Dashboard</a>
+                        {% if lesson.slot_available %}
+                            {% if user.user_type == 'ST' %}
+                                {% if not is_student_enrolled %} 
+                                    <button type="button" class="btn btn-theme book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">Book This Lesson</button>
+                                {% else %}
+                                    <a href="{{BASE_URL}}/student/dashboard/enrollments"  role="button" class="btn btn-theme">Already Enrolled, Go to Dashboard</a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </div>
@@ -356,7 +360,7 @@
                             <h2 class="lession-title">{{mlesson.name}}</h2>
                             <div class="searchresult-row mb-5 pb-4">
                                 <div class="lession-col-left">
-                                    <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                                    <img src="{% if mlesson.cover_image %} {{ mlesson.cover_image}} {% else %}{% static 'images/lession-1.jpg' %} {% endif %}" alt="" />
                                 </div>
                                 <div class="lession-col-right">
                                     <ul class="lessons-steps">
@@ -395,11 +399,15 @@
                                     </ul>
                                     <div class="btn-area-2">
                                     {% if user.user_type == 'ST' %}
-                                        <a href="{{BASE_URL}}/lesson/{{mlesson.lesson_uuid}}/book" target="_blank" type="button" class="btn btn-theme">
-                                            Book Now
-                                        </a>
+                                        {% if not mlesson.slot_available %}
+                                            <a href="{{BASE_URL}}/lesson/{{mlesson.lesson_uuid}}/book" target="_blank" type="button" class="btn btn-theme">
+                                                Book Now
+                                            </a>
+                                        {% endif %}
                                     {% else %}
-                                    Go to lesson
+                                        <a href="{% url 'dashboard-lessons' %}" target="_blank" type="button" class="btn btn-theme">
+                                            Go to lesson
+                                        </a>
                                     {% endif %}
                                     </div>
                                 </div>
@@ -432,78 +440,85 @@
                         <h3>for {{lesson.no_of_slots}} sessions</h3>
                     </div>
                 {% endif %}
-                {% if user.user_type == 'ST' %}
-                    {% if not is_student_enrolled %} 
-                        <button type="button" class="btn btn-theme w-100 mb-4 book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">
-                            Book Now </button>
-                    {% else %} 
-                        <a href="{{BASE_URL}}/student/dashboard/enrollments"  role="button" class="btn btn-theme">Already Enrolled, Go to Dashboard</a>
+
+                <!-- check lesson slot available or not -->
+                {% if lesson.slot_available %}
+                    {% if user.user_type == 'ST' %}
+                        {% if not is_student_enrolled %} 
+                            <button type="button" class="btn btn-theme w-100 mb-4 book-this-lesson" data-lesson-uuid="{{lesson.lesson_uuid}}" data-session-type="{{lesson.session_type}}">
+                                Book Now </button>
+                        {% else %} 
+                            <a href="{{BASE_URL}}/student/dashboard/enrollments"  role="button" class="btn btn-theme">Already Enrolled, Go to Dashboard</a>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                {% if lesson.session_type != 'ONGOING' %}
-                    <div class="default-box-style">
-                        <div class="seat-remaining-title">
-                            <div class="circle-area">{{ seats_remaining }}</div>
-                            Seats remaining
-                        </div>
-                        <div class="session-seat-row">
-                            <h5>First Session on</h5>
-                            <div class="sessionDayDate">
-                                <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{lesson_time_slots.0.3}}
+
+                    {% if lesson.session_type != 'ONGOING' %}
+                        <div class="default-box-style">
+                            <div class="seat-remaining-title">
+                                <div class="circle-area">{{ seats_remaining }}</div>
+                                Seats remaining
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Start Time</label>
-                                        <div class="content-area">
-                                            {{lesson_time_slots.0.0}}
-                                        </div>
-                                    </div>
+                            <div class="session-seat-row">
+                                <h5>First Session on</h5>
+                                <div class="sessionDayDate">
+                                    <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{lesson_time_slots.0.3}}
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>End Time</label>
-                                        <div class="content-area">
-                                            {{lesson_time_slots.0.1}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="session-seat-row">
-                            <h5>Next Session on</h5>
-                            {% for slot in lesson_time_slots|slice:"1:4" %}
-                                <div class="next-session-row">
-                                    <div class="sessionDayDate">
-                                        <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{slot.3}}
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Start Time</label>
-                                                <div class="content-area">
-                                                {{slot.0}}
-                                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Start Time</label>
+                                            <div class="content-area">
+                                                {{lesson_time_slots.0.0}}
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>End Time</label>
-                                                <div class="content-area">
-                                                {{slot.1}}
-                                                </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>End Time</label>
+                                            <div class="content-area">
+                                                {{lesson_time_slots.0.1}}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
+                            </div>
+                            <div class="session-seat-row">
+                                <h5>Next Session on</h5>
+                                {% for slot in lesson_time_slots|slice:"1:4" %}
+                                    <div class="next-session-row">
+                                        <div class="sessionDayDate">
+                                            <i><img src="{% static 'images/time_date.png' %}" alt="" /></i> {{slot.3}}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Start Time</label>
+                                                    <div class="content-area">
+                                                    {{slot.0}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>End Time</label>
+                                                    <div class="content-area">
+                                                    {{slot.1}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="see-allS-btn d-flex mb-4">
-                        <button class="btn btn-liner"  data-toggle="modal" data-target="#modal3">See All Sessions</button>
-                    </div>
+                        <div class="see-allS-btn d-flex mb-4">
+                            <button class="btn btn-liner"  data-toggle="modal" data-target="#modal3">See All Sessions</button>
+                        </div>
+                    {% endif %}
+                    <button type="button" class="btn btn-theme w-100"  onclick="copyToClipboard(window.location.href)">Share Now</button>
+                {% else %}
+                    <a href="{{teacher_url}}"  role="button" class="btn btn-theme">View more lessons</a>
                 {% endif %}
-                <button type="button" class="btn btn-theme w-100"  onclick="copyToClipboard(window.location.href)">Share Now</button>
             </div>
         </div>
     </div>
