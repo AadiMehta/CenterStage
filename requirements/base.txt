@@ -1,0 +1,32 @@
+boto3==1.17.33  # https://github.com/boto/boto3
+channels==3.0.3 # https://github.com/django/channels
+channels-redis==3.2.0
+daphne==3.0.1
+google-api-python-client==2.0.2
+google-auth-httplib2==0.1.0
+google-auth-oauthlib==0.4.3
+nh-currency==1.0.1  # https://github.com/NearHuscarl/py-currency
+psycopg2-binary==2.8.6  # https://github.com/psycopg/psycopg2
+python-slugify==4.0.1  # https://github.com/un33k/python-slugify
+Pillow==8.1.2  # https://github.com/python-pillow/Pillow
+python-dotenv==0.15.0   # https://github.com/theskumar/python-dotenv
+redis==3.5.3  # https://github.com/andymccurdy/redis-py
+hiredis==1.1.0  # https://github.com/redis/hiredis-py
+stripe==2.56.0  # https://github.com/stripe/stripe-python
+twilio==6.54.0  # https://github.com/twilio/twilio-python
+
+# Django
+# ------------------------------------------------------------------------------
+Django==3.1.7   # pyup: < 3.2  # https://www.djangoproject.com/
+django-environ==0.4.5  # https://github.com/joke2k/django-environ
+django-extensions==3.1.1  # https://github.com/django-extensions/django-extensions
+django-formtools==2.2
+# Django REST Framework
+djangorestframework==3.12.2  # https://github.com/encode/django-rest-framework
+drf_yasg==1.20.0    # https://github.com/axnsan12/drf-yasg
+django-cors-headers==3.7.0 # https://github.com/adamchainz/django-cors-headers
+django-filter==2.4.0    # https://github.com/carltongibson/django-filter
+django-countries==7.1   # https://github.com/SmileyChris/django-countries
+django-storages[boto3]==1.11.1 # https://github.com/jschneier/django-storages
+django-phonenumber-field[phonenumbers]==5.0.0
+stream-django==1.6.2    # https://github.com/GetStream/stream-django

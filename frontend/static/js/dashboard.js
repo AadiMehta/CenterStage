@@ -126,10 +126,12 @@ function getNewZoomLinkAndRoute() {
       data: JSON.stringify({}),
       success: function (data, status, xhr) {
         const {join_url} = data;
+        $('.spinner-border').hide();
         openInNewTab(join_url);
       },
       error: function (jqXhr, textStatus, errorMessage) {
-        showModal('zoomnotconnected', true);
+        $('.spinner-border').hide();
+        showModal('disconnectedZoomModal', true);
         console.log('Error while Creating free meeting', errorMessage)
       }
     });
@@ -150,6 +152,12 @@ function handleZoomConnectAccount (event) {
   openWindow(url, 'Authorize Zoom', 600, 700, 1);
 }
 
+/**
+ * Check Zoom Account Handler
+ */
+function checkZoomConnectAccount(event) {
+  showModal('disconnectedZoomModal', true);
+}
 
 
 /**
@@ -157,9 +165,10 @@ function handleZoomConnectAccount (event) {
  */
 function handleCreateFreeMeeting(event) {
   if (!isZoomLinked) {
-    handleZoomConnectAccount(event);
+    checkZoomConnectAccount(event);
     return;
   }
+  $('.spinner-border').show();
   getNewZoomLinkAndRoute()
 }
 
@@ -168,7 +177,7 @@ function handleCreateFreeMeeting(event) {
  */
 function handleCreatePaidMeeting() {
     if (!isZoomLinked) {
-      alert('asdasd');
+      checkZoomConnectAccount(event);
     }
     let isValid = true;
     $('#topicError').hide();
@@ -246,7 +255,7 @@ function logout() {
 
 function handleOpenPaidMeeting(event) {
   if (!isZoomLinked) {
-    handleZoomConnectAccount(event);
+    checkZoomConnectAccount(event);
     return;
   }
   showModal('paidMeeting');
@@ -265,6 +274,11 @@ function init() {
       e.stopPropagation();
       addMoreInvitee();
     }
+  });
+
+  $('.check-zoom-connect').click(checkZoomConnectAccount);
+  $('#btnZoomConnectConfirm').click(() => {
+    window.location = '/dashboard/account/info';
   });
 
   $('.open-zoom-connect').click(handleZoomConnectAccount);

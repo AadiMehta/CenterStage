@@ -69,36 +69,9 @@ function init() {
   /**
    * Init Function to add event handlers
    */
-  let paymentAccount = $("#step1").data('paymentAccount') === 'True'? true : false;
-  let zoomLinked = $("#step1").data('zoomLinked')  === 'True'? true : false;
-
-  if (!paymentAccount || !zoomLinked) {
-    let message = 'Zoom account or payment method are not connected, please connect first and try again';
-    if (!paymentAccount && !zoomLinked) {
-      message = 'Zoom account and payment method are not connected, please connect first and try again';
-    } else if (!paymentAccount ) {
-      message = 'payment method is not connected, please connect first and try again';
-    } else {
-      message = 'Zoom account is not connected, please connect first and try again';
-    }
-
-    jQuery.confirm({
-      title: 'Encountered an error!',
-      content: message,
-      type: 'red',
-      typeAnimated: true,
-      buttons: {
-          tryAgain: {
-              text: 'Go to dashboard',
-              btnClass: 'btn-red',
-              action: function(){
-                window.location = '/dashboard/lessons';
-              }
-          }
-      }
-    });
-  }
-   
+  // let paymentAccount = $("#step1").data('paymentAccount') === 'True'? true : false;
+  // let zoomLinked = $("#step1").data('zoomLinked')  === 'True'? true : false;
+  
   $('#lcs1Proceed').click(handleLCS1Proceed);
   $('#singleSession').click(handleLessonTypeSelect);
   $('#multiSession').click(handleLessonTypeSelect);
