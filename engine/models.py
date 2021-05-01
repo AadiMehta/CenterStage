@@ -1,13 +1,14 @@
 import uuid
 from django.utils import timezone
 from django.db import models
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Avg
 from django.conf import settings
 from users.models import TeacherProfile, StudentProfile, User
 from users.s3_storage import S3_LessonCoverImage_Storage
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import ugettext_lazy as _
 from enum import Enum
+from frontend.utils.auth import get_time_duration
 from stream_django import activity
 from users.models import User
 
@@ -67,7 +68,7 @@ class LessonData(models.Model):
         TeacherProfile, on_delete=models.CASCADE, related_name="lessons")
     name = models.CharField(_("Name of the lesson"), max_length=256)
     description = models.TextField(_("Description of the lesson"), blank=True, null=True)
-    no_of_participants = models.IntegerField(_('No of participants'), null=True)
+    no_of_participants = models.IntegerField(_('No of participants'), default=1)
     language = models.JSONField(default=list)
     lesson_type = models.CharField(
         _("Type of lesson"), null=True, choices=LessonTypes.choices, max_length=10)
@@ -128,6 +129,10 @@ class LessonSlots(models.Model):
     calendar_info = models.JSONField(default=dict, null=True)
     slot_booked = models.BooleanField(_('Slot Booked Status'), default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def session_duration(self):
+        return get_time_duration(self.lesson_to - self.lesson_from, formatted=True)
 
 
 class Meeting(models.Model):

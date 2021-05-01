@@ -144,17 +144,21 @@ def pre_save_order_receiver(sender, instance, *args, **kwargs):
         instance.order_id = unique_order_id_generator(instance)
 
 class PaymentIntentManager(models.Manager):
-    def get_stripe_account(self, lesson):
+    def get_teacher_stripe_account(self, lesson):
         user = lesson.creator.user
         stripe_account = user.get_stripe_account()
         return stripe_account
     
     def calculate_order_amount(self, lesson, order_obj):
-        # Calculate the order total on the server to prevent
-        # people from directly manipulating the amount on the client
+        """
+        Calculate the order total on the server to prevent
+        A positive integer representing how much to charge in the smallest currency unit
+        e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency
+        """
         total_slots = order_obj.lesson_slots.count()
         price = lesson.price.get('value')
-        return total_slots * int(price)
+        order_amount = total_slots * int(price)
+        return order_amount * 100
     
     def calculate_application_fee_amount(self, amount):
         # Take a 10% cut.
@@ -168,16 +172,17 @@ class PaymentIntentManager(models.Manager):
 
         try:
             # Create a PaymentIntent with the order amount, currency, and transfer destination
+            teacher_stripe_account = self.get_teacher_stripe_account(lesson)
             total_amount = self.calculate_order_amount(lesson, order_obj)
-            stripe_account = self.get_stripe_account(lesson)
+            application_fee_amount = self.calculate_application_fee_amount(total_amount)
 
             stripe_payment_intent = stripe.PaymentIntent.create(
                 amount=total_amount,
                 currency=lesson.price.get('currency'),
-                transfer_data={'destination': stripe_account.account_id},
+                transfer_data={'destination': teacher_stripe_account.account_id},
                 customer=billing_profile.customer_id,
                 metadata={'order_id': order_obj.order_id, 'lesson_id': lesson.lesson_uuid},
-                application_fee_amount=self.calculate_application_fee_amount(total_amount)
+                application_fee_amount=application_fee_amount
             )
             new_payment_intent_obj = self.model.objects.create(
                 billing_profile=billing_profile,

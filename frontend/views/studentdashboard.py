@@ -4,8 +4,8 @@ from django.db.models import Q
 from django.utils import timezone
 from django.conf import settings
 from django.views.generic import TemplateView
-from engine.models import LessonStatuses, Enrollment
-from engine.serializers import EnrollmentSerializer
+from engine.models import LessonData, LessonStatuses, Enrollment
+from engine.serializers import EnrollmentSerializer, LessonStudentSerializer
 
 
 class StudentDashboardEnrollments(TemplateView):
@@ -17,11 +17,10 @@ class StudentDashboardEnrollments(TemplateView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super().get_context_data(**kwargs)
-        enrollments = Enrollment.objects.filter(
-            student=user.student_profile_data
-        ).order_by('lesson_id', 'created_at').distinct('lesson_id', 'created_at')
-        serializer = EnrollmentSerializer(enrollments, many=True)
-        context['enrollments'] = serializer.data
+        lessons = LessonData.objects.filter(
+            enrollments__student=user.student_profile_data).order_by('lesson_uuid', '-created_at').distinct('lesson_uuid')
+        serializer = LessonStudentSerializer(lessons, many=True)
+        context['lessons'] = serializer.data
         context['user'] = user
         return context
 
@@ -71,10 +70,10 @@ class StudentDashboardSchedulesPastSessions(TemplateView):
         context = super().get_context_data(**kwargs)
         tz_now = timezone.now().astimezone(pytz.UTC)
         enrollments = Enrollment.objects.filter(
-            Q(lessonslot__lesson_from__lte=tz_now) | Q(lessonslot__lesson_to__lte=tz_now),
+            Q(lessonslot__lesson_to__lte=tz_now),
             lesson__status=LessonStatuses.ACTIVE,
             student=user.student_profile_data
-        ).order_by('lesson_id', 'created_at').distinct('lesson_id', 'created_at')
+        ).order_by('-created_at')
         serializer = EnrollmentSerializer(enrollments, many=True)
         context['enrollments'] = serializer.data
         context['user'] = self.request.user
@@ -92,10 +91,10 @@ class StudentDashboardSchedulesUpcomingSessions(TemplateView):
         context = super().get_context_data(**kwargs)
         tz_now = timezone.now().astimezone(pytz.UTC)
         enrollments = Enrollment.objects.filter(
-            Q(lessonslot__lesson_from__gte=tz_now) | Q(lessonslot__lesson_to__lte=tz_now),
+            Q(lessonslot__lesson_to__gte=tz_now),
             lesson__status=LessonStatuses.ACTIVE,
             student=user.student_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
+        ).order_by('lessonslot__lesson_from')
         serializer = EnrollmentSerializer(enrollments, many=True)
         context['enrollments'] = serializer.data
         context['user'] = self.request.user

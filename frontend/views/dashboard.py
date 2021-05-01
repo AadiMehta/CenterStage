@@ -1,4 +1,5 @@
 import urllib
+from django.db.models.query import QuerySet
 import pytz
 import operator
 from django.template.defaultfilters import slugify
@@ -6,10 +7,10 @@ from django.db.models import Q, Sum
 from django.db.models import Count, Avg
 from django.utils import timezone
 from django.conf import settings
-from django.views.generic import TemplateView
+from django.views.generic import ListView, TemplateView
 from django.db.models.functions import Coalesce
 from engine.models import LessonData, LessonSlots, LessonStatuses, Enrollment, LessonTypes, LessonFilterType, LessonRating
-from engine.serializers import LessonTeacherPageSerializer, LessonSerializer, LessonSlotSerializer, SlotSerializer
+from engine.serializers import LessonTeacherPageSerializer, LessonDashboardSerializer, LessonSerializer, LessonSlotSerializer, SlotSerializer
 from users.models import TeacherPageVisits, TeacherEarnings, AccountTypes
 from frontend.constants import currencies as currency_options
 from django_countries import countries
@@ -165,10 +166,10 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
         context = super().get_context_data(**kwargs)
         tz_now = timezone.now().astimezone(pytz.UTC)
         lesson_slots = LessonSlots.objects.filter(
-            Q(lesson_from__gte=tz_now) | Q(lesson_to__lte=tz_now),
-            lesson__status=LessonStatuses.ACTIVE,
-            creator=self.request.user.teacher_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
+            Q(lesson_from__gte=tz_now)&
+            Q(lesson__status=LessonStatuses.ACTIVE) &
+            Q(creator=self.request.user.teacher_profile_data)
+        ).order_by('-lesson_from').order_by('lesson_id').distinct('lesson_id')
         serializer = SlotSerializer(lesson_slots, many=True)
         context['lessons_slots'] = serializer.data
         context['user'] = self.request.user
@@ -190,9 +191,10 @@ class DashboardLessons(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        lessons = LessonData.objects.filter(creator=self.request.user.teacher_profile_data).order_by('-created_at')
+        user = self.request.user
+        lessons = LessonData.objects.filter(creator=user.teacher_profile_data).order_by('-created_at')
         lessons = get_filtered_lessons(self.request.GET.get('filter'), lessons)
-        serializer = LessonTeacherPageSerializer(lessons, many=True)
+        serializer = LessonDashboardSerializer(lessons, many=True)
         context['lessons'] = serializer.data
         context['user'] = self.request.user
         context.update({

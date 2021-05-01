@@ -44,32 +44,27 @@
                      <ul class="lessions-countDetail-list">
                         <li>
                            <div class="lessions-countDetail-box">
-                              <h4>NA</h4>
+                              <h4>{{ lesson.total_earn_count }} {{ lesson.price.currency }}</h4>
                               <h5>Total Earned</h5>
                            </div>
-                           <span class="growth-text">Lorem ipsum 25.30% <i><img src="{% static 'images/arrow-up.png' %}" alt="" /></i> growth this month</span>
+                           <span class="growth-text"> </span>
                         </li>
                         <li>
                            <div class="lessions-countDetail-box">
-                              <h4><img src="{% static 'images/star-w.svg' %}" alt="" />NA</h4>
+                              <h4><img src="{% static 'images/star-w.svg' %}" alt="" />{{ lesson.rating_count }}</h4>
                               <h5>Total Rating</h5>
                            </div>
                         </li>
                         <li>
                            <div class="lessions-countDetail-box">
-                              <h4>NA</h4>
-                              <h5>Sessions Conducted</h5>
+                              <h4>{{ lesson.completed_sessions_count }}</h4>
+                              <h5>Session(s) Conducted</h5>
                            </div>
                         </li>
                         <li>
                            <div class="lessions-countDetail-box">
                               <div class="crnt-studnt">
-                                 <h4>{{lesson.student_count}}</h4>
-                                 <div class="profimg-col">
-                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                                    <div class="profimg-rounded"><img src="{% static 'images/user-img.png' %}" alt=""></div>
-                                 </div>
+                                 <h4>{{lesson.enrollment_count}}</h4>
                               </div>
                               <h5>Current Students</h5>
                            </div>
@@ -78,7 +73,7 @@
                   </div>
                   <div class="searchresult-row">
                      <div class="lession-col-left">
-                        <img src="{% static 'images/lession-1.jpg' %}" alt="" />
+                        <img src="{% if lesson.cover_image %} {{ lesson.cover_image}} {% else %}{% static 'images/lession-1.jpg' %} {% endif %}" alt="" />
                      </div>
                      <div class="lession-col-right">
                         <ul class="lessons-steps">
@@ -92,8 +87,8 @@
                            <li>
                               <i><img src="{% static 'images/hour-glass.png' %}" alt=""></i>
                               <div class="lessons-steps-text">
-                                 <h4>Session Duration</h4>
-                                 <span>45 Minutes</span>
+                                 <h4>Total Hours</h4>
+                                 <span>{{ lesson.total_hours }} Hours</span>
                               </div>
                            </li>
                            <li>
@@ -112,6 +107,20 @@
                               <div class="lessons-steps-text">
                                  <h4>Session Language</h4>
                                  <span>Hosted in {% for language in lesson.language %}{{language}}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/time.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Created on</h4>
+                                 <span>{{ lesson.created_at }}</span>
+                              </div>
+                           </li>
+                           <li>
+                              <i><img src="{% static 'images/time.png' %}" alt=""></i>
+                              <div class="lessons-steps-text">
+                                 <h4>Next Sesson</h4>
+                                 <span>{{ lesson.upcoming_slot.lesson_from }}</span>
                               </div>
                            </li>
                         </ul>
