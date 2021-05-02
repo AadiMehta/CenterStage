@@ -2,7 +2,9 @@ import logging
 from django.utils import timezone
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
 from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Avg, Count
 from formtools.wizard.views import SessionWizardView
@@ -49,6 +51,7 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
             is_student_enrolled = lesson.is_student_enrolled(user.student_profile_data)
             context['is_student_enrolled'] = is_student_enrolled
 
+        context['all_lessons'] = lesson.creator.total_lessons
         slots = lesson.slots.all()
         upcoming_slots = lesson.slots.all().filter(Q(lesson_from__gt=timezone.now()))
 
@@ -104,10 +107,16 @@ class BookLessonWizard(LoginRequiredMixin, SessionWizardView):
         for mslots in more_lessons_slots:
             more_lessons.append(mslots.lesson)
         context['more_lessons'] = LessonTeacherPageSerializer(more_lessons, many=True).data
-
+        context['teacher_url'] = f"{settings.SCHEME}://{lesson.creator.subdomain}.{settings.SITE_URL}"
         return context
 
     def dispatch(self, request, *args, **kwargs):
+        # check for expired lessons
+        lesson_uuid = self.request.resolver_match.kwargs.get('lesson_uuid')
+        lesson = get_object_or_404(LessonData, lesson_uuid=lesson_uuid)
+        upcoming_slots = lesson.upcoming_slots()
+        if not upcoming_slots.exists():
+            messages.error(self.request, 'Lesson expired, Bookings for this lesson are closed')
         return super(BookLessonWizard, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):

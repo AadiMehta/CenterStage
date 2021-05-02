@@ -33,13 +33,7 @@
                <div class="boarding-left">
                <div class="form-group">
                   <input id="slot_type" name="step2-slot_type" type="text" value="{{wizard.form.slot_type.value|default_if_none:'fixed'}}" style="display:none">
-                  <div class="select-dateTime-row">
-                     <div class="select-dateTime-col">
-                        <button id="fixed-time-slot" type="button" class="btn-select-session {% if wizard.form.slot_type.value == None or wizard.form.slot_type.value == 'fixed' %}selected{% endif %}" data-slot-type="fixed">Select Date & Time</button>
-                        <span class="select-session-text">By selecting this option, students will be
-                        required to follow lesson timings set by you</span>
-                     </div>
-                  </div>
+<hr>
                </div>
                <div class="selectdatetile-wrap">
                   <div class="row">
@@ -101,6 +95,7 @@
                                  <input type="text" placeholder="Select End Time" name="step2-session_end_time" id="sessionEndTimePicker" class="timepicker" />
                               </div>
                               <p id="sessionEndTimePickerError" style="color:red;"></p>
+                              <p id="sessionEndTimePickerError2" style="color:red;"></p>
                            </div>
                         </div>
                      </div>
@@ -145,6 +140,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="MonEndTimeError" style="color:red;"></p>
+                                 <p id="MonEndTimeError2" style="color:red;"></p>
                               </td>
                            </tr>
                            <tr>
@@ -170,6 +166,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="TueEndTimeError" style="color:red;"></p>
+                                 <p id="TueEndTimeError2" style="color:red;"></p>
                               </td>
                            </tr>
                            <tr>
@@ -195,6 +192,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="WedEndTimeError" style="color:red;"></p>
+                                 <p id="WedEndTimeError2" style="color:red;"></p>
                               </td>
                            </tr>
                            <tr>
@@ -209,6 +207,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="ThuStartTimeError" style="color:red;"></p>
+                                 <p id="ThuStartTimeError2" style="color:red;"></p>
                               </td>
                               <td>
                                  <div class="liner-select-drop">
@@ -220,6 +219,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="ThuEndTimeError" style="color:red;"></p>
+                                 <p id="ThuEndTimeError2" style="color:red;"></p>
                               </td>
                            </tr>
                            <tr>
@@ -245,6 +245,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="FriEndTimeError" style="color:red;"></p>
+                                 <p id="FriEndTimeError2" style="color:red;"></p>
                               </td>
                            </tr>
                            <tr>
@@ -270,6 +271,7 @@
                                     {% endcomment %}
                                  </div>
                                  <p id="SatEndTimeError" style="color:red;"></p>
+                                 <p id="SatEndTimeError2" style="color:red;"></p>
                               </td>
                            </tr>
                            <tr>
@@ -294,6 +296,7 @@
                                     </select>
                                     {% endcomment %}
                                  </div>
+                                 <p id="SunEndTimeError" style="color:red;"></p>
                                  <p id="SunEndTimeError" style="color:red;"></p>
                               </td>
                            </tr>

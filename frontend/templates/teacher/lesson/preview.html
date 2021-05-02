@@ -198,13 +198,9 @@
                      <button type="submit" class="btn btn-primary btn-lg btn-theme" data-toggle="modal" data-target="#Publish"><span>Save & Publish</span> <i><img src="{% static 'images/next.svg' %}" alt="" /></i></button>
                   </div>
                </div>
+               {% if form_data.start_date %}
                <div class="boarding-right text-left">
-                  <div class="form-group">
-                     <div class="cald-right-col">
-                        <img src="{% static 'images/cald-2.png' %}" alt="" />
-                     </div>
-                     {% comment %} <span class="required-text pl-5">Please select 5 session dates</span> {% endcomment %}
-                  </div>
+
                   <div class="row">
                      <div class="col-md-6">
                         <div class="form-group">
@@ -224,6 +220,7 @@
                      </div>
                   </div>
                </div>
+               {% endif %}
             </div>
          </div>
       </div>

@@ -211,6 +211,11 @@ class TeacherProfile(models.Model):
     def get_teacher_full_url(self):
         return "{0}://{1}.{2}".format(settings.SCHEME, self.subdomain, settings.SITE_URL)
 
+    @property
+    def total_lessons(self):
+        lesson_count = self.lessons.count()
+        return lesson_count
+
     class Meta:
         verbose_name = _('Teacher Profile')
         verbose_name_plural = _('Teacher Profiles')

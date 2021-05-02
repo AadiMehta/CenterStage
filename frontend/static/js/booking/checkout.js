@@ -188,22 +188,7 @@ var showError = function (errorMsgText) {
   errorMsg.textContent = errorMsgText;
   setTimeout(function () {
     errorMsg.textContent = "";
-  }, 4000);
-
-  $.confirm({
-    title: "Encountered an error!",
-    content: errorMsgText,
-    type: "red",
-    typeAnimated: true,
-    buttons: {
-      tryAgain: {
-        text: "Try again",
-        btnClass: "btn-red",
-        action: function () {},
-      },
-      close: function () {},
-    },
-  });
+  }, 10000);
 };
 
 // Show a spinner on payment submission
