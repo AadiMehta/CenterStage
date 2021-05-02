@@ -142,7 +142,7 @@ class DashboardSchedulesPastSessions(TemplateView):
             lesson_to__lte=tz_now,
             lesson__status=LessonStatuses.ACTIVE,
             creator=self.request.user.teacher_profile_data
-        ).order_by('-created_at').order_by('lesson_id').distinct('lesson_id')
+        ).order_by('-created_at')
         serializer = SlotSerializer(lesson_slots, many=True)
         context['lessons_slots'] = serializer.data
         context['user'] = self.request.user
@@ -169,7 +169,7 @@ class DashboardSchedulesUpcomingSessions(TemplateView):
             Q(lesson_from__gte=tz_now)&
             Q(lesson__status=LessonStatuses.ACTIVE) &
             Q(creator=self.request.user.teacher_profile_data)
-        ).order_by('-lesson_from').order_by('lesson_id').distinct('lesson_id')
+        ).order_by('lesson_from')
         serializer = SlotSerializer(lesson_slots, many=True)
         context['lessons_slots'] = serializer.data
         context['user'] = self.request.user

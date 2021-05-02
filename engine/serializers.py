@@ -181,10 +181,15 @@ class LessonDashboardSerializer(serializers.ModelSerializer):
         return lesson_slots.count()
 
     def get_total_earn_count(self, obj):
-        price = obj.price.get('value')
-        enrollment_count = obj.enrollments.distinct('student').count()
-        earn_count = enrollment_count * int(price)
-        return earn_count * 0.9
+        # TODO: calculate total lesson earning
+        # try:
+        #     price = obj.price.get('value', 0)
+        #     enrollment_count = obj.enrollments.distinct('student').count()
+        #     earn_count = enrollment_count * int(price)
+        #     return earn_count * 0.9
+        # except Exception as e:
+        #     return 'NA'
+        return 'NA'
 
     def get_enrollment_count(self, obj):
         return obj.enrollments.distinct('student').count()
@@ -197,7 +202,10 @@ class LessonDashboardSerializer(serializers.ModelSerializer):
     def get_total_hours(self, obj):
         slots = obj.slots.all().aggregate(duration=Sum(F('lesson_to') - F('lesson_from')))
         duration = slots.get('duration')
-        return int(duration.total_seconds() // 3600)
+        total_hrs = 0
+        if duration:
+            total_hrs = int(duration.total_seconds() // 3600)
+        return total_hrs
 
     class Meta:
         model = LessonData
