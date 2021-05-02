@@ -76,7 +76,7 @@ class LessonData(models.Model):
         _("Type of lesson"), choices=SessionTypes.choices, max_length=10)
     meeting_type = models.CharField(
         _("Type of Meeting"), choices=MeetingTypes.choices, max_length=20)
-    price = models.JSONField(default=list)
+    price = models.JSONField(default=dict)
     timezone = models.CharField(
         _("Timezone of the lesson"), null=True, max_length=100)
     meeting_info = models.JSONField(default=dict)
