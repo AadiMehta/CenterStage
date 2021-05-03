@@ -140,6 +140,7 @@ function calculateNumberOfSessions() {
     }
   })
   $('#noOfSessions')[0].value = noOfSessions;
+  handlePricePerSessionChange();
 }
 
 function handleSesionDaysSelect(event) {
@@ -242,11 +243,7 @@ function handlePricePerSessionChange() {
   $('#totalPrice')[0].value = totalPrice;
   $('#pricePerSessionTotalPrice').text(`${symbol} ${totalPrice}`);
 }
-$("#pricePerSessionValue").on('keyup', function (e) {
-  if (e.key === 'Enter' || e.keyCode === 13) {
-      return;
-  }
-});
+
 // ****** End of Event Handlers ****** 
 
 function init() {
@@ -435,7 +432,22 @@ function updateCopySameTime($eventTarget) {
 }
 
 $('#copySameTime').click((event) => {
-  updateCopySameTime($(event.target));
-});
 
+  startDate = $('#startDatepicker')[0].value;
+  endDate = $('#endDatepicker')[0].value;
+
+  if(!startDate && !endDate){
+    $("#copySameTimeError").text("Please select start & end date first.");
+  }
+  else{
+    $("#copySameTimeError").text('');
+    updateCopySameTime($(event.target));
+  }
+});
+$(document).keypress(
+  function(event){
+    if (event.which == '13') {
+      event.preventDefault();
+    }
+});
 init();

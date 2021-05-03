@@ -114,6 +114,32 @@ function handleLCS2Proceed() {
     $("#step2").submit();
   }
 }
+function handlePricePerSessionChange() {
+  const selectedCurrencyEl = $('#pricePerSessionCurrency')[0];
+  const selectedCurrency = selectedCurrencyEl.children[selectedCurrencyEl.selectedIndex]
+  const pricePerSessionValue = $('#pricePerSessionValue')[0].value;
+  let noOfSessions = 1;
+  if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
+    noOfSessions = parseInt($('#noOfSessions')[0].value);
+  }
+  var totalPrice =  document.getElementById("pricePerSessionValue").value;
+  if(noOfSessions>0){
+    totalPrice *= noOfSessions;
+  }
+  else if(noOfSessions == 0){
+    totalPrice = 0;
+  }
+  const {symbol} = selectedCurrency.dataset;
+  $('#totalPrice')[0].value = totalPrice;
+  $('#pricePerSessionTotalPrice').text(`${symbol} ${totalPrice}`);
+
+}
+$("#pricePerSessionValue").on('keyup', function (e) {
+  if (e.key === 'Enter' || e.keyCode === 13) {
+      return;
+  }
+});
+
 
 function calculateNumberOfSessions() {
   if (sessionType !== 'MULTI') return;
@@ -137,6 +163,7 @@ function calculateNumberOfSessions() {
     }
   })
   $('#noOfSessions')[0].value = noOfSessions;
+  handlePricePerSessionChange();
 }
 
 function handleSesionDaysSelect(event) {
@@ -159,7 +186,7 @@ function handleSesionDaysSelect(event) {
     $dayEndTime[0].disabled = false;
   }
   $weekdaysInput.val(String(weekDayList));
-  calculateNumberOfSessions()
+  calculateNumberOfSessions();
 }
 
 function enablePriceCheck(name) {
@@ -242,27 +269,9 @@ function init() {
     }
   })
 
-  $('#pricePerSessionValue').change(function() {
-    const selectedCurrencyEl = $('#pricePerSessionCurrency')[0];
-    const selectedCurrency = selectedCurrencyEl.children[selectedCurrencyEl.selectedIndex]
-    const pricePerSessionValue = $('#pricePerSessionValue')[0].value;
-    let noOfSessions = 1;
-    if (sessionType !== 'ONGOING' && sessionType !== 'SINGLE') {
-      noOfSessions = parseInt($('#noOfSessions')[0].value);
-    }
-    var totalPrice =  document.getElementById("pricePerSessionValue").value;
-    if(noOfSessions>0){
-      totalPrice *= noOfSessions;
-    }
-    const {symbol} = selectedCurrency.dataset;
-    $('#totalPrice')[0].value = totalPrice;
-    $('#pricePerSessionTotalPrice').text(`${symbol} ${totalPrice}`);
-  })
-  $("#pricePerSessionValue").on('keyup', function (e) {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-        return;
-    }
-});
+
+
+$('#pricePerSessionValue').change(handlePricePerSessionChange);
 
   $('#lcs2Proceed').click(handleLCS2Proceed);
   /*
@@ -309,7 +318,23 @@ function updateCopySameTime($eventTarget) {
 }
 
 $('#copySameTime').click((event) => {
+  
+startDate = $('#startDatepicker')[0].value;
+endDate = $('#endDatepicker')[0].value;
+
+if(!startDate && !endDate){
+  $("#copySameTimeError").text("Please select start & end date first.");
+}
+else{
+  $("#copySameTimeError").text('');
   updateCopySameTime($(event.target));
+}
 });
 
+$(document).keypress(
+  function(event){
+    if (event.which == '13') {
+      event.preventDefault();
+    }
+});
 init();
