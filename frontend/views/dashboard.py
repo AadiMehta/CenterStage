@@ -14,6 +14,8 @@ from engine.serializers import LessonTeacherPageSerializer, LessonDashboardSeria
 from users.models import TeacherPageVisits, TeacherEarnings, AccountTypes
 from frontend.constants import currencies as currency_options
 from django_countries import countries
+from payments.constants import STIPE_COUNTRIES
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -125,7 +127,8 @@ class DashboardAccountPayment(TemplateView):
         user = self.request.user
         context['user'] = user
         context['payment_account'] = user.payment_account.first()
-        context['countries_list'] = list(countries)
+        context['currency_options'] = currency_options
+        context['countries_list'] = STIPE_COUNTRIES
         return context
 
 

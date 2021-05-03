@@ -20,64 +20,79 @@
       </div>
       <div class="modal-body">
       <form id="paymentAddForm" action="." method="post" autocomplete="off">{% csrf_token %}
-        <p id="paymentAddFormError" style="color:red;"></p>
+
         <div class="login-form">
-          <div class="form-group">
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_cake.svg' %}" alt="" /></i>
-              <input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth - dd/mm/yyyy" required/>
+          <fieldset>
+            <legend>Personal:</legend>
+            <p class="paymentAddFormError" style="color:red;"></p>
+            <div class="form-group">
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_cake.svg' %}" alt="" /></i>
+                  <input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth - dd/mm/yyyy" maxlength="10"  required/>
+                </div>
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
+                  <input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." />
+                </div>
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_addres.svg' %}" alt="" /></i>
+                  <input id="address" type="text" class="form-control" placeholder="Address" required/>
+                </div>
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
+                  <select name="country" id="country" class="form-control" required>
+                      <option value="">Select Country</option>
+                      {% for country in countries_list %}
+                        <option value="{{ country.code }}">{{ country.name }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="inp-col">
+                <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
+                  <select name="currency" class="form-control" id="currency" required>
+                      <option value="">Select Currency</option>
+                      {% for currency in currency_options %}
+                        <option value="{{currency.value}}">{{ currency.value}} - {{currency.label}}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_location.svg' %}" alt="" /></i>
+                  <input id="state" type="text" class="form-control" placeholder="State or Union territory Code - e.g. Delhi - DL" />
+                </div>
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_city.svg' %}" alt="" /></i>
+                  <input id="city" type="text" class="form-control" placeholder="City" required/>
+                </div>
+                <div class="inp-col">
+                  <i><img src="{% static '/images/icon_mailbox.svg' %}" alt="" /></i>
+                  <input id="postalCode" type="text" class="form-control" placeholder="Postal Code" />
+                </div>
             </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_addres.svg' %}" alt="" /></i>
-              <input id="address" type="text" class="form-control" placeholder="Address" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_city.svg' %}" alt="" /></i>
-              <input id="city" type="text" class="form-control" placeholder="City" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_mailbox.svg' %}" alt="" /></i>
-              <input id="postalCode" type="text" class="form-control" placeholder="Postal Code" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_location.svg' %}" alt="" /></i>
-              <input id="state" type="text" class="form-control" placeholder="State or Union territory Code - e.g. Delhi - DL" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
-              <select name="country" id="country" class="form-control" required>
-                <option value="">Select Country</option>
-                {% for country in countries_list %}
-                    <option value="{{ country.code }}">{{ country.name }}</option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
-              <input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." required/>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
-              <input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_bank.svg' %}" alt="" /></i>
-              <input id="bankName" type="text" class="form-control" placeholder="Bank Name" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
-              <input id="ifscCode" type="text" class="form-control" placeholder="IFSC Code" required/>
-            </div>
-            <div class="inp-col">
-              <i><img src="{% static '/images/icon-user.svg' %}" alt="" /></i>
-              <input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Namety" required/>
-            </div>
-          </div>
-
-            <button id="submitPayment" type="button" class="btn btn-primary btn-full btn-lg">Submit</button>
+          </fieldset>
+          <fieldset>
+              <legend>Bank Information:</legend>
+              <p class="paymentAddFormError" style="color:red;"></p>
+                <div class="form-group">
+                  <div class="inp-col">
+                  <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
+                  <input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" required/>
+                  </div>
+                  <div class="inp-col">
+                  <i><img src="{% static '/images/icon_bank.svg' %}" alt="" /></i>
+                  <input id="bankName" type="text" class="form-control" placeholder="Bank Name" required/>
+                  </div>
+                  <div class="inp-col">
+                  <i> <img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
+                  <input id="ifscCode" type="text" class="form-control" placeholder="Routing Number, sort code, or country-appropriate institution number for the bank account." />
+                  </div>
+                  <div class="inp-col">
+                  <i><img src="{% static '/images/icon-user.svg' %}" alt="" /></i>
+                  <input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Name" required/>
+                </div>
+                </div>
+          </fieldset>
+            <button id="submitPayment" type="button" class="btn btn-primary btn-full btn-lg">Add Payment Method</button>
         </div>
       </form>
       </div>

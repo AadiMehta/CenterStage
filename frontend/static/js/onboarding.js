@@ -288,6 +288,7 @@ function checkPaymentAddFormInputs() {
   const postalCode = document.querySelector("#postalCode");
   const state = document.querySelector("#state");
   const country = document.querySelector("#country");
+  const currency = document.querySelector("#currency");
   const bankAccountNo = document.querySelector("#bankAccountNumber");
   const ifscCode = document.querySelector("#ifscCode");
   const accountHolderName = document.querySelector("#accountHolderName");
@@ -335,6 +336,14 @@ function checkPaymentAddFormInputs() {
     setSuccessFor(country);
   }
 
+
+  if (currency.value.trim() === "") {
+    setErrorFor(currency, "please select country");
+    isValid = false;
+  } else {
+    setSuccessFor(currency);
+  }
+
   if (bankAccountNo.value.trim() === "") {
     setErrorFor(bankAccountNo, "bankAccountNo cannot be blank");
     isValid = false;
@@ -367,8 +376,8 @@ function checkPaymentAddFormInputs() {
 }
 
 function setErrorFor(input, message) {
-  $("#paymentAddFormError").text("* all fields are required");
-  $("#paymentAddFormError").show();
+  $(".paymentAddFormError").text("* all fields are required");
+  $(".paymentAddFormError").show();
 }
 
 function setSuccessFor(input) {
@@ -377,39 +386,7 @@ function setSuccessFor(input) {
 
 
 function addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName) {
-  const token = getCookie('auth_token');
-  $.ajax('/api/payments/add/', {
-    type: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    data: JSON.stringify({
-      "dob": dob,
-      "personalID": personalID,
-      "address": address,
-      "city": city,
-      "postalCode": postalCode,
-      "state": state,
-      "country": country,
-      "bankAccountNo": bankAccountNo,
-      "ifscCode": ifscCode,
-      "accountHolderName": accountHolderName
-    }),
-    success: function (data, status, xhr) {
-      console.log("payment added successfully");
-      document.getElementById("paymentAddForm").reset();
-      hideModal("bankingmodal");
-      $('#onboardingZoomConnectError').text('payment added successfully');
-      $('#onboardingStripeError').show();
-    },
-    error: function (jqXhr, textStatus, errorMessage) {
-      // Todo: Show Error Message on UI
-      console.log('Error while creating payment account', errorMessage)
-      $('#paymentAddFormError').text('Error while adding payment account');
-      $('#paymentAddFormError').show()
-      // window.location.href = "/onboarding/step2";
-    }});
+  
 }
 
 
@@ -421,13 +398,47 @@ function onSubmitPaymentClicked () {
   const postalCode = $('#postalCode')[0].value;
   const state = $('#state')[0].value;
   const country = $('#country')[0].value;
+  const currency = $("#currency")[0].value;
   const bankAccountNo = $('#bankAccountNumber')[0].value;
   const ifscCode = $('#ifscCode')[0].value;
   const accountHolderName = $('#accountHolderName')[0].value;
   const personalID = $('#personalID')[0].value
   const isFormValid = checkPaymentAddFormInputs();
   if (isFormValid) {
-    addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName);
+    const token = getCookie('auth_token');
+  $.ajax('/api/payments/add/', {
+    type: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    data: JSON.stringify({
+      dob: dob,
+      personalID: personalID,
+      address: address,
+      city: city,
+      postalCode: postalCode,
+      state: state,
+      country: country,
+      currency: currency,
+      bankAccountNo: bankAccountNo,
+      ifscCode: ifscCode,
+      accountHolderName: accountHolderName,
+    }),
+    success: function (data, status, xhr) {
+      console.log("payment added successfully");
+      document.getElementById("paymentAddForm").reset();
+      hideModal("bankingmodal");
+      $('#onboardingZoomConnectError').text('payment added successfully');
+      $('#onboardingStripeError').show();
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+      // Todo: Show Error Message on UI
+      console.log('Error while creating payment account', errorMessage)
+      $('.paymentAddFormError').text('Error while adding payment account');
+      $('.paymentAddFormError').show()
+      // window.location.href = "/onboarding/step2";
+    }});
   }
   
 }
