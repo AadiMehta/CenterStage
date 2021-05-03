@@ -50,11 +50,11 @@ class PaymentAccountView(APIView):
     authentication_classes = [BearerAuthentication]
     permission_classes = []
 
-    def create_stripe_account(self, request):
-        dob = request.data['dob'].split('/')
+    def create_stripe_account(self, request, data):
+        dob = data['dob'].split('/')
         timestamp = int(datetime.now().timestamp())
         account = stripe.Account.create(
-            country=request.data['country'][0:2].upper(),
+            country=data['country'][0:2].upper(),
             type='custom',
             business_type='individual',
             email=request.user.email,
@@ -67,14 +67,14 @@ class PaymentAccountView(APIView):
                 'email': request.user.email,
                 'first_name': request.user.first_name,
                 'last_name': request.user.last_name,
-                'id_number': request.data['personalID'],
+                'id_number': data['personalID'],
                 'address': {
-                    'line1': request.data['address'],
-                    'line2': request.data['address'],
-                    'city': request.data['city'],
-                    'state': request.data['state'],
-                    'country': request.data['country'],
-                    'postal_code': request.data['postalCode'],
+                    'line1': data['address'],
+                    'line2': data['address'],
+                    'city': data['city'],
+                    'state': data['state'],
+                    'country': data['country'],
+                    'postal_code': data['postalCode'],
 
                 }
             },
@@ -96,11 +96,11 @@ class PaymentAccountView(APIView):
         stripe.Account.create_external_account(
             account['id'], external_account={
                 'object': 'bank_account',
-                'country': request.data['country'],
-                'currency': 'INR',
-                'account_holder_name': request.data['accountHolderName'],
-                'routing_number': request.data['ifscCode'],
-                'account_number': request.data['bankAccountNo']
+                'country': data['country'],
+                'currency': data['currency'],
+                'account_holder_name': data['accountHolderName'],
+                'routing_number': data['ifscCode'],
+                'account_number': data['bankAccountNo']
             }
         )
         acc_details = stripe.Account.list_external_accounts(
@@ -122,7 +122,7 @@ class PaymentAccountView(APIView):
 
         try:
             data = request.data
-            stripe_account = self.create_stripe_account(request)
+            stripe_account = self.create_stripe_account(request, data)
             data['account_id'] = stripe_account.get('id')
             data['info'] = stripe_account
             data['payment_type'] = PaymentTypes.STRIPE
