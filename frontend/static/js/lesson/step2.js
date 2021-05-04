@@ -1,5 +1,21 @@
 // ****** Event Handlers ****** 
 
+function convertTime(val){
+  var time = val;
+  var hours = Number(time.match(/^(\d+)/)[1]);
+  var minutes = Number(time.match(/:(\d+)/)[1]);
+  var AMPM = time.match(/\s(.*)$/)[1];
+  if(AMPM == "PM" && hours<12) hours = hours+12;
+  if(AMPM == "AM" && hours==12) hours = hours-12;
+  var sHours = hours.toString();
+  var sMinutes = minutes.toString();
+  if(hours<10) sHours = "0" + sHours;
+  if(minutes<10) sMinutes = "0" + sMinutes;
+  return sHours + ":" + sMinutes;
+
+}
+
+
 function handleLCS2Proceed() {
   let isValid = true;
   $('#startDatePickerError').hide();
@@ -43,7 +59,7 @@ function handleLCS2Proceed() {
         $(`#${day}EndTimeError`).show()
         isValid = false;      
       }
-      if ($(`#${day}EndTime`)[0].value <= $(`#${day}StartTime`)[0].value){
+      if (convertTime($(`#${day}EndTime`)[0].value) <= convertTime($(`#${day}StartTime`)[0].value)){
         $(`#${day}EndTimeError2`).text('Please select end time later than start time');
         $(`#${day}EndTimeError2`).show();
         //scroll up to show user the error
@@ -88,7 +104,7 @@ function handleLCS2Proceed() {
       $('#sessionEndTimePickerError').show()
       isValid = false;
     }
-    if(sessionEndTime <= sessionStartTime){
+    if(convertTime(sessionEndTime) <= convertTime(sessionStartTime)){
       $('#sessionEndTimePickerError2').text('Please select end time later than start time');
       $('#sessionEndTimePickerError2').show();
       isValid = false;
