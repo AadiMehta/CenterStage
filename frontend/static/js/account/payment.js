@@ -90,12 +90,11 @@ function checkInputs() {
   const dob = document.querySelector("#dataOfBirth");
   const address = document.querySelector("#address");
   const city = document.querySelector("#city");
-  const postalCode = document.querySelector("#postalCode");
-  const state = document.querySelector("#state");
+  const bankName = document.querySelector("#bankName");
   const country = document.querySelector("#country");
   const currency = document.querySelector("#currency");
   const bankAccountNo = document.querySelector("#bankAccountNumber");
-  const ifscCode = document.querySelector("#ifscCode");
+  const routingNumber = document.querySelector("#routingNumber");
   const accountHolderName = document.querySelector("#accountHolderName");
   const personalID = document.querySelector("#personalID");
 
@@ -120,18 +119,11 @@ function checkInputs() {
     setSuccessFor(city);
   }
 
-  if (postalCode.value.trim() === "") {
-    setErrorFor(postalCode, "postalCode cannot be blank");
+  if (bankName.value.trim() === "") {
+    setErrorFor(bankName, "bankName cannot be blank");
     isValid = false;
   } else {
-    setSuccessFor(postalCode);
-  }
-
-  if (state.value.trim() === "") {
-    setErrorFor(state, "state cannot be blank");
-    isValid = false;
-  } else {
-    setSuccessFor(state);
+    setSuccessFor(bankName);
   }
 
   if (country.value.trim() === "") {
@@ -156,11 +148,11 @@ function checkInputs() {
     setSuccessFor(bankAccountNo);
   }
 
-  if (ifscCode.value.trim() === "") {
-    setErrorFor(ifscCode, "ifscCode cannot be blank");
+  if (routingNumber.value.trim() === "") {
+    setErrorFor(routingNumber, "Routing Number cannot be blank");
     isValid = false;
   } else {
-    setSuccessFor(ifscCode);
+    setSuccessFor(routingNumber);
   }
 
   if (accountHolderName.value.trim() === "") {
@@ -181,31 +173,29 @@ function checkInputs() {
 }
 
 function setErrorFor(input, message) {
-  // const formControl = input.parentElement;
-  // const small = formControl.querySelector('small');
-	// formControl.className = 'form-control error';
-	// small.innerText = message;
-  $(".paymentAddFormError").text("* all fields are required");
-  $(".paymentAddFormError").show();
+  const formControl = input.parentElement;
+  const small = $(formControl).find('small.error-feedback');
+  small.text(message);
 }
 
 function setSuccessFor(input) {
-  // const formControl = input.parentElement;
-  // formControl.className = "form-control success";
+  const formControl = input.parentElement;
+  const small = $(formControl).find('small.error-feedback');
+  small.text('');
 }
 
 function onSubmitPaymentClick(event) {
-  const paymentForm = $("#paymentAddForm");
+  $('.spinner-border').show();
 
+  const paymentForm = $("#paymentAddForm");
   const dob = $("#dataOfBirth")[0].value;
   const address = $("#address")[0].value;
   const city = $("#city")[0].value;
-  const postalCode = $("#postalCode")[0].value;
-  const state = $("#state")[0].value;
+  const bankName = $("#bankName")[0].value;
   const country = $("#country")[0].value;
   const currency = $("#currency")[0].value;
   const bankAccountNo = $("#bankAccountNumber")[0].value;
-  const ifscCode = $("#ifscCode")[0].value;
+  const routingNumber = $("#routingNumber")[0].value;
   const accountHolderName = $("#accountHolderName")[0].value;
   const personalID = $("#personalID")[0].value;
 
@@ -224,15 +214,15 @@ function onSubmitPaymentClick(event) {
         personalID: personalID,
         address: address,
         city: city,
-        postalCode: postalCode,
-        state: state,
+        bankName: bankName,
         country: country,
         currency: currency,
         bankAccountNo: bankAccountNo,
-        ifscCode: ifscCode,
+        routingNumber: routingNumber,
         accountHolderName: accountHolderName,
       }),
       success: function (data, status, xhr) {
+        $('.spinner-border').hide();
         document.getElementById("paymentAddForm").reset();
         console.log("payment added successfully");
         $(".paymentAddFormError").text("payment added successfully");
@@ -242,11 +232,14 @@ function onSubmitPaymentClick(event) {
       },
       error: function (jqXhr, textStatus, errorMessage) {
         // Todo: Show Error Message on UI
+        $('.spinner-border').hide();
         $(".paymentAddFormError").text("Error while adding payment account");
         $(".paymentAddFormError").show();
         console.log("Error while adding payment account", errorMessage);
       },
     });
+  } else {
+    $('.spinner-border').hide();
   }
 }
 

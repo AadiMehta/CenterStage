@@ -1,9 +1,7 @@
 import urllib
 from django.conf import settings
 from django.views.generic import TemplateView
-from django_countries import countries
-from payments.constants import STIPE_COUNTRIES
-from frontend.constants import currencies as currency_options
+from payments.services import stripe as stripe_service
 
 class AccountConnectedTemplate(TemplateView):
     """
@@ -67,8 +65,8 @@ class OnboardStep2TemplateView(TemplateView):
             'user': self.request.user,
             'teacher_accounts': teacher_accounts,
             'payment_account': payment_account,
-            'currency_options' :currency_options,
-            'countries_list': STIPE_COUNTRIES,
+            'currency_options' : stripe_service.STRIPE_CURRENCIES,
+            'countries_list': stripe_service.STRIPE_CURRENCIES,
             'zoom': {
                 'ZOOM_CLIENT_ID': getattr(settings, 'ZOOM_CLIENT_ID'),
                 'ZOOM_REDIRECT_URL': urllib.parse.quote_plus(settings.ZOOM_REDIRECT_URL)
