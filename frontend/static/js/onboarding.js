@@ -279,18 +279,17 @@ function onProceed2ButtonClicked () {
   }
 }
 
-function checkPaymentAddFormInputs() {
+function checkInputs() {
   let isValid = true;
   // trim to remove the whitespaces
   const dob = document.querySelector("#dataOfBirth");
   const address = document.querySelector("#address");
   const city = document.querySelector("#city");
-  const postalCode = document.querySelector("#postalCode");
-  const state = document.querySelector("#state");
+  const bankName = document.querySelector("#bankName");
   const country = document.querySelector("#country");
   const currency = document.querySelector("#currency");
   const bankAccountNo = document.querySelector("#bankAccountNumber");
-  const ifscCode = document.querySelector("#ifscCode");
+  const routingNumber = document.querySelector("#routingNumber");
   const accountHolderName = document.querySelector("#accountHolderName");
   const personalID = document.querySelector("#personalID");
 
@@ -315,18 +314,11 @@ function checkPaymentAddFormInputs() {
     setSuccessFor(city);
   }
 
-  if (postalCode.value.trim() === "") {
-    setErrorFor(postalCode, "postalCode cannot be blank");
+  if (bankName.value.trim() === "") {
+    setErrorFor(bankName, "bankName cannot be blank");
     isValid = false;
   } else {
-    setSuccessFor(postalCode);
-  }
-
-  if (state.value.trim() === "") {
-    setErrorFor(state, "state cannot be blank");
-    isValid = false;
-  } else {
-    setSuccessFor(state);
+    setSuccessFor(bankName);
   }
 
   if (country.value.trim() === "") {
@@ -336,13 +328,13 @@ function checkPaymentAddFormInputs() {
     setSuccessFor(country);
   }
 
-
   if (currency.value.trim() === "") {
     setErrorFor(currency, "please select country");
     isValid = false;
   } else {
     setSuccessFor(currency);
   }
+
 
   if (bankAccountNo.value.trim() === "") {
     setErrorFor(bankAccountNo, "bankAccountNo cannot be blank");
@@ -351,11 +343,11 @@ function checkPaymentAddFormInputs() {
     setSuccessFor(bankAccountNo);
   }
 
-  if (ifscCode.value.trim() === "") {
-    setErrorFor(ifscCode, "ifscCode cannot be blank");
+  if (routingNumber.value.trim() === "") {
+    setErrorFor(routingNumber, "Routing Number cannot be blank");
     isValid = false;
   } else {
-    setSuccessFor(ifscCode);
+    setSuccessFor(routingNumber);
   }
 
   if (accountHolderName.value.trim() === "") {
@@ -376,34 +368,37 @@ function checkPaymentAddFormInputs() {
 }
 
 function setErrorFor(input, message) {
-  $(".paymentAddFormError").text("* all fields are required");
-  $(".paymentAddFormError").show();
+  const formControl = input.parentElement;
+  const small = $(formControl).find('small.error-feedback');
+  small.text(message);
 }
 
 function setSuccessFor(input) {
-  // todo:
+  const formControl = input.parentElement;
+  const small = $(formControl).find('small.error-feedback');
+  small.text('');
 }
 
-
-function addPayment(dob, address, city, postalCode, state, country, personalID, bankAccountNo, ifscCode, accountHolderName) {
-  
-}
 
 
 
 function onSubmitPaymentClicked () {
-  const dob = $('#dataOfBirth')[0].value;
-  const address = $('#address')[0].value;
-  const city = $('#city')[0].value;
-  const postalCode = $('#postalCode')[0].value;
-  const state = $('#state')[0].value;
-  const country = $('#country')[0].value;
+  $('.spinner-border').show();
+
+  const paymentForm = $("#paymentAddForm");
+  const dob = $("#dataOfBirth")[0].value;
+  const address = $("#address")[0].value;
+  const city = $("#city")[0].value;
+  const bankName = $("#bankName")[0].value;
+  const country = $("#country")[0].value;
   const currency = $("#currency")[0].value;
-  const bankAccountNo = $('#bankAccountNumber')[0].value;
-  const ifscCode = $('#ifscCode')[0].value;
-  const accountHolderName = $('#accountHolderName')[0].value;
-  const personalID = $('#personalID')[0].value
-  const isFormValid = checkPaymentAddFormInputs();
+  const bankAccountNo = $("#bankAccountNumber")[0].value;
+  const routingNumber = $("#routingNumber")[0].value;
+  const accountHolderName = $("#accountHolderName")[0].value;
+  const personalID = $("#personalID")[0].value;
+
+  const isFormValid = checkInputs();
+
   if (isFormValid) {
     const token = getCookie('auth_token');
   $.ajax('/api/payments/add/', {
@@ -426,19 +421,22 @@ function onSubmitPaymentClicked () {
       accountHolderName: accountHolderName,
     }),
     success: function (data, status, xhr) {
+      $('.spinner-border').hide();
       console.log("payment added successfully");
       document.getElementById("paymentAddForm").reset();
-      hideModal("bankingmodal");
-      $('#onboardingZoomConnectError').text('payment added successfully');
+      hideModal("connectStipeModal");
+      $('#onboardingStripeError').text('payment added successfully');
       $('#onboardingStripeError').show();
     },
     error: function (jqXhr, textStatus, errorMessage) {
+      $('.spinner-border').hide();
       // Todo: Show Error Message on UI
       console.log('Error while creating payment account', errorMessage)
-      $('.paymentAddFormError').text('Error while adding payment account');
-      $('.paymentAddFormError').show()
-      // window.location.href = "/onboarding/step2";
+      $('.onboardingStripeError').text('Error while adding payment account');
+      $('.onboardingStripeError').show()
     }});
+  } else {
+    $('.spinner-border').hide();
   }
   
 }
@@ -486,18 +484,22 @@ function openImageSelector () {
 // ****** End of Event Handlers ****** 
 
 function handleDisconnectPayment() {
-  const token = getCookie('auth_token');
-  $.ajax('/api/payments/remove/', {
-    type: 'GET',
+  const token = getCookie("auth_token");
+  $.ajax("/api/payments/remove/", {
+    type: "POST",
     headers: {
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
+    data: JSON.stringify({
+      payment_type: "STRIPE",
+    }),
     success: function (data, status, xhr) {
       location.reload();
     },
     error: function (jqXhr, textStatus, errorMessage) {
-      alert('err')
-    }
+      alert("err");
+    },
   });
 }
 
