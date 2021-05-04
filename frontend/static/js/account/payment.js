@@ -93,6 +93,7 @@ function checkInputs() {
   const postalCode = document.querySelector("#postalCode");
   const state = document.querySelector("#state");
   const country = document.querySelector("#country");
+  const currency = document.querySelector("#currency");
   const bankAccountNo = document.querySelector("#bankAccountNumber");
   const ifscCode = document.querySelector("#ifscCode");
   const accountHolderName = document.querySelector("#accountHolderName");
@@ -140,6 +141,14 @@ function checkInputs() {
     setSuccessFor(country);
   }
 
+  if (currency.value.trim() === "") {
+    setErrorFor(currency, "please select country");
+    isValid = false;
+  } else {
+    setSuccessFor(currency);
+  }
+
+
   if (bankAccountNo.value.trim() === "") {
     setErrorFor(bankAccountNo, "bankAccountNo cannot be blank");
     isValid = false;
@@ -176,8 +185,8 @@ function setErrorFor(input, message) {
   // const small = formControl.querySelector('small');
 	// formControl.className = 'form-control error';
 	// small.innerText = message;
-  $("#paymentAddFormError").text("* all fields are required");
-  $("#paymentAddFormError").show();
+  $(".paymentAddFormError").text("* all fields are required");
+  $(".paymentAddFormError").show();
 }
 
 function setSuccessFor(input) {
@@ -194,6 +203,7 @@ function onSubmitPaymentClick(event) {
   const postalCode = $("#postalCode")[0].value;
   const state = $("#state")[0].value;
   const country = $("#country")[0].value;
+  const currency = $("#currency")[0].value;
   const bankAccountNo = $("#bankAccountNumber")[0].value;
   const ifscCode = $("#ifscCode")[0].value;
   const accountHolderName = $("#accountHolderName")[0].value;
@@ -217,6 +227,7 @@ function onSubmitPaymentClick(event) {
         postalCode: postalCode,
         state: state,
         country: country,
+        currency: currency,
         bankAccountNo: bankAccountNo,
         ifscCode: ifscCode,
         accountHolderName: accountHolderName,
@@ -224,15 +235,15 @@ function onSubmitPaymentClick(event) {
       success: function (data, status, xhr) {
         document.getElementById("paymentAddForm").reset();
         console.log("payment added successfully");
-        $("#paymentAddFormError").text("payment added successfully");
-        $("#paymentAddFormError").show();
+        $(".paymentAddFormError").text("payment added successfully");
+        $(".paymentAddFormError").show();
         hideModal("connectStipeModal");
         window.location.reload();
       },
       error: function (jqXhr, textStatus, errorMessage) {
         // Todo: Show Error Message on UI
-        $("#paymentAddFormError").text("Error while adding payment account");
-        $("#paymentAddFormError").show();
+        $(".paymentAddFormError").text("Error while adding payment account");
+        $(".paymentAddFormError").show();
         console.log("Error while adding payment account", errorMessage);
       },
     });

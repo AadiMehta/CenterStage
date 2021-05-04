@@ -77,16 +77,33 @@ function init() {
   $('#multiSession').click(handleLessonTypeSelect);
   $('#ongoingSession').click(handleLessonTypeSelect);
   $('#lessonNoOfParticipants').change((event) => {
-    if (event.target.value > 200) {
-      event.target.value = 200;
+    const currEle = $('#lessonNoOfParticipants');
+    const value = event.target.value;
+    const errorEle = $('#lessonNoOfParticipantsError1');
+    let lessonType = $('#lessonType');
+    errorEle.hide();
+
+    if(value < 1 || value == ""){
+      errorEle.text('Number of participants must be greater than 0.');
+      errorEle.show();
+      lessonType.val('');
+    } else if (value == 1) {
+      lessonType.val('ONE_ON_ONE');
+      errorEle.hide();
+    } else if (value >= 2) {
+      $('#lessonType').val('GROUP');
+      const output = value > 200 ? 200 : value;
+      currEle.val(output);
+      errorEle.hide();
     }
-    if (event.target.value == 2) {
-      $('#lessonType')[0].value = 'ONE_ON_ONE';
-    } else {
-      $('#lessonType')[0].value = 'GROUP';
-    }
+
   })
 
 }
-
+$(document).keypress(
+  function(event){
+    if (event.which == '13') {
+      event.preventDefault();
+    }
+});
 init();

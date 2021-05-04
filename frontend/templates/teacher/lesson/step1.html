@@ -70,18 +70,9 @@
                      <div class="input-area">
                         <label>Number of Participants <span>*</span></label>
                         <div class="liner-select-drop">
-                           <script>
-                              function change(){
-                                 let inp = document.getElementById("lessonNoOfParticipants").value;
-                                 if(inp<1 || inp == ""){
-                                    inp=1;
-                                    document.getElementById("lessonNoOfParticipantsError1").innerHTML = "Number of participants must be greater than 0";
-                                 }
-                              }
-                           </script>
-                           <input placeholder="Enter No. of participants"  onchange="change();" value="2" type="number" id="lessonNoOfParticipants" name="step1-no_of_participants" class="form-control" max="200" min="1"/>
+                           <input placeholder="Enter No. of participants" value="2" type="number" id="lessonNoOfParticipants" name="step1-no_of_participants" class="form-control" max="200" min="1"/>
                         </div>
-                        <input id="lessonType" type="hidden" name="step1-lesson_type" style="display:none" />
+                        <input id="lessonType" type="hidden" name="step1-lesson_type" value="GROUP" style="display:none" />
                         <p id="lessonNoOfParticipantsError" style="color:red;"></p>
                         <p id="lessonNoOfParticipantsError1" style="color:red;"></p>
                      </div>

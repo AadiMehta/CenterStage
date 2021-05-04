@@ -214,5 +214,10 @@ function init() {
   });
   $('#lcs4Proceed').click(handleLCS4Proceed);
 }
-
+$(document).keypress(
+  function(event){
+    if (event.which == '13') {
+      event.preventDefault();
+    }
+});
 init();
