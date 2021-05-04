@@ -27,21 +27,18 @@ class PaymentDisconnectAPIVIew(APIView):
     authentication_classes = [BearerAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        payment_account = PaymentAccounts.objects.get(
-            user=request.user,
-        )
-        if payment_account:
-            payment_account.delete()
-        return Response(dict(msg="Disconnected Payment Account"), status=status.HTTP_200_OK)
-    
     def post(self, request, *args, **kwargs):
         data = request.data
         payment_type = data.get('payment_type')
         payment_account = PaymentAccounts.objects.filter(user=request.user, payment_type=payment_type).first()
-        if payment_account:
-            payment_account.delete()
-            return Response({"msg": "Disconnected Payment Account"}, status=status.HTTP_200_OK)
+        if payment_account and payment_account.account_id:
+            account_id = payment_account.account_id
+            resp = stripe.Account.delete(account_id)
+            is_deleted = resp.get('deleted')
+            if is_deleted:
+                payment_account.delete()
+                return Response({"msg": "Disconnected Payment Account"}, status=status.HTTP_200_OK)
+            return Response({"msg": "account not exists"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"msg": "account not exists"}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -72,10 +69,7 @@ class PaymentAccountView(APIView):
                     'line1': data['address'],
                     'line2': data['address'],
                     'city': data['city'],
-                    'state': data['state'],
                     'country': data['country'],
-                    'postal_code': data['postalCode'],
-
                 }
             },
             capabilities={
@@ -99,7 +93,7 @@ class PaymentAccountView(APIView):
                 'country': data['country'],
                 'currency': data['currency'],
                 'account_holder_name': data['accountHolderName'],
-                'routing_number': data['ifscCode'],
+                'routing_number': data['routingNumber'],
                 'account_number': data['bankAccountNo']
             }
         )

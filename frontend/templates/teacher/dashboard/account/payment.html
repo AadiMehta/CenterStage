@@ -9,97 +9,146 @@
 
 {% block content %}
 {% include 'teacher/dashboard/modals.html' %}
-<!-- Modal stripe connect-->
-<div class="modal fade login-modal comn-modal" id="connectStipeModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><i><img src="{% static '/images/icon-finance.svg' %}" alt="" /></i> Add Payment Info</h5>
+
+<!-- Modal -->
+<div class="modal fade modal-bankac" id="connectStipeModal" tabindex="-1" aria-labelledby="bankLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+            <img src="{% static 'images/close.svg' %}" alt="" />
         </button>
-      </div>
-      <div class="modal-body">
+        <div class="modal-body">
+         <h2>Link Account!</h2>
+         {% comment %} <div class="note-text">Note: </div> {% endcomment %}
+         <p class="paymentAddFormError" style="color:red;"></p>
          <form id="paymentAddForm" action="." method="post" autocomplete="off">{% csrf_token %}
-            <div class="login-form">
-               <fieldset>
-                  <legend>Personal:</legend>
-                  <p class="paymentAddFormError" style="color:red;"></p>
-                  <div class="form-group">
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_cake.svg' %}" alt="" /></i>
-                        <input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth - dd/mm/yyyy" maxlength="10"  required/>
-                     </div>
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
-                        <input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." />
-                     </div>
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_addres.svg' %}" alt="" /></i>
-                        <input id="address" type="text" class="form-control" placeholder="Address" required/>
-                     </div>
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
-                        <select name="country" id="country" class="form-control" required>
-                           <option value="">Select Country</option>
-                           {% for country in countries_list %}
-                              <option value="{{ country.code }}">{{ country.name }}</option>
-                           {% endfor %}
-                        </select>
-                     </div>
-                     <div class="inp-col">
-                     <i><img src="{% static '/images/icon_flag.svg' %}" alt="" /></i>
-                        <select name="currency" class="form-control" id="currency" required>
-                           <option value="">Select Currency</option>
-                           {% for currency in currency_options %}
-                              <option value="{{currency.value}}">{{ currency.value}} - {{currency.label}}</option>
-                           {% endfor %}
-                        </select>
-                     </div>
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_location.svg' %}" alt="" /></i>
-                        <input id="state" type="text" class="form-control" placeholder="State or Union territory Code - e.g. Delhi - DL" />
-                     </div>
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_city.svg' %}" alt="" /></i>
-                        <input id="city" type="text" class="form-control" placeholder="City" required/>
-                     </div>
-                     <div class="inp-col">
-                        <i><img src="{% static '/images/icon_mailbox.svg' %}" alt="" /></i>
-                        <input id="postalCode" type="text" class="form-control" placeholder="Postal Code" />
-                     </div>
-                  </div>
-               </fieldset>
-               <fieldset>
-                   <legend>Bank Information:</legend>
-                   <p class="paymentAddFormError" style="color:red;"></p>
-                     <div class="form-group">
-                        <div class="inp-col">
-                        <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
-                        <input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" required/>
+            <div class="bank-form mt-5"> 
+                <div class="row">
+                    <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Your Birth Date <span class="required">*</span></label>
+                                <div class="liner-inp"> 
+                                    <input id="dataOfBirth" type="text" class="form-control" placeholder="Date of Birth - dd/mm/yyyy" maxlength="10"  required/>
+                                    <small class="text-danger error-feedback"></small>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Personal ID <span class="required">*</span></label>
+                                <div class="liner-inp"> 
+                                    <input id="personalID" type="text" class="form-control" placeholder="Personal ID / PAN No. / Social Sc No." />
+                                    <small class="text-danger error-feedback"></small>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Address <span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <input id="address" type="text" class="form-control" placeholder="Address" required/>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
                         </div>
-                        <div class="inp-col">
-                        <i><img src="{% static '/images/icon_bank.svg' %}" alt="" /></i>
-                        <input id="bankName" type="text" class="form-control" placeholder="Bank Name" required/>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>City<span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <input id="city" type="text" class="form-control" placeholder="City" required/>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
                         </div>
-                        <div class="inp-col">
-                        <i><img src="{% static '/images/icon_number.svg' %}" alt="" /></i>
-                        <input id="ifscCode" type="text" class="form-control" placeholder="Routing Number, sort code, or other country-appropriate institution number for the bank account." />
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Country<span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <select name="country" id="country" class="form-control" required>
+                                    <option value="">Select Country</option>
+                                    {% for country in countries_list %}
+                                        <option value="{{ country.code }}">{{ country.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
                         </div>
-                        <div class="inp-col">
-                        <i><img src="{% static '/images/icon-user.svg' %}" alt="" /></i>
-                        <input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Name" required/>
-                     </div>
-                     </div>
-               </fieldset>
-               <button type="button" id="btnSubmit" class="btn btn-primary btn-full btn-lg">Add Payment Method</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Currency <span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <select name="currency" class="form-control" id="currency" required>
+                                    <option value="">Select Currency</option>
+                                    {% for currency in currency_options %}
+                                        <option value="{{currency.code}}">{{ currency.code}} - {{currency.label}}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3>Bank Information</h3>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Account Number<span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <input id="bankAccountNumber" type="text" class="form-control" placeholder="Bank Account Number" required/>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Account Holder Name<span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <input id="accountHolderName" type="text" class="form-control" placeholder="Account Holder Name" required/>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Bank Name<span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <input id="bankName" type="text" class="form-control" placeholder="Bank Name" required/>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label>Routing Number<span class="required">*</span></label>
+                            <div class="liner-inp"> 
+                                <input id="routingNumber" type="text" class="form-control" placeholder="Routing Number, sort code, or other code" />
+                                <small id="emailHelp" class="form-text text-muted">The routing number, sort code, or other country-appropriate institution number for the bank account. </small></br>
+                                <small class="text-danger error-feedback"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </form>
+        </div>
+         
+        <div class="bankbottom">
+            <div class="bankbottom-left">
+                <button type="button" id="btnSubmit" class="btn btn-primary btn-full btn-lg">Add Account</button>
+                <div class="spinner-border" style="width: 3rem; height: 3rem; display:none;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
-         </form>
+            <div class="bank-graphic"><img src="{% static 'images/banking-graphics.svg' %}" alt="" /></div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<!-- Modal stripe connect End-->
+</div>   
+
+
 
 <div class="wrapper-main profileInfo-page">
    {% include 'teacher/dashboard/sidebar.html' with activeSection='account-payment' %}
@@ -173,40 +222,6 @@
                               {% endif%}
                            </div>
                         </div>
-                        {% comment %}<div class="ac-veryfy-row">
-                           <a href="#" class="ac-veryfy-left">
-                              <i><img src="{% static 'images/paypal.png' %}" alt="" /></i>
-                              <div class="col-text">
-                                 <h4>Go To PayPal</h4>
-                              </div>
-                           </a>
-                           <div class="ac-veryfy-right">
-                              <div class="radio-action">
-                                 <div class="custom-radios">
-                                    <input type="radio" id="test2" name="radio-group">
-                                    <label for="test2"></label>
-                                 </div>
-                              </div>
-                              <button type="button" class="btn-liner">Disconnect</button>
-                           </div>
-                        </div>
-                        <div class="ac-veryfy-row">
-                           <a href="#" class="ac-veryfy-left">
-                              <i><img src="{% static 'images/card.png' %}" alt="" /></i>
-                              <div class="col-text">
-                                 <h4>Go To Bank Account</h4>
-                              </div>
-                           </a>
-                           <div class="ac-veryfy-right">
-                              <div class="radio-action">
-                                 <div class="custom-radios">
-                                    <input type="radio" id="test3" name="radio-group">
-                                    <label for="test3"></label>
-                                 </div>
-                              </div>
-                              <button type="button" class="btn-liner" data-toggle="modal" data-target="#bank">Connect</button>
-                           </div>
-                        </div>{% endcomment %}
                      </div>
                      <div class="tansc-text">
                         View our <a href="{% url 'privacy-policy' %}">Privacy Policy</a>, <a href="{% url 'terms-and-conditions' %}">Terms &amp; Conditions</a> or <a href="{% url 'faqs' %}">FAQ</a>
