@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils import timezone
 from users.models import User, PaymentAccounts, BillingProfile
-from payments.models import LessonOrder, PaymentIntent 
+from payments.models import LessonOrder, PaymentIntent
 from payments.serializers import PaymentsSerializer
 import stripe
 from datetime import datetime
@@ -30,7 +30,8 @@ class PaymentDisconnectAPIVIew(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         payment_type = data.get('payment_type')
-        payment_account = PaymentAccounts.objects.filter(user=request.user, payment_type=payment_type).first()
+        payment_account = PaymentAccounts.objects.filter(
+            user=request.user, payment_type=payment_type).first()
         if payment_account and payment_account.account_id:
             account_id = payment_account.account_id
             resp = stripe.Account.delete(account_id)
@@ -69,6 +70,8 @@ class PaymentAccountView(APIView):
                     'line1': data['address'],
                     'line2': data['address'],
                     'city': data['city'],
+                    'state': data['state'],
+                    'postal_code': data['postal_code'],
                     'country': data['country'],
                 }
             },
@@ -86,8 +89,7 @@ class PaymentAccountView(APIView):
                 'ip': '127.0.0.1',
             },)
 
-        # print (account)
-        stripe.Account.create_external_account(
+        external_ac = stripe.Account.create_external_account(
             account['id'], external_account={
                 'object': 'bank_account',
                 'country': data['country'],
@@ -140,10 +142,10 @@ class LessonPaymentView(APIView):
 
     def get_order(self, order_id):
         return get_object_or_404(LessonOrder, order_id=order_id)
-    
+
     def get_lesson(self, lesson_uuid):
         return get_object_or_404(LessonData, lesson_uuid=lesson_uuid)
-    
+
     def selected_slots(self, lesson, set_to_all_sessions, time_slot):
         upcoming_slots = lesson.slots.all().filter(Q(lesson_from__gt=timezone.now()))
         if set_to_all_sessions:
@@ -162,7 +164,8 @@ class LessonPaymentView(APIView):
 
         lesson = self.get_lesson(lesson_id)
 
-        selected_slots = self.selected_slots(lesson, set_to_all_sessions, time_slot)
+        selected_slots = self.selected_slots(
+            lesson, set_to_all_sessions, time_slot)
         order_data = {
             "lesson": lesson,
             "student": request.user.student_profile_data,
@@ -175,7 +178,8 @@ class LessonPaymentView(APIView):
 
         stripe_publishable_key = settings.STRIPE_PUBLISHABLE_KEY
 
-        payment_intent, is_created = PaymentIntent.objects.do(request, order_obj)
+        payment_intent, is_created = PaymentIntent.objects.do(
+            request, order_obj)
         if is_created:
             # Send publishable key and PaymentIntent details to client
             return Response(
@@ -193,13 +197,13 @@ class LessonPaymentCompleteView(APIView):
 
     authentication_classes = [BearerAuthentication]
     permission_classes = []
-  
+
     def get_order(self, order_id):
         return get_object_or_404(LessonOrder, order_id=order_id)
-    
+
     def get_lesson(self, lesson_uuid):
         return get_object_or_404(LessonData, lesson_uuid=lesson_uuid)
-    
+
     def get_payment_intent(self, stripe_id):
         return get_object_or_404(PaymentIntent, stripe_id=stripe_id)
 
@@ -224,11 +228,11 @@ class LessonPaymentCompleteView(APIView):
             return Response({'status': 'succeeded'}, status=status.HTTP_200_OK)
         return Response({'status': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class LessonPaymentWebhookView(APIView):
 
     # authentication_classes = [BearerAuthentication]
     permission_classes = []
-
 
     def post(self, request, *args, **kwargs):
         payload = request.data

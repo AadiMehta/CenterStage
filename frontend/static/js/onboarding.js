@@ -287,6 +287,8 @@ function checkInputs() {
   const city = document.querySelector("#city");
   const bankName = document.querySelector("#bankName");
   const country = document.querySelector("#country");
+  const state = document.querySelector("#state");
+  const postalCode = document.querySelector("#postalCode");
   const currency = document.querySelector("#currency");
   const bankAccountNo = document.querySelector("#bankAccountNumber");
   const routingNumber = document.querySelector("#routingNumber");
@@ -328,13 +330,26 @@ function checkInputs() {
     setSuccessFor(country);
   }
 
+  if (state.value.trim() === "") {
+    setErrorFor(state, "state cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(state);
+  }
+
+  if (postalCode.value.trim() === "") {
+    setErrorFor(postalCode, "postalCode cannot be blank");
+    isValid = false;
+  } else {
+    setSuccessFor(postalCode);
+  }
+
   if (currency.value.trim() === "") {
     setErrorFor(currency, "please select country");
     isValid = false;
   } else {
     setSuccessFor(currency);
   }
-
 
   if (bankAccountNo.value.trim() === "") {
     setErrorFor(bankAccountNo, "bankAccountNo cannot be blank");
@@ -390,6 +405,8 @@ function onSubmitPaymentClicked () {
   const address = $("#address")[0].value;
   const city = $("#city")[0].value;
   const bankName = $("#bankName")[0].value;
+  const state = $("#state")[0].value;
+  const postalCode = $("#postalCode")[0].value;
   const country = $("#country")[0].value;
   const currency = $("#currency")[0].value;
   const bankAccountNo = $("#bankAccountNumber")[0].value;
@@ -412,12 +429,13 @@ function onSubmitPaymentClicked () {
       personalID: personalID,
       address: address,
       city: city,
-      postalCode: postalCode,
-      state: state,
+      bankName: bankName,
       country: country,
+      state: state,
+      postal_code: postalCode,
       currency: currency,
       bankAccountNo: bankAccountNo,
-      ifscCode: ifscCode,
+      routingNumber: routingNumber,
       accountHolderName: accountHolderName,
     }),
     success: function (data, status, xhr) {
