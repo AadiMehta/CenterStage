@@ -89,7 +89,6 @@ class PaymentAccountView(APIView):
                 'ip': '127.0.0.1',
             },)
 
-        import ipdb; ipdb.set_trace()
         external_ac = stripe.Account.create_external_account(
             account['id'], external_account={
                 'object': 'bank_account',
