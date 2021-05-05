@@ -113,6 +113,7 @@ function handleLCS2Proceed() {
       isValid = false;
     }  
   }
+  
   const priceType = $('#priceType')[0].value
   const priceCurrency = $(`#${priceType}Currency`)[0].value
   const priceValue = parseInt($(`#${priceType}Value`)[0].value)
